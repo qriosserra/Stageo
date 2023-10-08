@@ -1,0 +1,26 @@
+{% from "macros/button.twig" import button %}
+{% from "macros/input.twig" import input %}
+{% from "macros/token.twig" import token %}
+
+{% extends "partials/layout.html.twig" %}
+
+{% block title %}Se connecter{% endblock %}
+{% block head %}<script type="module" src="https://unpkg.com/@splinetool/viewer@0.9.425/build/spline-viewer.js"></script>{% endblock %}
+{% block nav %}{% endblock %}
+{% block content %}
+    <main class="h-screen flex items-center justify-center gap-8 relative">
+        {{ button("Accueil", "fi-rr-angle-small-left", route("home"), "!absolute !pl-2 top-16 left-0") }}
+        <h1 class="w-[36rem]">Se connecter</h1>
+        <div class="absolute -left-12 -z-10">
+{#            <spline-viewer url="https://prod.spline.design/u3W7RtljDhjVFvKJ/scene.splinecode"></spline-viewer>#}
+        </div>
+        <form class="flex flex-col items-center gap-4" action="{{ route("etudiantSignIn") }}" method="post">
+            {{ input("login", "Login", "text", "fi-rr-user", "required") }}
+            {{ input("password", "Mot de passe", "password", "fi-rr-lock", "required") }}
+            {{ token(token) }}
+            <input type="submit" value="Se connecter" class="button-primary">
+            <p>Vous n'avez pas de compte étudiant ? <a class="font-bold" href="{{ route("etudiantSignUpForm") }}">S'inscrire</a></p>
+        </form>
+    </main>
+{% endblock %}
+{% block footer %}{% endblock %}

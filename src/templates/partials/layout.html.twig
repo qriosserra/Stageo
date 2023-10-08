@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Title{% endblock %} – Stageo</title>
+        <link rel="stylesheet" href="{{ asset("assets/css/main.css") }}">
+        <link rel='stylesheet' href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+        <script defer src="{{ asset("assets/js/script.js") }}"></script>
+        {% block head %}{% endblock %}
+    </head>
+    <body>
+        <header>
+            {% block nav %}
+                {% include "partials/nav.html.twig" %}
+            {% endblock %}
+            {% if flashMessages is not empty %}
+                <ul class="flash-messages-container">
+                    {% for flashMessage in flashMessages %}
+                        <li class="flash-message {{ flashMessage.type }}">
+                            {% if flashMessage.type == "success" %}
+                                <i class="success fi fi-rr-check-circle text-red-500"></i>
+                            {% elseif flashMessage.type == "info" %}
+                                <i class="info fi fi-rr-info"></i>
+                            {% elseif flashMessage.type == "warning" %}
+                                <i class="warning fi fi-rr-exclamation"></i>
+                            {% elseif flashMessage.type == "error" %}
+                                <i class="error fi fi-rr-cross-circle"></i>
+                            {% endif %}
+                            <p>
+                                {{ flashMessage.content }}
+                            </p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        </header>
+        {% block content %}{% endblock %}
+        {% block footer %}
+            {% include "partials/footer.html.twig" %}
+        {% endblock %}
+    </body>
+</html>

@@ -1,0 +1,25 @@
+<nav>
+    <a class="logo-container" href="{{ route("home") }}">
+        <span>Stageo</span>
+    </a>
+    <ul class="account-buttons-container">
+        {% if idUser is null %}
+            <li class="sign-in">
+                <a class="sign-in button-ghost" href="{{ route("etudiantSignInForm") }}">
+                    <span>Se connecter</span>
+                </a>
+            </li>
+            <li class="sign-up">
+                <a class="sign-up button-primary" href="{{ route("etudiantSignUpForm") }}">
+                    <span>S'inscrire</span>
+                </a>
+            </li>
+        {% else %}
+            <li class="profile">
+                {#                <a class="profile button" href="{{ route("profile", {"idUser" : idUser}) }}">#}
+                <span>Profil</span>
+                {#                </a>#}
+            </li>
+        {% endif %}
+    </ul>
+</nav>

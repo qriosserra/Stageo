@@ -1,0 +1,10 @@
+{% macro button(
+    text,
+    icon,
+    url,
+    class) %}
+    <a href="{{ url }}" class="button-ghost {{ class }}">
+        <i class="fi {{ icon }}"></i>
+        <span>{{ text }}</span>
+    </a>
+{% endmacro button %}

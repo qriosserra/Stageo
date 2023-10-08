@@ -1,0 +1,74 @@
+{% from "macros/input.twig" import input %}
+
+<footer>
+{#    <div class="footer-newsletter-container">#}
+{#        <h6>Newsletter</h6>#}
+{#        <form action="" class="footer-newsletter-form">#}
+{#            {{ input("newsletter", "Email", "email", "fi-rr-envelope", "required") }}#}
+{#            <input class="button-primary" type="submit" value="Subscribe">#}
+{#        </form>#}
+{#    </div>#}
+    <div class="footer-information-container">
+        <div class="footer-section-container">
+            <section class="footer-section">
+                <h6>Plan du site</h6>
+                <ul class="footer-section-list-container ">
+                    <li class="footer-section-list-wrapper">
+                        <a href="{{ route("about") }}">
+                            <span>À propos</span>
+                        </a>
+                    </li>
+                    <li class="footer-section-list-wrapper">
+                        <a href="{{ route("contactForm") }}">
+                            <span>Contact</span>
+                        </a>
+                    </li>
+                    <li class="footer-section-list-wrapper">
+                        <a href="{{ route("faq") }}">
+                            <span>FAQ</span>
+                        </a>
+                    </li>
+                    <li class="footer-section-list-wrapper">
+                        <a href="https://github.com/qriosserra/Stageo">
+                            <span>GitHub</span>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+            <section class="footer-section">
+                <h6>Groupe</h6>
+                <ul class="footer-section-list-container">
+                    <li class="footer-section-list-wrapper">
+                        <a href="https://github.com/LouisTexier3012">
+                            <span>Texier</span>
+                        </a>
+                    </li>
+                    <li class="footer-section-list-wrapper">
+                        <a href="https://github.com/qriosserra">
+                            <span>Rios-Serra</span>
+                        </a>
+                    </li>
+                    <li class="footer-section-list-wrapper">
+                        <a href="https://github.com/">
+                            <span>Dupont</span>
+                        </a>
+                    </li>
+                    <li class="footer-section-list-wrapper">
+                        <a href="https://github.com/">
+                            <span>Smith</span>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+        </div>
+        <section class="footer-description-container">
+            <h6>Stageo</h6>
+            <p class="footer-description">
+                Stageo est une plateforme de mise en relation entre des entreprises et des étudiants en recherche de
+                stage ou d'alternance. Elle permet aux entreprises de publier des offres auxquelles les étudiants
+                peuvent postuler.
+            </p>
+        </section>
+    </div>
+    <span class="footer-copyright">Stageo © 2023</span>
+</footer>
