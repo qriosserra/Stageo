@@ -26,7 +26,7 @@ class UserConnection
 		Session::delete(self::$key);
 	}
 
-    public static function getSignedInUser(): ?User
+    public static function getSignedInUser(): Etudiant|Entreprise|Enseignant|null
 	{
 		return Session::get(self::$key) ?? null;
 	}

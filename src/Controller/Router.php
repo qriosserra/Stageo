@@ -36,6 +36,7 @@ use Twig\TwigFunction;
 
 class Router
 {
+
     /**
      * @return void
      *

@@ -35,3 +35,8 @@ let profilePictureInput = document.querySelector("#profilePicture");
 profilePictureInput.onchange = () => {
     profilePicture.src = URL.createObjectURL(profilePictureInput.files[0]);
 }
+
+window.onload = function() {
+    var shadowRoot = document.querySelector('spline-viewer').shadowRoot;
+    shadowRoot.querySelector('#logo').remove();
+}
