@@ -37,4 +37,85 @@ class Validate
             subject: $studentId
         );
     }
+
+    public static function isSiret(string $siret)
+    {
+        return preg_match(
+            pattern: "/" . Pattern::SIRET->value . "/",
+            subject: $siret
+        );
+    }
+
+    public static function isPhone(string $phone)
+    {
+        return preg_match(
+            pattern: "/" . Pattern::PHONE->value . "/",
+            subject: $phone
+        );
+    }
+
+    public static function isFax(string $fax)
+    {
+        return preg_match(
+            pattern: "/" . Pattern::PHONE->value . "/",
+            subject: $fax
+        );
+    }
+
+    public static function isRaisonSociale(string $raisonSociale)
+    {
+        return preg_match(
+            pattern: "/" . Pattern::NAME->value . "/",
+            subject: $raisonSociale
+        );
+    }
+
+    public static function isAdresse(string $adresse)
+    {
+        return preg_match(
+            pattern: "/" . Pattern::NAME->value . "/",
+            subject: $adresse
+        );
+    }
+
+    public static function isCodePostal(string $codePostal)
+    {
+        return preg_match(
+            pattern: "/" . Pattern::CODE_POSTAL->value . "/",
+            subject: $codePostal
+        );
+    }
+
+    public static function isCodeNaf(string $codeNaf)
+    {
+        return preg_match(
+            pattern: "/" . Pattern::NAF->value . "/",
+            subject: $codeNaf
+        );
+    }
+
+    public static function isStatutJuridique(string $statutJuridique)
+    {
+        return preg_match(
+            pattern: "/" . Pattern::NAME->value . "/",
+            subject: $statutJuridique
+        );
+    }
+
+    public static function isEffectif(string $effectif)
+    {
+        return preg_match(
+            pattern: "/" . Pattern::NUMBER->value . "/",
+            subject: $effectif
+        );
+    }
+
+    public static function isTypeStructure(string $typeStructure)
+    {
+        return preg_match(
+            pattern: "/" . Pattern::NAME->value . "/",
+            subject: $typeStructure
+        );
+    }
+
 }

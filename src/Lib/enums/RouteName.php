@@ -20,4 +20,6 @@ enum RouteName: string
     case ETUDIANT_SIGN_IN = "etudiantSignIn";
     case SETTINGS = "settings";
     case ADMIN_DASHBOARD = "adminDashboard";
+    case ENTREPRISE_ADD_FORM = "entrepriseAddForm";
+    case ENTREPRISE_ADD = "entrepriseAdd";
 }

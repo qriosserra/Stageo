@@ -219,6 +219,22 @@ class Router
                     path: "/admin/dashboard",
                     defaults: ["_controller" => [AdminController::class, "dashboard"]]
                 )
+            ],
+            [
+                "name" => RouteName::ENTREPRISE_ADD_FORM,
+                "route" => new Route(
+                    path: "/entreprise/add/{email?}",
+                    defaults: ["_controller" => [EntrepriseController::class, "addForm"]],
+                    methods: "GET"
+                )
+            ],
+            [
+                "name" => RouteName::ENTREPRISE_ADD,
+                "route" => new Route(
+                    path: "/entreprise/add",
+                    defaults: ["_controller" => [EntrepriseController::class, "add"]],
+                    methods: "POST"
+                )
             ]
         ];
         $routeCollection = new RouteCollection();
