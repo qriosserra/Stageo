@@ -80,12 +80,12 @@ $query = <<<SQL
         `email_etudiant`            VARCHAR(320)    NULL,
         `adresse_voie`              VARCHAR(256)    NULL,
         `civilite`                  CHAR(1)         NULL,
-        `id_code_postal`            VARCHAR(50)     NULL,
+        `id_commune`            INT(11)     NULL,
         `id_departement`            VARCHAR(32)     NULL,
         `id_etape`                  VARCHAR(64)     NULL,
         `id_ufr`                    VARCHAR(4)      NULL,
         PRIMARY KEY(`id_etudiant`),
-        FOREIGN KEY(`id_code_postal`)   REFERENCES {$prefix}code_postal(`id_code_postal`),
+        FOREIGN KEY(`id_commune`)   REFERENCES {$prefix}commune(`id_commune`),
         FOREIGN KEY(`id_departement`)   REFERENCES {$prefix}departement(`id_departement`),
         FOREIGN KEY(`id_etape`)         REFERENCES {$prefix}etape(`id_etape`),
         FOREIGN KEY(`id_ufr`)           REFERENCES {$prefix}composante(`id_ufr`)
@@ -108,9 +108,9 @@ $query = <<<SQL
         `telephone`                 VARCHAR(20)     NULL,
         `fax`                       VARCHAR(64)     NULL,
         `site`                      VARCHAR(256)    NULL,
-        `id_code_postal`            VARCHAR(50)     NULL,
+        `id_commune`            INT(11)     NULL,
         PRIMARY KEY(`id_entreprise`),
-        FOREIGN KEY(`id_code_postal`)   REFERENCES {$prefix}code_postal(`id_code_postal`)
+        FOREIGN KEY(`id_commune`)   REFERENCES {$prefix}commune(`id_commune`)
     );
     
     CREATE TABLE `{$prefix}tuteur`(
