@@ -1,23 +1,57 @@
 {% extends "partials/layout.html.twig" %}
 
 {% block title %}Accueil{% endblock %}
-
 {% block content %}
     <main class="w-[64rem]">
-        <section>
-            <h5>Responsable</h5>
+       <!-- <section class="bg-gray-100 py-8">
+            <h5 class="">Responsable</h5>
             <p>Rémi Coletta</p>
             <p>coletta@lirmm.fr</p>
+        </section>-->
+        <section class="bg-gray-100 py-8 inline-block align-middle">
+            <h5>Bienvenido</h5><!--mettre le texte aux centre -->
         </section>
-        <section>
-            <h5>Rémunération</h5>
-            <p>
-                La gratification est obligatoire au delà de 2 mois de stage (soit l’équivalent de 44 jours à 7
-                heures/jour ou à partir de la 309e heure de stage, même effectué discontinuellement).
-                Le montant minimum légal de gratification est de 4,05 euros* par heure.  *(modification au 1er
-                Janvier 2023). Vous trouverez des informations supplémentaires sur vos droits et devoirs en tant que
-                stagiaire ici, ainsi qu’un simulateur de votre rémunération en cliquant ici.
-            </p>
+        <section class="bg-gray-100 py-8">
+            <div class="bg-gray-200 p-4">
+                <div class="max-w-screen-xl mx-auto">
+                    <div class="relative">
+                        <img id="carouselImage" src="assets/img/durée.jpg" alt="Image 1" class="w-full h-100 object-cover rounded-lg shadow-md">
+                        <div class="absolute top-500 left-0 right-500 bottom-0 flex items-center justify-center">
+                            <button id="prevButton" class="bg-blue-500 text-white px-4 py-2 rounded-l-lg button-ghost">Précédent</button>
+                            <button id="nextButton" class="bg-blue-500 text-white px-4 py-2 rounded-r-lg button-ghost">Suivant</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </section>
+
+        <script>
+            const images = [
+                "assets/img/durée.jpg",
+                "assets/img/Rémunération.jpg",
+                "assets/img/FAQ.jpg"
+            ]; // Liste des images
+            let currentIndex = 0; // Index de l'image actuelle
+
+            const carouselImage = document.getElementById("carouselImage");
+            const prevButton = document.getElementById("prevButton");
+            const nextButton = document.getElementById("nextButton");
+
+            // Fonction pour afficher l'image suivante
+            function showNextImage() {
+                currentIndex = (currentIndex + 1) % images.length;
+                carouselImage.src = images[currentIndex];
+            }
+
+            // Fonction pour afficher l'image précédente
+            function showPrevImage() {
+                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                carouselImage.src = images[currentIndex];
+            }
+
+            // Gestion des boutons
+            prevButton.addEventListener("click", showPrevImage);
+            nextButton.addEventListener("click", showNextImage);
+        </script>
     </main>
 {% endblock %}
