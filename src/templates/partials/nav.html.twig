@@ -15,6 +15,12 @@
                 </a>
             </li>
         {% else %}
+            <li class = "sign-out">
+                <a class="sign-out logo-container" href="{{ route("signOut") }}">
+                    <span>déconnexion</span>
+                </a>
+            </li>
+
             <li class="profile">
                 {#                <a class="profile button" href="{{ route("profile", {"idUser" : idUser}) }}">#}
                 <span>Profil</span>
