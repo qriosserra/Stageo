@@ -7,7 +7,7 @@ use Stageo\Lib\Database\PrimaryKey;
 use Stageo\Lib\Database\Table;
 
 #[Table("entreprise")]
-class Entreprise extends CoreObject
+class Entreprise extends User
 {
     public function __construct(#[PrimaryKey] private ?int       $id_entreprise = null,
                                 private string|NullDataType|null $email = null,

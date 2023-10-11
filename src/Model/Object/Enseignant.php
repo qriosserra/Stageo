@@ -6,7 +6,7 @@ use Stageo\Lib\Database\NullDataType;
 use Stageo\Lib\Database\Table;
 
 #[Table("enseignant")]
-class Enseignant extends CoreObject
+class Enseignant extends User
 {
     public function __construct(private ?int                     $id_enseignant = null,
                                 private string|NullDataType|null $email = null,

@@ -108,6 +108,7 @@ class Router
         //Passages de functions & variables globales aux templates Twig
         $twig->addFunction(new TwigFunction("cookie", [Cookie::class, "get"]));
         $twig->addFunction(new TwigFunction("session", [Session::class, "get"]));
+        $twig->addFunction(new TwigFunction("isUserInstance", [UserConnection::class, "isInstance"]));
         $twig->addGlobal("idUser", $idUser);
         $twig->addGlobal("flashMessages", FlashMessage::read());
         $twig->addGlobal("pattern", Pattern::toArray());
