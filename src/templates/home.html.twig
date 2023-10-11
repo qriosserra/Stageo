@@ -1,5 +1,5 @@
 {% extends "partials/layout.html.twig" %}
-
+{% from "macros/button.twig" import button %}
 {% block title %}Accueil{% endblock %}
 {% block content %}
     <main class="w-[64rem]">
@@ -8,14 +8,14 @@
             <p>Rémi Coletta</p>
             <p>coletta@lirmm.fr</p>
         </section>-->
-        <section class="bg-gray-100 py-8 inline-block align-middle">
-            <h5>Bienvenido</h5><!--mettre le texte aux centre -->
+        <section class="bg-gray-100 py-8  flex justify-center items-center ">
+            <h5 class="align-middle">Bienvenue sur Stageo</h5><!--mettre le texte aux centre -->
         </section>
         <section class="bg-gray-100 py-8">
             <div class="bg-gray-200 p-4">
                 <div class="max-w-screen-xl mx-auto">
                     <div class="relative">
-                        <img id="carouselImage" src="assets/img/durée.jpg" alt="Image 1" class="w-full h-100 object-cover rounded-lg shadow-md">
+                        <img id="carouselImage" src="assets/img/DuréeB.jpg" alt="Image 1" class="w-full h-100 object-cover rounded-lg shadow-md">
                         <div class="absolute top-500 left-0 right-500 bottom-0 flex items-center justify-center">
                             <button id="prevButton" class="bg-blue-500 text-white px-4 py-2 rounded-l-lg button-ghost">Précédent</button>
                             <button id="nextButton" class="bg-blue-500 text-white px-4 py-2 rounded-r-lg button-ghost">Suivant</button>
@@ -24,12 +24,33 @@
                 </div>
             </div>
         </section>
-
+        {% if  idUser != null %}
+            <section>
+                <h5 class="flex justify-center items-center">
+                    listes des recherche recentes ou des favories
+                </h5>
+                <div class="flex flex-wrap overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8 ">
+                {% for i in 0..5 %}
+                    {{ button('listes des recherche', "",""," padding: 5px") }}
+                {% endfor %}
+                </div>
+            </section>
+            <section>
+                <h5 class="flex justify-center items-center ">
+                    listes des categories rechercher recement
+                </h5>
+                <div class="flex flex-wrap  overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8">
+                    {% for i in 0..5 %}
+                        {{ button("listes des recherche " , "",""," bg-red ") }}
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
         <script>
             const images = [
-                "assets/img/durée.jpg",
-                "assets/img/Rémunération.jpg",
-                "assets/img/FAQ.jpg"
+                "assets/img/DuréeB.jpg",
+                "assets/img/RémunérationB.jpg",
+                "assets/img/FAQB.jpg"
             ]; // Liste des images
             let currentIndex = 0; // Index de l'image actuelle
 

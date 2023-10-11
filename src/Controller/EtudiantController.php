@@ -9,6 +9,7 @@ use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\enums\RouteName;
 use Stageo\Lib\enums\StatusCode;
 use Stageo\Lib\FlashMessage;
+use Stageo\Lib\HTTP\Session;
 use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
 use Stageo\Lib\UserConnection;
@@ -154,6 +155,8 @@ class EtudiantController extends CoreController
             type: FlashType::SUCCESS
         );
         UserConnection::signIn($etudiant);
+        (new Session())->set('idEtudiant', $etudiant->getIdEtudiant());
+        (new Session())->set('type', "etudiant");
         return new ControllerResponse(
             redirection: RouteName::HOME,
             statusCode: StatusCode::ACCEPTED
