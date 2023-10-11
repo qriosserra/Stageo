@@ -1,5 +1,5 @@
 {% extends "partials/layout.html.twig" %}
-
+{% from "macros/button.twig" import button %}
 {% block title %}Accueil{% endblock %}
 {% block content %}
     <main class="w-[64rem]">
@@ -24,24 +24,24 @@
                 </div>
             </div>
         </section>
-        {% if 1 < 2 %}
+        {% if  idUser != null %}
             <section>
                 <h5 class="flex justify-center items-center">
                     listes des recherche recentes ou des favories
                 </h5>
-                <div class="flex flex-wrap overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8">
+                <div class="flex flex-wrap overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8 ">
                 {% for i in 0..5 %}
-                    <div class="w-32 h-32 bg-blue-200 m-2">Élément {{ i }}</div>
+                    {{ button('listes des recherche', "",""," padding: 5px") }}
                 {% endfor %}
                 </div>
             </section>
             <section>
-                <h5 class="flex justify-center items-center">
+                <h5 class="flex justify-center items-center ">
                     listes des categories rechercher recement
                 </h5>
-                <div class="flex flex-wrap overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8">
+                <div class="flex flex-wrap  overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8">
                     {% for i in 0..5 %}
-                        <div class="w-32 h-32 bg-blue-200 m-2">Élément {{ i }}</div>
+                        {{ button("listes des recherche " , "",""," bg-red ") }}
                     {% endfor %}
                 </div>
             </section>
