@@ -15,6 +15,7 @@ use Stageo\Lib\FlashMessage;
 use Stageo\Lib\HTTP\Cookie;
 use Stageo\Lib\HTTP\Session;
 use Stageo\Lib\UserConnection;
+use Stageo\Model\Repository\CategorieRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\UrlHelper;
@@ -113,6 +114,7 @@ class Router
         $twig->addGlobal("flashMessages", FlashMessage::read());
         $twig->addGlobal("pattern", Pattern::toArray());
         $twig->addGlobal("absoluteURL", $_ENV["ABSOLUTE_URL"]);
+        $twig->addGlobal("categories",(new CategorieRepository())->select());
         $twig->addExtension(new DebugExtension);
         Container::addService("twig", $twig);
 
