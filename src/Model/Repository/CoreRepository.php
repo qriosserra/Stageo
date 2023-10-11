@@ -117,7 +117,7 @@ abstract class CoreRepository
      * @param QueryCondition|QueryCondition[] $conditions
      * @return array
      */
-    private function prepareValues(QueryCondition|array $conditions): array
+    private function prepareValues(QueryCondition|array|null $conditions): array
     {
         /**
          * Ne gère pas les conditions avec plusieurs fois la même colonne, également les conditions demandant
@@ -128,6 +128,6 @@ abstract class CoreRepository
                 $values[$condition->getColumn()] = $condition->getValue();
             }
         }
-        return $values ?? [$conditions->getColumn() => $conditions->getValue()];
+        return !is_null($conditions) ? $values ?? [$conditions->getColumn() => $conditions->getValue()] : [];
     }
 }
