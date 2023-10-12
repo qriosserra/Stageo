@@ -16,6 +16,7 @@ use Stageo\Lib\UserConnection;
 use Stageo\Lib\Validate;
 use Stageo\Model\Object\Etudiant;
 use Stageo\Model\Repository\EtudiantRepository;
+use Stageo\Model\Repository\CategorieRepository;
 
 class EtudiantController extends CoreController
 {
@@ -155,11 +156,11 @@ class EtudiantController extends CoreController
             type: FlashType::SUCCESS
         );
         UserConnection::signIn($etudiant);
-        (new Session())->set('idEtudiant', $etudiant->getIdEtudiant());
-        (new Session())->set('type', "etudiant");
+        // a modifier
+
         return new ControllerResponse(
             redirection: RouteName::HOME,
-            statusCode: StatusCode::ACCEPTED
+            statusCode: StatusCode::ACCEPTED,
         );
     }
 

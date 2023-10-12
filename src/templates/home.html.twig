@@ -30,8 +30,8 @@
                     listes des recherche recentes ou des favories
                 </h5>
                 <div class="flex flex-wrap overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8 ">
-                {% for i in 0..5 %}
-                    {{ button('listes des recherche', "",""," padding: 5px") }}
+                {% for categorie in categories %}
+                    {{button(categorie.nom, "",""," padding: 5px") }}
                 {% endfor %}
                 </div>
             </section>
