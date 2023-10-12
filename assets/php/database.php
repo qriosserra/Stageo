@@ -23,13 +23,7 @@ $query = <<<SQL
         `id_departement`            VARCHAR(32)     NOT NULL,
         PRIMARY KEY(`id_departement`)
     );
-    
-    CREATE TABLE `{$prefix}etape`(
-        `id_etape`                  VARCHAR(64)     NOT NULL,
-        `libelle`                   VARCHAR(256)    NULL,
-        PRIMARY KEY                     (`id_etape`)
-    );
-    
+
     CREATE TABLE `{$prefix}enseignant`(
         `id_enseignant`             INT(11)         NOT NULL AUTO_INCREMENT,
         `email`                     VARCHAR(320)    NULL,
@@ -41,7 +35,7 @@ $query = <<<SQL
         `prenom`                    VARCHAR(256)    NULL,
         PRIMARY KEY                     (`id_enseignant`)
     );
-    
+
     CREATE TABLE `{$prefix}pays`(
         `id_pays`                   INT(11)         NOT NULL AUTO_INCREMENT,
         `nom`                       VARCHAR(64)     NULL,
@@ -49,24 +43,42 @@ $query = <<<SQL
         UNIQUE KEY (`nom`)
     );
 
-    CREATE TABLE `{$prefix}code_postal`(
-        `id_code_postal`            VARCHAR(32)     NOT NULL,
-        PRIMARY KEY(`id_code_postal`)
-    );
-    
     CREATE TABLE `{$prefix}commune`(
         `id_commune`                INT(11)         NOT NULL AUTO_INCREMENT,
         `commune`                   VARCHAR(256)    NULL,
-        `id_pays`                   INT(11)         NOT NULL,
-        `id_code_postal`            VARCHAR(32)     NOT NULL,
-        PRIMARY KEY(`id_commune`),
-        FOREIGN KEY(`id_pays`)          REFERENCES {$prefix}pays(`id_pays`),
-        FOREIGN KEY(`id_code_postal`)   REFERENCES {$prefix}code_postal(`id_code_postal`)
+        `id_code_postal`            VARCHAR(32)     NULL,
+        PRIMARY KEY(`id_commune`)
     );
-   
+
+    CREATE TABLE `{$prefix}code_postal`(
+        `id_code_postal`            INT             NOT NULL,
+        `id_pays`                   INT             NULL,
+        PRIMARY KEY(`id_code_postal`),
+        FOREIGN KEY (`id_pays`) REFERENCES `{$prefix}pays`(`id_pays`)
+    );
+
+    CREATE TABLE `{$prefix}categorie`(
+        `id_categorie`              INT             NOT NULL AUTO_INCREMENT,
+        `nom`                       VARCHAR(50)     NULL,
+        PRIMARY KEY(`id_categorie`)
+    );
+
+    CREATE TABLE `{$prefix}etape`(
+        `id_etape`                  VARCHAR(64)     NOT NULL,
+        `libelle`                   VARCHAR(256)    NULL,
+        PRIMARY KEY(`id_etape`)
+    );
+
+    CREATE TABLE `{$prefix}code_postal_commune`(
+        `id_commune`                INT             NOT NULL,
+        `id_code_postal`            INT             NOT NULL,
+        PRIMARY KEY(`id_commune`, `id_code_postal`),
+        FOREIGN KEY(`id_commune`)     REFERENCES `{$prefix}commune`(`id_commune`),
+        FOREIGN KEY(`id_code_postal`) REFERENCES `{$prefix}code_postal`(`id_code_postal`)
+);
     
     CREATE TABLE `{$prefix}etudiant`(
-        `id_etudiant`               INT(11) NOT NULL AUTO_INCREMENT,
+        `id_etudiant`               INT(11)         NOT NULL AUTO_INCREMENT,
         `login`                     VARCHAR(256)    NULL,
         `email`                     VARCHAR(320)    NULL,
         `unverified_email`          VARCHAR(320)    NULL,
@@ -80,15 +92,15 @@ $query = <<<SQL
         `email_etudiant`            VARCHAR(320)    NULL,
         `adresse_voie`              VARCHAR(256)    NULL,
         `civilite`                  CHAR(1)         NULL,
-        `id_commune`            INT(11)     NULL,
+        `id_commune`                INT(11)         NULL,
         `id_departement`            VARCHAR(32)     NULL,
         `id_etape`                  VARCHAR(64)     NULL,
         `id_ufr`                    VARCHAR(4)      NULL,
         PRIMARY KEY(`id_etudiant`),
-        FOREIGN KEY(`id_commune`)   REFERENCES {$prefix}commune(`id_commune`),
-        FOREIGN KEY(`id_departement`)   REFERENCES {$prefix}departement(`id_departement`),
-        FOREIGN KEY(`id_etape`)         REFERENCES {$prefix}etape(`id_etape`),
-        FOREIGN KEY(`id_ufr`)           REFERENCES {$prefix}composante(`id_ufr`)
+        FOREIGN KEY(`id_commune`)       REFERENCES `{$prefix}commune`(`id_commune`),
+        FOREIGN KEY(`id_departement`)   REFERENCES `{$prefix}departement`(`id_departement`),
+        FOREIGN KEY(`id_etape`)         REFERENCES `{$prefix}etape`(`id_etape`),
+        FOREIGN KEY(`id_ufr`)           REFERENCES `{$prefix}composante`(`id_ufr`)
     );
     
     CREATE TABLE `{$prefix}entreprise`(
@@ -108,9 +120,53 @@ $query = <<<SQL
         `telephone`                 VARCHAR(20)     NULL,
         `fax`                       VARCHAR(64)     NULL,
         `site`                      VARCHAR(256)    NULL,
-        `id_commune`            INT(11)     NULL,
+        `id_commune`                INT(11)         NULL,
         PRIMARY KEY(`id_entreprise`),
         FOREIGN KEY(`id_commune`)   REFERENCES {$prefix}commune(`id_commune`)
+    );
+
+    CREATE TABLE `{$prefix}offre`(
+        `id_offre`                  INT             NOT NULL AUTO_INCREMENT,
+        `description`               VARCHAR(512)    NULL,  
+        `secteur`                   VARCHAR(128)    NULL,
+        `thematique`                VARCHAR(64)     NULL,
+        `tache`                     VARCHAR(256)    NULL,
+        `commentaire`               VARCHAR(256)    NULL,
+        `gratification`             VARCHAR(32)     NULL,
+        `unite_gratification`       VARCHAR(8)      NULL,
+        `id_etudiant`               INT             NULL,
+        `id_entreprise`             INT             NULL,
+        PRIMARY KEY(`id_offre`),
+        FOREIGN KEY(`id_etudiant`)   REFERENCES `{$prefix}etudiant`(`id_etudiant`),
+        FOREIGN KEY(`id_entreprise`) REFERENCES `{$prefix}entreprise`(`id_entreprise`)
+    );
+
+    CREATE TABLE `{$prefix}etape_vise`(
+        `id_etape`                  VARCHAR(64)     NOT NULL,
+        `id_offre`                  INT             NOT NULL,
+        PRIMARY KEY(`id_etape`, `id_offre`),
+        FOREIGN KEY(`id_etape`) REFERENCES `{$prefix}etape`(`id_etape`),
+        FOREIGN KEY(`id_offre`) REFERENCES `{$prefix}offre`(`id_offre`)
+    );
+
+    CREATE TABLE `{$prefix}offre_alternance`(
+        `id_offre`                  INT             NOT NULL AUTO_INCREMENT,
+        PRIMARY KEY(`id_offre`),
+        FOREIGN KEY(`id_offre`) REFERENCES `{$prefix}offre`(`id_offre`)
+    );
+
+    CREATE TABLE `{$prefix}offre_stage`(
+        `id_offre`                  INT             NOT NULL AUTO_INCREMENT,
+        PRIMARY KEY(`id_offre`),
+        FOREIGN KEY(`id_offre`) REFERENCES `{$prefix}offre`(`id_offre`)
+    );
+
+    CREATE TABLE `{$prefix}categorie_offre`(
+        `id_offre`                  INT             NOT NULL,
+        `id_categorie`              INT             NOT NULL,
+        PRIMARY KEY(`id_offre`, `id_categorie`),
+        FOREIGN KEY(`id_offre`)     REFERENCES `{$prefix}offre`(`id_offre`),
+        FOREIGN KEY(`id_categorie`) REFERENCES `{$prefix}categorie`(`id_categorie`)
     );
     
     CREATE TABLE `{$prefix}tuteur`(
@@ -178,7 +234,7 @@ $query = <<<SQL
         FOREIGN KEY(`id_convention`)    REFERENCES {$prefix}convention(`id_convention`)
     );
     
-    ALTER TABLE {$prefix}pays MODIFY id_pays INT AUTO_INCREMENT;
+ALTER TABLE {$prefix}pays MODIFY id_pays INT AUTO_INCREMENT;
 
 INSERT INTO {$prefix}pays (nom)
 VALUES
@@ -424,7 +480,8 @@ VALUES
 ('Serbie-et-Monténégro'),
 ('Zambie');
 
-    INSERT INTO {$prefix}code_postal VALUES
+ALTER TABLE {$prefix}code_postal MODIFY COLUMN id_pays INT DEFAULT 75;
+INSERT INTO {$prefix}code_postal(id_code_postal) VALUES
 (1000),
 (1090),
 (1100),
@@ -6305,7 +6362,6 @@ VALUES
 (95870),
 (95880);
 
-ALTER TABLE {$prefix}commune MODIFY COLUMN id_pays INT DEFAULT 75;
 ALTER TABLE {$prefix}commune MODIFY id_commune INT AUTO_INCREMENT;
 
 INSERT INTO {$prefix}commune(id_code_postal, commune) VALUES
@@ -41559,8 +41615,11 @@ INSERT INTO {$prefix}commune(id_code_postal, commune) VALUES
 (9320,'Soulan'),
 (9800,'Villeneuve');
 
+INSERT INTO {$prefix}code_postal_commune (`id_commune`, `id_code_postal`)
+SELECT id_commune, id_code_postal FROM {$prefix}commune;
 
 
+ALTER TABLE {$prefix}commune DROP COLUMN id_code_postal;
 
 SQL;
 
