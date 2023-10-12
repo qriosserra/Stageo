@@ -24,14 +24,14 @@
                 </div>
             </div>
         </section>
-        {% if  idUser != null %}
+        {% if idUser != null %}
             <section>
                 <h5 class="flex justify-center items-center">
                     listes des recherche recentes ou des favories
                 </h5>
                 <div class="flex flex-wrap overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8 ">
-                {% for cate in categories %}
-                    {{button(cate, "",""," padding: 5px") }}
+                {% for categorie in categories %}
+                    {{button(categorie.nom, "",""," padding: 5px") }}
                 {% endfor %}
                 </div>
             </section>
