@@ -15,6 +15,10 @@ use Stageo\Lib\FlashMessage;
 use Stageo\Lib\HTTP\Cookie;
 use Stageo\Lib\HTTP\Session;
 use Stageo\Lib\UserConnection;
+use Stageo\Model\Object\Enseignant;
+use Stageo\Model\Object\Entreprise;
+use Stageo\Model\Object\Etudiant;
+use Stageo\Model\Repository\EntrepriseRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\UrlHelper;
@@ -109,7 +113,10 @@ class Router
         $twig->addFunction(new TwigFunction("cookie", [Cookie::class, "get"]));
         $twig->addFunction(new TwigFunction("session", [Session::class, "get"]));
         $twig->addFunction(new TwigFunction("isUserInstance", [UserConnection::class, "isInstance"]));
-        $twig->addGlobal("idUser", $idUser);
+        $twig->addGlobal("idUser", UserConnection::getSignedInUser());
+        $twig->addGlobal("etudiant", new Etudiant());
+        $twig->addGlobal("entreprise", new Entreprise());
+        $twig->addGlobal("enseignant", new Enseignant());
         $twig->addGlobal("flashMessages", FlashMessage::read());
         $twig->addGlobal("pattern", Pattern::toArray());
         $twig->addGlobal("absoluteURL", $_ENV["ABSOLUTE_URL"]);
@@ -230,11 +237,18 @@ class Router
                 )
             ],
             [
+                "name" => RouteName::HOME_ENTREPRISE,
+                "route" => new Route(
+                    path: "/entreprise/add/{email?}",
+                    defaults: ["_controller" => [EntrepriseController::class, "addForm"]],
+                    methods: "GET"
+                )
+            ],
+            [
                 "name" => RouteName::ENTREPRISE_ADD,
                 "route" => new Route(
-                    path: "/entreprise/add",
-                    defaults: ["_controller" => [EntrepriseController::class, "add"]],
-                    methods: "POST"
+                    path: "/home_entreprise",
+                    defaults: ["_controller" => [MainController::class, "home_entreprise"]]
                 )
             ]
         ];
