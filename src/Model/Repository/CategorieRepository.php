@@ -15,4 +15,3 @@ class CategorieRepository extends CoreRepository
         return new Categorie();
     }
 }
-?>
