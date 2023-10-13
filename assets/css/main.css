@@ -1051,3 +1051,8 @@ footer .footer-information-container .footer-description-container .footer-descr
     text-align: center;
   }
 }
+.field-container{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}

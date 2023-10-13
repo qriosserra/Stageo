@@ -239,18 +239,10 @@ class Router
                 )
             ],
             [
-                "name" => RouteName::HOME_ENTREPRISE,
-                "route" => new Route(
-                    path: "/entreprise/add/{email?}",
-                    defaults: ["_controller" => [EntrepriseController::class, "addForm"]],
-                    methods: "GET"
-                )
-            ],
-            [
                 "name" => RouteName::ENTREPRISE_ADD,
                 "route" => new Route(
-                    path: "/home_entreprise",
-                    defaults: ["_controller" => [MainController::class, "home_entreprise"]]
+                    path: "/add/entreprise",
+                    defaults: ["_controller" => [EntrepriseController::class, "add"]],
                 )
             ]
         ];
