@@ -46,6 +46,18 @@
                 </div>
             </section>
         {% endif %}
+        {% if isUserInstance(entreprise) %}
+            <section>
+                <h5 class="flex justify-center items-center">
+                    listes des recherche recentes ou des favories
+                </h5>
+                <div class="flex flex-wrap overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8 ">
+                    {% for categorie in categories %}
+                        {{button(categorie.nom, "",""," padding: 5px") }}
+                    {% endfor %}
+                </div>
+            </section>
+        {% endif %}
         <script>
             const images = [
                 "assets/img/DuréeB.jpg",
