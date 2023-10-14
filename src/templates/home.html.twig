@@ -49,9 +49,12 @@
         {% if isUserInstance(entreprise) %}
             <section>
                 <h5 class="flex justify-center items-center">
-                    listes des recherche recentes ou des favories
+                    listes des recherche recentes ou des favoriese
                 </h5>
                 <div class="flex flex-wrap overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8 ">
+                    {% for offre in offres %}
+                        {{button(offre.getIdOffre, "",""," padding: 5px") }}
+                    {% endfor %}
                 </div>
             </section>
         {% endif %}

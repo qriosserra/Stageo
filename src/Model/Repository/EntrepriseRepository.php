@@ -28,4 +28,5 @@ class EntrepriseRepository extends CoreRepository
     {
         return $this->select([new QueryCondition("unverified_email", ComparisonOperator::EQUAL, $email)])[0] ?? null;
     }
+
 }
