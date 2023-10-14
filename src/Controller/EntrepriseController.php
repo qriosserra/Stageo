@@ -15,7 +15,7 @@ use Stageo\Lib\Validate;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Repository\EntrepriseRepository;
 
-class EntrepriseController extends CoreController
+class EntrepriseController extends UserController
 {
     /**
      * @throws ControllerException
@@ -49,6 +49,7 @@ class EntrepriseController extends CoreController
         $effectif = $_REQUEST["effectif"];
         $site = $_REQUEST["site"];
         $fax = $_REQUEST["fax"];
+        $password = $_REQUEST["password"];
         $id_code_postal = $_REQUEST["id_code_postal"];
 
         if (!Token::verify(RouteName::ENTREPRISE_ADD_FORM, $_REQUEST["token"]))
@@ -133,7 +134,8 @@ class EntrepriseController extends CoreController
                 ]
             );
         }
-        if (!Validate::isCodePostal($id_code_postal)) {
+        //En commentaire car changement dans base de donnée
+        /*if (!Validate::isCodePostal($id_code_postal)) {
             throw new ControllerException(
                 message: "Le code postal n'est pas valide",
                 redirection: RouteName::ENTREPRISE_ADD_FORM,
@@ -141,7 +143,7 @@ class EntrepriseController extends CoreController
                     "email" => $email
                 ]
             );
-        }
+        }*/
         if (!Validate::isCodeNaf($code_naf)) {
             throw new ControllerException(
                 message: "Le code NAF n'est pas valide",
@@ -178,6 +180,24 @@ class EntrepriseController extends CoreController
                 ]
             );
         }
+        if (!Validate::isPassword($password)) {
+            throw new ControllerException(
+                message: "Le mot de passe ne respecte pas les critères de sécurité",
+                redirection: RouteName::ENTREPRISE_ADD_FORM,
+                params: [
+                    "email" => $email
+                ]
+            );
+        }
+        if ($password !== $_REQUEST["confirm"]) {
+            throw new ControllerException(
+                message: "Les mots de passe ne correspondent pas",
+                redirection: RouteName::ENTREPRISE_ADD_FORM,
+                params: [
+                    "email" => $email
+                ]
+            );
+        }
 
         FlashMessage::add(
             content: "L'entreprise a été ajoutée avec succès",
@@ -186,6 +206,7 @@ class EntrepriseController extends CoreController
         (new EntrepriseRepository)->insert(
             new Entreprise(
                 email: $email,
+                hashed_password: Password::hash($password),
                 raison_sociale: $raison_socale,
                 adresse_voie: $adresse_voie,
                 code_naf: $code_naf,
@@ -196,7 +217,7 @@ class EntrepriseController extends CoreController
                 effectif: $effectif,
                 site: $site,
                 fax: $fax,
-                id_code_postal: $id_code_postal
+                //id_code_postal: $id_code_postal
             )
         );
         return new ControllerResponse(

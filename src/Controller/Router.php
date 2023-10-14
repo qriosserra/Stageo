@@ -20,6 +20,7 @@ use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Etudiant;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\CategorieRepository;
+use Stageo\Model\Repository\OffreRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\UrlHelper;
@@ -122,6 +123,7 @@ class Router
         $twig->addGlobal("pattern", Pattern::toArray());
         $twig->addGlobal("absoluteURL", $_ENV["ABSOLUTE_URL"]);
         $twig->addGlobal("categories",(new CategorieRepository())->select());
+        $twig->addGlobal("ofrres",(new OffreRepository())->select());
         $twig->addExtension(new DebugExtension);
         Container::addService("twig", $twig);
 

@@ -40,8 +40,12 @@
                 {{ input("fax", "Fax", "text", "required") }}
                 {{ input("id_code_postal", "Code Postal", "text", "required") }}
             </div>
+            <div class="flex flex-col items-center gap-4 hidden" id="group4" >
+                {{ input("password", "Mot de passe", "password", "fi-rr-lock", "required", pattern.password) }}
+                {{ input("confirm", "Confirmation", "password", "fi-rr-lock", "required", pattern.password) }}
+            </div>
             <script> let currentGroup = 1;
-                const totalGroups = 3;
+                const totalGroups = 4;
 
                 function move(step) {
                     document.getElementById('group' + currentGroup).style.display = 'none';

@@ -22,4 +22,5 @@ enum RouteName: string
     case ADMIN_DASHBOARD = "adminDashboard";
     case ENTREPRISE_ADD_FORM = "entrepriseAddForm";
     case ENTREPRISE_ADD = "entrepriseAdd";
+    case ENTREPRISE_SIGN_IN_FORM = "entrepriseSignInForm";
 }

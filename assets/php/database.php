@@ -105,6 +105,7 @@ $query = <<<SQL
     
     CREATE TABLE `{$prefix}entreprise`(
         `id_entreprise`             INT(11)         NOT NULL AUTO_INCREMENT,
+        `nom`                       VARCHAR(32)     NULL,
         `email`                     VARCHAR(320)    NULL,
         `unverified_email`          VARCHAR(320)    NULL,
         `nonce`                     VARCHAR(256)    NULL,

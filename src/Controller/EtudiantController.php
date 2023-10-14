@@ -17,8 +17,10 @@ use Stageo\Lib\Validate;
 use Stageo\Model\Object\Etudiant;
 use Stageo\Model\Repository\EtudiantRepository;
 use Stageo\Model\Repository\CategorieRepository;
+use Stageo\Controller\UserController;
 
-class EtudiantController extends CoreController
+
+class EtudiantController extends UserController
 {
     /**
      * @throws ControllerException
@@ -114,55 +116,56 @@ class EtudiantController extends CoreController
      * @throws ControllerException
      * @throws InvalidTokenException
      */
-    public function signIn(): ControllerResponse
-    {
-        $login = $_REQUEST["login"];
-        $password = $_REQUEST["password"];
-        if (!Token::verify(RouteName::ETUDIANT_SIGN_IN_FORM, $_REQUEST["token"]))
-            throw new InvalidTokenException();
-        if (Token::isTimeout(RouteName::ETUDIANT_SIGN_IN_FORM)) {
-            throw new TokenTimeoutException(
-                routeName: RouteName::ETUDIANT_SIGN_IN_FORM,
-                params: [
-                    "login" => $login
-                ]
-            );
-        }
-        /**
-         * @var Etudiant|null $etudiant
-         */
-        $etudiant = (new EtudiantRepository())->getByLogin($login);
-        if (is_null($etudiant)) {
-            throw new ControllerException(
-                message: "Aucun compte n'existe avec ce login",
-                redirection: RouteName::ETUDIANT_SIGN_IN_FORM,
-                params: [
-                    "login" => $login
-                ]
-            );
-        }
-        if (!Password::verify($password, $etudiant->getHashedPassword())) {
-            throw new ControllerException(
-                message: "Le mot de passe est incorrect",
-                redirection: RouteName::ETUDIANT_SIGN_IN_FORM,
-                params: [
-                    "login" => $login
-                ]
-            );
-        }
-
-        FlashMessage::add(
-            content: "Connexion réalisée avec succès",
-            type: FlashType::SUCCESS
-        );
-        UserConnection::signIn($etudiant);
-        // a modifier
-
-        return new ControllerResponse(
-            redirection: RouteName::HOME,
-            statusCode: StatusCode::ACCEPTED,
+    /*
+public function signIn(): ControllerResponse
+{
+    $login = $_REQUEST["login"];
+    $password = $_REQUEST["password"];
+    if (!Token::verify(RouteName::ETUDIANT_SIGN_IN_FORM, $_REQUEST["token"]))
+        throw new InvalidTokenException();
+    if (Token::isTimeout(RouteName::ETUDIANT_SIGN_IN_FORM)) {
+        throw a TokenTimeoutException(
+            routeName: RouteName::ETUDIANT_SIGN_IN_FORM,
+            params: [
+                "login" => $login
+            ]
         );
     }
+
+    * @var Etudiant|null $etudiant *
+    $etudiant = (new EtudiantRepository())->getByLogin($login);
+    if (is_null($etudiant)) {
+        throw new ControllerException(
+            message: "Aucun compte n'existe avec ce login",
+            redirection: RouteName::ETUDIANT_SIGN_IN_FORM,
+            params: [
+                "login" => $login
+            ]
+        );
+    }
+    if (!Password::verify($password, $etudiant->getHashedPassword())) {
+        throw new ControllerException(
+            message: "Le mot de passe est incorrect",
+            redirection: RouteName::ETUDIANT_SIGN_IN_FORM,
+            params: [
+                "login" => $login
+            ]
+        );
+    }
+
+    FlashMessage::add(
+        content: "Connexion réalisée avec succès",
+        type: FlashType::SUCCESS
+    );
+    UserConnection::signIn($etudiant);
+    // a modifier
+
+    return new ControllerResponse(
+        redirection: RouteName::HOME,
+        statusCode: StatusCode::ACCEPTED,
+    );
+}
+*/
 
     /**
      * @throws ControllerException
