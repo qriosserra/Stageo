@@ -123,7 +123,7 @@ class Router
         $twig->addGlobal("pattern", Pattern::toArray());
         $twig->addGlobal("absoluteURL", $_ENV["ABSOLUTE_URL"]);
         $twig->addGlobal("categories",(new CategorieRepository())->select());
-        $twig->addGlobal("ofrres",(new OffreRepository())->select());
+        $twig->addGlobal("offres",(new OffreRepository())->select());
         $twig->addExtension(new DebugExtension);
         Container::addService("twig", $twig);
 

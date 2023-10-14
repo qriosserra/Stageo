@@ -114,7 +114,7 @@ abstract class UserController extends CoreController
         ];
 
         foreach ($list as $type => $data) {
-            try {
+            //try {
                 $login = $data["login"] ?? null;
                 $password = $data["password"];
                 $email = $data["email"] ?? null;
@@ -134,52 +134,45 @@ abstract class UserController extends CoreController
 
                 //$repositoryClass = ucfirst($type) . 'Repository';
                 $repositoryClass = $repositoryList[$type];
-                if($login) {
-                    $user = (new $repositoryClass)->getByLogin($login);
+                if($type=='etudiant') {
+                    $user = $repositoryClass->getByLogin($login);
                 }
                 else{
                     $login = $email;
-                    $user = (new $repositoryClass)->getByEmail($login);
+                    $user = $repositoryClass->getByEmail($login);
                 }
 
-                if (is_null($user)) {
-                    throw new ControllerException(
-                        message: "Aucun compte n'existe avec ce login",
-                        redirection: RouteName::ETUDIANT_SIGN_IN_FORM,
-                        params: [
-                            "login" => $login
-                        ]
-                    );
-                }
-                if (!Password::verify($password, $user->getHashedPassword())) {
-                    throw new ControllerException(
-                        message: "Le mot de passe est incorrect",
-                        redirection: RouteName::ETUDIANT_SIGN_IN_FORM,
-                        params: [
-                            "login" => $login
-                        ]
-                    );
+                if ($user) {
+
+                    if (Password::verify($password, $user->getHashedPassword())) {
+                        FlashMessage::add(
+                            content: "Connexion réalisée avec succès",
+                            type: FlashType::SUCCESS
+                        );
+                        UserConnection::signIn($user);
+
+                        return new ControllerResponse(
+                            redirection: RouteName::HOME,
+                            statusCode: StatusCode::ACCEPTED,
+                        );
+                    }
                 }
 
-                FlashMessage::add(
-                    content: "Connexion réalisée avec succès",
-                    type: FlashType::SUCCESS
-                );
-                UserConnection::signIn($user);
-
-                return new ControllerResponse(
-                    redirection: RouteName::HOME,
-                    statusCode: StatusCode::ACCEPTED,
-                );
-
-            }
+            /*}
             catch (Exception $e) {
                 return new ControllerResponse(
                     redirection: RouteName::ETUDIANT_SIGN_IN_FORM,
                     statusCode: StatusCode::ACCEPTED,
                 );
-            }
+            }*/
 
         }
+        throw new ControllerException(
+            message: "L'utilisateur n'existe pas ou le mot de passe est incorrect",
+            redirection: RouteName::ETUDIANT_SIGN_IN_FORM,
+            params: [
+                "login" => $login
+            ]
+        );
     }
 }

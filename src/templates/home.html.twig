@@ -52,9 +52,6 @@
                     listes des recherche recentes ou des favories
                 </h5>
                 <div class="flex flex-wrap overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8 ">
-                    {% for offre in offres %}
-                        {{button(offre.nom, "",""," padding: 5px") }}
-                    {% endfor %}
                 </div>
             </section>
         {% endif %}
