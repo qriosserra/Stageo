@@ -226,6 +226,16 @@ class EntrepriseController extends UserController
         );
     }
 
+    public function creation_offre_form(string $email = null): ControllerResponse {
+        return new ControllerResponse(
+            template: "entreprise/creaOffreForm.html.twig",
+            params: [
+                "email" => $email,
+                "token" => Token::generateToken(RouteName::ENTREPRISE_CREATION_OFFRE_FORM)
+            ]
+        );
+    }
+
 
 
 }

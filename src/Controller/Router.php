@@ -246,6 +246,13 @@ class Router
                     path: "/add/entreprise",
                     defaults: ["_controller" => [EntrepriseController::class, "add"]],
                 )
+            ],
+            [
+            "name" => RouteName::ENTREPRISE_CREATION_OFFRE_FORM,
+            "route" => new Route(
+                path: "/entreprise/creationOffreForm",
+                defaults: ["_controller" => [EntrepriseController::class, "creation_offre_form"]],
+            )
             ]
         ];
         $routeCollection = new RouteCollection();

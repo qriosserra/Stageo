@@ -31,76 +31,52 @@ abstract class UserController extends CoreController
      */
     public function signIn(): ControllerResponse
     {
-        $repositoryList = [
-            'etudiant' => new EtudiantRepository(),
-            'entreprise' => new EntrepriseRepository(),
-            'enseignant' => new EnseignantRepository(),
-        ];
-
         $list = [
-            "etudiant" => [
-                "login" => $_REQUEST['login'],
-                "password" => $_REQUEST['password'],
-                "token" => $_REQUEST['token']
-            ],
-            "entreprise" => [
-                "email" => $_REQUEST['login'],
-                "password" => $_REQUEST['password'],
-                "token" => $_REQUEST['token']
-            ],
-            "enseignant" => [
-                "email" => $_REQUEST['login'],
-                "password" => $_REQUEST['password'],
-                "token" => $_REQUEST['token']
-            ]
+            "etudiant" => new EtudiantRepository(),
+            "entreprise" => new EntrepriseRepository(),
+            "enseignant" => new EnseignantRepository()
         ];
 
-        foreach ($list as $type => $data) {
-            //try {
-                $login = $data["login"] ?? null;
-                $password = $data["password"];
-                $email = $data["email"] ?? null;
-                $token = $data["token"] ?? null;
+        $login = $_REQUEST["login"] ?? null;
+        $password = $_REQUEST["password"];
+        $token = $_REQUEST["token"] ?? null;
 
-                if (!Token::verify(RouteName::ETUDIANT_SIGN_IN_FORM, $token)) {
-                    throw new InvalidTokenException();
-                }
-                if (Token::isTimeout(RouteName::ETUDIANT_SIGN_IN_FORM)) {
-                    throw new TokenTimeoutException(
-                        routeName: RouteName::ETUDIANT_SIGN_IN_FORM,
-                        params: [
-                            "login" => $login
-                        ]
+        foreach ($list as $type => $repositoryClass) {
+
+            if (!Token::verify(RouteName::ETUDIANT_SIGN_IN_FORM, $token)) {
+                throw new InvalidTokenException();
+            }
+            if (Token::isTimeout(RouteName::ETUDIANT_SIGN_IN_FORM)) {
+                throw new TokenTimeoutException(
+                    routeName: RouteName::ETUDIANT_SIGN_IN_FORM,
+                    params: [
+                        "login" => $login
+                    ]
+                );
+            }
+
+            if ($type == 'etudiant') {
+                $user = $repositoryClass->getByLogin($login);
+            } else {
+                $user = $repositoryClass->getByEmail($login);
+            }
+
+            if ($user) {
+                if (Password::verify($password, $user->getHashedPassword())) {
+                    FlashMessage::add(
+                        content: "Connexion réalisée avec succès",
+                        type: FlashType::SUCCESS
+                    );
+                    UserConnection::signIn($user);
+
+                    return new ControllerResponse(
+                        redirection: RouteName::HOME,
+                        statusCode: StatusCode::ACCEPTED,
                     );
                 }
-
-                //$repositoryClass = ucfirst($type) . 'Repository';
-                $repositoryClass = $repositoryList[$type];
-                if($type=='etudiant') {
-                    $user = $repositoryClass->getByLogin($login);
-                }
-                else{
-                    $login = $email;
-                    $user = $repositoryClass->getByEmail($login);
-                }
-
-                if ($user) {
-
-                    if (Password::verify($password, $user->getHashedPassword())) {
-                        FlashMessage::add(
-                            content: "Connexion réalisée avec succès",
-                            type: FlashType::SUCCESS
-                        );
-                        UserConnection::signIn($user);
-
-                        return new ControllerResponse(
-                            redirection: RouteName::HOME,
-                            statusCode: StatusCode::ACCEPTED,
-                        );
-                    }
-                }
-
+            }
         }
+
         throw new ControllerException(
             message: "L'utilisateur n'existe pas ou le mot de passe est incorrect",
             redirection: RouteName::ETUDIANT_SIGN_IN_FORM,

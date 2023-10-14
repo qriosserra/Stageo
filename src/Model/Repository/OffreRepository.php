@@ -15,4 +15,9 @@ class OffreRepository extends CoreRepository
         return new Offre();
     }
 
+    public function getById(int $id): ?CoreObject
+    {
+        return $this->select([new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id)])[0] ?? null;
+    }
+
 }
