@@ -29,64 +29,6 @@ abstract class UserController extends CoreController
      * @throws ControllerException
      * @throws InvalidTokenException
      */
-    public function signIn2(string $cle, string $type): ControllerResponse
-    {
-        $login = $_REQUEST["$cle"];
-        $type_chemin = strtoupper($type);
-        $password = $_REQUEST["password"];
-        if (!Token::verify(RouteName::${$type_chemin . '_SIGN_IN_FORM'}, $_REQUEST["token"])) {
-            throw new InvalidTokenException();
-        }
-        if (Token::isTimeout(RouteName::${$type_chemin . '_SIGN_IN_FORM'})) {
-            throw new TokenTimeoutException(
-                routeName: RouteName::${$type_chemin . '_SIGN_IN_FORM'},
-                params: [
-                    "login" => $login
-                ]
-            );
-        }
-        /**
-         * @var User|null $user
-         */
-        $method = 'getBy' . $cle;
-        $repositoryClass = ucfirst($type) . 'Repository';
-        $user = (new $repositoryClass)->$method($login);
-        if (is_null($user)) {
-            throw new ControllerException(
-                message: "Aucun compte n'existe avec ce login",
-                redirection: RouteName::${$type_chemin . '_SIGN_IN_FORM'},
-                params: [
-                    "$cle" => $login
-                ]
-            );
-        }
-        if (!Password::verify($password, $user->getHashedPassword())) {
-            throw new ControllerException(
-                message: "Le mot de passe est incorrect",
-                redirection: RouteName::${$type_chemin . '_SIGN_IN_FORM'},
-                params: [
-                    "$cle" => $login
-                ]
-            );
-        }
-        FlashMessage::add(
-            content: "Connexion réalisée avec succès",
-            type: FlashType::SUCCESS
-        );
-        UserConnection::signIn($user);
-        // a modifier
-
-        return new ControllerResponse(
-            redirection: RouteName::HOME,
-            statusCode: StatusCode::ACCEPTED,
-        );
-    }
-
-    /**
-     * @throws TokenTimeoutException
-     * @throws ControllerException
-     * @throws InvalidTokenException
-     */
     public function signIn(): ControllerResponse
     {
         $repositoryList = [
@@ -157,14 +99,6 @@ abstract class UserController extends CoreController
                         );
                     }
                 }
-
-            /*}
-            catch (Exception $e) {
-                return new ControllerResponse(
-                    redirection: RouteName::ETUDIANT_SIGN_IN_FORM,
-                    statusCode: StatusCode::ACCEPTED,
-                );
-            }*/
 
         }
         throw new ControllerException(
