@@ -5,8 +5,6 @@ namespace Stageo\Controller\Exception;
 use Exception;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
-use Stageo\Lib\enums\RouteName;
-use Stageo\Lib\enums\StatusCode;
 
 class ControllerException extends Exception
 {

@@ -7,13 +7,14 @@ use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
 use Stageo\Lib\HTTP\Cookie;
+use Stageo\Lib\Response;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Repository\CategorieRepository;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class MainController extends CoreController
+class MainController
 {
     /**
      * @throws RuntimeError

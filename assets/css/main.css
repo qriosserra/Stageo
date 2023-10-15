@@ -419,6 +419,37 @@ video {
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
 }
+.container{
+  width: 100%;
+}
+@media (min-width: 640px){
+  .container{
+    max-width: 640px;
+  }
+}
+@media (min-width: 768px){
+  .container{
+    max-width: 768px;
+  }
+}
+@media (min-width: 1024px){
+  .container{
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1280px){
+  .container{
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1536px){
+  .container{
+    max-width: 1536px;
+  }
+}
+.static{
+  position: static;
+}
 .\!absolute{
   position: absolute !important;
 }
@@ -436,12 +467,6 @@ video {
 }
 .left-0{
   left: 0px;
-}
-.right-0{
-  right: 0px;
-}
-.top-0{
-  top: 0px;
 }
 .top-16{
   top: 4rem;
@@ -462,9 +487,6 @@ video {
 .hidden{
   display: none;
 }
-.h-40{
-  height: 10rem;
-}
 .h-screen{
   height: 100vh;
 }
@@ -480,8 +502,14 @@ video {
 .max-w-screen-xl{
   max-width: 1280px;
 }
+.flex-row{
+  flex-direction: row;
+}
 .flex-col{
   flex-direction: column;
+}
+.flex-wrap{
+  flex-wrap: wrap;
 }
 .items-center{
   align-items: center;
@@ -489,11 +517,20 @@ video {
 .justify-center{
   justify-content: center;
 }
+.gap-2{
+  gap: 0.5rem;
+}
 .gap-4{
   gap: 1rem;
 }
 .gap-8{
   gap: 2rem;
+}
+.overflow-hidden{
+  overflow: hidden;
+}
+.overflow-x-auto{
+  overflow-x: auto;
 }
 .rounded-lg{
   border-radius: 0.5rem;
@@ -518,9 +555,16 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
+.bg-white{
+  --tw-bg-opacity: 1;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
 .object-cover{
   -o-object-fit: cover;
      object-fit: cover;
+}
+.\!p-8{
+  padding: 2rem !important;
 }
 .p-4{
   padding: 1rem;
@@ -539,6 +583,13 @@ video {
 }
 .\!pl-2{
   padding-left: 0.5rem !important;
+}
+.align-middle{
+  vertical-align: middle;
+}
+.text-3xl{
+  font-size: 1.875rem;
+  line-height: 2.25rem;
 }
 .font-bold{
   font-weight: 700;
@@ -1050,9 +1101,4 @@ footer .footer-information-container .footer-description-container .footer-descr
   footer .footer-information-container .footer-description-container .footer-description{
     text-align: center;
   }
-}
-.field-container{
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
 }
