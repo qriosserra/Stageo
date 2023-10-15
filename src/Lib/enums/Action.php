@@ -13,4 +13,6 @@ enum Action: string
     case ETUDIANT_SIGN_IN = "?c=etudiant&a=signIn";
     case ENTREPRISE_ADD_FORM = "?c=entreprise&a=addForm";
     case ENTREPRISE_ADD = "?c=entreprise&a=add";
+    case ENTREPRISE_CREATION_OFFRE_FORM = "?c=entreprise&a=creation_offre_form";
+    case ENTREPRISE_CREATION_OFFRE = "?c=entreprise&a=creation_offre";
 }

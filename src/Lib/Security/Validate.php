@@ -117,4 +117,46 @@ class Validate
             subject: $typeStructure
         );
     }
+    public static function isTypeDescription(string $description){
+        return preg_match(
+            pattern: "/" . Pattern::DESCRIPTION->value . "/",
+            subject: $description
+        );
+    }
+    public static function isTypeSecteur(string $secteur){
+        return preg_match(
+            pattern: "/" . Pattern::SECTEUR->value . "/",
+            subject: $secteur
+        );
+    }
+    public static function isTypeThematique(string $thematique){
+        return preg_match(
+            pattern: "/" . Pattern::THEMATIQUE->value . "/",
+            subject: $thematique
+        );
+    }
+    public static function isTypeTache(string $tache){
+        return preg_match(
+            pattern: "/" . Pattern::THEMATIQUE->value . "/",
+            subject: $tache
+        );
+    }
+    public static function isTypeCommentaire(string $commentaire){
+        return preg_match(
+            pattern: "/" . Pattern::THEMATIQUE->value . "/",
+            subject: $commentaire
+        );
+    }
+    public static function isTypeGratification(string $gratification){
+        return preg_match(
+            pattern: "/" . Pattern::THEMATIQUE->value . "/",
+            subject: $gratification
+        );
+    }
+    public static function isTypeUniteGratification(string $unite_gratification){
+        return preg_match(
+            pattern: "/" . Pattern::UNITEGRATIFICATION->value . "/",
+            subject: $unite_gratification
+        );
+    }
 }

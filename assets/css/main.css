@@ -478,9 +478,6 @@ video {
   margin-left: auto;
   margin-right: auto;
 }
-.block{
-  display: block;
-}
 .flex{
   display: flex;
 }

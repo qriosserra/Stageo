@@ -30,6 +30,7 @@ class Request
                 elseif (!$parameter->isOptional())
                     throw new ControllerException("Le paramètre {$parameter->getName()} est manquant dans $class->$action");
             self::handleResponse($reflection->invokeArgs($instance, $actionParams ?? []));
+
         }
         catch (ControllerException $exception) {
             self::handleControllerException($exception);

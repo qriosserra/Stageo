@@ -11,8 +11,11 @@ use Stageo\Lib\FlashMessage;
 use Stageo\Lib\Response;
 use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
+use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Entreprise;
+use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\EntrepriseRepository;
+use Stageo\Model\Repository\OffreRepository;
 
 class EntrepriseController
 {
@@ -117,7 +120,7 @@ class EntrepriseController
         /*if (!Validate::isUrl($site)) {
             throw new ControllerException(
                 message: "L'url du site n'est pas valide",
-                redirection: RouteName::ENTREPRISE_ADD_FORM,
+                action: Action::ENTREPRISE_ADD_FORM,
                 params: [
                     "email" => $email
                 ]
@@ -201,5 +204,112 @@ class EntrepriseController
         return new Response(
             action: Action::HOME
         );
+    }
+
+    public function creation_offre_form(string $email = null): Response {
+        return new Response(
+            template: "entreprise/creationOffreForm.php",
+            params: [
+                "email" => $email,
+                "token" => Token::generateToken(Action::ENTREPRISE_CREATION_OFFRE_FORM)
+            ]
+        );
+    }
+
+    /**
+     * @throws TokenTimeoutException
+     * @throws ControllerException
+     * @throws InvalidTokenException
+     */
+    public function creation_offre(): Response{
+        $description = $_REQUEST["description"];
+        $secteur = $_REQUEST["secteur"];
+        $thematique = $_REQUEST["thematique"];
+        $tache = $_REQUEST["tache"];
+        $commentaire = $_REQUEST["commentaire"];
+        $gratification = $_REQUEST["gratification"];
+        $unite_gratification = $_REQUEST["unite_gratification"];
+        /*if(!UserConnection::isInstance(new Entreprise())){
+            throw new ControllerException(
+                message: "Vous n'avez pas les droits",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }*/
+        /**
+         * @var Entreprise $entreprise
+         */
+        $entreprise = UserConnection::getSignedInUser();
+        $id_entreprise = $entreprise->getIdEntreprise();
+
+
+        if (!Token::verify(Action::ENTREPRISE_CREATION_OFFRE_FORM, $_REQUEST["token"]))
+            throw new InvalidTokenException();
+        if (Token::isTimeout(Action::ENTREPRISE_CREATION_OFFRE_FORM)) {
+            throw new TokenTimeoutException(
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if (!Validate::isTypeDescription($description)) {
+            throw new ControllerException(
+                message: "La description n'est pas valide",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if (!Validate::isTypeSecteur($secteur)) {
+            throw new ControllerException(
+                message: "Le secteur n'est pas valide",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if (!Validate::isTypeThematique($thematique)) {
+            throw new ControllerException(
+                message: "L'effectif n'est pas valide",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if (!Validate::isTypeTache($tache)) {
+            throw new ControllerException(
+                message: "La tache n'est pas valide",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if (!Validate::isTypeCommentaire($commentaire)) {
+            throw new ControllerException(
+                message: "Le commmentaire n'est pas valide",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if (!Validate::isTypeGratification($gratification)) {
+            throw new ControllerException(
+                message: "La gratification n'est pas valide",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if (!Validate::isTypeUniteGratification($unite_gratification)) {
+            throw new ControllerException(
+                message: "L'unite de gratification n'est pas valide",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        FlashMessage::add(
+            content: "L'offre a été ajoutée avec succès",
+            type: FlashType::SUCCESS
+        );
+        (new OffreRepository())->insert(
+            new Offre(
+                id_entreprise: $id_entreprise,
+                description: $description,
+                secteur: $secteur,
+                thematique: $thematique,
+                tache: $tache,
+                commentaire: $commentaire,
+                gratification: $gratification,
+                unite_gratification: $unite_gratification,
+            )
+        );
+        return new Response(
+            action: Action::HOME,
+        );
+
     }
 }
