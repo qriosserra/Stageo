@@ -1,7 +1,14 @@
 <?php
 
 namespace Stageo\Controller;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+
+use Stageo\Controller\Exception\ControllerException;
+use Stageo\Lib\enums\Action;
+use Stageo\Lib\enums\FlashType;
+use Stageo\Lib\FlashMessage;
+use Stageo\Lib\HTTP\Cookie;
+use Stageo\Lib\UserConnection;
+use Stageo\Model\Repository\CategorieRepository;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -13,10 +20,14 @@ class MainController extends CoreController
      * @throws SyntaxError
      * @throws LoaderError
      */
-    public function home(): ControllerResponse
+    public function home(): Response
     {
-        return new ControllerResponse(
-            template: "home.html.twig"
+        return new Response(
+            template: "home.php",
+            params: [
+                "title" => "Home",
+                "categories" => (new CategorieRepository)->select()
+            ]
         );
     }
 
@@ -25,10 +36,10 @@ class MainController extends CoreController
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function about(): ControllerResponse
+    public function about(): Response
     {
-        return new ControllerResponse(
-            template: "about.html.twig"
+        return new Response(
+            template: "about.php"
         );
     }
 
@@ -37,29 +48,40 @@ class MainController extends CoreController
      * @throws RuntimeError
      * @throws LoaderError
      */
-    public function faq(): ControllerResponse
+    public function faq(): Response
     {
-        return new ControllerResponse(
-            template: "faq.html.twig"
-        );
-    }
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     */
-    public function contactForm(): ControllerResponse
-    {
-        return new ControllerResponse(
-            template: "contact.html.twig"
+        return new Response(
+            template: "faq.php"
         );
     }
 
     /**
-     * @throws TransportExceptionInterface
+     * @throws ControllerException
      */
-    public function contact(): ControllerResponse
+    public function signOut(): Response
     {
-        return new ControllerResponse();
+        if (!UserConnection::isSignedIn())
+            throw new ControllerException(
+                message: "Aucun utilisateur n'est connecté"
+            );
+        UserConnection::signOut();
+        FlashMessage::add(
+            content: "Vous avez été déconnecté",
+            type: FlashType::INFO
+        );
+        return new Response(
+            action: Action::HOME
+        );
+    }
+
+    public static function error(): Response
+    {
+        return new Response(
+            template: "error.php",
+            params: [
+                "title" => "Error",
+                "message" => Cookie::get("error")
+            ]
+        );
     }
 }

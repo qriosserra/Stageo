@@ -23,7 +23,7 @@ class Etudiant extends User
                                 private string|NullDataType|null $adresse_voie = null,
                                 private string|NullDataType|null $email_etudiant = null,
                                 private string|NullDataType|null $civilite = null,
-                                private string|NullDataType|null $id_code_postal = null,
+                                private string|NullDataType|null $id_commune = null,
                                 private string|NullDataType|null $id_departement = null,
                                 private string|NullDataType|null $id_etape = null,
                                 private string|NullDataType|null $id_ufr = null)
@@ -257,17 +257,17 @@ class Etudiant extends User
     /**
      * @return NullDataType|string|null
      */
-    public function getIdCodePostal(): string|NullDataType|null
+    public function getIdCommune(): string|NullDataType|null
     {
-        return $this->id_code_postal;
+        return $this->id_commune;
     }
 
     /**
-     * @param NullDataType|string|null $id_code_postal
+     * @param NullDataType|string|null $id_commune
      */
-    public function setIdCodePostal(string|NullDataType|null $id_code_postal): void
+    public function setIdCommune(string|NullDataType|null $id_commune): void
     {
-        $this->id_code_postal = $id_code_postal;
+        $this->id_commune = $id_commune;
     }
 
     /**

@@ -236,6 +236,8 @@ $query = <<<SQL
     
 ALTER TABLE {$prefix}pays MODIFY id_pays INT AUTO_INCREMENT;
 
+INSERT INTO {$prefix}categorie (nom)
+
 INSERT INTO {$prefix}pays (nom)
 VALUES
 ('Afghanistan'),
