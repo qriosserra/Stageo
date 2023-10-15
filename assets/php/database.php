@@ -234,6 +234,16 @@ $query = <<<SQL
         FOREIGN KEY(`id_convention`)    REFERENCES {$prefix}convention(`id_convention`)
     );
     
+    CREATE TABLE {$prefix}admin (
+        id INT NOT NULL AUTO_INCREMENT,
+        email VARCHAR(320) NOT NULL,
+        nom VARCHAR(64) NOT NULL,
+        prenom VARCHAR(64) NOT NULL,
+        hashed_password VARCHAR(256) NOT NULL,
+        PRIMARY KEY (id),
+        UNIQUE (email)
+    );
+
 ALTER TABLE {$prefix}pays MODIFY id_pays INT AUTO_INCREMENT;
 
 INSERT INTO {$prefix}categorie (nom)
