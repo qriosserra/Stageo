@@ -18,13 +18,18 @@
         <script defer src="assets/js/script.js"></script>
     </head>
     <body>
-        <header>
+        <header class="mb-3">
             <?php if ($nav):?>
                 <nav>
                     <a class="logo-container" href="/Stageo">
                         <span>Stageo</span>
                     </a>
                     <ul class="account-buttons-container">
+                        <li class="aPropos">
+                            <a class="aPropos button" href="?a=about">
+                                <span>A Propos</span>
+                            </a>
+                        </li>
                         <?php if (is_null($user)):?>
                             <li class="sign-in">
                                 <a class="sign-in button-ghost" href="?c=etudiant&a=SignInForm">
@@ -72,7 +77,7 @@
         </header>
         <?php require_once $template?>
         <?php if ($footer):?>
-            <footer>
+            <footer class="mt-3">
                 <div class="footer-information-container">
                     <div class="footer-section-container">
                         <section class="footer-section">

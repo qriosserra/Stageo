@@ -11,7 +11,7 @@ include __DIR__ . "/../macros/token.php";
 ?>
 
 <main class="h-screen flex items-center justify-center gap-2 relative">
-    <?=button("Accueil", "fi-rr-angle-small-left", Action::HOME->value, "!absolute !pl-2 top-16 left-0")?>
+    <?=button("Accueil", "fi-rr-angle-small-left", "/Stageo", "!absolute !pl-2 top-16 left-0")?>
     <h4 class="text-3xl font-bold">Ajouter une entreprise</h4>
     <form class="flex flex-row gap-4" action="<?=Action::ENTREPRISE_ADD->value?>" method="post">
         <div class="left-0">

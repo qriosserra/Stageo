@@ -10,6 +10,7 @@ use Stageo\Lib\HTTP\Cookie;
 use Stageo\Lib\Response;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Repository\CategorieRepository;
+use Stageo\Model\Repository\OffreRepository;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -27,7 +28,19 @@ class MainController
             template: "home.php",
             params: [
                 "title" => "Home",
-                "categories" => (new CategorieRepository)->select()
+                "categories" => (new CategorieRepository)->select(),
+                "offres" => (new OffreRepository())->select()
+            ]
+        );
+    }
+
+    public function listeOffre(): Response
+    {
+        return new Response(
+            template: "listeOffre.php",
+            params: [
+                "title" => "Home",
+                "offres" => (new OffreRepository())->select()
             ]
         );
     }
