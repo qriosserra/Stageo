@@ -46,11 +46,9 @@ include "macros/offre.php";
                 <h5 class="flex justify-center items-center ">
                     Liste des categories récemment recherchées
                 </h5>
-                <div class="flex flex-wrap gap-4 space-y-10 overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100">
+                <div class="flex flex-wrap gap-4  overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100">
                     <?php $max = (count($offres)<=5) ? count($offres)-1 : 5; ?>
                     <?php for ($i = 0; $i <= $max; $i++):?>
-                        <?=\offre($offres[$i]->getDescription() , $offres[$i]->getIdOffre(),$offres[$i]->getIdEntreprise(),"assets/img/FAQB.jpg","assets/img/DuréeB.jpg" )?>
-                        <?=\offre($offres[$i]->getDescription() , $offres[$i]->getIdOffre(),$offres[$i]->getIdEntreprise(),"assets/img/FAQB.jpg","assets/img/DuréeB.jpg" )?>
                         <?=\offre($offres[$i]->getDescription() , $offres[$i]->getIdOffre(),$offres[$i]->getIdEntreprise(),"assets/img/FAQB.jpg","assets/img/DuréeB.jpg" )?>
                     <?php endfor ?>
                 </div>

@@ -6,6 +6,9 @@
  * @var string $template
  * @var bool $footer
  */
+
+use Stageo\Lib\enums\Action;
+
 ?>
 
 <!DOCTYPE html>
@@ -21,12 +24,33 @@
         <header class="mb-3">
             <?php if ($nav):?>
                 <nav>
-                    <a class="logo-container" href="/Stageo">
+                    <a class="logo-container flex justify-center items-center" href="/Stageo">
                         <span>Stageo</span>
                     </a>
-                    <ul class="account-buttons-container">
+                    <?php if ($user != null):?>
+                        <form class="" action="<?=Action::LISTE_OFFRE->value?>" method="post">
+                            <div class="relative flex flex-row h-1/2  flex-wrap items-stretch">
+                                <div class="w-64 ">
+                                    <select id="Option" name="OptionL" class="rounded-l-lg  w-full bg-white border border-blue-500 text-gray-700 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        <option value="description" >Description</option>
+                                        <option value="secteur">Secteur</option>
+                                    </select>
+                                </div>
+                                <input
+                                        type="search"
+                                        class=" relative bg-white m-0 -mr-0.5 block w-[10px] min-w-0 flex-auto border border-solid border-blue-500 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary "
+                                        id="searchInput"
+                                        name="searchInput"
+                                        placeholder="Search"
+                                        aria-label="Search"
+                                        aria-describedby="button-addon1" />
+                                <input type="submit" value="rechercher" class="bg-blue-500 rounded-none !rounded-l-none !rounded-r-lg flex justify-center items-center">
+                            </div>
+                        </form>
+                    <?php endif ?>
+                    <ul class="account-buttons-container flex justify-center items-center">
                         <li class="aPropos">
-                            <a class="aPropos button" href="?a=about">
+                            <a class="aPropos button " href="?a=about">
                                 <span>A Propos</span>
                             </a>
                         </li>

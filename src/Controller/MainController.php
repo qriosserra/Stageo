@@ -3,6 +3,8 @@
 namespace Stageo\Controller;
 
 use Stageo\Controller\Exception\ControllerException;
+use Stageo\Lib\Database\ComparisonOperator;
+use Stageo\Lib\Database\QueryCondition;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
@@ -36,11 +38,24 @@ class MainController
 
     public function listeOffre(): Response
     {
+        $cherche = $_POST['searchInput'];
+        $opt = (strlen($_POST['OptionL']) == 0) ? "description" : $_POST['OptionL'] ;
+        $tabla = ($opt == "description") ? "description" : "secteur";
+        $offres  = (strlen($cherche) == 0) ? (new OffreRepository())->select() : (new OffreRepository())->select( new QueryCondition(
+            column: $tabla,
+            comparisonOperator: ComparisonOperator::LIKE,
+            value: "%".$cherche."%"
+        ));
+        $selA = ($_POST['OptionL'] == "description") ? "selected" : "";
+        $selB = ($_POST['OptionL'] == "secteur") ? "selected" : "";
         return new Response(
             template: "listeOffre.php",
             params: [
                 "title" => "Home",
-                "offres" => (new OffreRepository())->select()
+                "offres" =>$offres,
+                "selA" => $selA,
+                "selB" => $selB,
+                "cherche" =>$cherche
             ]
         );
     }
