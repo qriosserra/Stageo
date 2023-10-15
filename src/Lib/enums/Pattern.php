@@ -17,7 +17,7 @@ enum Pattern: string
     case THEMATIQUE = "^.{1,50}$";
     case SECTEUR = "^.{1,100}$";
     case DESCRIPTION = "^.{1,500}$";
-    case UNITEGRATIFICATION = "[A-Z]{1,5}";
+    case UNITEGRATIFICATION = "[a-zA-Z]{1,5}";
 
     public static function toArray(): array
     {

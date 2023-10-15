@@ -238,8 +238,8 @@ class EntrepriseController
         /**
          * @var Entreprise $entreprise
          */
-        $entreprise = UserConnection::getSignedInUser();
-        $id_entreprise = $entreprise->getIdEntreprise();
+        //$entreprise = UserConnection::getSignedInUser();
+        //$id_entreprise = $entreprise->getIdEntreprise();
 
 
         if (!Token::verify(Action::ENTREPRISE_CREATION_OFFRE_FORM, $_REQUEST["token"]))
