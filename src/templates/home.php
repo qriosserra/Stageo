@@ -3,12 +3,15 @@
 use Stageo\Model\Object\Categorie;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Etudiant;
+use \Stageo\Model\Object\Offre;
 
 include "macros/button.php";
 include "macros/input.php";
+include "macros/offre.php";
 /**
  * @var Categorie[] $categories
  * @var Etudiant $etudiant
+ * @var Offre[] $offres
  */
 ?>
     <main class="w-[64rem]">
@@ -33,7 +36,7 @@ include "macros/input.php";
                 <h5 class="flex justify-center items-center">
                     Liste des recherches récentes ou favorites
                 </h5>
-                <div class="flex flex-wrap overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8">
+                <div class="flex flex-wrap  overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8">
                 <?php foreach ($categories as $categorie):?>
                     <?=button($categorie->getNom(), "",""," !p-8 bg-white")?>
                 <?php endforeach ?>
@@ -43,9 +46,12 @@ include "macros/input.php";
                 <h5 class="flex justify-center items-center ">
                     Liste des categories récemment recherchées
                 </h5>
-                <div class="flex flex-wrap  overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8">
-                    <?php for ($i = 0; $i < 5; $i++):?>
-                        <?=button("listes des recherche " , "",""," bg-red ")?>
+                <div class="flex flex-wrap gap-4 space-y-10 overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100">
+                    <?php $max = (count($offres)<=5) ? count($offres)-1 : 5; ?>
+                    <?php for ($i = 0; $i <= $max; $i++):?>
+                        <?=\offre($offres[$i]->getDescription() , $offres[$i]->getIdOffre(),$offres[$i]->getIdEntreprise(),"assets/img/FAQB.jpg","assets/img/DuréeB.jpg" )?>
+                        <?=\offre($offres[$i]->getDescription() , $offres[$i]->getIdOffre(),$offres[$i]->getIdEntreprise(),"assets/img/FAQB.jpg","assets/img/DuréeB.jpg" )?>
+                        <?=\offre($offres[$i]->getDescription() , $offres[$i]->getIdOffre(),$offres[$i]->getIdEntreprise(),"assets/img/FAQB.jpg","assets/img/DuréeB.jpg" )?>
                     <?php endfor ?>
                 </div>
             </section>
