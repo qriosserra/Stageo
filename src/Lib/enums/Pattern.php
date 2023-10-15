@@ -14,6 +14,10 @@ enum Pattern: string
     case NUMBER = "[0-9]{1,64}";
     case CODE_POSTAL = "[0-9]{5}";
     case NAF = "[0-9]{4}[A-Z]{1}";
+    case THEMATIQUE = "^.{1,50}$";
+    case SECTEUR = "^.{1,100}$";
+    case DESCRIPTION = "^.{1,500}$";
+    case UNITEGRATIFICATION = "[A-Z]{1,5}";
 
 
     public static function toArray(): array

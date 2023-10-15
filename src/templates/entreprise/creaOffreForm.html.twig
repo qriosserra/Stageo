@@ -1,8 +1,50 @@
 {% extends "partials/layout.html.twig" %}
+{% from "macros/button.twig" import button %}
+{% from "macros/input.twig" import input %}
 {% from "macros/token.twig" import token %}
-
-{% block title %}Contact{% endblock %}
-
+{% block title %}Se connecter{% endblock %}
 {% block content %}
+    <main class="w-[64rem]">
 
+        <form class="flex flex-col items-center gap-4" action="{{ route("creationOffre") }}" method="post">
+            <div class="grid gap-6 mb-6 md:grid-cols-2">
+                <div>
+
+                </div>
+                <div>
+                    <div>
+                        <label for="secteur" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Secteur</label>
+                        <input type="text" id="secteur" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" required>
+                    </div>
+                    <div>
+                        <label for="thematique" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Thematique</label>
+                        <input type="text" id="thematique" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Doe" required>
+                    </div>
+                    <div>
+                        <label for="tache" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Tache</label>
+                        <input type="text" id="tache" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Flowbite" required>
+                    </div>
+                </div>
+            </div>
+            <div class="mb-6">
+                <label for="description" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Description</label>
+                <input type="text" id="description" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="john.doe@company.com" required>
+            </div>
+            <div class="mb-6">
+                <label for="commentaire" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Commentaire</label>
+                <input type="text" id="commentaire" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required>
+            </div>
+            <div class="mb-6">
+                <label for="gratification" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Gratification</label>
+                <input type="text" id="gratification" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required>
+            </div>
+            <div class="mb-6">
+                <label for="unite_gratification" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unite Gratification</label>
+                <input type="text" id="unite_gratification" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required>
+            </div>
+            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Envoyer</button>
+            {{ token(token) }}
+        </form>
+
+    </main>
 {% endblock %}

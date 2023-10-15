@@ -250,10 +250,17 @@ class Router
             [
             "name" => RouteName::ENTREPRISE_CREATION_OFFRE_FORM,
             "route" => new Route(
-                path: "/entreprise/creationOffreForm",
+                path: "/entreprise/creationOffreForm/{email?}",
                 defaults: ["_controller" => [EntrepriseController::class, "creation_offre_form"]],
             )
-            ]
+            ],
+            [
+            "name" => RouteName::ENTREPRISE_CREATION_OFFRE,
+            "route" => new Route(
+                path: "entreprise/creationOffreForm",
+                defaults: ["_controller" => [EntrepriseController::class, "creation_offre"]],
+            )
+        ]
         ];
         $routeCollection = new RouteCollection();
         foreach ($routes as $route) {

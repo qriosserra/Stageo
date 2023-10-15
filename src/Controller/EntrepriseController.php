@@ -13,7 +13,9 @@ use Stageo\Lib\Security\Token;
 use Stageo\Lib\UserConnection;
 use Stageo\Lib\Validate;
 use Stageo\Model\Object\Entreprise;
+use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\EntrepriseRepository;
+use Stageo\Model\Repository\OffreRepository;
 
 class EntrepriseController extends UserController
 {
@@ -234,6 +236,119 @@ class EntrepriseController extends UserController
                 "token" => Token::generateToken(RouteName::ENTREPRISE_CREATION_OFFRE_FORM)
             ]
         );
+    }
+
+    /**
+     * @throws TokenTimeoutException
+     * @throws ControllerException
+     * @throws InvalidTokenException
+     */
+    public function creation_offre(): ControllerResponse{
+        $description = $_REQUEST["description"];
+        $secteur = $_REQUEST["secteur"];
+        $thematique = $_REQUEST["thematique"];
+        $tache = $_REQUEST["tache"];
+        $commentaire = $_REQUEST["commentaire"];
+        $gratification = $_REQUEST["gratification"];
+        $unite_gratification = $_REQUEST["unite_gratification"];
+
+        //Je sais pas quoi faire pour récup le mail
+        $email = $_REQUEST["email"];
+
+        if (!Token::verify(RouteName::ENTREPRISE_CREATION_OFFRE_FORM, $_REQUEST["token"]))
+            throw new InvalidTokenException();
+        if (Token::isTimeout(RouteName::ENTREPRISE_CREATION_OFFRE_FORM)) {
+            throw new TokenTimeoutException(
+                routeName: RouteName::ENTREPRISE_CREATION_OFFRE_FORM,
+                params: [
+                    "email" => $email
+                ]
+            );
+        }
+        if (!Validate::isTypeDescription($description)) {
+            throw new ControllerException(
+                message: "La description n'est pas valide",
+                redirection: RouteName::ENTREPRISE_CREATION_OFFRE_FORM,
+                params: [
+                    "email" => $email
+                ]
+            );
+        }
+        if (!Validate::isTypeSecteur($secteur)) {
+            throw new ControllerException(
+                message: "Le secteur n'est pas valide",
+                redirection: RouteName::ENTREPRISE_CREATION_OFFRE_FORM,
+                params: [
+                    "email" => $email
+                ]
+            );
+        }
+        if (!Validate::isTypeThematique($thematique)) {
+            throw new ControllerException(
+                message: "La thematique n'est pas valide",
+                redirection: RouteName::ENTREPRISE_CREATION_OFFRE_FORM,
+                params: [
+                    "email" => $email
+                ]
+            );
+        }
+        if (!Validate::isTypeTache($tache)) {
+            throw new ControllerException(
+                message: "La tache n'est pas valide",
+                redirection: RouteName::ENTREPRISE_CREATION_OFFRE_FORM,
+                params: [
+                    "email" => $email
+                ]
+            );
+        }
+        if (!Validate::isTypeCommentaire($commentaire)) {
+            throw new ControllerException(
+                message: "Le commmentaire n'est pas valide",
+                redirection: RouteName::ENTREPRISE_CREATION_OFFRE_FORM,
+                params: [
+                    "email" => $email
+                ]
+            );
+        }
+        if (!Validate::isTypeGratification($gratification)) {
+            throw new ControllerException(
+                message: "La gratification n'est pas valide",
+                redirection: RouteName::ENTREPRISE_CREATION_OFFRE_FORM,
+                params: [
+                    "email" => $email
+                ]
+            );
+        }
+        if (!Validate::isTypeUniteGratification($unite_gratification)) {
+            throw new ControllerException(
+                message: "L'unite de gratification n'est pas valide",
+                redirection: RouteName::ENTREPRISE_CREATION_OFFRE_FORM,
+                params: [
+                    "email" => $email
+                ]
+            );
+        }
+        FlashMessage::add(
+            content: "L'offre a été ajoutée avec succès",
+            type: FlashType::SUCCESS
+        );
+        (new OffreRepository())->insert(
+            new Offre(
+                id_entreprise: 1,
+                description: $description,
+                secteur: $secteur,
+                thematique: $thematique,
+                tache: $tache,
+                commentaire: $commentaire,
+                gratification: $gratification,
+                unite_gratification: $unite_gratification,
+            )
+        );
+        return new ControllerResponse(
+            redirection: RouteName::HOME,
+            statusCode: StatusCode::ACCEPTED
+        );
+
     }
 
 
