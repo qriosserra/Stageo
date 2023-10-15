@@ -2,7 +2,9 @@
 
 namespace Stageo\Controller;
 
-class AdminController extends CoreController
+use Stageo\Lib\Response;
+
+class AdminController
 {
     public function dashboard(): Response
     {

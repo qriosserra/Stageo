@@ -2,7 +2,6 @@
 
 namespace Stageo\Lib;
 
-use Exception;
 use Stageo\Controller\Exception\ControllerException;
 
 class EnvLoader

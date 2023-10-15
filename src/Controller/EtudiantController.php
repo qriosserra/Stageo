@@ -8,14 +8,15 @@ use Stageo\Controller\Exception\TokenTimeoutException;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
+use Stageo\Lib\Response;
 use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
+use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
-use Stageo\Lib\Validate;
 use Stageo\Model\Object\Etudiant;
 use Stageo\Model\Repository\EtudiantRepository;
 
-class EtudiantController extends CoreController
+class EtudiantController
 {
     public function signUpForm(string $login = null): Response
     {

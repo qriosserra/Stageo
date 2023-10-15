@@ -1,6 +1,6 @@
 <?php
 
-namespace Stageo\Lib;
+namespace Stageo\Lib\Security;
 
 use Stageo\Lib\enums\Pattern;
 
@@ -30,7 +30,7 @@ class Validate
         );
     }
 
-    public static function isStudentId(string $studentId)
+    public static function isStudentId(string $studentId): bool
     {
         return preg_match(
             pattern: "/" . Pattern::ID_ETUDIANT->value . "/",
@@ -38,7 +38,7 @@ class Validate
         );
     }
 
-    public static function isSiret(string $siret)
+    public static function isSiret(string $siret): bool
     {
         return preg_match(
             pattern: "/" . Pattern::SIRET->value . "/",
@@ -46,7 +46,7 @@ class Validate
         );
     }
 
-    public static function isPhone(string $phone)
+    public static function isPhone(string $phone): bool
     {
         return preg_match(
             pattern: "/" . Pattern::PHONE->value . "/",
@@ -54,7 +54,7 @@ class Validate
         );
     }
 
-    public static function isFax(string $fax)
+    public static function isFax(string $fax): bool
     {
         return preg_match(
             pattern: "/" . Pattern::PHONE->value . "/",
@@ -62,7 +62,7 @@ class Validate
         );
     }
 
-    public static function isRaisonSociale(string $raisonSociale)
+    public static function isRaisonSociale(string $raisonSociale): bool
     {
         return preg_match(
             pattern: "/" . Pattern::NAME->value . "/",
@@ -70,7 +70,7 @@ class Validate
         );
     }
 
-    public static function isAdresse(string $adresse)
+    public static function isAdresse(string $adresse): bool
     {
         return preg_match(
             pattern: "/" . Pattern::NAME->value . "/",
@@ -78,7 +78,7 @@ class Validate
         );
     }
 
-    public static function isCodePostal(string $codePostal)
+    public static function isCodePostal(string $codePostal): bool
     {
         return preg_match(
             pattern: "/" . Pattern::CODE_POSTAL->value . "/",
@@ -86,7 +86,7 @@ class Validate
         );
     }
 
-    public static function isCodeNaf(string $codeNaf)
+    public static function isCodeNaf(string $codeNaf): bool
     {
         return preg_match(
             pattern: "/" . Pattern::NAF->value . "/",
@@ -94,7 +94,7 @@ class Validate
         );
     }
 
-    public static function isStatutJuridique(string $statutJuridique)
+    public static function isStatutJuridique(string $statutJuridique): bool
     {
         return preg_match(
             pattern: "/" . Pattern::NAME->value . "/",
@@ -102,7 +102,7 @@ class Validate
         );
     }
 
-    public static function isEffectif(string $effectif)
+    public static function isEffectif(string $effectif): bool
     {
         return preg_match(
             pattern: "/" . Pattern::NUMBER->value . "/",
@@ -110,12 +110,11 @@ class Validate
         );
     }
 
-    public static function isTypeStructure(string $typeStructure)
+    public static function isTypeStructure(string $typeStructure): bool
     {
         return preg_match(
             pattern: "/" . Pattern::NAME->value . "/",
             subject: $typeStructure
         );
     }
-
 }
