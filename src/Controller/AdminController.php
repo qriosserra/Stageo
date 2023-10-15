@@ -4,9 +4,9 @@ namespace Stageo\Controller;
 
 class AdminController extends CoreController
 {
-    public function dashboard(): ControllerResponse
+    public function dashboard(): Response
     {
-        return new ControllerResponse(
+        return new Response(
             template: "admin/dashboard.html.twig"
         );
     }

@@ -4,5 +4,14 @@
 //xdebug_info();
 //die();
 
-require_once __DIR__ . "/vendor/autoload.php";
-Stageo\Controller\Router::processRequest();
+require_once __DIR__ . "/src/Lib/Psr4AutoloaderClass.php";
+
+$loader = new Stageo\Lib\Psr4AutoloaderClass();
+$loader->addNamespace("Stageo", __DIR__ . "/src");
+$loader->register();
+
+(new Stageo\Controller\Request)->process(
+    controller: $_GET["c"] ?? "main",
+    action: $_GET["a"] ?? "home",
+    params: $_GET
+);

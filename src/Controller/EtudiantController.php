@@ -5,34 +5,31 @@ namespace Stageo\Controller;
 use Stageo\Controller\Exception\ControllerException;
 use Stageo\Controller\Exception\InvalidTokenException;
 use Stageo\Controller\Exception\TokenTimeoutException;
+use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
-use Stageo\Lib\enums\RouteName;
-use Stageo\Lib\enums\StatusCode;
 use Stageo\Lib\FlashMessage;
-use Stageo\Lib\HTTP\Session;
 use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
 use Stageo\Lib\UserConnection;
 use Stageo\Lib\Validate;
 use Stageo\Model\Object\Etudiant;
 use Stageo\Model\Repository\EtudiantRepository;
-use Stageo\Model\Repository\CategorieRepository;
 
 class EtudiantController extends CoreController
 {
-    /**
-     * @throws ControllerException
-     */
-    public function signUpForm(string $login = null): ControllerResponse
+    public function signUpForm(string $login = null): Response
     {
 //        if (UserConnection::isSignedIn())
 //            self::signOut();
 
-        return new ControllerResponse(
-            template: "etudiant/sign-up.html.twig",
+        return new Response(
+            template: "etudiant/sign-up.php",
             params: [
+                "title" => "S'inscrire",
+                "nav" => false,
+                "footer" => false,
                 "login" => $login,
-                "token" => Token::generateToken(RouteName::ETUDIANT_SIGN_UP_FORM)
+                "token" => Token::generateToken(Action::ETUDIANT_SIGN_UP_FORM)
             ]
         );
     }
@@ -42,24 +39,22 @@ class EtudiantController extends CoreController
      * @throws ControllerException
      * @throws InvalidTokenException
      */
-    public function signUp(): ControllerResponse
+    public function signUp(): Response
     {
         $login = $_REQUEST["login"];
         $password = $_REQUEST["password"];
-        if (!Token::verify(RouteName::ETUDIANT_SIGN_UP_FORM, $_REQUEST["token"]))
+        if (!Token::verify(Action::ETUDIANT_SIGN_UP_FORM, $_REQUEST["token"]))
             throw new InvalidTokenException();
-        if (Token::isTimeout(RouteName::ETUDIANT_SIGN_UP_FORM)) {
+        if (Token::isTimeout(Action::ETUDIANT_SIGN_UP_FORM)) {
             throw new TokenTimeoutException(
-                routeName: RouteName::ETUDIANT_SIGN_UP_FORM,
-                params: [
-                    "login" => $login
-                ]
+                action: Action::ETUDIANT_SIGN_UP_FORM,
+                params: ["login" => $login]
             );
         }
         if (!is_null((new EtudiantRepository())->getByLogin($login))) {
             throw new ControllerException(
                 message: "Un compte avec ce login existe déjà",
-                redirection: RouteName::ETUDIANT_SIGN_UP_FORM,
+                action: Action::ETUDIANT_SIGN_UP_FORM,
                 params: [
                     "login" => $login
                 ]
@@ -68,7 +63,7 @@ class EtudiantController extends CoreController
         if (!Validate::isPassword($password)) {
             throw new ControllerException(
                 message: "Le mot de passe ne respecte pas les critères de sécurité",
-                redirection: RouteName::ETUDIANT_SIGN_UP_FORM,
+                action: Action::ETUDIANT_SIGN_UP_FORM,
                 params: [
                     "login" => $login
                 ]
@@ -77,7 +72,7 @@ class EtudiantController extends CoreController
         if ($password !== $_REQUEST["confirm"]) {
             throw new ControllerException(
                 message: "Les mots de passe ne correspondent pas",
-                redirection: RouteName::ETUDIANT_SIGN_UP_FORM,
+                action: Action::ETUDIANT_SIGN_UP_FORM,
                 params: [
                     "login" => $login
                 ]
@@ -88,23 +83,27 @@ class EtudiantController extends CoreController
             content: "Inscription réalisée avec succès",
             type: FlashType::SUCCESS
         );
-        (new EtudiantRepository)->insert(new Etudiant(
+        $etudiant = new Etudiant(
             login: $login,
             hashed_password: Password::hash($password),
-        ));
-        return new ControllerResponse(
-            redirection: RouteName::HOME,
-            statusCode: StatusCode::ACCEPTED
+        );
+        UserConnection::signIn($etudiant);
+        (new EtudiantRepository)->insert($etudiant);
+        return new Response(
+            action: Action::HOME
         );
     }
 
-    public function signInForm(string $login = null): ControllerResponse
+    public function signInForm(string $login = null): Response
     {
-        return new ControllerResponse(
-            template: "etudiant/sign-in.html.twig",
+        return new Response(
+            template: "etudiant/sign-in.php",
             params: [
+                "title" => "Se connecter",
+                "nav" => false,
+                "footer" => false,
                 "login" => $login,
-                "token" => Token::generateToken(RouteName::ETUDIANT_SIGN_IN_FORM)
+                "token" => Token::generateToken(Action::ETUDIANT_SIGN_IN_FORM)
             ]
         );
     }
@@ -114,18 +113,16 @@ class EtudiantController extends CoreController
      * @throws ControllerException
      * @throws InvalidTokenException
      */
-    public function signIn(): ControllerResponse
+    public function signIn(): Response
     {
         $login = $_REQUEST["login"];
         $password = $_REQUEST["password"];
-        if (!Token::verify(RouteName::ETUDIANT_SIGN_IN_FORM, $_REQUEST["token"]))
+        if (!Token::verify(Action::ETUDIANT_SIGN_IN_FORM, $_REQUEST["token"]))
             throw new InvalidTokenException();
-        if (Token::isTimeout(RouteName::ETUDIANT_SIGN_IN_FORM)) {
+        if (Token::isTimeout(Action::ETUDIANT_SIGN_IN_FORM)) {
             throw new TokenTimeoutException(
-                routeName: RouteName::ETUDIANT_SIGN_IN_FORM,
-                params: [
-                    "login" => $login
-                ]
+                action: Action::ETUDIANT_SIGN_IN_FORM,
+                params: ["login" => $login]
             );
         }
         /**
@@ -135,7 +132,7 @@ class EtudiantController extends CoreController
         if (is_null($etudiant)) {
             throw new ControllerException(
                 message: "Aucun compte n'existe avec ce login",
-                redirection: RouteName::ETUDIANT_SIGN_IN_FORM,
+                action: Action::ETUDIANT_SIGN_IN_FORM,
                 params: [
                     "login" => $login
                 ]
@@ -144,7 +141,7 @@ class EtudiantController extends CoreController
         if (!Password::verify($password, $etudiant->getHashedPassword())) {
             throw new ControllerException(
                 message: "Le mot de passe est incorrect",
-                redirection: RouteName::ETUDIANT_SIGN_IN_FORM,
+                action: Action::ETUDIANT_SIGN_IN_FORM,
                 params: [
                     "login" => $login
                 ]
@@ -158,32 +155,8 @@ class EtudiantController extends CoreController
         UserConnection::signIn($etudiant);
         // a modifier
 
-        return new ControllerResponse(
-            redirection: RouteName::HOME,
-            statusCode: StatusCode::ACCEPTED,
-        );
-    }
-
-    /**
-     * @throws ControllerException
-     */
-    public function signOut(): ControllerResponse
-    {
-        if (!UserConnection::isSignedIn())
-            throw new ControllerException(
-                message: "User is not signed in",
-                statusCode: StatusCode::UNAUTHORIZED
-            );
-
-        UserConnection::signOut();
-        FlashMessage::add(
-            content: "Vous avez été déconnecté",
-            type: FlashType::INFO
-        );
-
-        return new ControllerResponse(
-            redirection: RouteName::RELOAD_PAGE,
-            statusCode: StatusCode::CREATED
+        return new Response(
+            action: Action::HOME
         );
     }
 }
