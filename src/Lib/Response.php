@@ -1,10 +1,8 @@
 <?php
 
-namespace Stageo\Controller;
+namespace Stageo\Lib;
 
 use Stageo\Lib\enums\Action;
-use Stageo\Lib\enums\RouteName;
-use Stageo\Lib\enums\StatusCode;
 
 class Response
 {
@@ -23,7 +21,7 @@ class Response
     }
 
     /**
-     * @return RouteName|null
+     * @return Action|null
      */
     public function getAction(): ?Action
     {

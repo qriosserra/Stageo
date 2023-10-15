@@ -8,13 +8,25 @@ use Stageo\Lib\HTTP\Session;
 class FlashMessage
 {
     private static string $key = __CLASS__;
-	public readonly string $content;
-	public readonly string $type;
-	public function __construct(string $content, FlashType $type)
+	public function __construct(private readonly string $content, private readonly FlashType $type)
 	{
-		$this->content = $content;
-		$this->type = $type->value;
 	}
+
+    /**
+     * @return string
+     */
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType(): string
+    {
+        return $this->type->value;
+    }
 
     /**
      * Adds a FlashMessage in the FlashMessage array stocked in $_SESSION[$key]

@@ -1,6 +1,4 @@
 /.idea
 /node_modules
-/vendor
 .env
-composer.lock
 package-lock.json

@@ -7,23 +7,22 @@ use Stageo\Controller\Exception\InvalidTokenException;
 use Stageo\Controller\Exception\TokenTimeoutException;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
-use Stageo\Lib\enums\RouteName;
-use Stageo\Lib\enums\StatusCode;
 use Stageo\Lib\FlashMessage;
+use Stageo\Lib\Response;
 use Stageo\Lib\Security\Token;
-use Stageo\Lib\Validate;
+use Stageo\Lib\Security\Validate;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Repository\EntrepriseRepository;
 
-class EntrepriseController extends CoreController
+class EntrepriseController
 {
-    /**
-     * @throws ControllerException
-     */
     public function addForm(string $email = null): Response {
         return new Response(
-            template: "entreprise/add.html.twig",
+            template: "entreprise/add.php",
             params: [
+                "title" => "Ajouter son entreprise",
+                "nav" => false,
+                "footer" => false,
                 "email" => $email,
                 "token" => Token::generateToken(Action::ENTREPRISE_ADD_FORM)
             ]
@@ -203,7 +202,4 @@ class EntrepriseController extends CoreController
             action: Action::HOME
         );
     }
-
-
-
 }

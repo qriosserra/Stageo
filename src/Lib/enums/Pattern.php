@@ -15,7 +15,6 @@ enum Pattern: string
     case CODE_POSTAL = "[0-9]{5}";
     case NAF = "[0-9]{4}[A-Z]{1}";
 
-
     public static function toArray(): array
     {
         foreach (self::cases() as $pattern) {

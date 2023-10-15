@@ -1,16 +1,13 @@
 <?php
 
-namespace Stageo\Controller;
+namespace Stageo\Lib;
 
 use JetBrains\PhpStorm\NoReturn;
 use ReflectionMethod;
 use Stageo\Lib\enums\Action;
 use Stageo\Controller\Exception\ControllerException;
 use Stageo\Lib\enums\Pattern;
-use Stageo\Lib\EnvLoader;
-use Stageo\Lib\FlashMessage;
 use Stageo\Lib\HTTP\Cookie;
-use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Etudiant;
 
@@ -32,7 +29,7 @@ class Request
                     $actionParams[] = $params[$parameter->getName()];
                 elseif (!$parameter->isOptional())
                     throw new ControllerException("Le paramètre {$parameter->getName()} est manquant dans $class->$action");
-            self::handleControllerResponse($reflection->invokeArgs($instance, $actionParams ?? []));
+            self::handleResponse($reflection->invokeArgs($instance, $actionParams ?? []));
         }
         catch (ControllerException $exception) {
             self::handleControllerException($exception);
@@ -60,25 +57,24 @@ class Request
     {
         $url = $_ENV["ABSOLUTE_URL"] . $action->value;
         if (!empty($params)) $url .= "&" . http_build_query($params);
-//        header("Location: $url");
-        header("Refresh:1; url=$url");
+        header("Location: $url");
         exit();
     }
 
     /**
      * @throws ControllerException
      */
-    public function handleControllerResponse(Response $controllerResponse): void
+    public function handleResponse(Response $response): void
     {
-        if (!is_null($controllerResponse->getTemplate()))
+        if (!is_null($response->getTemplate()))
             self::render(
-                template: $controllerResponse->getTemplate(),
-                params: $controllerResponse->getParams()
+                template: $response->getTemplate(),
+                params: $response->getParams()
             );
-        elseif (!is_null($controllerResponse->getAction()))
+        elseif (!is_null($response->getAction()))
             self::redirect(
-                action: $controllerResponse->getAction(),
-                params: $controllerResponse->getParams()
+                action: $response->getAction(),
+                params: $response->getParams()
             );
         else
             throw new ControllerException(
