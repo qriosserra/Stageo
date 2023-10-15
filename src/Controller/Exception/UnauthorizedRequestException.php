@@ -2,18 +2,16 @@
 
 namespace Stageo\Controller\Exception;
 
-use Stageo\Lib\enums\RouteName;
-use Stageo\Lib\enums\StatusCode;
+use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 
 class UnauthorizedRequestException extends ControllerException
 {
-    public function __construct(string     $message = "Unauthorized request",
-                                RouteName  $routeName = RouteName::ERROR,
-                                FlashType  $flashType = FlashType::ERROR,
-                                StatusCode $statusCode = StatusCode::UNAUTHORIZED,
-                                array      $params = [])
+    public function __construct(string    $message = "Requête non-authorisée",
+                                Action    $action = Action::ERROR,
+                                FlashType $flashType = FlashType::ERROR,
+                                array     $params = [])
     {
-        parent::__construct($message, $routeName, $flashType, $statusCode, $params);
+        parent::__construct($message, $action, $flashType, $params);
     }
 }

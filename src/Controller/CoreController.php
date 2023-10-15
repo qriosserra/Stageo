@@ -49,16 +49,16 @@ abstract class CoreController
     /**
      * @throws Exception
      */
-    public static function handleControllerResponse(ControllerResponse $controllerResponse): Response
+    public static function handleControllerResponse(Response $controllerResponse): Response
     {
         if (!is_null($controllerResponse->getTemplate()))
             return self::renderTwigView(
                 path: $controllerResponse->getTemplate(),
                 params: $controllerResponse->getParams()
             )->setStatusCode($controllerResponse->getStatusCode()->value);
-        elseif (!is_null($controllerResponse->getRedirection()))
+        elseif (!is_null($controllerResponse->getAction()))
             return self::redirect(
-                route: $controllerResponse->getRedirection(),
+                route: $controllerResponse->getAction(),
                 statusCode: $controllerResponse->getStatusCode(),
                 params: $controllerResponse->getParams()
             );
@@ -82,24 +82,6 @@ abstract class CoreController
             route: $exception->getRedirection(),
             statusCode: $exception->getStatusCode(),
             params: $exception->getParams()
-        );
-    }
-
-    /**
-     * @throws SyntaxError
-     * @throws RuntimeError
-     * @throws LoaderError
-     */
-    public static function error(string            $message = "",
-                                 StatusCode|string $statusCode = StatusCode::BAD_REQUEST): ControllerResponse
-    {
-        return new ControllerResponse(
-            template: "error.html.twig",
-            statusCode: is_string($statusCode) ? StatusCode::from($statusCode) : $statusCode,
-            params: [
-                "statusCode" => is_string($statusCode) ? $statusCode : $statusCode->value,
-                "message" => $message
-            ]
         );
     }
 }

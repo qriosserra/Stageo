@@ -2,7 +2,7 @@
 
 namespace Stageo\Lib\Security;
 
-use Stageo\Lib\enums\RouteName;
+use Stageo\Lib\enums\Action;
 use Stageo\Lib\HTTP\Session;
 
 class Token
@@ -14,8 +14,8 @@ class Token
      * Generates a string of 22 characters by default to have more than 256 random bits. (a characters is encoded
      * on 6 bits in 64 base)
      */
-    public static function generateToken(string|RouteName $key,
-                                         int              $length = 43): string
+    public static function generateToken(string|Action $key,
+                                         int           $length = 43): string
     {
         $randomBytes = random_bytes(ceil($length * 6 / 8));
         $nonce = substr(Crypto::encode($randomBytes), 0, $length);
@@ -29,19 +29,19 @@ class Token
         );
     }
 
-    public static function get(string|RouteName $key): string
+    public static function get(string|Action $key): string
     {
         return Session::get(is_string($key) ? self::TOKEN_PREFIX . $key : self::TOKEN_PREFIX . $key->value);
     }
 
-    public static function delete(string|RouteName $key): void
+    public static function delete(string|Action $key): void
     {
         Session::delete(is_string($key) ? self::TOKEN_PREFIX . $key : self::TOKEN_PREFIX . $key->value);
     }
 
-    public static function verify(string|RouteName $key,
-                                  string           $token,
-                                  bool             $delete = true): bool
+    public static function verify(string|Action $key,
+                                  string        $token,
+                                  bool          $delete = true): bool
     {
         return $token === Session::get(
                 key: is_string($key) ? self::TOKEN_PREFIX . $key : self::TOKEN_PREFIX . $key->value,
@@ -49,9 +49,9 @@ class Token
             );
     }
 
-    public static function isTimeout(string|RouteName $key,
-                                     bool             $delete = true,
-                                     int              $minutes = 60): bool
+    public static function isTimeout(string|Action $key,
+                                     bool          $delete = true,
+                                     int           $minutes = 60): bool
     {
         $timestamp = Session::get(
             key: is_string($key) ? self::TIMESTAMP_PREFIX . $key : self::TIMESTAMP_PREFIX . $key->value,

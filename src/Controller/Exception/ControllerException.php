@@ -3,25 +3,19 @@
 namespace Stageo\Controller\Exception;
 
 use Exception;
+use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\enums\RouteName;
 use Stageo\Lib\enums\StatusCode;
 
 class ControllerException extends Exception
 {
-    public function __construct(string                      $message,
-                                private readonly RouteName  $redirection = RouteName::ERROR,
-                                private readonly FlashType  $flashType = FlashType::ERROR,
-                                private readonly StatusCode $statusCode = StatusCode::BAD_REQUEST,
-                                private array      $params = [])
+    public function __construct(string                     $message,
+                                private readonly Action    $action = Action::ERROR,
+                                private readonly FlashType $flashType = FlashType::ERROR,
+                                private readonly array     $params = [])
     {
         parent::__construct($message);
-        $this->params["statusCode"] = $this->statusCode->value;
-    }
-
-    public function getStatusCode(): StatusCode
-    {
-        return $this->statusCode;
     }
 
     public function getFlashType(): FlashType
@@ -29,12 +23,9 @@ class ControllerException extends Exception
         return $this->flashType;
     }
 
-    /**
-     * @return RouteName
-     */
-    public function getRedirection(): ?RouteName
+    public function getAction(): Action
     {
-        return $this->redirection;
+        return $this->action;
     }
 
     /**
