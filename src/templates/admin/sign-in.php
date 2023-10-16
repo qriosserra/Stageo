@@ -22,7 +22,7 @@ include __DIR__ . "/../macros/token.php";
  */
 ?>
 <main class="h-screen flex items-center justify-center gap-8 relative">
-    <?=button("Accueil", "fi-rr-angle-small-left", "/Stageo", "!absolute !pl-2 top-16 left-0")?>
+    <?=button("Accueil", "fi-rr-angle-small-left", Action::HOME->value, "!absolute !pl-2 top-16 left-0")?>
     <h1 class="w-[36rem]">Connection d'Admin</h1>
     <form class="flex flex-col items-center gap-4" action="<?=Action::ADMIN_SIGN_IN->value?>" method="post">
         <?=input("email", "Email", "text", "fi-rr-at", "required", null, $email ?? null)?>
