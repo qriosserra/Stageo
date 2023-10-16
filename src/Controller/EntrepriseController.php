@@ -222,7 +222,6 @@ class EntrepriseController
      * @throws InvalidTokenException
      */
     public function creation_offre(): Response{
-        $id_entreprise = $_REQUEST["id_entreprise"];
         $description = $_REQUEST["description"];
         $secteur = $_REQUEST["secteur"];
         $thematique = $_REQUEST["thematique"];
