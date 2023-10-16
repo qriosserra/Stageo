@@ -8,6 +8,8 @@
  */
 
 use Stageo\Lib\enums\Action;
+use Stageo\Lib\UserConnection;
+use Stageo\Model\Object\Admin;
 
 ?>
 
@@ -55,6 +57,13 @@ use Stageo\Lib\enums\Action;
                                 <span>A Propos</span>
                             </a>
                         </li>
+                        <?php if (UserConnection::isInstance(new Admin())):?>
+                            <li class="dash">
+                                <a class="dash button" href="<?= Action::ADMIN_DASH->value ?>">
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                        <?php endif ?>
                         <?php if (is_null($user)):?>
                             <li class="sign-in">
                                 <a class="sign-in button-ghost" href="?c=etudiant&a=SignInForm">
