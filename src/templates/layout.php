@@ -27,7 +27,7 @@ use Stageo\Lib\enums\Action;
                     <a class="logo-container flex justify-center items-center" href="/Stageo">
                         <span>Stageo</span>
                     </a>
-                    <?php if ($user != null):?>
+                    <?php if ($user != null && !str_contains($_SERVER['REQUEST_URI'],"?a=listeOffre")):?>
                         <form class="" action="<?=Action::LISTE_OFFRE->value?>" method="post">
                             <div class="relative flex flex-row h-1/2  flex-wrap items-stretch">
                                 <div class="w-64 ">
