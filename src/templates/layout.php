@@ -51,24 +51,24 @@ use Stageo\Lib\enums\Action;
                     <?php endif ?>
                     <ul class="account-buttons-container flex justify-center items-center">
                         <li class="aPropos">
-                            <a class="aPropos button " href="?a=about">
+                            <a class="aPropos button " href="<?=Action::ABOUT->value?>">
                                 <span>A Propos</span>
                             </a>
                         </li>
                         <?php if (is_null($user)):?>
                             <li class="sign-in">
-                                <a class="sign-in button-ghost" href="?c=etudiant&a=SignInForm">
+                                <a class="sign-in button-ghost" href="<?=Action::ETUDIANT_SIGN_IN_FORM->value?>">
                                     <span>Se connecter</span>
                                 </a>
                             </li>
                             <li class="sign-up">
-                                <a class="sign-up button-primary" href="?c=etudiant&a=SignUpForm">
+                                <a class="sign-up button-primary" href="<?=Action::ETUDIANT_SIGN_UP_FORM->value?>">
                                     <span>S'inscrire</span>
                                 </a>
                             </li>
                         <?php else: ?>
                             <li class = "sign-out">
-                                <a class="sign-out logo-container" href="?a=signOut">
+                                <a class="sign-out logo-container" href="<?=Action::SIGN_OUT->value?>">
                                     <span>Déconnexion</span>
                                 </a>
                             </li>
