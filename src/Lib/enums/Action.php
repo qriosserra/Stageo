@@ -21,5 +21,6 @@ enum Action: string
     case ADMIN_SIGN_UP = "?c=admin&a=signUp";
     case ADMIN_SIGN_IN_FORM = "?c=admin&a=signInForm";
     case ADMIN_SIGN_IN = "?c=admin&a=signIn";
+    case ABOUT = "?a=about";
     case ADMIN_DASH = "?c=admin&a=dashboard";
 }
