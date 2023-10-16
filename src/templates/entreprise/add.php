@@ -11,7 +11,7 @@ include __DIR__ . "/../macros/token.php";
 ?>
 
 <main class="h-screen flex items-center justify-center gap-2 relative">
-    <?=button("Accueil", "fi-rr-angle-small-left", "/Stageo", "!absolute !pl-2 top-16 left-0")?>
+    <?=button("Accueil", "fi-rr-angle-small-left", Action::HOME->value, "!absolute !pl-2 top-16 left-0")?>
     <h4 class="text-3xl font-bold">Ajouter mon entreprise</h4>
     <form class="flex flex-row gap-4" action="<?=Action::ENTREPRISE_ADD->value?>" method="post">
         <div class="left-0">
@@ -21,12 +21,12 @@ include __DIR__ . "/../macros/token.php";
         </div>
         <div class="flex flex-col items-center gap-4 " id="group1" >
             <?=input("raison_sociale", "Nom de l'entreprise", "text", "required")?>
-            <?=input("adresse_voie", "Adresse de l'entreprise", "text", "required")?>
+            <?=input("email", "Email", "email", "required")?>
             <?=input("code_naf", "Code Naf", "text", "required")?>
             <?=input("telephone", "Téléphone", "text", "required")?>
         </div>
         <div class="flex flex-col items-center gap-4 hidden" id="group2">
-            <?=input("email", "Email", "email", "required")?>
+            <?=input("adresse_voie", "Adresse de l'entreprise", "text", "required")?>
             <?=input("siret", "Siret", "text", "required")?>
             <?=input("statut_juridique", "Statut Juridique", "text", "required")?>
             <?=input("type_structure", "Type de structure", "text", "required")?>
