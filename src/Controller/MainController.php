@@ -72,7 +72,7 @@ class MainController
             template: "afficherOffre.php",
             params: [
                 "title" => "afficherOffre",
-                "offre" =>$offre,
+                "offre" =>$offre[0],
             ]
         );
     }
