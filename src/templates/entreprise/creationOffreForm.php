@@ -36,11 +36,11 @@ include __DIR__ . "/../macros/token.php";
     </div>
     <div class="flex">
         <div class="flex items-center pr-4">
-            <input id="alternance" type="radio" value="" name="emploi" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <input id="alternance" type="radio" value="alternance" name="emploi" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
             <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alternance</label>
         </div>
         <div class="flex items-center">
-            <input checked id="stage" type="radio" value="" name="emploi" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <input checked id="stage" type="radio" value="stage" name="emploi" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
             <label class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Stage</label>
         </div>
     </div>

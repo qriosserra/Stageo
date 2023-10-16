@@ -11,6 +11,7 @@ use Stageo\Lib\FlashMessage;
 use Stageo\Lib\HTTP\Cookie;
 use Stageo\Lib\Response;
 use Stageo\Lib\UserConnection;
+use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\CategorieRepository;
 use Stageo\Model\Repository\OffreRepository;
 use Twig\Error\LoaderError;
@@ -56,6 +57,22 @@ class MainController
                 "selA" => $selA,
                 "selB" => $selB,
                 "cherche" =>$cherche
+            ]
+        );
+    }
+
+    public function afficherOffre(): Response
+    {
+        $offre  = (new OffreRepository())->select( new QueryCondition(
+            column: "id_offre",
+            comparisonOperator: ComparisonOperator::EQUAL,
+            value: $_REQUEST['offre']
+        ));
+        return new Response(
+            template: "afficherOffre.php",
+            params: [
+                "title" => "afficherOffre",
+                "offre" =>$offre[0],
             ]
         );
     }

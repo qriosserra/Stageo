@@ -48,7 +48,9 @@ include "macros/offre.php";
     <br>
     <section  class="flex flex-wrap gap-4 overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100">
         <?php foreach ($offres as $offre):?>
-            <?=\offre($offre->getDescription() , $offre->getIdOffre(),$offre->getIdEntreprise(),"assets/img/FAQB.jpg","assets/img/DuréeB.jpg", "itemContainer")?>
+            <?=\offre($offre->getDescription() , $offre->getIdOffre(),$offre->getIdEntreprise(),$offre->getIdOffre(),"assets/img/DuréeB.jpg" )?>
+            <?=\offre($offre->getDescription() , $offre->getIdOffre(),$offre->getIdEntreprise(),$offre->getIdOffre(),"assets/img/DuréeB.jpg" )?>
+            <?=\offre($offre->getDescription() , $offre->getIdOffre(),$offre->getIdEntreprise(),$offre->getIdOffre(),"assets/img/DuréeB.jpg" )?>
         <?php endforeach ?>
     </section>
 </main>

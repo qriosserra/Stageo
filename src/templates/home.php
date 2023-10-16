@@ -33,7 +33,7 @@ include "macros/offre.php";
         </section>
         <?php if (UserConnection::isInstance($etudiant)): ?>
             <section>
-                <h5 class="flex justify-center items-center">
+                <h5 class="flex justify-center items-center text-[2.5em] tracking-tighter">
                     Liste des recherches récentes ou favorites
                 </h5>
                 <div class="flex flex-wrap  overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8">
@@ -43,13 +43,13 @@ include "macros/offre.php";
                 </div>
             </section>
             <section>
-                <h5 class="flex justify-center items-center ">
+                <h5 class="flex justify-center items-center text-[2.5em] tracking-tighter">
                     Liste des categories récemment recherchées
                 </h5>
                 <div class="flex flex-wrap gap-4  overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100">
                     <?php $max = (count($offres)<=5) ? count($offres)-1 : 5; ?>
                     <?php for ($i = 0; $i <= $max; $i++):?>
-                        <?=\offre($offres[$i]->getDescription() , $offres[$i]->getIdOffre(),$offres[$i]->getIdEntreprise(),"assets/img/FAQB.jpg","assets/img/DuréeB.jpg" )?>
+                        <?=\offre($offres[$i]->getDescription() , $offres[$i]->getIdOffre(),$offres[$i]->getIdEntreprise(),$offres[$i]->getIdOffre(),"assets/img/DuréeB.jpg" )?>
                     <?php endfor ?>
                 </div>
             </section>
