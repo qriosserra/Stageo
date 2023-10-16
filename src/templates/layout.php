@@ -22,7 +22,7 @@ use Stageo\Lib\enums\Action;
     </head>
     <body>
     <p class="hidden"></p>
-        <header id="header" class="mb-3">
+        <header class="mb-3">
             <?php if ($nav):?>
                 <nav>
                     <a class="logo-container flex justify-center items-center" href="<?=Action::HOME->value?>">
@@ -178,28 +178,5 @@ use Stageo\Lib\enums\Action;
                 <span class="footer-copyright">Stageo © 2023</span>
             </footer>
         <?php endif ?>
-    <script>
-        // JavaScript
-        var header = document.getElementById('header'); // Sélectionnez l'élément du header
-        console.log(header);
-        var lastScrollY = 0; // Initialisez la position précédente du défilement
-
-        // Définissez une fonction pour gérer le défilement
-        function handleScroll() {
-            var currentScrollY = window.scrollY; // Obtenez la position actuelle du défilement
-
-            if (currentScrollY > 30) { // Vérifiez si la position actuelle est supérieure à 30 pixels
-                header.classList.add('hidden'); // Ajoutez la classe "hidden-header" pour masquer le header
-            } else {
-                header.classList.remove('hidden'); // Supprimez la classe "hidden-header" pour afficher le header
-            }
-
-            // Mettez à jour la position précédente du défilement
-            lastScrollY = currentScrollY;
-        }
-
-        // Ajoutez un écouteur d'événement pour gérer le défilement
-        window.addEventListener('scroll', handleScroll);
-    </script>
     </body>
 </html>
