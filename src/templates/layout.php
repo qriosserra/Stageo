@@ -21,13 +21,14 @@ use Stageo\Lib\enums\Action;
         <script defer src="assets/js/script.js"></script>
     </head>
     <body>
-        <header class="mb-3">
+    <p class="hidden"></p>
+        <header id="header" class="mb-3">
             <?php if ($nav):?>
                 <nav>
                     <a class="logo-container flex justify-center items-center" href="<?=Action::HOME->value?>">
                         <span>Stageo</span>
                     </a>
-                    <?php if ($user != null):?>
+                    <?php if ($user != null && !str_contains($_SERVER['REQUEST_URI'],"?a=listeOffre")):?>
                         <form class="" action="<?=Action::LISTE_OFFRE->value?>" method="post">
                             <div class="relative flex flex-row h-1/2  flex-wrap items-stretch">
                                 <div class="w-64 ">
@@ -177,5 +178,28 @@ use Stageo\Lib\enums\Action;
                 <span class="footer-copyright">Stageo © 2023</span>
             </footer>
         <?php endif ?>
+    <script>
+        // JavaScript
+        var header = document.getElementById('header'); // Sélectionnez l'élément du header
+        console.log(header);
+        var lastScrollY = 0; // Initialisez la position précédente du défilement
+
+        // Définissez une fonction pour gérer le défilement
+        function handleScroll() {
+            var currentScrollY = window.scrollY; // Obtenez la position actuelle du défilement
+
+            if (currentScrollY > 30) { // Vérifiez si la position actuelle est supérieure à 30 pixels
+                header.classList.add('hidden'); // Ajoutez la classe "hidden-header" pour masquer le header
+            } else {
+                header.classList.remove('hidden'); // Supprimez la classe "hidden-header" pour afficher le header
+            }
+
+            // Mettez à jour la position précédente du défilement
+            lastScrollY = currentScrollY;
+        }
+
+        // Ajoutez un écouteur d'événement pour gérer le défilement
+        window.addEventListener('scroll', handleScroll);
+    </script>
     </body>
 </html>
