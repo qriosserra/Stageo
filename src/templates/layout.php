@@ -32,14 +32,14 @@ use Stageo\Lib\enums\Action;
                         <form class="" action="<?=Action::LISTE_OFFRE->value?>" method="post">
                             <div class="relative flex flex-row h-1/2  flex-wrap items-stretch">
                                 <div class="w-64 ">
-                                    <select id="Option" name="OptionL" class="rounded-l-lg  w-full bg-white border border-blue-500 text-gray-700 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                    <select id="Option" name="OptionL" class="rounded-l-lg w-full  bg-white border border-blue-500 text-gray-700 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                                         <option value="description" >Description</option>
                                         <option value="secteur">Secteur</option>
                                     </select>
                                 </div>
                                 <input
                                         type="search"
-                                        class=" relative bg-white m-0 -mr-0.5 block w-[10px] min-w-0 flex-auto border border-solid border-blue-500 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary "
+                                        class=" relative bg-white m-0 -mr-0.5 block w-auto min-w-0 flex-auto border border-solid border-blue-500 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary "
                                         id="searchInput"
                                         name="searchInput"
                                         placeholder="Search"
