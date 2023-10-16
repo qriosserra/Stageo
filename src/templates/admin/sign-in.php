@@ -25,7 +25,7 @@ include __DIR__ . "/../macros/token.php";
     <?=button("Accueil", "fi-rr-angle-small-left", "/Stageo", "!absolute !pl-2 top-16 left-0")?>
     <h1 class="w-[36rem]">Connection d'Admin</h1>
     <form class="flex flex-col items-center gap-4" action="<?=Action::ADMIN_SIGN_IN->value?>" method="post">
-        <?=input("email", "Email", "text", "fi-rr-at", "required", null, $email)?>
+        <?=input("email", "Email", "text", "fi-rr-at", "required", null, $email ?? null)?>
         <?=input("password", "Mot de passe", "password", "fi-rr-lock", "required")?>
         <?=token($token)?>
         <input class="button-primary" type="submit" value="Se connecter">

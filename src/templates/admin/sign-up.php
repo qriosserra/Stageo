@@ -17,9 +17,9 @@ include __DIR__ . "/../macros/token.php";
     <?=button("Accueil", "fi-rr-angle-small-left", "/Stageo", "!absolute !pl-2 top-16 left-0")?>
     <h1 class="w-[36rem]">Crée un administrateur</h1>
     <form class="flex flex-col items-center gap-4" action="<?=Action::ADMIN_SIGN_UP->value?>" method="post">
-        <?=input("nom", "Nom", "text", "fi-rr-user", "required", null, $nom)?>
-        <?=input("prenom", "Prenom", "text", "fi-rr-user", "required", null, $prenom)?>
-        <?=input("email", "Email", "text", "fi-rr-at", "required", null, $email)?>
+        <?=input("nom", "Nom", "text", "fi-rr-user", "required", null, $nom ?? null)?>
+        <?=input("prenom", "Prenom", "text", "fi-rr-user", "required", null, $prenom ?? null)?>
+        <?=input("email", "Email", "text", "fi-rr-at", "required", null, $email ?? null)?>
         <?=input("password", "Mot de passe", "password", "fi-rr-lock", "required", $pattern["password"])?>
         <?=input("confirm", "Confirmation", "password", "fi-rr-lock", "required", $pattern["password"])?>
         <?=token($token)?>
