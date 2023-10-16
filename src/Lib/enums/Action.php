@@ -14,6 +14,7 @@ enum Action: string
     case ENTREPRISE_ADD_FORM = "?c=entreprise&a=addForm";
     case ENTREPRISE_ADD = "?c=entreprise&a=add";
     case LISTE_OFFRE = "?a=listeOffre";
+    case AFFICHER_OFFRE = "?a=afficherOffre";
     case ENTREPRISE_CREATION_OFFRE_FORM = "?c=entreprise&a=creation_offre_form";
     case ENTREPRISE_CREATION_OFFRE = "?c=entreprise&a=creation_offre";
     case ADMIN_SIGN_UP_FORM = "?c=admin&a=signUpForm";
