@@ -14,6 +14,7 @@ use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Offre;
+use Stageo\Model\Repository\DatabaseConnection;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\OffreRepository;
 
@@ -230,6 +231,7 @@ class EntrepriseController
         $commentaire = $_REQUEST["commentaire"];
         $gratification = $_REQUEST["gratification"];
         $unite_gratification = $_REQUEST["unite_gratification"];
+        $job = $_REQUEST["emploi"];
         /*if(!UserConnection::isInstance(new Entreprise())){
             throw new ControllerException(
                 message: "Vous n'avez pas les droits",
@@ -296,7 +298,7 @@ class EntrepriseController
             content: "L'offre a été ajoutée avec succès",
             type: FlashType::SUCCESS
         );
-        (new OffreRepository())->insert(
+        $id_offre = (new OffreRepository())->insert(
             new Offre(
                 id_entreprise: $id_entreprise,
                 description: $description,
@@ -308,6 +310,11 @@ class EntrepriseController
                 unite_gratification: $unite_gratification,
             )
         );
+
+        //A Modifie plus TARD !!!!!!!!!!!!!
+        $pdo = DatabaseConnection::getPdo();
+        $sql = $pdo->prepare("INSERT INTO stg_offre_$job (id_offre) VALUES ($id_offre)");
+        $sql->execute();
         return new Response(
             action: Action::HOME,
         );
