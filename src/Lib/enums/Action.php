@@ -4,7 +4,7 @@ namespace Stageo\Lib\enums;
 
 enum Action: string
 {
-    case HOME = "";
+    case HOME = "?a=home";
     case ERROR = "?a=error";
     case ETUDIANT_SIGN_UP_FORM = "?c=etudiant&a=signUpForm";
     case ETUDIANT_SIGN_UP = "?c=etudiant&a=signUp";

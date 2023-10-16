@@ -24,7 +24,7 @@ use Stageo\Lib\enums\Action;
         <header class="mb-3">
             <?php if ($nav):?>
                 <nav>
-                    <a class="logo-container flex justify-center items-center" href="/Stageo">
+                    <a class="logo-container flex justify-center items-center" href="<?=Action::HOME->value?>">
                         <span>Stageo</span>
                     </a>
                     <?php if ($user != null):?>
