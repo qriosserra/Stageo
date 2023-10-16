@@ -49,7 +49,7 @@ include "macros/offre.php";
                 <div class="flex flex-wrap gap-4  overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100">
                     <?php $max = (count($offres)<=5) ? count($offres)-1 : 5; ?>
                     <?php for ($i = 0; $i <= $max; $i++):?>
-                        <?=\offre($offres[$i]->getDescription() , $offres[$i]->getIdOffre(),$offres[$i]->getIdEntreprise(),"assets/img/FAQB.jpg","assets/img/DuréeB.jpg" )?>
+                        <?=\offre($offres[$i]->getDescription() , $offres[$i]->getIdOffre(),$offres[$i]->getIdEntreprise(),$offres[$i]->getIdOffre(),"assets/img/DuréeB.jpg" )?>
                     <?php endfor ?>
                 </div>
             </section>
