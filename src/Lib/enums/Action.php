@@ -8,7 +8,7 @@ enum Action: string
     case ERROR = "?a=error";
     case ETUDIANT_SIGN_UP_FORM = "?c=etudiant&a=signUpForm";
     case ETUDIANT_SIGN_UP = "?c=etudiant&a=signUp";
-    case SIGN_OUT = "?c=signOut";
+    case SIGN_OUT = "?a=signOut";
     case ETUDIANT_SIGN_IN_FORM = "?c=etudiant&a=signInForm";
     case ETUDIANT_SIGN_IN = "?c=etudiant&a=signIn";
     case ENTREPRISE_ADD_FORM = "?c=entreprise&a=addForm";
@@ -21,6 +21,7 @@ enum Action: string
     case ADMIN_SIGN_UP = "?c=admin&a=signUp";
     case ADMIN_SIGN_IN_FORM = "?c=admin&a=signInForm";
     case ADMIN_SIGN_IN = "?c=admin&a=signIn";
+    case ADMIN_DASH = "?c=admin&a=dashboard";
     case ABOUT = "?a=about";
     case ADMIN_DASH = "?c=admin&a=dashboard";
 }

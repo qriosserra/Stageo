@@ -17,7 +17,7 @@ if (!empty($class)){
     $src = (is_null($src)) ? "assets/img/FAQB.jpg" : $src;
 return <<<HTML
  <div>
-    <a href="?a=afficherOffre&offre=$idOffre" class=" flex flex-row items-center bg-white border border-blue-500 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700  $class ">
+    <a href="?a=afficherOffre&offre=$idOffre" class="grid flex flex-row items-center bg-white border border-blue-500 rounded-lg shadow md:flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700  $class ">
       <div class="flex flex-col justify-between p-4 leading-normal">
           <img class="object-cover w-1/2 rounded-t-lg h-96 md:h-auto md:w-48 md:rounded-none md:rounded-l-lg border-blue-500" src="$src" alt="">
           <h7>
