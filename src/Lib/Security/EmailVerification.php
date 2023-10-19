@@ -24,7 +24,7 @@ class EmailVerification
         ]);
         $url = "$absoluteURL/verify/$encodedData";
 
-        Mailer::sendEmail(
+        Mailer::send(
             to: $email,
             subject: "Verify your email",
             content: "<a href='$url'>Verify your email</a>"
@@ -37,7 +37,7 @@ class EmailVerification
      */
     public static function sendAlertEmail(string $email): void
     {
-        Mailer::sendEmail(
+        Mailer::send(
             to: $email,
             subject: "Your email has been used to sign up",
             content: ""
