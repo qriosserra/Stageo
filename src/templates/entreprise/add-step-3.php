@@ -6,15 +6,20 @@ use Stageo\Model\Object\Entreprise;
 
 include __DIR__ . "/../macros/button.php";
 include __DIR__ . "/../macros/input.php";
+include __DIR__ . "/../macros/breadcrumb.php";
 /**
  * @var Entreprise $entreprise
  * @var string $token
  */
 ?>
 
-<main class="h-screen flex items-center justify-center gap-2 relative">
-    <?=button("Précédent", "fi-rr-angle-small-left", Action::ENTREPRISE_ADD_STEP_2_FORM, "!absolute !pl-2 top-16 left-0")?>
-    <h4 class="text-3xl font-bold">Ajouter mon entreprise</h4>
+<main class="h-screen flex flex-col items-center justify-center gap-2 relative">
+    <?=breadcrumb(3, [
+        "Information générale" => Action::ENTREPRISE_ADD_STEP_1_FORM->value,
+        "Détails techniques" => Action::ENTREPRISE_ADD_STEP_2_FORM->value,
+        "Adresse postale" => Action::ENTREPRISE_ADD_STEP_3_FORM->value,
+        "Authentification" => Action::ENTREPRISE_ADD_STEP_4_FORM->value
+    ])?>
     <form class="grid grid-cols-3 gap-8" action="<?=Action::ENTREPRISE_ADD_STEP_3->value?>" method="post">
         <?=field("adresse_voie", "Adresse de l'entreprise", "text", "Entrez l'adresse de siège de l'entreprise", null, false, $adresse_voie ?? null, "col-span-3")?>
         <?=dropdown("id_commune", "Commune", "Sélectionnez une commune", "col-span-2", $id_commune ?? null, $communes ?? [])?>

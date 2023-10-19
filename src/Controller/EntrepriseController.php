@@ -255,7 +255,7 @@ class EntrepriseController
     public function addStep3(): Response
     {
         return new Response(
-            action: Action::HOME
+            action: Action::ENTREPRISE_ADD_STEP_4_FORM
         );
     }
 
