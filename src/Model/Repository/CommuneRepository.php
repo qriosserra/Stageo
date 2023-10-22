@@ -14,6 +14,11 @@ class CommuneRepository extends CoreRepository
         return new Commune();
     }
 
+    public function getById(int|string $id): ?CoreObject
+    {
+        return $this->select(new QueryCondition("id_commune", ComparisonOperator::EQUAL, $id))[0] ?? null;
+    }
+
     public function getByName(string $name, int $limit = 5): ?array
     {
         return $this->select(new QueryCondition("commune", ComparisonOperator::LIKE, $name), $limit) ?? null;

@@ -21,10 +21,10 @@ include __DIR__ . "/../macros/breadcrumb.php";
         "Authentification" => Action::ENTREPRISE_ADD_STEP_4_FORM->value
     ])?>
     <form class="grid grid-cols-2 gap-8" action="<?=Action::ENTREPRISE_ADD_STEP_1->value?>" method="post">
-        <?=field("raison_sociale", "Nom de l'entreprise*", "text", "Entrez le nom de l'entreprise", Pattern::NAME, true, $entreprise->getRaisonSociale() ?? null)?>
-        <?=field("telephone", "Téléphone*", "text", "Entrez un téléphone de contact", null, false, $entreprise->getTelephone() ?? null)?>
-        <?=field("site", "Site web", "text", "www.example.com", null, false, $entreprise->getSite() ?? null)?>
-        <?=field("fax", "Fax", "text", "Entrez un numéro de fax", null, false, $entreprise->getFax() ?? null)?>
+        <?=field("raison_sociale", "Nom de l'entreprise*", "text", "Entrez le nom de l'entreprise", Pattern::NAME, true, $entreprise->getRaisonSociale())?>
+        <?=field("telephone", "Téléphone", "text", "0412345678", Pattern::PHONE_NUMBER, false, $entreprise->getTelephone())?>
+        <?=field("site", "Site web", "text", "www.example.com", Pattern::URL, false, $entreprise->getSite())?>
+        <?=field("fax", "Fax", "text", "Entrez un numéro de fax", Pattern::PHONE_NUMBER, false, $entreprise->getFax())?>
         <?=submit("Suivant", "col-span-2")?>
         <?=token($token)?>
     </form>

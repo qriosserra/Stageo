@@ -21,9 +21,9 @@ include __DIR__ . "/../macros/breadcrumb.php";
         "Authentification" => Action::ENTREPRISE_ADD_STEP_4_FORM->value
     ])?>
     <form class="grid grid-cols-3 gap-8" action="<?=Action::ENTREPRISE_ADD_STEP_3->value?>" method="post">
-        <?=field("adresse_voie", "Adresse de l'entreprise", "text", "Entrez l'adresse de siège de l'entreprise", null, false, $adresse_voie ?? null, "col-span-3")?>
-        <?=dropdown("id_commune", "Commune", "Sélectionnez une commune", "col-span-2", $id_commune ?? null, $communes ?? [])?>
-        <?=dropdown("id_code_postal", "Code Postal", "Sélectionnez un code postal", null, $id_code_postal ?? null, $code_postaux ?? [])?>
+        <?=field("numero_voie", "Numéro et voie du siège de l'entreprise", "text", "Entrez l'adresse de siège de l'entreprise", null, false, $entreprise->getNumeroVoie(), "col-span-3")?>
+        <?=dropdown("id_commune", "Commune", "Sélectionnez une commune", "col-span-2", $entreprise->getIdCommune(), $communes ?? [])?>
+        <?=dropdown("id_code_postal", "Code Postal", "Sélectionnez un code postal", null, $entreprise->getIdCodePostal(), $code_postaux ?? [])?>
         <?=submit("Suivant", "col-span-3")?>
         <?=token($token)?>
     </form>

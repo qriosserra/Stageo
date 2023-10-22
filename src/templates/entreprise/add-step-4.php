@@ -1,7 +1,6 @@
 <?php
 
 use Stageo\Lib\enums\Action;
-use Stageo\Lib\enums\Pattern;
 use Stageo\Model\Object\Entreprise;
 
 include __DIR__ . "/../macros/button.php";
@@ -20,8 +19,8 @@ include __DIR__ . "/../macros/breadcrumb.php";
         "Adresse postale" => Action::ENTREPRISE_ADD_STEP_3_FORM->value,
         "Authentification" => Action::ENTREPRISE_ADD_STEP_4_FORM->value
     ])?>
-    <form class="grid gap-8" action="<?=Action::ENTREPRISE_ADD_STEP_3->value?>" method="post">
-        <?=field("email", "Email*", "email", "Entrez un email de contact", null, true, $entreprise->getUnverifiedEmail() ?? null)?>
+    <form class="grid gap-8" action="<?=Action::ENTREPRISE_ADD_STEP_4->value?>" method="post">
+        <?=field("email", "Email*", "email", "Entrez un email de contact", null, true, $entreprise->getUnverifiedEmail())?>
         <?=field("password", "Mot de passe*", "password", "Entrez un mot de passe", null, true)?>
         <div>
             <p>Le mot de passe doit au moins contenir:</p>
@@ -33,7 +32,7 @@ include __DIR__ . "/../macros/breadcrumb.php";
             </ul>
         </div>
         <?=field("confirm", "Confirmer le mot de passe*", "password", "Confirmez le mot de passe", null, true)?>
-        <?=submit("Terminer l'inscription")?>
+        <?=submit("Finaliser l'inscription")?>
         <?=token($token)?>
     </form>
 </main>
