@@ -3,7 +3,8 @@ const colors = require("tailwindcss/colors");
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   // Scan templates files to delete unused style and generate optimal CSS file
-  content: ["./src/**/*.{php,css}"],
+  darkMode: 'class',
+  content: ["./src/**/*.{php,css,js}"],
   theme: {
     extend: {
       colors: {

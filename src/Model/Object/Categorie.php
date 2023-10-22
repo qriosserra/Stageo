@@ -10,7 +10,7 @@ class Categorie extends CoreObject{
 
 
     public function __construct(#[PrimaryKey] private ?int $id_categorie = null,
-                                private string|null        $nom  = null)
+                                private string|null        $libelle  = null)
     {}
 
     public function getIdCategorie(): ?int
@@ -23,14 +23,14 @@ class Categorie extends CoreObject{
         $this->id_categorie = $id_categorie;
     }
 
-    public function getNom(): ?string
+    public function getLibelle(): ?string
     {
-        return $this->nom;
+        return $this->libelle;
     }
 
-    public function setNom(?string $nom): void
+    public function setLibelle(?string $libelle): void
     {
-        $this->nom = $nom;
+        $this->libelle = $libelle;
     }
 
 

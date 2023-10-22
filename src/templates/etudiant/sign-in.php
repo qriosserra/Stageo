@@ -22,7 +22,7 @@ include __DIR__ . "/../macros/token.php";
 ?>
 
 <main class="h-screen flex items-center justify-center gap-8 relative">
-    <?=button("Accueil", "fi-rr-angle-small-left", Action::HOME->value, "!absolute !pl-2 top-16 left-0")?>
+    <?=button("Accueil", "fi-rr-angle-small-left", Action::HOME, "!absolute !pl-2 top-16 left-0")?>
     <h1 class="w-[36rem]">Connection d'étudiant</h1>
     <div class="absolute -left-12 -z-10">
     </div>

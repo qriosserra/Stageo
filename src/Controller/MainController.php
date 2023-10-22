@@ -13,7 +13,9 @@ use Stageo\Lib\Response;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\CategorieRepository;
+use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\OffreRepository;
+use Stageo\Model\Repository\UniteGratificationRepository;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -39,40 +41,46 @@ class MainController
 
     public function listeOffre(): Response
     {
-        $cherche = $_POST['searchInput'];
-        $opt = (strlen($_POST['OptionL']) == 0) ? "description" : $_POST['OptionL'] ;
-        $tabla = ($opt == "description") ? "description" : "secteur";
-        $offres  = (strlen($cherche) == 0) ? (new OffreRepository())->select() : (new OffreRepository())->select( new QueryCondition(
-            column: $tabla,
-            comparisonOperator: ComparisonOperator::LIKE,
-            value: "%".$cherche."%"
-        ));
-        $selA = ($_POST['OptionL'] == "description") ? "selected" : "";
-        $selB = ($_POST['OptionL'] == "secteur") ? "selected" : "";
+        $search = $_REQUEST["search"] ?? "";
+        $option = $_POST["OptionL"] ?? "description";
+        $tabla = $option === "description"
+            ? "description"
+            : "secteur";
+        $offres = isset($search)
+            ? (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%".$search."%"))
+            : (new OffreRepository)->select();
+        $selA = $option === "description"
+            ? "selected"
+            : null;
+        $selB = $option === "secteur"
+            ? "selected"
+            : null;
+
         return new Response(
-            template: "listeOffre.php",
+            template: "entreprise/offre/liste-offre.php",
             params: [
-                "title" => "Home",
-                "offres" =>$offres,
+                "title" => "Liste des offres",
+                "offres" => $offres,
                 "selA" => $selA,
                 "selB" => $selB,
-                "cherche" =>$cherche
+                "search" => $search
             ]
         );
     }
 
-    public function afficherOffre(): Response
+    public function afficherOffre(string $id): Response
     {
-        $offre  = (new OffreRepository())->select( new QueryCondition(
-            column: "id_offre",
-            comparisonOperator: ComparisonOperator::EQUAL,
-            value: $_REQUEST['offre']
-        ));
+        /**
+         * @var Offre $offre
+         */
+        $offre = (new OffreRepository)->getById($id);
         return new Response(
-            template: "afficherOffre.php",
+            template: "entreprise/offre/offre.php",
             params: [
-                "title" => "afficherOffre",
-                "offre" =>$offre[0],
+                "title" => "Offre $id",
+                "entreprise" => (new EntrepriseRepository)->getById($offre->getIdEntreprise()),
+                "offre" => $offre,
+                "unite_gratification" => (new UniteGratificationRepository)->getById($offre->getIdUniteGratification())->getLibelle()
             ]
         );
     }

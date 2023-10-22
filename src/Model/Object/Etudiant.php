@@ -20,7 +20,7 @@ class Etudiant extends User
                                 private string|NullDataType|null $prenom = null,
                                 private string|NullDataType|null $telephone = null,
                                 private string|NullDataType|null $telephone_fixe = null,
-                                private string|NullDataType|null $adresse_voie = null,
+                                private string|NullDataType|null $numero_voie = null,
                                 private string|NullDataType|null $email_etudiant = null,
                                 private string|NullDataType|null $civilite = null,
                                 private string|NullDataType|null $id_commune = null,
@@ -209,17 +209,17 @@ class Etudiant extends User
     /**
      * @return NullDataType|string|null
      */
-    public function getAdresseVoie(): string|NullDataType|null
+    public function getNumeroVoie(): string|NullDataType|null
     {
-        return $this->adresse_voie;
+        return $this->numero_voie;
     }
 
     /**
-     * @param NullDataType|string|null $adresse_voie
+     * @param NullDataType|string|null $numero_voie
      */
-    public function setAdresseVoie(string|NullDataType|null $adresse_voie): void
+    public function setNumeroVoie(string|NullDataType|null $numero_voie): void
     {
-        $this->adresse_voie = $adresse_voie;
+        $this->numero_voie = $numero_voie;
     }
 
     /**
