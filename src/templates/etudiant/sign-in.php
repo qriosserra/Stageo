@@ -14,7 +14,6 @@ use Stageo\Lib\enums\Action;
 
 include __DIR__ . "/../macros/button.php";
 include __DIR__ . "/../macros/input.php";
-include __DIR__ . "/../macros/token.php";
 /**
  * @var string $token
  * @var string $login
