@@ -138,6 +138,19 @@ class EtudiantController
         /**
          * @var Etudiant|null $etudiant
          */
+        $ldap_conn = $this->connectToLdap();
+
+        $ldap_login =$login;
+        $ldap_password = $password;
+        $ldap_basedn = "dc=info,dc=iutmontp,dc=univ-montp2,dc=fr";
+        $ldap_searchfilter = "(uid=$ldap_login)";
+        $search = ldap_search($ldap_conn, $ldap_basedn, $ldap_searchfilter, array());
+        $user_result = ldap_get_entries($ldap_conn, $search);
+        $user_exist = $user_result["count"] == 1;
+        if($user_exist) {
+            $dn = "uid=".$ldap_login.",ou=Ann1,ou=Etudiants,ou=People,dc=info,dc=iutmontp,dc=univ-montp2,dc=fr";
+            $passwd_ok = ldap_bind($ldap_conn, $ldap_basedn, $ldap_password);
+        }
         $etudiant = (new EtudiantRepository())->getByLogin($login);
         if (is_null($etudiant)) {
             throw new ControllerException(
