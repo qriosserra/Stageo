@@ -11,6 +11,7 @@
 <?php
 
 use Stageo\Lib\enums\Action;
+use Stageo\Lib\enums\Pattern;
 
 include __DIR__ . "/../macros/button.php";
 include __DIR__ . "/../macros/input.php";
@@ -26,8 +27,8 @@ include __DIR__ . "/../macros/input.php";
     <div class="absolute -left-12 -z-10">
     </div>
     <form class="flex flex-col items-center gap-4" action="<?=Action::ETUDIANT_SIGN_IN->value?>" method="post">
-        <?=input("login", "Login", "text", "fi-rr-user", "required", null, $login)?>
-        <?=input("password", "Mot de passe", "password", "fi-rr-lock", "required")?>
+        <?=field("login", "Login", "text", "Entrez votre login", null, true, $login)?>
+        <?=field("password", "Mot de passe", "password", "Entrez un mot de passe", Pattern::PASSWORD, true)?>
         <?=token($token)?>
         <input type="submit" value="Se connecter" class="button-primary">
         <p>Vous n'avez pas de compte étudiant ? <a class="font-bold" href="<?=Action::ETUDIANT_SIGN_UP_FORM->value?>">S'inscrire</a></p>
