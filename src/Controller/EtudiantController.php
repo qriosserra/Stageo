@@ -40,6 +40,15 @@ class EtudiantController
      * @throws ControllerException
      * @throws InvalidTokenException
      */
+
+    function connectToLdap(): bool|\LDAP\Connection
+    {
+        $ldap_host = "10.10.1.30";
+        $ldap_port = "389";
+        $ldap_conn = ldap_connect($ldap_host, $ldap_port);
+        ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
+        return $ldap_conn;
+    }
     public function signUp(): Response
     {
         $login = $_REQUEST["login"];
