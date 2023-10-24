@@ -36,7 +36,7 @@ include __DIR__ . "/../macros/input.php";
 
 <!-- check box -->
     <!-- Checkbox pour étudiant -->
-    <input type="checkbox" id="etudiant" disabled checked ">
+    <input type="checkbox" id="etudiant" disabled checked>
     <label for="etudiant">Étudiant</label>
 
     <!-- Checkbox pour admin -->

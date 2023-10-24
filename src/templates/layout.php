@@ -10,7 +10,6 @@
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Admin;
-
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +17,7 @@ use Stageo\Model\Object\Admin;
     <head>
         <meta charset="UTF-8">
         <title><?=$title?> – Stageo</title>
-        <link rel="stylesheet" href="assets/css/main.css"">
+        <link rel="stylesheet" href="assets/css/main.css">
         <link rel='stylesheet' href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
         <script defer src="assets/js/script.js"></script>
     </head>

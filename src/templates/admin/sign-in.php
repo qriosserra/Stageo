@@ -33,7 +33,7 @@ include __DIR__ . "/../macros/token.php";
 
 <!-- check box -->
     <!-- Checkbox pour étudiant -->
-    <input type="checkbox" id="etudiant" onchange="redirectToLink('admin', '<?= Action::ETUDIANT_SIGN_IN_FORM->value ?>')" ">
+    <input type="checkbox" id="etudiant" onchange="redirectToLink('admin', '<?= Action::ETUDIANT_SIGN_IN_FORM->value ?>')">
     <label for="etudiant">Étudiant</label>
 
     <!-- Checkbox pour admin -->

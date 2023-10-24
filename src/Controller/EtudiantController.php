@@ -134,49 +134,19 @@ class EtudiantController
                 params: ["login" => $login]
             );
         }
-        /**
-         * @var Etudiant|null $etudiant
-         */
-        $ldap_conn = $this->connectToLdap();
-
-        $ldap_login =$login;
-        $ldap_password = $password;
-        $ldap_basedn = "dc=info,dc=iutmontp,dc=univ-montp2,dc=fr";
-        $ldap_searchfilter = "(uid=$ldap_login)";
-        $search = ldap_search($ldap_conn, $ldap_basedn, $ldap_searchfilter, array());
-        $user_result = ldap_get_entries($ldap_conn, $search);
-        $user_exist = $user_result["count"] == 1;
-        if($user_exist) {
-            $dn = "uid=".$ldap_login.",ou=Ann1,ou=Etudiants,ou=People,dc=info,dc=iutmontp,dc=univ-montp2,dc=fr";
-            $passwd_ok = ldap_bind($ldap_conn, $ldap_basedn, $ldap_password);
+        $etudiantRepository=new EtudiantRepository();
+        $url = "https://webinfo.iutmontp.univ-montp2.fr/~riosq/LDAP/?login=$login&password=$password";
+        $response = json_decode(file_get_contents($url), true);
+        $etudiant= $etudiantRepository->getByLogin($login);
+        if (is_null($etudiant)){
+            $etudiant = new Etudiant($login,$response["nom"],$response["prenom"],$response["mail"],$response["annee"]);
+            $etudiantRepository->insert($etudiant);
         }
-        $etudiant = (new EtudiantRepository())->getByLogin($login);
-        if (is_null($etudiant)) {
-            throw new ControllerException(
-                message: "Aucun compte n'existe avec ce login",
-                action: Action::ETUDIANT_SIGN_IN_FORM,
-                params: [
-                    "login" => $login
-                ]
-            );
-        }
-        if (!Password::verify($password, $etudiant->getHashedPassword())) {
-            throw new ControllerException(
-                message: "Le mot de passe est incorrect",
-                action: Action::ETUDIANT_SIGN_IN_FORM,
-                params: [
-                    "login" => $login
-                ]
-            );
-        }
-
         FlashMessage::add(
             content: "Connexion réalisée avec succès",
             type: FlashType::SUCCESS
         );
         UserConnection::signIn($etudiant);
-        // a modifier
-
         return new Response(
             action: Action::HOME
         );

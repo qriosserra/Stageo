@@ -18,7 +18,7 @@ include "macros/offre.php";
         <section class="bg-gray-100 py-8  flex justify-center items-center ">
             <h5 class="align-middle">Bienvenue sur Stageo</h5>
         </section>
-        <section class="bg-gray-100 py-8">
+        <div class="bg-gray-100 py-8">
             <div class="bg-gray-200 p-4">
                 <div class="max-w-screen-xl mx-auto">
                     <div class="relative">
@@ -30,7 +30,7 @@ include "macros/offre.php";
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
         <?php if (UserConnection::isInstance($etudiant)): ?>
             <section>
                 <h5 class="flex justify-center items-center text-[2.5em] tracking-tighter">
