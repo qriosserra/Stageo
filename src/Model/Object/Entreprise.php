@@ -16,18 +16,42 @@ class Entreprise extends User
                                 private int|NullDataType|null    $nonce_timestamp = null,
                                 private string|NullDataType|null $hashed_password = null,
                                 private string|NullDataType|null $raison_sociale = null,
-                                private string|NullDataType|null $adresse_voie = null,
+                                private string|NullDataType|null $numero_voie = null,
                                 private string|NullDataType|null $code_naf = null,
                                 private string|NullDataType|null $telephone = null,
                                 private string|NullDataType|null $siret = null,
-                                private string|NullDataType|null $statut_juridique = null,
-                                private string|NullDataType|null $type_structure = null,
-                                private string|NullDataType|null $effectif = null,
+                                private string|NullDataType|null $id_statut_juridique = null,
+                                private string|NullDataType|null $id_type_structure = null,
+                                private string|NullDataType|null $id_taille_entreprise = null,
                                 private string|NullDataType|null $site = null,
                                 private string|NullDataType|null $fax = null,
                                 private string|NullDataType|null $id_code_postal = null,
-    )
+                                private string|NullDataType|null $id_commune = null)
     {
+    }
+
+    /**
+     * @param NullDataType|string|null $raison_sociale
+     */
+    public function setRaisonSociale(string|NullDataType|null $raison_sociale): void
+    {
+        $this->raison_sociale = $raison_sociale;
+    }
+
+    /**
+     * @return NullDataType|string|null
+     */
+    public function getIdCommune(): string|NullDataType|null
+    {
+        return $this->id_commune;
+    }
+
+    /**
+     * @param NullDataType|string|null $id_commune
+     */
+    public function setIdCommune(string|NullDataType|null $id_commune): void
+    {
+        $this->id_commune = $id_commune;
     }
 
     /**
@@ -134,14 +158,14 @@ class Entreprise extends User
         return $this->raison_sociale;
     }
 
-    public function getAdresseVoie(): string|NullDataType|null
+    public function getNumeroVoie(): string|NullDataType|null
     {
-        return $this->adresse_voie;
+        return $this->numero_voie;
     }
 
-    public function setAdresseVoie(string|NullDataType|null $adresse_voie): void
+    public function setNumeroVoie(string|NullDataType|null $numero_voie): void
     {
-        $this->adresse_voie = $adresse_voie;
+        $this->numero_voie = $numero_voie;
     }
 
     public function getCodeNaf(): string|NullDataType|null
@@ -174,34 +198,34 @@ class Entreprise extends User
         $this->siret = $siret;
     }
 
-    public function getStatutJuridique(): string|NullDataType|null
+    public function getIdStatutJuridique(): string|NullDataType|null
     {
-        return $this->statut_juridique;
+        return $this->id_statut_juridique;
     }
 
-    public function setStatutJuridique(string|NullDataType|null $statut_juridique): void
+    public function setIdStatutJuridique(string|NullDataType|null $id_statut_juridique): void
     {
-        $this->statut_juridique = $statut_juridique;
+        $this->id_statut_juridique = $id_statut_juridique;
     }
 
-    public function getTypeStructure(): string|NullDataType|null
+    public function getIdTypeStructure(): string|NullDataType|null
     {
-        return $this->type_structure;
+        return $this->id_type_structure;
     }
 
-    public function setTypeStructure(string|NullDataType|null $type_structure): void
+    public function setIdTypeStructure(string|NullDataType|null $id_type_structure): void
     {
-        $this->type_structure = $type_structure;
+        $this->id_type_structure = $id_type_structure;
     }
 
-    public function getEffectif(): string|NullDataType|null
+    public function getIdTailleEntreprise(): string|NullDataType|null
     {
-        return $this->effectif;
+        return $this->id_taille_entreprise;
     }
 
-    public function setEffectif(string|NullDataType|null $effectif): void
+    public function setIdtailleentreprise(string|NullDataType|null $id_taille_entreprise): void
     {
-        $this->effectif = $effectif;
+        $this->id_taille_entreprise = $id_taille_entreprise;
     }
 
     public function getSite(): string|NullDataType|null

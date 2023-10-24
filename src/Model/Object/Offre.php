@@ -10,17 +10,18 @@ use Stageo\Lib\Database\Table;
 #[Table("offre")]
 class Offre extends CoreObject
 {
-    public function __construct(#[PrimaryKey] private ?int $id_offre = null,
-                                private int|null $id_entreprise = null,
-                                private string|null $description  = null,
+    public function __construct(#[PrimaryKey] private ?int       $id_offre = null,
+                                private int|null                 $id_entreprise = null,
+                                private string|null              $description = null,
                                 private string|NullDataType|null $secteur = null,
                                 private string|NullDataType|null $thematique = null,
-                                private string|NullDataType|null $tache = null,
-                                private string|NullDataType|null $commentaire = null,
-                                private string|NullDataType|null $gratification = null,
-                                private string|NullDataType|null $unite_gratification = null,
-                                private int|NullDataType|null $id_etudiant = null)
-    {}
+                                private string|NullDataType|null $taches = null,
+                                private string|NullDataType|null $commentaires = null,
+                                private float|NullDataType|null  $gratification = null,
+                                private string|NullDataType|null $id_unite_gratification = null,
+                                private int|NullDataType|null    $id_etudiant = null)
+    {
+    }
 
     /**
      * @return int|null
@@ -105,33 +106,33 @@ class Offre extends CoreObject
     /**
      * @return NullDataType|string|null
      */
-    public function getTache(): string|NullDataType|null
+    public function getTaches(): string|NullDataType|null
     {
-        return $this->tache;
+        return $this->taches;
     }
 
     /**
-     * @param NullDataType|string|null $tache
+     * @param NullDataType|string|null $taches
      */
-    public function setTache(string|NullDataType|null $tache): void
+    public function setTaches(string|NullDataType|null $taches): void
     {
-        $this->tache = $tache;
+        $this->taches = $taches;
     }
 
     /**
      * @return NullDataType|string|null
      */
-    public function getCommentaire(): string|NullDataType|null
+    public function getCommentaires(): string|NullDataType|null
     {
-        return $this->commentaire;
+        return $this->commentaires;
     }
 
     /**
-     * @param NullDataType|string|null $commentaire
+     * @param NullDataType|string|null $commentaires
      */
-    public function setCommentaire(string|NullDataType|null $commentaire): void
+    public function setCommentaires(string|NullDataType|null $commentaires): void
     {
-        $this->commentaire = $commentaire;
+        $this->commentaires = $commentaires;
     }
 
     /**
@@ -153,17 +154,17 @@ class Offre extends CoreObject
     /**
      * @return NullDataType|string|null
      */
-    public function getUniteGratification(): string|NullDataType|null
+    public function getIdUniteGratification(): string|NullDataType|null
     {
-        return $this->unite_gratification;
+        return $this->id_unite_gratification;
     }
 
     /**
-     * @param NullDataType|string|null $unite_gratification
+     * @param NullDataType|string|null $id_unite_gratification
      */
-    public function setUniteGratification(string|NullDataType|null $unite_gratification): void
+    public function setIdUniteGratification(string|NullDataType|null $id_unite_gratification): void
     {
-        $this->unite_gratification = $unite_gratification;
+        $this->id_unite_gratification = $id_unite_gratification;
     }
 
     /**

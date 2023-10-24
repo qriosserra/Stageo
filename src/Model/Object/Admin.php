@@ -19,7 +19,7 @@ class Admin extends User
     /**
      * @return int|null
      */
-    public function getIdAdmint(): ?int
+    public function getIdAdmin(): ?int
     {
         return $this->id_admin;
     }
@@ -27,7 +27,7 @@ class Admin extends User
     /**
      * @param int|null $id_admin
      */
-    public function setId_Admint(?int $id_admin): void
+    public function setId_Admin(?int $id_admin): void
     {
         $this->id_admin = $id_admin;
     }
@@ -95,6 +95,4 @@ class Admin extends User
     {
         $this->prenom = $prenom;
     }
-
-
 }

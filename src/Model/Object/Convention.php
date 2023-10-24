@@ -25,17 +25,68 @@ class Convention extends CoreObject
                                 private string|NullDataType|null $date_interruption_debut = null,
                                 private string|NullDataType|null $date_interruption_fin = null,
                                 private string|NullDataType|null $heures_total = null,
-                                private string|NullDataType|null $jour_hebdomadaire = null,
-                                private string|NullDataType|null $heure_hebdomadaire = null,
+                                private string|NullDataType|null $jours_hebdomadaire = null,
+                                private string|NullDataType|null $heures_hebdomadaire = null,
                                 private string|NullDataType|null $commentaires_duree = null,
                                 private string|NullDataType|null $gratification = null,
-                                private string|NullDataType|null $unite_gratification = null,
+                                private string|NullDataType|null $id_unite_gratification = null,
                                 private string|NullDataType|null $avantages_nature = null,
                                 private string|NullDataType|null $code_elp = null,
+                                private string|NullDataType|null $numero_voie = null,
+                                private string|NullDataType|null $id_code_postal = null,
+                                private string|NullDataType|null $id_commune = null,
                                 private string|NullDataType|null $id_entreprise = null,
                                 private string|NullDataType|null $id_tuteur = null,
                                 private string|NullDataType|null $id_enseignant = null)
     {
+    }
+
+    /**
+     * @return NullDataType|string|null
+     */
+    public function getNumeroVoie(): string|NullDataType|null
+    {
+        return $this->numero_voie;
+    }
+
+    /**
+     * @param NullDataType|string|null $numero_voie
+     */
+    public function setNumeroVoie(string|NullDataType|null $numero_voie): void
+    {
+        $this->numero_voie = $numero_voie;
+    }
+
+    /**
+     * @return NullDataType|string|null
+     */
+    public function getIdCodePostal(): string|NullDataType|null
+    {
+        return $this->id_code_postal;
+    }
+
+    /**
+     * @param NullDataType|string|null $id_code_postal
+     */
+    public function setIdCodePostal(string|NullDataType|null $id_code_postal): void
+    {
+        $this->id_code_postal = $id_code_postal;
+    }
+
+    /**
+     * @return NullDataType|string|null
+     */
+    public function getIdCommune(): string|NullDataType|null
+    {
+        return $this->id_commune;
+    }
+
+    /**
+     * @param NullDataType|string|null $id_commune
+     */
+    public function setIdCommune(string|NullDataType|null $id_commune): void
+    {
+        $this->id_commune = $id_commune;
     }
 
     /**
@@ -297,33 +348,33 @@ class Convention extends CoreObject
     /**
      * @return NullDataType|string|null
      */
-    public function getJourHebdomadaire(): string|NullDataType|null
+    public function getJoursHebdomadaire(): string|NullDataType|null
     {
-        return $this->jour_hebdomadaire;
+        return $this->jours_hebdomadaire;
     }
 
     /**
-     * @param NullDataType|string|null $jour_hebdomadaire
+     * @param NullDataType|string|null $jours_hebdomadaire
      */
-    public function setJourHebdomadaire(string|NullDataType|null $jour_hebdomadaire): void
+    public function setJoursHebdomadaire(string|NullDataType|null $jours_hebdomadaire): void
     {
-        $this->jour_hebdomadaire = $jour_hebdomadaire;
+        $this->jours_hebdomadaire = $jours_hebdomadaire;
     }
 
     /**
      * @return NullDataType|string|null
      */
-    public function getHeureHebdomadaire(): string|NullDataType|null
+    public function getHeuresHebdomadaire(): string|NullDataType|null
     {
-        return $this->heure_hebdomadaire;
+        return $this->heures_hebdomadaire;
     }
 
     /**
-     * @param NullDataType|string|null $heure_hebdomadaire
+     * @param NullDataType|string|null $heures_hebdomadaire
      */
-    public function setHeureHebdomadaire(string|NullDataType|null $heure_hebdomadaire): void
+    public function setHeuresHebdomadaire(string|NullDataType|null $heures_hebdomadaire): void
     {
-        $this->heure_hebdomadaire = $heure_hebdomadaire;
+        $this->heures_hebdomadaire = $heures_hebdomadaire;
     }
 
     /**
@@ -361,17 +412,17 @@ class Convention extends CoreObject
     /**
      * @return NullDataType|string|null
      */
-    public function getUniteGratification(): string|NullDataType|null
+    public function getIdUniteGratification(): string|NullDataType|null
     {
-        return $this->unite_gratification;
+        return $this->id_unite_gratification;
     }
 
     /**
-     * @param NullDataType|string|null $unite_gratification
+     * @param NullDataType|string|null $id_unite_gratification
      */
-    public function setUniteGratification(string|NullDataType|null $unite_gratification): void
+    public function setIdUniteGratification(string|NullDataType|null $id_unite_gratification): void
     {
-        $this->unite_gratification = $unite_gratification;
+        $this->id_unite_gratification = $id_unite_gratification;
     }
 
     /**
