@@ -28,7 +28,7 @@ include __DIR__ . "/../macros/input.php";
     </div>
     <form class="flex flex-col items-center gap-4" action="<?=Action::ETUDIANT_SIGN_IN->value?>" method="post">
         <?=field("login", "Login", "text", "Entrez votre login", null, true, $login)?>
-        <?=field("password", "Mot de passe", "password", "Entrez un mot de passe", Pattern::PASSWORD, true)?>
+        <?=field("password", "Mot de passe", "password", "Entrez un mot de passe", null, true)?>
         <?=token($token)?>
         <input type="submit" value="Se connecter" class="button-primary">
         <p>Vous n'avez pas de compte étudiant ? <a class="font-bold" href="<?=Action::ETUDIANT_SIGN_UP_FORM->value?>">S'inscrire</a></p>
