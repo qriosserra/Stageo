@@ -94,8 +94,7 @@ class EtudiantController
             type: FlashType::SUCCESS
         );
         $etudiant = new Etudiant(
-            login: $login,
-            hashed_password: Password::hash($password),
+            login: $login
         );
         UserConnection::signIn($etudiant);
         (new EtudiantRepository)->insert($etudiant);
