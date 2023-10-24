@@ -10,16 +10,17 @@ use Stageo\Lib\Database\Table;
 #[Table("offre")]
 class Offre extends CoreObject
 {
-    public function __construct(#[PrimaryKey] private ?int       $id_offre = null,
-                                private int|null                 $id_entreprise = null,
-                                private string|null              $description = null,
-                                private string|NullDataType|null $secteur = null,
-                                private string|NullDataType|null $thematique = null,
-                                private string|NullDataType|null $taches = null,
-                                private string|NullDataType|null $commentaires = null,
-                                private float|NullDataType|null  $gratification = null,
-                                private string|NullDataType|null $id_unite_gratification = null,
-                                private int|NullDataType|null    $id_etudiant = null)
+    public function __construct(#[PrimaryKey] private ?int                                                      $id_offre = null,
+                                private int|null                                                                $id_entreprise = null,
+                                #[Association("entreprise", "id_entreprise", "raison_sociale")] private ?string $nom_entreprise = null,
+                                private string|null                                                             $description = null,
+                                private string|NullDataType|null                                                $secteur = null,
+                                private string|NullDataType|null                                                $thematique = null,
+                                private string|NullDataType|null                                                $taches = null,
+                                private string|NullDataType|null                                                $commentaires = null,
+                                private float|NullDataType|null                                                 $gratification = null,
+                                private string|NullDataType|null                                                $id_unite_gratification = null,
+                                private int|NullDataType|null                                                   $id_etudiant = null)
     {
     }
 
