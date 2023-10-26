@@ -24,7 +24,7 @@ use Stageo\Model\Object\Admin;
     </head>
     <body>
     <p class="hidden"></p>
-        <header class="mb-3">
+        <header>
             <?php if ($nav):?>
                 <nav>
                     <a class="logo-container flex justify-center items-center" href="<?=Action::HOME->value?>">

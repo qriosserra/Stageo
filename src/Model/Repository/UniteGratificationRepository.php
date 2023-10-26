@@ -2,21 +2,20 @@
 
 namespace Stageo\Model\Repository;
 
-use Exception;
 use Stageo\Lib\Database\ComparisonOperator;
 use Stageo\Lib\Database\QueryCondition;
 use Stageo\Model\Object\CoreObject;
-use Stageo\Model\Object\Offre;
+use Stageo\Model\Object\UniteGratification;
 
-class OffreRepository extends CoreRepository
+class UniteGratificationRepository extends CoreRepository
 {
     protected function getObject(): CoreObject
     {
-        return new Offre();
+        return new UniteGratification();
     }
 
     public function getById(int $id): ?CoreObject
     {
-        return $this->select(new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id))[0] ?? null;
+        return $this->select(new QueryCondition("id_unite_gratification", ComparisonOperator::EQUAL, $id))[0] ?? null;
     }
 }

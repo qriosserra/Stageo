@@ -46,8 +46,8 @@ class Request
             "flashMessages" => FlashMessage::read(),
             "absolute_url" => $_ENV["ABSOLUTE_URL"],
             "user" => UserConnection::getSignedInUser(),
-            "etudiant" => new Etudiant(),
-            "entreprise" => new Entreprise(),
+            "etudiant" => $params["etudiant"] ?? new Etudiant(),
+            "entreprise" => $params["entreprise"] ?? new Entreprise(),
             "pattern" => Pattern::toArray()
         ]);
         extract($params);

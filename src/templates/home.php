@@ -38,7 +38,7 @@ include "macros/offre.php";
                 </h5>
                 <div class="flex flex-wrap  overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100 py-8">
                 <?php foreach ($categories as $categorie):?>
-                    <?=button($categorie->getNom(), "",""," !p-8 bg-white")?>
+                    <?=button($categorie->getLibelle(), "",""," !p-8 bg-white")?>
                 <?php endforeach ?>
                 </div>
             </section>

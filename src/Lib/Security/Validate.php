@@ -6,157 +6,90 @@ use Stageo\Lib\enums\Pattern;
 
 class Validate
 {
-    public static function isEmail(string $email): bool
+    private static function match(string $pattern, string $subject, bool $required): bool
     {
-        return preg_match(
-            pattern: "/" . Pattern::EMAIL->value . "/",
-            subject: $email
-        );
+        return $required
+            ? preg_match("/" . $pattern . "/", $subject)
+            : preg_match("/" . $pattern . "/", $subject) or empty($subject);
     }
 
-    public static function isPassword(string $password): bool
+    public static function isName(string $name, bool $required = true): bool
     {
-        return preg_match(
-            pattern: "/" . Pattern::PASSWORD->value . "/",
-            subject: $password
-        );
+        return self::match(
+            pattern: Pattern::NAME->value,
+            subject: $name,
+            required: $required);
     }
 
-    public static function isUrl(string $url): bool
+    public static function isText(string $text, bool $required = false): bool
     {
-        return preg_match(
-            pattern: "/" . Pattern::URL->value . "/",
-            subject: $url
-        );
+        return self::match(
+            pattern: Pattern::TEXT->value,
+            subject: $text,
+            required: $required);
     }
 
-    public static function isStudentId(string $studentId): bool
+    public static function isFloat(string $float, bool $required = true): bool
     {
-        return preg_match(
-            pattern: "/" . Pattern::ID_ETUDIANT->value . "/",
-            subject: $studentId
-        );
+        return self::match(
+            pattern: Pattern::FLOAT->value,
+            subject: $float,
+            required: $required);
     }
 
-    public static function isSiret(string $siret): bool
+    public static function isEmail(string $email, bool $required = true): bool
     {
-        return preg_match(
-            pattern: "/" . Pattern::SIRET->value . "/",
-            subject: $siret
-        );
+        return self::match(
+            pattern: Pattern::EMAIL->value,
+            subject: $email,
+            required: false);
     }
 
-    public static function isPhone(string $phone): bool
+    public static function isPassword(string $password, bool $required = true): bool
     {
-        return preg_match(
-            pattern: "/" . Pattern::PHONE->value . "/",
-            subject: $phone
-        );
+        return self::match(
+            pattern: Pattern::PASSWORD->value,
+            subject: $password,
+            required: $required);
     }
 
-    public static function isFax(string $fax): bool
+    public static function isUrl(string $url, bool $required = false): bool
     {
-        return preg_match(
-            pattern: "/" . Pattern::PHONE->value . "/",
-            subject: $fax
-        );
+        return self::match(
+            pattern: Pattern::URL->value,
+            subject: $url,
+            required: $required);
     }
 
-    public static function isRaisonSociale(string $raisonSociale): bool
+    public static function isStudentId(string $studentId, bool $required = false): bool
     {
-        return preg_match(
-            pattern: "/" . Pattern::NAME->value . "/",
-            subject: $raisonSociale
-        );
+        return self::match(
+            pattern: Pattern::ID_ETUDIANT->value,
+            subject: $studentId,
+            required: $required);
     }
 
-    public static function isAdresse(string $adresse): bool
+    public static function isSiret(string $siret, bool $required = true): bool
     {
-        return preg_match(
-            pattern: "/" . Pattern::NAME->value . "/",
-            subject: $adresse
-        );
+        return self::match(
+            pattern: Pattern::SIRET->value,
+            subject: $siret,
+            required: $required);
     }
 
-    public static function isCodePostal(string $codePostal): bool
+    public static function isPhoneNumber(string $phone, bool $required = false): bool
     {
-        return preg_match(
-            pattern: "/" . Pattern::CODE_POSTAL->value . "/",
-            subject: $codePostal
-        );
+        return self::match(
+            pattern: Pattern::PHONE_NUMBER->value,
+            subject: $phone,
+            required: $required);
     }
 
-    public static function isCodeNaf(string $codeNaf): bool
+    public static function isCodeNaf(string $codeNaf, bool $required = false): bool
     {
-        return preg_match(
-            pattern: "/" . Pattern::NAF->value . "/",
-            subject: $codeNaf
-        );
-    }
-
-    public static function isStatutJuridique(string $statutJuridique): bool
-    {
-        return preg_match(
-            pattern: "/" . Pattern::NAME->value . "/",
-            subject: $statutJuridique
-        );
-    }
-
-    public static function isEffectif(string $effectif): bool
-    {
-        return preg_match(
-            pattern: "/" . Pattern::NUMBER->value . "/",
-            subject: $effectif
-        );
-    }
-
-    public static function isTypeStructure(string $typeStructure): bool
-    {
-        return preg_match(
-            pattern: "/" . Pattern::NAME->value . "/",
-            subject: $typeStructure
-        );
-    }
-    public static function isTypeDescription(string $description){
-        return preg_match(
-            pattern: "/" . Pattern::DESCRIPTION->value . "/",
-            subject: $description
-        );
-    }
-    public static function isTypeSecteur(string $secteur){
-        return preg_match(
-            pattern: "/" . Pattern::SECTEUR->value . "/",
-            subject: $secteur
-        );
-    }
-    public static function isTypeThematique(string $thematique){
-        return preg_match(
-            pattern: "/" . Pattern::THEMATIQUE->value . "/",
-            subject: $thematique
-        );
-    }
-    public static function isTypeTache(string $tache){
-        return preg_match(
-            pattern: "/" . Pattern::THEMATIQUE->value . "/",
-            subject: $tache
-        );
-    }
-    public static function isTypeCommentaire(string $commentaire){
-        return preg_match(
-            pattern: "/" . Pattern::THEMATIQUE->value . "/",
-            subject: $commentaire
-        );
-    }
-    public static function isTypeGratification(string $gratification){
-        return preg_match(
-            pattern: "/" . Pattern::THEMATIQUE->value . "/",
-            subject: $gratification
-        );
-    }
-    public static function isTypeUniteGratification(string $unite_gratification){
-        return preg_match(
-            pattern: "/" . Pattern::UNITEGRATIFICATION->value . "/",
-            subject: $unite_gratification
-        );
+        return self::match(
+            pattern: Pattern::NAF->value,
+            subject: $codeNaf,
+            required: $required);
     }
 }
