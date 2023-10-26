@@ -104,16 +104,13 @@ CREATE TABLE stg_unite_gratification(
 );
 
 CREATE TABLE stg_etudiant(
-   id_etudiant INT AUTO_INCREMENT,
+   login VARCHAR(256),
    nom VARCHAR(256),
    prenom VARCHAR(256),
    telephone VARCHAR(20),
    telephone_fixe VARCHAR(20),
-   email VARCHAR(320),
    email_etudiant VARCHAR(320),
-   hashed_password VARCHAR(256),
-   nonce VARCHAR(256),
-   nonce_timestamp INT,
+   annee VARCHAR(256),
    civilite CHAR(1),
    numero_voie VARCHAR(256),
    id_ufr VARCHAR(4),
@@ -121,7 +118,7 @@ CREATE TABLE stg_etudiant(
    id_etape VARCHAR(64),
    id_code_postal VARCHAR(5),
    id_commune INT,
-   PRIMARY KEY(id_etudiant),
+   PRIMARY KEY(login),
    FOREIGN KEY(id_ufr) REFERENCES stg_ufr(id_ufr),
    FOREIGN KEY(id_departement_universitaire) REFERENCES stg_departement_universitaire(id_departement_universitaire),
    FOREIGN KEY(id_etape) REFERENCES stg_etape(id_etape)/*,
@@ -176,12 +173,12 @@ CREATE TABLE stg_offre(
    gratification DECIMAL(15,2),
    id_unite_gratification INT,
    id_entreprise INT NOT NULL,
-   id_etudiant INT,
+   login VARCHAR(256),
    id_postulation INT,
    PRIMARY KEY(id_offre),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
    FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise),
-   FOREIGN KEY(id_etudiant) REFERENCES stg_etudiant(id_etudiant),
+   FOREIGN KEY(login) REFERENCES stg_etudiant(login),
    FOREIGN KEY(id_postulation) REFERENCES stg_postulation(id_postulation)
 );
 
@@ -226,14 +223,14 @@ CREATE TABLE stg_convention(
    id_entreprise INT,
    id_code_postal VARCHAR(5),
    id_commune INT,
-   id_etudiant INT NOT NULL,
+   login VARCHAR(256) NOT NULL,
    PRIMARY KEY(id_convention),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
    FOREIGN KEY(id_enseignant) REFERENCES stg_enseignant(id_enseignant),
    FOREIGN KEY(id_tuteur) REFERENCES stg_tuteur(id_tuteur),
    FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise),
    /*FOREIGN KEY(id_code_postal, id_commune) REFERENCES stg_distribution_commune(id_code_postal, id_commune),*/
-   FOREIGN KEY(id_etudiant) REFERENCES stg_etudiant(id_etudiant)
+   FOREIGN KEY(login) REFERENCES stg_etudiant(login)
 );
 
 CREATE TABLE stg_suivi(

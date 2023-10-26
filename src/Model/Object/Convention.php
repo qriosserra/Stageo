@@ -10,7 +10,7 @@ use Stageo\Lib\Database\Table;
 class Convention extends CoreObject
 {
     public function __construct(#[PrimaryKey] private ?int       $id_convention = null,
-                                private ?string                  $id_etudiant = null,
+                                private ?string                  $login = null,
                                 private string|NullDataType|null $type_convention = null,
                                 private string|NullDataType|null $origine_stage = null,
                                 private string|NullDataType|null $annee_universitaire = null,
@@ -108,17 +108,17 @@ class Convention extends CoreObject
     /**
      * @return string|null
      */
-    public function getIdEtudiant(): ?string
+    public function getLogin(): ?string
     {
-        return $this->id_etudiant;
+        return $this->login;
     }
 
     /**
-     * @param string|null $id_etudiant
+     * @param string|null $login
      */
-    public function setIdEtudiant(?string $id_etudiant): void
+    public function setLogin(?string $login): void
     {
-        $this->id_etudiant = $id_etudiant;
+        $this->login = $login;
     }
 
     /**

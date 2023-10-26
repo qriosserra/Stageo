@@ -19,7 +19,7 @@ class Offre extends CoreObject
                                 private string|NullDataType|null $commentaires = null,
                                 private float|NullDataType|null  $gratification = null,
                                 private string|NullDataType|null $id_unite_gratification = null,
-                                private int|NullDataType|null    $id_etudiant = null)
+                                private int|NullDataType|null    $login = null)
     {
     }
 
@@ -170,17 +170,17 @@ class Offre extends CoreObject
     /**
      * @return int|NullDataType|null
      */
-    public function getIdEtudiant(): int|NullDataType|null
+    public function getLogin(): int|NullDataType|null
     {
-        return $this->id_etudiant;
+        return $this->login;
     }
 
     /**
-     * @param int|NullDataType|null $id_etudiant
+     * @param int|NullDataType|null $login
      */
-    public function setIdEtudiant(int|NullDataType|null $id_etudiant): void
+    public function setLogin(int|NullDataType|null $login): void
     {
-        $this->id_etudiant = $id_etudiant;
+        $this->login = $login;
     }
 
 
