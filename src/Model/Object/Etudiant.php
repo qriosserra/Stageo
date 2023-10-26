@@ -9,20 +9,15 @@ use Stageo\Lib\Database\Table;
 #[Table("etudiant")]
 class Etudiant extends User
 {
-    public function __construct(#[PrimaryKey] private ?int       $id_etudiant = null,
-                                private string|null              $login = null,
-                                private string|NullDataType|null $email = null,
-                                private string|NullDataType|null $unverified_email = null,
-                                private string|NullDataType|null $nonce = null,
-                                private int|NullDataType|null    $nonce_timestamp = null,
-                                private string|NullDataType|null $hashed_password = null,
+    public function __construct(#[PrimaryKey] private ?string       $login = null,
                                 private string|NullDataType|null $nom = null,
                                 private string|NullDataType|null $prenom = null,
+                                private string|NullDataType|null $email_etudiant = null,
+                                private string|NullDataType|null $annee = null,
                                 private string|NullDataType|null $telephone = null,
                                 private string|NullDataType|null $telephone_fixe = null,
-                                private string|NullDataType|null $adresse_voie = null,
-                                private string|NullDataType|null $email_etudiant = null,
                                 private string|NullDataType|null $civilite = null,
+                                private string|NullDataType|null $numero_voie = null,
                                 private string|NullDataType|null $id_commune = null,
                                 private string|NullDataType|null $id_departement = null,
                                 private string|NullDataType|null $id_etape = null,
@@ -31,24 +26,38 @@ class Etudiant extends User
     }
 
     /**
-     * @return int|null
+     * @return NullDataType|string|null
      */
-    public function getIdEtudiant(): ?int
+    public function getAnnee(): string|NullDataType|null
     {
-        return $this->id_etudiant;
+        return $this->annee;
     }
 
     /**
-     * @param int|null $id_etudiant
+     * @param NullDataType|string|null $annee
      */
-    public function setIdEtudiant(?int $id_etudiant): void
+    public function setAnnee(string|NullDataType|null $annee): void
     {
-        $this->id_etudiant = $id_etudiant;
+        $this->annee = $annee;
     }
 
     /**
-     * @return string|null
+     * @return NullDataType|string|null
      */
+    public function getNumeroVoie(): string|NullDataType|null
+    {
+        return $this->numero_voie;
+    }
+
+    /**
+     * @param NullDataType|string|null $numero_voie
+     */
+    public function setNumeroVoie(string|NullDataType|null $numero_voie): void
+    {
+        $this->numero_voie = $numero_voie;
+    }
+
+
     public function getLogin(): ?string
     {
         return $this->login;
@@ -62,89 +71,6 @@ class Etudiant extends User
         $this->login = $login;
     }
 
-    /**
-     * @return NullDataType|string|null
-     */
-    public function getEmail(): string|NullDataType|null
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param NullDataType|string|null $email
-     */
-    public function setEmail(string|NullDataType|null $email): void
-    {
-        $this->email = $email;
-    }
-
-    /**
-     * @return NullDataType|string|null
-     */
-    public function getUnverifiedEmail(): string|NullDataType|null
-    {
-        return $this->unverified_email;
-    }
-
-    /**
-     * @param NullDataType|string|null $unverified_email
-     */
-    public function setUnverifiedEmail(string|NullDataType|null $unverified_email): void
-    {
-        $this->unverified_email = $unverified_email;
-    }
-
-    /**
-     * @return NullDataType|string|null
-     */
-    public function getNonce(): string|NullDataType|null
-    {
-        return $this->nonce;
-    }
-
-    /**
-     * @param NullDataType|string|null $nonce
-     */
-    public function setNonce(string|NullDataType|null $nonce): void
-    {
-        $this->nonce = $nonce;
-    }
-
-    /**
-     * @return int|NullDataType|null
-     */
-    public function getNonceTimestamp(): int|NullDataType|null
-    {
-        return $this->nonce_timestamp;
-    }
-
-    /**
-     * @param int|NullDataType|null $nonce_timestamp
-     */
-    public function setNonceTimestamp(int|NullDataType|null $nonce_timestamp): void
-    {
-        $this->nonce_timestamp = $nonce_timestamp;
-    }
-
-    /**
-     * @return NullDataType|string|null
-     */
-    public function getHashedPassword(): string|NullDataType|null
-    {
-        return $this->hashed_password;
-    }
-
-    /**
-     * @param NullDataType|string|null $hashed_password
-     */
-    public function setHashedPassword(string|NullDataType|null $hashed_password): void
-    {
-        $this->hashed_password = $hashed_password;
-    }
-
-    /**
-     * @return NullDataType|string|null
-     */
     public function getNom(): string|NullDataType|null
     {
         return $this->nom;

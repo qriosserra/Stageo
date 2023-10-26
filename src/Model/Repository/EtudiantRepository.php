@@ -15,14 +15,6 @@ class EtudiantRepository extends CoreRepository
         return new Etudiant();
     }
 
-    /**
-     * @throws Exception
-     */
-    public function getById(int $id): ?CoreObject
-    {
-        return $this->select([new QueryCondition("id_etudiant", ComparisonOperator::EQUAL, $id)])[0] ?? null;
-    }
-
     public function getByLogin(string $login): ?CoreObject
     {
         return $this->select([new QueryCondition("login", ComparisonOperator::EQUAL, $login)])[0] ?? null;

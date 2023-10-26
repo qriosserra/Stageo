@@ -9,7 +9,6 @@ use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
 use Stageo\Lib\Response;
-use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
@@ -20,9 +19,6 @@ class EtudiantController
 {
     public function signUpForm(string $login = null): Response
     {
-//        if (UserConnection::isSignedIn())
-//            self::signOut();
-
         return new Response(
             template: "etudiant/sign-up.php",
             params: [
@@ -35,11 +31,6 @@ class EtudiantController
         );
     }
 
-    /**
-     * @throws TokenTimeoutException
-     * @throws ControllerException
-     * @throws InvalidTokenException
-     */
     public function signUp(): Response
     {
         $login = $_REQUEST["login"];
@@ -85,8 +76,7 @@ class EtudiantController
             type: FlashType::SUCCESS
         );
         $etudiant = new Etudiant(
-            login: $login,
-            hashed_password: Password::hash($password),
+            login: $login
         );
         UserConnection::signIn($etudiant);
         (new EtudiantRepository)->insert($etudiant);
@@ -126,36 +116,19 @@ class EtudiantController
                 params: ["login" => $login]
             );
         }
-        /**
-         * @var Etudiant|null $etudiant
-         */
-        $etudiant = (new EtudiantRepository())->getByLogin($login);
-        if (is_null($etudiant)) {
-            throw new ControllerException(
-                message: "Aucun compte n'existe avec ce login",
-                action: Action::ETUDIANT_SIGN_IN_FORM,
-                params: [
-                    "login" => $login
-                ]
-            );
+        $etudiantRepository=new EtudiantRepository();
+        $url = "https://webinfo.iutmontp.univ-montp2.fr/~riosq/LDAP/?login=$login&password=$password";
+        $response = json_decode(file_get_contents($url), true);
+        $etudiant= $etudiantRepository->getByLogin($login);
+        if (is_null($etudiant)){
+            $etudiant = new Etudiant($login,$response["nom"],$response["prenom"],$response["mail"],$response["annee"],$password);
+            $etudiantRepository->insert($etudiant);
         }
-        if (!Password::verify($password, $etudiant->getHashedPassword())) {
-            throw new ControllerException(
-                message: "Le mot de passe est incorrect",
-                action: Action::ETUDIANT_SIGN_IN_FORM,
-                params: [
-                    "login" => $login
-                ]
-            );
-        }
-
         FlashMessage::add(
             content: "Connexion réalisée avec succès",
             type: FlashType::SUCCESS
         );
         UserConnection::signIn($etudiant);
-        // a modifier
-
         return new Response(
             action: Action::HOME
         );
