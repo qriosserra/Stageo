@@ -134,6 +134,7 @@ class EtudiantController
                 params: ["login" => $login]
             );
         }
+
         $etudiantRepository=new EtudiantRepository();
         $url = "https://webinfo.iutmontp.univ-montp2.fr/~riosq/LDAP/?login=$login&password=$password";
         $response = json_decode(file_get_contents($url), true);
@@ -142,6 +143,9 @@ class EtudiantController
             $etudiant = new Etudiant($login,$response["nom"],$response["prenom"],$response["mail"],$response["annee"]);
             $etudiantRepository->insert($etudiant);
         }
+
+
+
         FlashMessage::add(
             content: "Connexion réalisée avec succès",
             type: FlashType::SUCCESS
