@@ -29,18 +29,19 @@ function field(
 
     return <<<HTML
     <div $class>
-        <label for="$name"
-               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+        <input autocomplete="off" 
+               id="$name" 
+               name="$name" 
+               $type 
+               class="focus:border-rose-600 peer h-10 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:outline-none" 
+               placeholder="$placeholder" 
+               $pattern 
+               $required 
+               value="$value">
+        <label for="$name" 
+               class="peer-placeholder-shown:text-gray-440 absolute -top-3.5 left-0 text-sm text-gray-600 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-600">
             $label
         </label>
-        <input name="$name"
-               id="$name"
-               $type
-               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-               placeholder="$placeholder"
-               $pattern
-               $required
-               value="$value">
     </div>
     HTML;
 }
