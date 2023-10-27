@@ -419,6 +419,9 @@ video {
   --tw-backdrop-saturate:  ;
   --tw-backdrop-sepia:  ;
 }
+.pointer-events-none{
+  pointer-events: none;
+}
 .visible{
   visibility: visible;
 }
@@ -449,8 +452,14 @@ video {
 .left-0{
   left: 0px;
 }
+.left-2\/4{
+  left: 50%;
+}
 .top-16{
   top: 4rem;
+}
+.top-2\/4{
+  top: 50%;
 }
 .col-span-2{
   grid-column: span 2 / span 2;
@@ -510,8 +519,17 @@ video {
 .h-10{
   height: 2.5rem;
 }
+.h-3{
+  height: 0.75rem;
+}
+.h-3\.5{
+  height: 0.875rem;
+}
 .h-4{
   height: 1rem;
+}
+.h-5{
+  height: 1.25rem;
 }
 .h-96{
   height: 24rem;
@@ -528,8 +546,20 @@ video {
 .w-1\/2{
   width: 50%;
 }
+.w-3{
+  width: 0.75rem;
+}
+.w-3\.5{
+  width: 0.875rem;
+}
+.w-3\/4{
+  width: 75%;
+}
 .w-4{
   width: 1rem;
+}
+.w-5{
+  width: 1.25rem;
 }
 .w-64{
   width: 16rem;
@@ -571,12 +601,26 @@ video {
 .flex-auto{
   flex: 1 1 auto;
 }
+.flex-shrink{
+  flex-shrink: 1;
+}
+.-translate-x-2\/4{
+  --tw-translate-x: -50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.-translate-y-2\/4{
+  --tw-translate-y: -50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
 .-skew-y-6{
   --tw-skew-y: -6deg;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 .transform{
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.cursor-pointer{
+  cursor: pointer;
 }
 .list-inside{
   list-style-position: inside;
@@ -589,6 +633,11 @@ video {
 }
 .list-disc{
   list-style-type: disc;
+}
+.appearance-none{
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
 }
 .grid-cols-2{
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -658,6 +707,9 @@ video {
 }
 .overflow-x-auto{
   overflow-x: auto;
+}
+.rounded-full{
+  border-radius: 9999px;
 }
 .rounded-lg{
   border-radius: 0.5rem;
@@ -757,6 +809,9 @@ video {
 }
 .p-2\.5{
   padding: 0.625rem;
+}
+.p-3{
+  padding: 0.75rem;
 }
 .p-4{
   padding: 1rem;
@@ -925,6 +980,9 @@ video {
 .placeholder-transparent::placeholder{
   color: transparent;
 }
+.opacity-0{
+  opacity: 0;
+}
 .shadow{
   --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
   --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
@@ -964,6 +1022,11 @@ video {
 }
 .transition-all{
   transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.transition-opacity{
+  transition-property: opacity;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
@@ -1467,9 +1530,74 @@ footer .footer-information-container .footer-description-container .footer-descr
     text-align: center;
   }
 }
+.before\:absolute::before{
+  content: var(--tw-content);
+  position: absolute;
+}
+.before\:left-2\/4::before{
+  content: var(--tw-content);
+  left: 50%;
+}
+.before\:top-2\/4::before{
+  content: var(--tw-content);
+  top: 50%;
+}
+.before\:block::before{
+  content: var(--tw-content);
+  display: block;
+}
+.before\:h-12::before{
+  content: var(--tw-content);
+  height: 3rem;
+}
+.before\:w-12::before{
+  content: var(--tw-content);
+  width: 3rem;
+}
+.before\:-translate-x-2\/4::before{
+  content: var(--tw-content);
+  --tw-translate-x: -50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.before\:-translate-y-2\/4::before{
+  content: var(--tw-content);
+  --tw-translate-y: -50%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+.before\:rounded-full::before{
+  content: var(--tw-content);
+  border-radius: 9999px;
+}
+.before\:opacity-0::before{
+  content: var(--tw-content);
+  opacity: 0;
+}
+.before\:transition-opacity::before{
+  content: var(--tw-content);
+  transition-property: opacity;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+.checked\:border-blue-500:checked{
+  --tw-border-opacity: 1;
+  border-color: rgb(59 130 246 / var(--tw-border-opacity));
+}
+.checked\:bg-blue-500:checked{
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
+.checked\:before\:bg-blue-500:checked::before{
+  content: var(--tw-content);
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+}
 .hover\:bg-gray-100:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(243 244 246 / var(--tw-bg-opacity));
+}
+.hover\:before\:opacity-10:hover::before{
+  content: var(--tw-content);
+  opacity: 0.1;
 }
 .focus\:z-\[3\]:focus{
   z-index: 3;
@@ -1515,6 +1643,9 @@ footer .footer-information-container .footer-description-container .footer-descr
 .focus\:ring-primary-600:focus{
   --tw-ring-opacity: 1;
   --tw-ring-color: rgb(22 163 74 / var(--tw-ring-opacity));
+}
+.peer:checked ~ .peer-checked\:opacity-100{
+  opacity: 1;
 }
 .peer:-moz-placeholder-shown ~ .peer-placeholder-shown\:top-2{
   top: 0.5rem;
@@ -1660,17 +1791,11 @@ footer .footer-information-container .footer-description-container .footer-descr
   .md\:w-48{
     width: 12rem;
   }
-  .md\:w-full{
-    width: 100%;
-  }
   .md\:max-w-xl{
     max-width: 36rem;
   }
   .md\:flex-row{
     flex-direction: row;
-  }
-  .md\:flex-col{
-    flex-direction: column;
   }
   .md\:rounded-none{
     border-radius: 0px;
@@ -1682,19 +1807,5 @@ footer .footer-information-container .footer-description-container .footer-descr
   .md\:text-lg{
     font-size: 1.125rem;
     line-height: 1.75rem;
-  }
-}
-@media (min-width: 1024px){
-  .lg\:w-full{
-    width: 100%;
-  }
-  .lg\:w-1\/2{
-    width: 50%;
-  }
-  .lg\:flex-row{
-    flex-direction: row;
-  }
-  .lg\:flex-col{
-    flex-direction: column;
   }
 }
