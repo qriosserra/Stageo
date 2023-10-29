@@ -59,6 +59,33 @@ INSERT INTO `stg_offre` (`id_offre`, `description`, `thematique`, `secteur`, `ta
 (NULL, 'Stage en développement mobile pour créer une application Android innovante.', 'Développement d\'applications mobiles', 'Informatique / Applications mobiles', 'Développement d\'applications Android, tests d\'applications, documentation technique.', 'Le stagiaire pourra exprimer sa créativité tout en apprenant à utiliser des outils de développement mobile de pointe.', '7.77', '1', '1', NULL, NULL),
 (NULL, 'Recherche d\'un stagiaire pour assister le chef de projet dans la gestion de projets informatiques.', 'Gestion de projets informatiques', 'Informatique / Gestion de projets', 'Suivi de l\'avancement des projets, préparation des documents de projet, communication avec les membres de l\'équipe.', 'Le stagiaire apprendra les compétences essentielles en gestion de projet et travaillera sur des projets stimulants.', '4.05', '2', '1', NULL, NULL);
 
+INSERT INTO stg_pays (nom)
+VALUES
+('Afghanistan'),
+('Albanie'),
+('Antarctique'),
+('Algérie'),
+('American Samoa'),
+('Andorre'),
+('Angola'),
+('Antigua-et-Barbuda'),
+('Azerbaïdjan');
+
+INSERT INTO stg_distribution_commune(id_code_postal, commune, stg_pays) VALUES
+(1400,' L''Abergement-Clémenciat ',1),
+(1640,' L''Abergement-de-Varey ',2),
+(1090,' Amareins ',3),
+(1500,' Ambérieu-en-Bugey ',1),
+(1330,' Ambérieux-en-Dombes ',1),
+(1300,' Ambléon ',1),
+(1500,' Ambronay ',1),
+(1500,' Ambutrix ',1),
+(1300,' Andert-et-Condon ',1),
+(1350,' Anglefort ',1),
+(1100,' Apremont ',1),
+(1110,' Aranc ',1),
+(1230,' Arandas ',1);
+
 SQL;
 
 echo $query;

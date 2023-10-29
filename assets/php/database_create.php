@@ -82,11 +82,11 @@ CREATE TABLE stg_type_structure(
 );
 
 CREATE TABLE stg_distribution_commune(
+   id_commune INT AUTO_INCREMENT,
    id_code_postal VARCHAR(5),
-   id_commune INT,
    commune VARCHAR(256),
    stg_pays INT,
-   PRIMARY KEY(id_code_postal, id_commune),
+   PRIMARY KEY(id_commune),
    FOREIGN KEY(stg_pays) REFERENCES stg_pays(stg_pays)
 );
 
