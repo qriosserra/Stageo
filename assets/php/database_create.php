@@ -175,6 +175,7 @@ CREATE TABLE stg_offre(
    id_entreprise INT NOT NULL,
    login VARCHAR(256),
    id_postulation INT,
+   type VARCHAR(32),
    PRIMARY KEY(id_offre),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
    FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise),

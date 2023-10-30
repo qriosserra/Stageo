@@ -9,10 +9,12 @@ use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
 use Stageo\Lib\HTTP\Session;
+use Stageo\Lib\Request;
 use Stageo\Lib\Response;
 use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
+use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\CodePostalRepository;
@@ -344,6 +346,7 @@ class EntrepriseController
             commentaires: $commentaires,
             gratification: $gratification,
             id_unite_gratification: $id_unite_gratification,
+            type: $type
         ));
 
         if (!Token::verify(Action::ENTREPRISE_CREATION_OFFRE_FORM, $_REQUEST["token"])) {
@@ -402,11 +405,92 @@ class EntrepriseController
 
         //A MODIFIER PLUS TARD !!!!!!!!!!!!!
         $pdo = DatabaseConnection::getPdo();
-        $sql = $pdo->prepare("INSERT INTO stg_offre_$type (id_offre) VALUES ($id_offre)");
-        $sql->execute();
+        if (stripos($type, "stage") !== false) {
+            $sql = $pdo->prepare("INSERT INTO stg_offre_stage (id_offre) VALUES ($id_offre)");
+            $sql->execute();
+        }
+        if (stripos($type, "alternance") !== false) {
+            $sql = $pdo->prepare("INSERT INTO stg_offre_alternance (id_offre) VALUES ($id_offre)");
+            $sql->execute();
+        }
         return new Response(
             action: Action::HOME,
         );
 
+    }
+
+    /**
+     * @throws ControllerException
+     */
+    public static function afficherFormulaireMiseAJourOffre(string $idOffre): Response
+    {
+        $user = UserConnection::getSignedInUser();
+        $offre = (new OffreRepository)->getById($idOffre);
+        if (!$user) {
+            throw new ControllerException(
+                message: "Veillez vous connecter",
+                action: Action::HOME
+            );
+        } else if (!UserConnection::isInstance(new Entreprise())) {
+            throw new ControllerException(
+                message: "Vous n'avez pas à acceder à cette page",
+                action: Action::HOME
+            );
+        } else if (!($user->getIdEntreprise() == $offre->getIdEntreprise())) {
+            throw new ControllerException(
+                message: "Vous n'êtes pas la bonne entreprise pour modifier cette offre",
+                action: Action::HOME
+            );
+        } else {
+            return new Response(
+                template: "entreprise/offre/modifier-offre.php",
+                params: [
+                    "entreprise" => $user,
+                    "offre" => $offre,
+                    "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository())->select()), "libelle", "id_unite_gratification")
+                ]
+            );
+        }
+    }
+
+    public static function mettreAJourOffre() : Response
+    {
+        $idOffre = $_REQUEST["idOffre"];
+        $offre = (new OffreRepository)->getById($idOffre);
+        $login = $_REQUEST["login"];
+        $description = $_REQUEST["description"];
+        $secteur = $_REQUEST["secteur"];
+        $thematique = $_REQUEST["thematique"];
+        $taches = $_REQUEST["taches"];
+        $commentaires = $_REQUEST["commentaires"];
+        $gratification = $_REQUEST["gratification"];
+        $id_unite_gratification = $_REQUEST["id_unite_gratification"];
+        $type = $_REQUEST["emploi"];
+        $user = UserConnection::getSignedInUser();
+        if(!$user){
+            throw new ControllerException(
+                message: "Veillez vous connecter",
+                action: Action::HOME
+            );
+        }
+        else if(!UserConnection::isInstance(new Entreprise())){
+            throw new ControllerException(
+                message: "Vous n'avez pas à acceder à cette page",
+                action: Action::HOME
+            );
+        }
+        else if (!($user->getIdEntreprise() == $offre->getIdEntreprise())) {
+            throw new ControllerException(
+                message: "Vous n'êtes pas la bonne entreprise pour modifier cette offre",
+                action: Action::HOME
+            );
+        }
+        else {
+            $o = new Offre($idOffre, $user->getIdEntreprise(), $description, $secteur, $thematique, $taches, $commentaires, $gratification, $id_unite_gratification, $login, $type);
+            (new OffreRepository())->update($o);
+        }
+            return new Response(
+            action: Action::HOME,
+        );
     }
 }

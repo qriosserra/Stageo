@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wdth,wght,YTLC@6..12,75..125,200..1000,440..540&display=swap");
 @import url("https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css");
 /*
-! tailwindcss v3.3.3 | MIT License | https://tailwindcss.com
+! tailwindcss v3.3.5 | MIT License | https://tailwindcss.com
 */
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -610,14 +610,8 @@ video {
 .gap-4{
   gap: 1rem;
 }
-.gap-64{
-  gap: 16rem;
-}
 .gap-8{
   gap: 2rem;
-}
-.gap-16{
-  gap: 4rem;
 }
 .\!space-x-9 > :not([hidden]) ~ :not([hidden]){
   --tw-space-x-reverse: 0 !important;
