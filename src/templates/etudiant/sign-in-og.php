@@ -1,13 +1,3 @@
-<!-- check box -->
-<script>
-    function redirectToLink(checkboxId, actionValue) {
-        var checkbox = document.getElementById(checkboxId);
-        if (checkbox.checked) {
-            window.location.href = actionValue;
-        }
-    }
-</script>
-<!------------------------------------------->
 <?php
 
 use Stageo\Lib\enums\Action;

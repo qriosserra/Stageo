@@ -17,6 +17,13 @@ function rippleEffect(event) {
     button.appendChild(circle);
 }
 
+function redirectToLink(checkboxId, actionValue) {
+    var checkbox = document.getElementById(checkboxId);
+    if (checkbox.checked) {
+        window.location.href = actionValue;
+    }
+}
+
 function setFormAction(action) {
     // Récupération du formulaire de manière naïve.
     let form = document.querySelector("form");
@@ -40,4 +47,3 @@ window.onload = function() {
     var shadowRoot = document.querySelector('spline-viewer').shadowRoot;
     shadowRoot.querySelector('#logo').remove();
 }
-

@@ -12,9 +12,6 @@ function field(
     string  $value = null,
     string  $class = null): string
 {
-    is_null($class)
-        ? $class = ""
-        : $class = "class='$class'";
     $type === "float"
         ? $type = "type='number' step='0.01'"
         : $type = "type='$type'";
@@ -28,7 +25,7 @@ function field(
         : $required = "required";
 
     return <<<HTML
-    <div $class>
+    <div class="relative $class">
         <input autocomplete="off" 
                id="$name" 
                name="$name" 
@@ -92,6 +89,30 @@ function textarea(
         <div $class>
             <label for="$name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">$label</label>
             <textarea id="$name" name="$name" $required rows="$rows" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" $placeholder>$value</textarea>
+        </div>
+    HTML;
+}
+
+function checkbox(
+    string $name,
+    string $label,
+    bool   $checked = false,
+    string $class = null): string
+{
+    $checked = !$checked
+        ? $checked = ""
+        : $checked = "checked";
+    return <<<HTML
+        <div class="checkbox-container $class">
+            <input id="$name" name="$name" type="checkbox" $checked>
+            <label for="$name">
+                <span>$label</span>
+                <span class="checkbox-button">
+                    <svg viewbox="-4 -4 20 20">
+                        <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                    </svg>
+                </span>
+            </label>
         </div>
     HTML;
 }

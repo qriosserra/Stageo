@@ -86,14 +86,12 @@ p, input {
 }
 
 .checkbox-container {
-    @apply w-full;
 
     input {
-        display: none;
+        @apply hidden;
 
         &:checked ~ label .checkbox-button {
-            @apply bg-primary-700 border-primary-700 shadow-md shadow-primary-700/50;
-            animation: wave 375ms ease;
+            @apply bg-primary-700 border-primary-700 shadow-md shadow-primary-700/50 animate-[wave_375ms_ease];
 
             &:before {
                 content: "";
@@ -153,12 +151,6 @@ p, input {
                 transition-delay: 250ms;
             }
         }
-    }
-}
-
-@keyframes wave {
-    50% {
-        transform: scale(.75);
     }
 }
 
