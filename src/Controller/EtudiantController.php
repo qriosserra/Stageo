@@ -9,6 +9,7 @@ use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
 use Stageo\Lib\Response;
+use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
@@ -19,6 +20,9 @@ class EtudiantController
 {
     public function signUpForm(string $login = null): Response
     {
+//        if (UserConnection::isSignedIn())
+//            self::signOut();
+
         return new Response(
             template: "etudiant/sign-up.php",
             params: [
@@ -31,6 +35,20 @@ class EtudiantController
         );
     }
 
+    /**
+     * @throws TokenTimeoutException
+     * @throws ControllerException
+     * @throws InvalidTokenException
+     */
+
+    function connectToLdap(): bool|\LDAP\Connection
+    {
+        $ldap_host = "10.10.1.30";
+        $ldap_port = "389";
+        $ldap_conn = ldap_connect($ldap_host, $ldap_port);
+        ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
+        return $ldap_conn;
+    }
     public function signUp(): Response
     {
         $login = $_REQUEST["login"];
@@ -116,14 +134,18 @@ class EtudiantController
                 params: ["login" => $login]
             );
         }
+
         $etudiantRepository=new EtudiantRepository();
         $url = "https://webinfo.iutmontp.univ-montp2.fr/~riosq/LDAP/?login=$login&password=$password";
         $response = json_decode(file_get_contents($url), true);
         $etudiant= $etudiantRepository->getByLogin($login);
         if (is_null($etudiant)){
-            $etudiant = new Etudiant($login,$response["nom"],$response["prenom"],$response["mail"],$response["annee"],$password);
+            $etudiant = new Etudiant($login,$response["nom"],$response["prenom"],$response["mail"],$response["annee"]);
             $etudiantRepository->insert($etudiant);
         }
+
+
+
         FlashMessage::add(
             content: "Connexion réalisée avec succès",
             type: FlashType::SUCCESS
