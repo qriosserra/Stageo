@@ -9,7 +9,7 @@ use Stageo\Lib\Database\Table;
 #[Table("etudiant")]
 class Etudiant extends User
 {
-    public function __construct(#[PrimaryKey] private ?string       $login = null,
+    public function __construct(#[PrimaryKey] private ?string    $login = null,
                                 private string|NullDataType|null $nom = null,
                                 private string|NullDataType|null $prenom = null,
                                 private string|NullDataType|null $email_etudiant = null,
@@ -18,7 +18,7 @@ class Etudiant extends User
                                 private string|NullDataType|null $telephone_fixe = null,
                                 private string|NullDataType|null $civilite = null,
                                 private string|NullDataType|null $numero_voie = null,
-                                private string|NullDataType|null $id_commune = null,
+                                private int|NullDataType|null $id_distribution_commune = null,
                                 private string|NullDataType|null $id_departement = null,
                                 private string|NullDataType|null $id_etape = null,
                                 private string|NullDataType|null $id_ufr = null)
@@ -55,26 +55,6 @@ class Etudiant extends User
         $this->prenom = $prenom;
     }
 
-    public function getTelephone(): string|NullDataType|null
-    {
-        return $this->telephone;
-    }
-
-    public function setTelephone(string|NullDataType|null $telephone): void
-    {
-        $this->telephone = $telephone;
-    }
-
-    public function getTelephoneFixe(): string|NullDataType|null
-    {
-        return $this->telephone_fixe;
-    }
-
-    public function setTelephoneFixe(string|NullDataType|null $telephone_fixe): void
-    {
-        $this->telephone_fixe = $telephone_fixe;
-    }
-
     public function getEmailEtudiant(): string|NullDataType|null
     {
         return $this->email_etudiant;
@@ -93,6 +73,26 @@ class Etudiant extends User
     public function setAnnee(string|NullDataType|null $annee): void
     {
         $this->annee = $annee;
+    }
+
+    public function getTelephone(): string|NullDataType|null
+    {
+        return $this->telephone;
+    }
+
+    public function setTelephone(string|NullDataType|null $telephone): void
+    {
+        $this->telephone = $telephone;
+    }
+
+    public function getTelephoneFixe(): string|NullDataType|null
+    {
+        return $this->telephone_fixe;
+    }
+
+    public function setTelephoneFixe(string|NullDataType|null $telephone_fixe): void
+    {
+        $this->telephone_fixe = $telephone_fixe;
     }
 
     public function getCivilite(): string|NullDataType|null
@@ -115,14 +115,14 @@ class Etudiant extends User
         $this->numero_voie = $numero_voie;
     }
 
-    public function getIdCommune(): string|NullDataType|null
+    public function getIdDistributionCommune(): int|NullDataType|null
     {
-        return $this->id_commune;
+        return $this->id_distribution_commune;
     }
 
-    public function setIdCommune(string|NullDataType|null $id_commune): void
+    public function setIdDistributionCommune(int|NullDataType|null $id_distribution_commune): void
     {
-        $this->id_commune = $id_commune;
+        $this->id_distribution_commune = $id_distribution_commune;
     }
 
     public function getIdDepartement(): string|NullDataType|null

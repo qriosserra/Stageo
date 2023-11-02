@@ -18,91 +18,6 @@ use Stageo\Model\Repository\EtudiantRepository;
 
 class EtudiantController
 {
-    public function signUpForm(string $login = null): Response
-    {
-//        if (UserConnection::isSignedIn())
-//            self::signOut();
-
-        return new Response(
-            template: "etudiant/sign-up.php",
-            params: [
-                "title" => "S'inscrire",
-                "nav" => false,
-                "footer" => false,
-                "login" => $login,
-                "token" => Token::generateToken(Action::ETUDIANT_SIGN_UP_FORM)
-            ]
-        );
-    }
-
-    /**
-     * @throws TokenTimeoutException
-     * @throws ControllerException
-     * @throws InvalidTokenException
-     */
-
-    function connectToLdap(): bool|\LDAP\Connection
-    {
-        $ldap_host = "10.10.1.30";
-        $ldap_port = "389";
-        $ldap_conn = ldap_connect($ldap_host, $ldap_port);
-        ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
-        return $ldap_conn;
-    }
-    public function signUp(): Response
-    {
-        $login = $_REQUEST["login"];
-        $password = $_REQUEST["password"];
-        if (!Token::verify(Action::ETUDIANT_SIGN_UP_FORM, $_REQUEST["token"]))
-            throw new InvalidTokenException();
-        if (Token::isTimeout(Action::ETUDIANT_SIGN_UP_FORM)) {
-            throw new TokenTimeoutException(
-                action: Action::ETUDIANT_SIGN_UP_FORM,
-                params: ["login" => $login]
-            );
-        }
-        if (!is_null((new EtudiantRepository())->getByLogin($login))) {
-            throw new ControllerException(
-                message: "Un compte avec ce login existe déjà",
-                action: Action::ETUDIANT_SIGN_UP_FORM,
-                params: [
-                    "login" => $login
-                ]
-            );
-        }
-        if (!Validate::isPassword($password)) {
-            throw new ControllerException(
-                message: "Le mot de passe ne respecte pas les critères de sécurité",
-                action: Action::ETUDIANT_SIGN_UP_FORM,
-                params: [
-                    "login" => $login
-                ]
-            );
-        }
-        if ($password !== $_REQUEST["confirm"]) {
-            throw new ControllerException(
-                message: "Les mots de passe ne correspondent pas",
-                action: Action::ETUDIANT_SIGN_UP_FORM,
-                params: [
-                    "login" => $login
-                ]
-            );
-        }
-
-        FlashMessage::add(
-            content: "Inscription réalisée avec succès",
-            type: FlashType::SUCCESS
-        );
-        $etudiant = new Etudiant(
-            login: $login
-        );
-        UserConnection::signIn($etudiant);
-        (new EtudiantRepository)->insert($etudiant);
-        return new Response(
-            action: Action::HOME
-        );
-    }
-
     public function signInForm(string $login = null): Response
     {
         return new Response(
@@ -135,16 +50,26 @@ class EtudiantController
             );
         }
 
-        $etudiantRepository=new EtudiantRepository();
-        $url = "https://webinfo.iutmontp.univ-montp2.fr/~riosq/LDAP/?login=$login&password=$password";
+        $url = $_ENV["LDAP_API"] . "?" . http_build_query([
+            "login" => $login,
+            "password" => $password
+        ]);
         $response = json_decode(file_get_contents($url), true);
-        $etudiant= $etudiantRepository->getByLogin($login);
-        if (is_null($etudiant)){
-            $etudiant = new Etudiant($login,$response["nom"],$response["prenom"],$response["mail"],$response["annee"]);
-            $etudiantRepository->insert($etudiant);
+        if (empty($response)) throw new ControllerException(
+            message: "Le login ou le mot de passe est incorrect",
+            action: Action::ETUDIANT_SIGN_IN_FORM,
+            params: ["login" => $login]
+        );
+        if (is_null((new EtudiantRepository)->getByLogin($login))){
+            $etudiant = new Etudiant(
+                login: $login,
+                nom: $response["nom"],
+                prenom: $response["prenom"],
+                email_etudiant: $response["mail"],
+                annee: $response["annee"]
+            );
+            (new EtudiantRepository)->insert($etudiant);
         }
-
-
 
         FlashMessage::add(
             content: "Connexion réalisée avec succès",

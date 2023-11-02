@@ -30,13 +30,13 @@ function field(
                id="$name" 
                name="$name" 
                $type 
-               class="focus:border-rose-600 peer h-10 w-full border-b-2 border-gray-300 text-gray-900 placeholder-transparent focus:outline-none" 
+               class="h-10 w-full mt-4 px-2 bg-transparent border-b-2 border-gray-300 focus:valid:border-primary-600 focus:invalid:border-red-600 rounded-md peer text-gray-600 placeholder-transparent outline-none" 
                placeholder="$placeholder" 
                $pattern 
                $required 
                value="$value">
         <label for="$name" 
-               class="peer-placeholder-shown:text-gray-440 absolute -top-3.5 left-0 text-sm text-gray-600 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:text-base peer-focus:-top-3.5 peer-focus:text-sm peer-focus:text-gray-600">
+               class="peer-placeholder-shown:text-gray-500 absolute -top-0 left-0 text-sm font-semibold text-gray-600 transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:left-2 peer-placeholder-shown:text-base peer-placeholder-shown:font-normal peer-focus:-top-0 peer-focus:left-0 peer-focus:text-sm peer-focus:font-semibold peer-focus:text-gray-600 cursor-text">
             $label
         </label>
     </div>
@@ -55,8 +55,8 @@ function dropdown(string $name,
         : $class = "class='$class'";
     $html = <<<HTML
     <div $class>
-        <label for="$name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">$label</label>
-        <select id="$name" name="$name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+        <label for="$name" class="block h-4 text-sm font-semibold text-gray-900 dark:text-white">$label</label>
+        <select id="$name" name="$name" class="bg-transparent border-b-2 border-gray-300 text-gray-900 text-sm rounded-md focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
     HTML;
     if (!is_null($placeholder))
         is_null($default)
@@ -81,10 +81,10 @@ function textarea(
     is_null($class)
         ? $class = ""
         : $class = "class='$class'";
-    $placeholder = "placeholder='$placeholder'";
+    $placeholder = "placeholder='" . htmlspecialchars($placeholder) . "'";
     $required = !$required
-        ? $required = ""
-        : $required = "required";
+        ? ""
+        : "required";
     return <<<HTML
         <div $class>
             <label for="$name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">$label</label>

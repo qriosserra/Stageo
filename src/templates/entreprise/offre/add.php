@@ -12,16 +12,16 @@ include __DIR__ . "/../../macros/input.php";
 ?>
 <main class="h-screen flex flex-col items-center justify-center">
     <?=button("Accueil", "fi-rr-home", Action::HOME, "!absolute !pl-2 top-16 left-0")?>
-    <h5 class="font-bold py-6">Ajouter une offre</h5>
-    <form class="w-[60vw] grid grid-cols-2 gap-8" action="<?=Action::ENTREPRISE_CREATION_OFFRE->value?>" method="post">
-        <?=field("secteur", "Secteur de l'offre*", "text", "", Pattern::NAME, true, null, null)?>
-        <?=field("thematique", "Thématique de l'offre*", "text", null, Pattern::NAME,true, null, null)?>
-        <?=textarea("description", "Description", "", 4, false, null, "col-span-2")?>
-        <?=textarea("taches", "Fonctions et tâches", "", 4,false)?>
-        <?=textarea("commentaires", "Commentaires sur l'offre", "")?>
-        <?=field("gratification", "Gratification par heure", "float", "", null, true, 4.05)?>
+    <form class="bg-white h-screen lg:h-auto w-screen lg:w-[64rem] overflow-scroll p-12 text-gray-600 rounded-lg shadow-lg grid gap-8" action="<?=Action::ENTREPRISE_CREATION_OFFRE->value?>" method="post">
+        <h4 class="lg:col-span-2">Ajouter une offre</h4>
+        <?=field("secteur", "Secteur de l'offre*", "text", "Entrez le secteur de l'offre", Pattern::NAME, true, null, null)?>
+        <?=field("thematique", "Thématique de l'offre*", "text", "Entrez la thématique de l'offre", Pattern::NAME,true, null, null)?>
+        <?=textarea("description", "Description", "Entrez une description brève de l'offre", 4, false, null, "lg:col-span-2")?>
+        <?=textarea("taches", "Fonctions et tâches", "Entrez les fonctions et tâches que sera amené à faire l'étudiant", 4,false)?>
+        <?=textarea("commentaires", "Commentaires sur l'offre", "Entrez des commentaires optionnels sur l'offre")?>
+        <?=field("gratification", "Gratification par heure", "float", null, null, true, 4.05)?>
         <?=dropdown("id_unite_gratification", "Unité de gratification", null, null, 2, $unite_gratifications)?>
-        <div class="flex items-center col-span-2">
+        <div class="flex items-center lg:col-span-2">
             <div class="grid grid-cols-3 gap-4 w-full">
                 <div>
                     <input id="alternance" type="radio" value="alternance" name="emploi" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">

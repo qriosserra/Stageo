@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@material-tailwind/react": "^2.1.2",
-    "browser-sync": "^2.29.3"
+    "browser-sync": "^2.29.3",
+    "flowbite": "^2.0.0"
   }
 }

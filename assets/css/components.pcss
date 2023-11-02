@@ -1,5 +1,4 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wdth,wght,YTLC@6..12,75..125,200..1000,440..540&display=swap");
-@import url("https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css");
 
 @tailwind base;
 @tailwind components;
@@ -15,45 +14,33 @@ html {
 }
 
 h1 {
-    @apply text-9xl font-extrabold ;
+    @apply text-5xl font-[800] tracking-[-1.75px] leading-[1];
     font-variation-settings: "wdth" 110, "YTLC" 440;
 }
 
 h2 {
-    @apply text-[7rem] font-[750] tracking-[-0.4rem] leading-[1.03];
+    @apply text-4xl font-[775] tracking-[-1.5px] leading-[1.05];
     font-variation-settings: "wdth" 110, "YTLC" 454.2;
 }
 
 h3 {
-    font-size: 6rem;
+    @apply text-3xl font-[750] tracking-[-1px] leading-[1.1];
     font-variation-settings: "wdth" 110, "YTLC" 468.5;
-    font-weight: 700;
-    letter-spacing: -5.5px;
-    line-height: 1.07;
 }
 
 h4 {
-    font-size: 5rem;
+    @apply text-2xl font-[750] tracking-[-0.75px] leading-[1.2];
     font-variation-settings: "wdth" 110, "YTLC" 482.8;
-    font-weight: 650;
-    letter-spacing: -4.5px;
-    line-height: 1.11;
 }
 
 h5 {
-    font-size: 4rem;
+    @apply text-xl font-[725] tracking-[-0.6px] leading-[1.3];
     font-variation-settings: "wdth" 110, "YTLC" 497.1;
-    font-weight: 600;
-    letter-spacing: -3.5px;
-    line-height: 1.16;
 }
 
 h6 {
-    font-size: 1rem;
+    @apply text-lg font-[700] tracking-[-0.5px] leading-[1.4];
     font-variation-settings: "wdth" 110, "YTLC" 540;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    line-height: 1.4;
 }
 
 p, input {
@@ -154,7 +141,7 @@ p, input {
     }
 }
 
-a:not([class*="button-"]) {
+/*a:not([class*="button-"]) {
     @apply relative w-fit;
 
     &:after {
@@ -165,7 +152,7 @@ a:not([class*="button-"]) {
     &:hover::after {
         @apply origin-left scale-x-100;
     }
-}
+}*/
 
 [class*="button-"] {
     @apply font-bold rounded-lg py-2 px-4 flex gap-2 cursor-pointer select-none;
@@ -184,12 +171,12 @@ a:not([class*="button-"]) {
 }
 
 i.fi {
-    @apply text-2xl h-6 text-font-600;
+    /*@apply text-2xl h-6 text-font-600;*/
 }
 
 /*ripple effect*/
 [class*="button-"] {
-    @apply relative overflow-clip;
+    @apply relative;
 }
 
 span.ripple {
