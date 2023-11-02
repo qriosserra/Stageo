@@ -5,6 +5,7 @@ namespace Stageo\Controller;
 use Stageo\Controller\Exception\ControllerException;
 use Stageo\Controller\Exception\InvalidTokenException;
 use Stageo\Controller\Exception\TokenTimeoutException;
+use Stageo\Lib\Database\ComparisonOperator;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
@@ -15,6 +16,8 @@ use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
+use Stageo\Lib\Database\QueryCondition;
+use Stageo\Model\Object\Admin;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\CodePostalRepository;
@@ -492,5 +495,23 @@ class EntrepriseController
             return new Response(
             action: Action::HOME,
         );
+    }
+
+    public static function deleteOffre(string $idOffre) : Response{
+        $offre = (new OffreRepository())->getById($idOffre);
+        $user = UserConnection::getSignedInUser();
+        if($user and (UserConnection::isInstance(new Admin())) or (UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise())){
+            $condition = new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre);
+            (new OffreRepository())->delete($condition);
+            return new Response(
+                action: Action::HOME,
+            );
+        }
+        else{
+            throw new ControllerException(
+                message: "Vous n'avez pas les droits de supprimer cette offre",
+                action: Action::HOME
+            );
+        }
     }
 }

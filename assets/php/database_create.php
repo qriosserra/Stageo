@@ -181,18 +181,21 @@ CREATE TABLE stg_offre(
    FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise),
    FOREIGN KEY(login) REFERENCES stg_etudiant(login),
    FOREIGN KEY(id_postulation) REFERENCES stg_postulation(id_postulation)
+   ON DELETE CASCADE
 );
 
 CREATE TABLE stg_offre_alternance(
    id_offre INT,
    PRIMARY KEY(id_offre),
    FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
+   ON DELETE CASCADE
 );
 
 CREATE TABLE stg_offre_stage(
    id_offre INT,
    PRIMARY KEY(id_offre),
    FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
+   ON DELETE CASCADE
 );
 
 CREATE TABLE stg_convention(
