@@ -10,6 +10,8 @@
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Admin;
+use Stageo\Model\Object\Entreprise;
+use Stageo\Model\Object\Etudiant;
 
 ?>
 
@@ -17,16 +19,108 @@ use Stageo\Model\Object\Admin;
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?=$title?> – Stageo</title>
-        <link rel="stylesheet" href="assets/css/main.css"">
-        <link rel='stylesheet' href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+        <link rel="stylesheet" href="assets/css/main.css">
+        <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css">
+        <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.0.0/uicons-solid-straight/css/uicons-solid-straight.css" >
+        <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css">
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.0.0/flowbite.min.js"></script>
         <script defer src="assets/js/script.js"></script>
     </head>
     <body>
-    <p class="hidden"></p>
         <header>
             <?php if ($nav):?>
-                <nav>
+                <button data-drawer-target="sidenav" data-drawer-toggle="sidenav" aria-controls="sidenav" type="button" class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+                    <span class="sr-only">Open sidebar</span>
+                    <i class="fi fi-sr-menu-burger text-2xl"></i>
+                </button>
+                <nav id="sidenav" class="transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidenav">
+                    <div>
+                        <ul>
+                            <li>
+                                <a href="<?=Action::HOME->value?>">
+                                    <i aria-hidden="true" class="fi fi-sr-home"></i>
+                                    <span>Accueil</span>
+                                </a>
+                            </li>
+                            <?php if (is_null($user)): ?>
+                            <li>
+                                <a href="<?=Action::ETUDIANT_SIGN_IN_FORM->value?>">
+                                    <i aria-hidden="true" class="fi fi-sr-graduation-cap"></i>
+                                    <span>Connexion étudiant</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?=Action::ENTREPRISE_SIGN_IN_FORM->value?>">
+                                    <i aria-hidden="true" class="fi fi-ss-building"></i>
+                                    <span>Connexion entreprise</span>
+                                </a>
+                            </li>
+                            <?php elseif ($user instanceof Etudiant): ?>
+                            <li>
+                                <a href="<?=Action::LISTE_OFFRE->value?>">
+                                    <i aria-hidden="true" class="fi fi-sr-document"></i>
+                                    <span>Rechercher une offre</span>
+                                </a>
+                            </li>
+                            <?php elseif ($user instanceof Entreprise): ?>
+                            <li>
+                                <button type="button" aria-controls="dropdown-pages" data-collapse-toggle="dropdown-pages">
+                                    <i aria-hidden="true" class="fi fi-sr-document"></i>
+                                    <span>Offres</span>
+                                    <i aria-hidden="true" class="fi fi-rr-angle-small-down"></i>
+                                </button>
+                                <ul id="dropdown-pages" class="hidden py-2 space-y-2">
+                                    <li>
+                                        <a href="<?=Action::ENTREPRISE_CREATION_OFFRE_FORM->value?>">Ajouter une nouvelle offre</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Voir mes offres</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <?php elseif ($user instanceof Admin): ?>
+                            <li>
+                                <a href="#">
+                                    <i aria-hidden="true" class="fi fi-ss-check-circle"></i>
+                                    <span>Entreprises à valider</span>
+                                    <span class="!flex-none inline-flex justify-center items-center w-6 h-6 text-xs font-semibold rounded-full text-primary-800 bg-primary-100 dark:bg-primary-200 dark:text-primary-800">
+                      6
+                  </span>
+                                </a>
+                            </li>
+                            <?php endif; ?>
+                        </ul>
+                        <ul>
+                            <li>
+                                <a href="<?=Action::ABOUT->value?>">
+                                    <i aria-hidden="true" class="fi fi-sr-info"></i>
+                                    <span>A propos</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="hidden absolute bottom-0 left-0 p-4 space-x-4 w-full lg:flex bg-white dark:bg-gray-800 z-20 border-r border-gray-200 dark:border-gray-700">
+                        <?php if (!is_null($user)): ?>
+                        <button type="button" data-dropdown-toggle="language-dropdown" class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:hover:text-white dark:text-gray-400 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600">
+                            <img src="" class="h-6 w-6 rounded-full mt-0.5" alt="">
+                        </button>
+                        <!-- Dropdown -->
+                        <div class="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700" id="language-dropdown">
+                            <ul class="py-1" role="none">
+                                <li>
+                                    <a href="<?=Action::SIGN_OUT->value?>" class="block py-2 px-4 text-sm text-red-700 hover:bg-gray-100 dark:hover:text-white dark:text-gray-300 dark:hover:bg-gray-600" role="menuitem">
+                                        <i class="fi fi-rr-exit"></i>
+                                        <span>Déconnexion</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <?php endif ?>
+                    </div>
+                </nav>
+                <nav class="hidden">
                     <a class="logo-container flex justify-center items-center" href="<?=Action::HOME->value?>">
                         <span>Stageo</span>
                     </a>
@@ -67,12 +161,12 @@ use Stageo\Model\Object\Admin;
                         <?php if (is_null($user)):?>
                             <li class="sign-in">
                                 <a class="sign-in button-ghost" href="<?=Action::ETUDIANT_SIGN_IN_FORM->value?>">
-                                    <span>Se connecter</span>
+                                    <span>Connexion à un compte étudiant</span>
                                 </a>
                             </li>
-                            <li class="sign-up">
-                                <a class="sign-up button-primary" href="<?=Action::ETUDIANT_SIGN_UP_FORM->value?>">
-                                    <span>S'inscrire</span>
+                            <li>
+                                <a class="sign-up button-primary" href="<?=Action::ENTREPRISE_SIGN_IN_FORM->value?>">
+                                    <span>Connexion à un compte entreprise</span>
                                 </a>
                             </li>
                         <?php else: ?>

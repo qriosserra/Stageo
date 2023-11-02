@@ -25,137 +25,78 @@ class Entreprise extends User
                                 private string|NullDataType|null $id_taille_entreprise = null,
                                 private string|NullDataType|null $site = null,
                                 private string|NullDataType|null $fax = null,
-                                private string|NullDataType|null $id_code_postal = null,
-                                private string|NullDataType|null $id_commune = null)
+                                private int|NullDataType|null $id_distribution_commune = null)
     {
     }
 
-    /**
-     * @param NullDataType|string|null $raison_sociale
-     */
-    public function setRaisonSociale(string|NullDataType|null $raison_sociale): void
-    {
-        $this->raison_sociale = $raison_sociale;
-    }
-
-    /**
-     * @return NullDataType|string|null
-     */
-    public function getIdCommune(): string|NullDataType|null
-    {
-        return $this->id_commune;
-    }
-
-    /**
-     * @param NullDataType|string|null $id_commune
-     */
-    public function setIdCommune(string|NullDataType|null $id_commune): void
-    {
-        $this->id_commune = $id_commune;
-    }
-
-    /**
-     * @return int|null
-     */
     public function getIdEntreprise(): ?int
     {
         return $this->id_entreprise;
     }
 
-    /**
-     * @param int|null $id_entreprise
-     */
     public function setIdEntreprise(?int $id_entreprise): void
     {
         $this->id_entreprise = $id_entreprise;
     }
 
-    /**
-     * @return NullDataType|string|null
-     */
     public function getEmail(): string|NullDataType|null
     {
         return $this->email;
     }
 
-    /**
-     * @param NullDataType|string|null $email
-     */
     public function setEmail(string|NullDataType|null $email): void
     {
         $this->email = $email;
     }
 
-    /**
-     * @return NullDataType|string|null
-     */
     public function getUnverifiedEmail(): string|NullDataType|null
     {
         return $this->unverified_email;
     }
 
-    /**
-     * @param NullDataType|string|null $unverified_email
-     */
     public function setUnverifiedEmail(string|NullDataType|null $unverified_email): void
     {
         $this->unverified_email = $unverified_email;
     }
 
-    /**
-     * @return NullDataType|string|null
-     */
     public function getNonce(): string|NullDataType|null
     {
         return $this->nonce;
     }
 
-    /**
-     * @param NullDataType|string|null $nonce
-     */
     public function setNonce(string|NullDataType|null $nonce): void
     {
         $this->nonce = $nonce;
     }
 
-    /**
-     * @return int|NullDataType|null
-     */
     public function getNonceTimestamp(): int|NullDataType|null
     {
         return $this->nonce_timestamp;
     }
 
-    /**
-     * @param int|NullDataType|null $nonce_timestamp
-     */
     public function setNonceTimestamp(int|NullDataType|null $nonce_timestamp): void
     {
         $this->nonce_timestamp = $nonce_timestamp;
     }
 
-    /**
-     * @return NullDataType|string|null
-     */
     public function getHashedPassword(): string|NullDataType|null
     {
         return $this->hashed_password;
     }
 
-    /**
-     * @param NullDataType|string|null $hashed_password
-     */
     public function setHashedPassword(string|NullDataType|null $hashed_password): void
     {
         $this->hashed_password = $hashed_password;
     }
 
-    /**
-     * @return NullDataType|string|null
-     */
     public function getRaisonSociale(): string|NullDataType|null
     {
         return $this->raison_sociale;
+    }
+
+    public function setRaisonSociale(string|NullDataType|null $raison_sociale): void
+    {
+        $this->raison_sociale = $raison_sociale;
     }
 
     public function getNumeroVoie(): string|NullDataType|null
@@ -223,7 +164,7 @@ class Entreprise extends User
         return $this->id_taille_entreprise;
     }
 
-    public function setIdtailleentreprise(string|NullDataType|null $id_taille_entreprise): void
+    public function setIdTailleEntreprise(string|NullDataType|null $id_taille_entreprise): void
     {
         $this->id_taille_entreprise = $id_taille_entreprise;
     }
@@ -248,14 +189,13 @@ class Entreprise extends User
         $this->fax = $fax;
     }
 
-    public function getIdCodePostal(): string|NullDataType|null
+    public function getIdDistributionCommune(): int|NullDataType|null
     {
-        return $this->id_code_postal;
+        return $this->id_distribution_commune;
     }
 
-    public function setIdCodePostal(string|NullDataType|null $id_code_postal): void
+    public function setIdDistributionCommune(int|NullDataType|null $id_distribution_commune): void
     {
-        $this->id_code_postal = $id_code_postal;
+        $this->id_distribution_commune = $id_distribution_commune;
     }
-
 }

@@ -19,10 +19,12 @@ include __DIR__ . "/../macros/breadcrumb.php";
         "Adresse postale" => Action::ENTREPRISE_ADD_STEP_3_FORM->value,
         "Authentification" => Action::ENTREPRISE_ADD_STEP_4_FORM->value
     ])?>
-    <form class="grid gap-8" action="<?=Action::ENTREPRISE_ADD_STEP_4->value?>" method="post">
-        <?=field("email", "Email*", "email", "Entrez un email de contact", null, true, $entreprise->getUnverifiedEmail())?>
+    <form class="bg-white p-12 text-gray-600 rounded-lg shadow-lg grid gap-8" action="<?=Action::ENTREPRISE_ADD_STEP_4->value?>" method="post">
+        <h4 class="sm:col-span-2">4. Authentification</h4>
+        <?=field("email", "Email*", "email", "Entrez un email de contact", null, true, $entreprise->getUnverifiedEmail(), "sm:col-span-2")?>
         <?=field("password", "Mot de passe*", "password", "Entrez un mot de passe", null, true)?>
-        <div>
+        <?=field("confirm", "Confirmer le mot de passe*", "password", "Confirmez le mot de passe", null, true)?>
+        <div class="sm:col-span-2">
             <p>Le mot de passe doit au moins contenir:</p>
             <ul>
                 <li>- 8 caractères</li>
@@ -31,8 +33,7 @@ include __DIR__ . "/../macros/breadcrumb.php";
                 <li>- Un chiffre</li>
             </ul>
         </div>
-        <?=field("confirm", "Confirmer le mot de passe*", "password", "Confirmez le mot de passe", null, true)?>
-        <?=submit("Finaliser l'inscription")?>
+        <?=submit("Finaliser l'inscription", "sm:col-span-2")?>
         <?=token($token)?>
     </form>
 </main>

@@ -18,11 +18,11 @@ use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
 use Stageo\Lib\Database\QueryCondition;
 use Stageo\Model\Object\Admin;
+use Stageo\Model\Object\DistributionCommune;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Offre;
-use Stageo\Model\Repository\CodePostalRepository;
-use Stageo\Model\Repository\CommuneRepository;
 use Stageo\Model\Repository\DatabaseConnection;
+use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\OffreRepository;
 use Stageo\Model\Repository\StatutJuridiqueRepository;
@@ -181,6 +181,12 @@ class EntrepriseController
 
     public function addStep3Form(): Response
     {
+        /**
+         * @var DistributionCommune $distribution
+         */
+        foreach ((new DistributionCommuneRepository)->select() as $distribution) {
+            $distributions_commune[] = "{$distribution->getCommune()} ({$distribution->getCodePostal()})";
+        }
         return new Response(
             template: "entreprise/add-step-3.php",
             params: [
@@ -188,8 +194,7 @@ class EntrepriseController
                 "nav" => false,
                 "footer" => false,
                 "entreprise" => Session::get("entreprise"),
-                "communes" => array_column(array_map(fn($e) => $e->toArray(), (new CommuneRepository())->select()), "commune", "id_commune"),
-                "code_postaux" => array_column(array_map(fn($e) => $e->toArray(), (new CodePostalRepository())->select()), "id_code_postal", "id_code_postal"),
+                "distributions_commune" => $distributions_commune,
                 "token" => Token::generateToken(Action::ENTREPRISE_ADD_STEP_3_FORM)
             ]
         );
@@ -198,13 +203,11 @@ class EntrepriseController
     public function addStep3(): Response
     {
         $numero_voie = $_REQUEST["numero_voie"];
-        $id_commune = $_REQUEST["id_commune"];
-        $id_code_postal = $_REQUEST["id_code_postal"];
+        $id_distribution_commune = $_REQUEST["id_distribution_commune"];
 
         $entreprise = Session::get("entreprise") ?? new Entreprise();
         $entreprise->setNumeroVoie($numero_voie);
-        $entreprise->setIdCommune($id_commune);
-        $entreprise->setIdCodePostal($id_code_postal);
+        $entreprise->setIdDistributioncommune($id_distribution_commune);
         Session::set("entreprise", $entreprise);
 
         if (!Token::verify(Action::ENTREPRISE_ADD_STEP_3_FORM, $_REQUEST["token"])) {
@@ -221,15 +224,9 @@ class EntrepriseController
                 action: Action::ENTREPRISE_ADD_STEP_3_FORM
             );
         }
-        if (is_null((new CommuneRepository())->getById($id_commune))) {
+        if (is_null((new DistributionCommuneRepository)->getById($id_distribution_commune))) {
             throw new ControllerException(
-                message: "Choisissez une commune valide",
-                action: Action::ENTREPRISE_ADD_STEP_3_FORM
-            );
-        }
-        if (is_null((new CodePostalRepository())->getById($id_code_postal))) {
-            throw new ControllerException(
-                message: "Le code postal n'est pas valide",
+                message: "Choisissez une distribution de commune valide",
                 action: Action::ENTREPRISE_ADD_STEP_3_FORM
             );
         }
@@ -259,7 +256,7 @@ class EntrepriseController
         $password = $_REQUEST["password"];
 
         $entreprise = Session::get("entreprise") ?? new Entreprise();
-        $entreprise->setUnverifiedEmail($email);
+        $entreprise->setEmail($email);
         Session::set("entreprise", $entreprise);
 
         if (!Token::verify(Action::ENTREPRISE_ADD_STEP_4_FORM, $_REQUEST["token"])) {
@@ -291,8 +288,64 @@ class EntrepriseController
 
         $entreprise->setHashedPassword((Password::hash($password)));
         (new EntrepriseRepository)->insert($entreprise);
+        UserConnection::signIn($entreprise);
         Session::delete("entreprise");
         FlashMessage::add("L'entreprise a été ajoutée avec succès", FlashType::SUCCESS);
+        return new Response(
+            action: Action::HOME
+        );
+    }
+
+    public function signInForm(string $email = null): Response {
+        return new Response(
+            template: "entreprise/sign-in.php",
+            params: [
+                "title" => "Connexion à un compte entreprise",
+                "nav" => false,
+                "footer" => false,
+                "email" => $email,
+                "token" => Token::generateToken(Action::ENTREPRISE_SIGN_IN_FORM)
+            ]
+        );
+    }
+
+    public function signIn(): Response {
+        $email = $_REQUEST["email"];
+        $password = $_REQUEST["password"];
+
+        if (!Token::verify(Action::ENTREPRISE_SIGN_IN_FORM, $_REQUEST["token"])) {
+            throw new InvalidTokenException();
+        }
+        if (Token::isTimeout(Action::ENTREPRISE_SIGN_IN_FORM)) {
+            throw new TokenTimeoutException(
+                action: Action::ENTREPRISE_SIGN_IN_FORM
+            );
+        }
+        if (!Validate::isEmail($email)) {
+            throw new ControllerException(
+                message: "L'email n'est pas valide",
+                action: Action::ENTREPRISE_SIGN_IN_FORM
+            );
+        }
+        if (!Validate::isPassword($password)) {
+            throw new ControllerException(
+                message: "Le mot de passe n'est pas valide",
+                action: Action::ENTREPRISE_SIGN_IN_FORM
+            );
+        }
+        /**
+         * @var Entreprise $entreprise
+         */
+        $entreprise = (new EntrepriseRepository)->getByEmail($email);
+        if (is_null($entreprise) or !Password::verify($password, $entreprise->getHashedPassword())) {
+            throw new ControllerException(
+                message: "L'email ou le mot de passe est incorrect",
+                action: Action::ENTREPRISE_SIGN_IN_FORM
+            );
+        }
+
+        UserConnection::signIn($entreprise);
+        FlashMessage::add("Vous êtes connecté", FlashType::SUCCESS);
         return new Response(
             action: Action::HOME
         );
@@ -307,7 +360,7 @@ class EntrepriseController
                 "nav" => false,
                 "footer" => false,
                 "offre" => Session::get("offre"),
-                "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository())->select()), "libelle", "id_unite_gratification"),
+                "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
                 "token" => Token::generateToken(Action::ENTREPRISE_CREATION_OFFRE_FORM)
             ]
         );
@@ -328,28 +381,26 @@ class EntrepriseController
         $id_unite_gratification = $_REQUEST["id_unite_gratification"];
         $type = $_REQUEST["emploi"];
 
-        /*if(!UserConnection::isInstance(new Entreprise())){
+        if(!UserConnection::isInstance(new Entreprise())){
             throw new ControllerException(
                 message: "Vous n'avez pas les droits",
                 action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
             );
-        }*/
+        }
         /**
          * @var Entreprise $entreprise
          */
-        //$entreprise = UserConnection::getSignedInUser();
-        //$id_entreprise = $entreprise->getIdEntreprise();
+        $entreprise = UserConnection::getSignedInUser();
 
         $offre = Session::set("offre", new Offre(
-            id_entreprise: $id_entreprise ?? 1,
+            id_entreprise: $entreprise->getIdEntreprise(),
             description: $description,
             secteur: $secteur,
             thematique: $thematique,
             taches: $taches,
             commentaires: $commentaires,
             gratification: $gratification,
-            id_unite_gratification: $id_unite_gratification,
-            type: $type
+            id_unite_gratification: $id_unite_gratification
         ));
 
         if (!Token::verify(Action::ENTREPRISE_CREATION_OFFRE_FORM, $_REQUEST["token"])) {
@@ -404,7 +455,7 @@ class EntrepriseController
         }
 
         FlashMessage::add("L'offre a été ajoutée avec succès", FlashType::SUCCESS);
-        $id_offre = (new OffreRepository())->insert($offre);
+        $id_offre = (new OffreRepository)->insert($offre);
 
         //A MODIFIER PLUS TARD !!!!!!!!!!!!!
         $pdo = DatabaseConnection::getPdo();
@@ -419,7 +470,6 @@ class EntrepriseController
         return new Response(
             action: Action::HOME,
         );
-
     }
 
     /**

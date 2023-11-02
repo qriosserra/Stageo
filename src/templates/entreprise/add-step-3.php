@@ -20,11 +20,11 @@ include __DIR__ . "/../macros/breadcrumb.php";
         "Adresse postale" => Action::ENTREPRISE_ADD_STEP_3_FORM->value,
         "Authentification" => Action::ENTREPRISE_ADD_STEP_4_FORM->value
     ])?>
-    <form class="grid grid-cols-3 gap-8" action="<?=Action::ENTREPRISE_ADD_STEP_3->value?>" method="post">
-        <?=field("numero_voie", "Numéro et voie du siège de l'entreprise", "text", "Entrez l'adresse de siège de l'entreprise", null, false, $entreprise->getNumeroVoie(), "col-span-3")?>
-        <?=dropdown("id_commune", "Commune", "Sélectionnez une commune", "col-span-2", $entreprise->getIdCommune(), $communes ?? [])?>
-        <?=dropdown("id_code_postal", "Code Postal", "Sélectionnez un code postal", null, $entreprise->getIdCodePostal(), $code_postaux ?? [])?>
-        <?=submit("Suivant", "col-span-3")?>
+    <form class="bg-white p-12 text-gray-600 rounded-lg shadow-lg grid gap-8 w-[28rem]" action="<?=Action::ENTREPRISE_ADD_STEP_3->value?>" method="post">
+        <h4>3. Adresse postale</h4>
+        <?=field("numero_voie", "Numéro et voie du siège de l'entreprise", "text", "Entrez l'adresse de siège de l'entreprise", null, false, $entreprise->getNumeroVoie())?>
+        <?=dropdown("id_distribution_commune", "Commune", "Sélectionnez une commune", null, $entreprise->getIdDistributioncommune(), $distributions_commune ?? [])?>
+        <?=submit("Suivant")?>
         <?=token($token)?>
     </form>
 </main>
