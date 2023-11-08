@@ -76,7 +76,7 @@ use Stageo\Model\Object\Etudiant;
                                         <a href="<?=Action::ENTREPRISE_CREATION_OFFRE_FORM->value?>">Ajouter une nouvelle offre</a>
                                     </li>
                                     <li>
-                                        <a href="#">Voir mes offres</a>
+                                        <a href="<?=Action::ENTREPRISE_AFFICHER_OFFRE->value?>">Voir mes offres</a>
                                     </li>
                                 </ul>
                             </li>

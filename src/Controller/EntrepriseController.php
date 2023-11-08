@@ -564,4 +564,22 @@ class EntrepriseController
             );
         }
     }
+
+    public static function afficherOffreEntreprise():Response{
+        $user = UserConnection::getSignedInUser();
+        $idEntreprise = $user->getIdEntreprise();
+        $condition = new QueryCondition("id_entreprise",ComparisonOperator::EQUAL,$idEntreprise);
+        $liste_offre = (new OffreRepository())->select($condition);
+        return new Response(
+            template: "entreprise/offre/liste-offre.php",
+            params: [
+                "title" => "Liste des offres",
+                "offres" => $liste_offre,
+                "selA" => null,
+                "selB" => null,
+                "search" => null
+                ]
+        );
+
+    }
 }

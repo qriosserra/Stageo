@@ -19,8 +19,20 @@ class Offre extends CoreObject
                                 private string|NullDataType|null $commentaires = null,
                                 private float|NullDataType|null  $gratification = null,
                                 private string|NullDataType|null $id_unite_gratification = null,
-                                private int|NullDataType|null    $login = null)
+                                private int|NullDataType|null    $login = null,
+                                private string|NullDataType|null $type = null,//Alternance, stage ou les deux
+                                )
     {
+    }
+
+    public function getType(): string|NullDataType|null
+    {
+        return $this->type;
+    }
+
+    public function setType(string|NullDataType|null $type): void
+    {
+        $this->type = $type;
     }
 
     /**

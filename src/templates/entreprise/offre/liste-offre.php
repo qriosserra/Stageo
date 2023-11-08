@@ -60,6 +60,7 @@ include __DIR__ . "/../../macros/offre.php";
 
     <div>
         <form class="mb-3" action="<?=Action::LISTE_OFFRE->value?>" method="post">
+            <?php if ($selA and $selB): ?>
             <div class="relative flex flex-row flex-wrap items-stretch">
                 <div class="w-64 ">
                     <select id="Option" name="OptionL" class="rounded-l-lg  w-full bg-white border border-blue-500 text-gray-700 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
@@ -76,6 +77,7 @@ include __DIR__ . "/../../macros/offre.php";
                        aria-describedby="button-addon1"  />
                 <input type="submit" value="Rechercher" class="bg-blue-500 rounded-none !rounded-l-none !rounded-r-lg flex justify-center items-center">
             </div>
+            <?php endif; ?>
         </form>
     </div>
 
