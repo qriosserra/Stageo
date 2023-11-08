@@ -17,7 +17,7 @@ class Request
     {
         $class = "Stageo\\Controller\\" . ucfirst(strtolower($controller)) . "Controller";
         try {
-            EnvLoader::load(__DIR__ . "/..");
+            EnvLoader::load(__DIR__ . "/../..");
             if (!class_exists($class))
                 throw new ControllerException("La classe {$class} n'existe pas");
             $instance = new $class();

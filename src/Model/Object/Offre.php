@@ -62,7 +62,6 @@ class Offre extends CoreObject
     {
         return $this->id_entreprise;
     }
-
     /**
      * @param int|null $id_entreprise
      */

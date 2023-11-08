@@ -13,6 +13,7 @@ use Stageo\Lib\Response;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\CategorieRepository;
+use Stageo\Model\Repository\DeCategorieRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\OffreRepository;
 use Stageo\Model\Repository\UniteGratificationRepository;
@@ -46,16 +47,35 @@ class MainController
         $tabla = $option === "description"
             ? "description"
             : "secteur";
-        $offres = isset($search)
+      /*  $offres = isset($search)
             ? (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%".$search."%"))
-            : (new OffreRepository)->select();
+            : (new OffreRepository)->select();*/
+
+        if (isset($search)){
+            if ($option == "Categories"){
+               $categories =  (new CategorieRepository()) ->select(new QueryCondition("libelle",ComparisonOperator::LIKE,"%".$search."%"));
+               $idOffres =  [];
+               foreach ($categories as $category) {
+                  $idOffres [] =  (new DeCategorieRepository())->getByIdCategorie($category->getIdCategorie());
+               }
+               foreach ($idOffres as $idOffre){
+                  $offres [] =  (new OffreRepository)->getById($idOffre->getIdOffre());
+               }
+            }else {
+                $offres = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%".$search."%"));
+            }
+        }else{
+            $offres = (new OffreRepository)->select();
+        }
         $selA = $option === "description"
             ? "selected"
             : null;
         $selB = $option === "secteur"
             ? "selected"
             : null;
-
+        $selC = $option === "Categories"
+            ? "selected"
+            : null;
         return new Response(
             template: "entreprise/offre/liste-offre.php",
             params: [
@@ -63,6 +83,7 @@ class MainController
                 "offres" => $offres,
                 "selA" => $selA,
                 "selB" => $selB,
+                "selC" => $selC,
                 "search" => $search
             ]
         );
