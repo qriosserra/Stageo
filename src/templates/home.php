@@ -1,9 +1,8 @@
 <?php
 
 use Stageo\Model\Object\Categorie;
-use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Etudiant;
-use \Stageo\Model\Object\Offre;
+use Stageo\Model\Object\Offre;
 
 include "macros/button.php";
 include "macros/input.php";
@@ -14,70 +13,138 @@ include "macros/offre.php";
  * @var Offre[] $offres
  */
 ?>
-    <main class="h-screen">
-    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-<div class="min-h-screen">
-  <div class="antialiased bg-gray-100 dark-mode:bg-gray-900">
-  <div class="w-full text-gray-700 bg-white dark-mode:text-gray-200 dark-mode:bg-gray-800">
-    <div x-data="{ open: true }" class="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
-      <div class="flex flex-row items-center justify-between p-4">
-        <a href="#" class="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline">Flowtrail UI</a>
-        <button class="rounded-lg md:hidden focus:outline-none focus:shadow-outline" @click="open = !open">
-          <svg fill="currentColor" viewBox="0 0 20 20" class="w-6 h-6">
-            <path x-show="!open" fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM9 15a1 1 0 011-1h6a1 1 0 110 2h-6a1 1 0 01-1-1z" clip-rule="evenodd"></path>
-            <path x-show="open" fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-          </svg>
-        </button>
-      </div>
-      <nav :class="{'flex': open, 'hidden': !open}" class="flex-col flex-grow hidden pb-4 md:pb-0 md:flex md:justify-end md:flex-row">
-        <a class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href="#">Blog</a>
-        <a class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href="#">Portfolio</a>
-        <a class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href="#">About</a>
-        <a class="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href="#">Contact</a>
-        <div @click.away="open = false" class="relative" x-data="{ open: true }">
-          <button @click="open = !open" class="flex flex-row text-gray-900 bg-gray-200 items-center w-full px-4 py-2 mt-2 text-sm font-semibold text-left bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:focus:bg-gray-600 dark-mode:hover:bg-gray-600 md:w-auto md:inline md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline">
-            <span>More</span>
-            <svg fill="currentColor" viewBox="0 0 20 20" :class="{'rotate-180': open, 'rotate-0': !open}" class="inline w-4 h-4 mt-1 ml-1 transition-transform duration-200 transform md:-mt-1"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-          </button>
-          <div x-show="open" x-transition :enter="transition ease-out duration-100" x-transition :enter-start="transform opacity-0 scale-95" x-transition :enter-end="transform opacity-100 scale-100" x-transition:leave="transition ease-in duration-75" x-transition:leave-start="transform opacity-100 scale-100" x-transition:leave-end="transform opacity-0 scale-95" class="absolute right-0 w-full md:max-w-screen-sm md:w-screen mt-2 origin-top-right">
-            <div class="px-2 pt-2 pb-4 bg-white rounded-md shadow-lg dark-mode:bg-gray-700">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <a class="flex flex row items-start rounded-lg bg-transparent p-2 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href="#">
-                  <div class="bg-teal-500 text-white rounded-lg p-3">
-                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="md:h-6 md:w-6 h-4 w-4"><path d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path></svg>
-                  </div>
-                  <div class="ml-3">
-                    <p class="font-semibold">Appearance</p>
-                    <p class="text-sm">Easy customization</p>
-                  </div>
-                </a>
-
-                <a class="flex flex row items-start rounded-lg bg-transparent p-2 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href="#">
-                  <div class="bg-teal-500 text-white rounded-lg p-3">
-                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="md:h-6 md:w-6 h-4 w-4"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
-                  </div>
-                  <div class="ml-3">
-                    <p class="font-semibold">Comments</p>
-                    <p class="text-sm">Check your latest comments</p>
-                  </div>
-                </a>
-
-                <a class="flex flex row items-start rounded-lg bg-transparent p-2 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 hover:text-gray-900 focus:text-gray-900 hover:bg-gray-200 focus:bg-gray-200 focus:outline-none focus:shadow-outline" href="#">
-                  <div class="bg-teal-500 text-white rounded-lg p-3">
-                    <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="md:h-6 md:w-6 h-4 w-4"><path d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
-                  </div>
-                  <div class="ml-3">
-                    <p class="font-semibold">Analytics</p>
-                    <p class="text-sm">Take a look at your statistics</p>
-                  </div>
-                </a>
-              </div>
+<main class="mt-[8rem]">
+    <section class="w-full h-[35rem] sm:h-[29rem] border-b">
+        <h1 class="mt-16 text-center font-bold leading-[3rem] font-custom text-gray-700 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-6xl">
+            Tout ce dont vous avez besoin pour tracer<span class="block font-custom text-gray-700">Votre Parcours Professionnel</span>
+        </h1>
+        <h5 class="petit-text text-neutral-900 mt-9 text-center">
+            La plateforme parfaite pour gérer vos Stages/Alternances du BUT2 et BUT3 Informatique.
+        </h5>
+        <div class="flex flex-row justify-center mt-9 mr-10">
+            <img id="cfa" class="w-[20%] h-[20%] ml-[7%] md:w-[15%] md:h-[10%] lg:w-[8%] lg:h-[6%] lg:mr-[2%]" src="assets/img/cfa.png" alt="">
+            <img id="iut" class="w-[40%] h-[30%] mt-[3%] md:w-[30%] md:h-[20%] lg:mt-[1%] lg:w-[18%] lg:h-[8%] lg:mr-[2%]" src="assets/img/iut_montpellier_sete.png" alt="">
+            <img id="um" class="w-[40%] h-[30%] mt-0 md:w-[30%] md:h-[20%] lg:w-[18%] lg:h-[8%] lg:mt-[1%]" src="assets/img/um.png" alt="">
+        </div>
+        <span class="petit-text text-neutral-900 block mb-10 ml text-center font-thin ">
+            Avec la participation du CFA Sud Montpellier, Univerisité de Montpellier et l'IUT Montpellier/Sète
+        </span>
+    </section>
+    <section class="w-full md:h-[38rem] mt-[5rem] md:mt-auto h-[64rem] border-b flex flex-col justify-center items-center">
+        <div>
+            <h4 class="second-titre mt-4 text-center font-bold leading-[3rem]  font-custom text-gray-700
+            text-1xl sm:text-2xl md:text-1xl lg:text-2xl xl:text-3xl">
+                Préparer votre alternance ou votre stage facilement
+            </h4>
+            <h6 class="text-center mt-4 sm:text-base text-xs" style="font-family: 'Montserrat',serif;">
+                Une plateforme conçue par des étudiants, pensée pour les étudiants, pour gérer tout le processus,
+                <br> la découverte de l'offre jusqu'à la signature du contrat.
+            </h6>
+        </div>
+        <div class="rectangle flex justify-between  items-center mt-[2.5rem] mx-auto " style="max-width: 1200px;">
+            <div class="flex-1"></div>
+            <div class="bg-slate-50 max-w-lg rounded-md h-auto lg:h-[350px] xl:h-[322px]">
+                <div class="under-card mt-[2rem] border-r flex flex-col items-center border-gray-400 h-3/4 mb-[2rem]">
+                    <i class="fi fi-rr-search mb-3 text-5xl text-gray-700"></i>
+                    <h2 class="mt-2 font-custom text-2xl font-medium text-gray-700">Trouver une offre</h2>
+                    <p class="petit-text text-neutral-900 text-center m-5">
+                        Démarrez votre carrière avec précision. Utilisez nos filtres détaillés et trouvez une entreprise qui partage vos valeurs et vos aspirations.
+                    </p>
+                </div>
             </div>
-          </div>
-        </div>    
-      </nav>
-    </div>
-  </div>
-</div>
-  </div>
-    </main>
+            <div class="bg-slate-50 max-w-lg h-auto lg:h-[350px] xl:h-[322px]">
+                <div class=" under-card mt-[2rem] border-r flex flex-col items-center border-gray-400 h-3/4  mb-[2rem]">
+                    <i class="fi fi-rs-comments mb-3 text-5xl text-gray-700"></i>
+                    <h2 class="mt-2 font-custom text-2xl font-medium text-gray-700">Discuter avec l'employeur</h2>
+                    <p class="petit-text text-neutral-900 text-center m-5">
+                        Communiquez directement sur notre plateforme avec les entreprises, le CFA, les services administratifs et nos administrateurs. Tout cela depuis notre site !
+                    </p>
+                </div>
+            </div>
+            <div class="bg-slate-50 max-w-lg rounded-md h-auto lg:h-[350px] xl:h-[322px]">
+                <div class="under-card mt-[2rem] flex flex-col items-center h-3/4  mb-[2rem]">
+                    <i class="fi fi-rr-document-signed mb-3 text-5xl text-gray-700"></i>
+                    <h2 class="mt-2 font-custom text-2xl font-medium text-gray-700">Signez le contrat</h2>
+                    <p class="petit-text text-neutral-900 text-center m-5 ">
+                        Gérez aisément vos contrats/conventions directement ici. Téléchargez, envoyez vos documents pour signature, le tout dans un espace sécurisé.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="mt-[8rem] sm:mt-auto">
+        <div class="container px-6 py-12 mx-auto">
+            <h1 class="text-2xl font-semibold text-center text-gray-800 lg:text-3xl md ">Les questions récurrentes</h1>
+            <div class="mt-8 xl:mt-16 lg:flex lg:-mx-12">
+                <div class="faq-section flex-1 mt-8 lg:mx-12 lg:mt-0" id="general">
+                    <div>
+                        <button class="flex items-center focus:outline-none" onclick="toggleContent('faq1')">
+                            <i class="fi fi-br-plus flex-shrink-0 w-6 h-6 text-blue-500"></i>
+                            <span class="mx-4 text-xl">Quelles sont les heures du stage/alternance ?</span>
+                        </button>
+                        <div class="hidden transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq1">
+                            <span class="border border-blue-500"></span>
+                            <p class="max-w-3xl px-4">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
+                            </p>
+                        </div>
+                    </div>
+                    <hr class="my-8 border-gray-200 dark:border-gray-700">
+                    <div>
+                        <button class="flex items-center focus:outline-none" onclick="toggleContent('faq2')">
+                            <i class="fi fi-br-plus flex-shrink-0 w-6 h-6 text-blue-500"></i>
+                            <span class="mx-4 text-xl ">Y'a t-il des gratifications ?</span>
+                        </button>
+                        <div class="hidden transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq2">
+                            <span class="border border-blue-500"></span>
+                            <p class="max-w-3xl px-4">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
+                            </p>
+                        </div>
+                    </div>
+                    <hr class="my-8 border-gray-200 dark:border-gray-700">
+                    <div>
+                        <button class="flex items-center focus:outline-none" onclick="toggleContent('faq3')">
+                            <i class="fi fi-br-plus flex-shrink-0 w-6 h-6 text-blue-500"></i>
+                            <span class="mx-4 text-xl ">What are your opening house ?</span>
+                        </button>
+                        <div class="hidden transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq3">
+                            <span class="border border-blue-500"></span>
+                            <p class="max-w-3xl px-4  ">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
+                            </p>
+                        </div>
+                    </div>
+                    <hr class="my-8 border-gray-200 dark:border-gray-700">
+                    <div>
+                        <button class="flex items-center focus:outline-none" onclick="toggleContent('faq4')">
+                            <i class="fi fi-br-plus flex-shrink-0 w-6 h-6 text-blue-500"></i>
+                            <span class="mx-4 text-xl ">Do i need a referral ?</span>
+                        </button>
+                        <div class="hidden transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq4">
+                            <span class="border border-blue-500"></span>
+                            <p class="max-w-3xl px-4">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
+                            </p>
+                        </div>
+                    </div>
+                    <hr class="my-8 border-gray-200 dark:border-gray-700">
+                    <div>
+                        <button class="flex items-center focus:outline-none" onclick="toggleContent('faq5')">
+                            <i class="fi fi-br-plus flex-shrink-0 w-6 h-6 text-blue-500"></i>
+                            <span class="mx-4 text-xl">
+                                Is the cost of the appoinment covered by private health insurance ?
+                            </span>
+                        </button>
+                        <div class="hidden transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq5">
+                            <span class="border border-blue-500"></span>
+                            <p class="max-w-3xl px-4">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

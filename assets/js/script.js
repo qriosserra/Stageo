@@ -31,6 +31,42 @@ function setFormAction(action) {
     // form.submit(); // Soumettez le formulaire
 }
 
+//Karim
+function setupDropdown(dropdownButtonId, dropdownContentId) {
+    let dropdownButton = document.getElementById(dropdownButtonId);
+    let dropdownContent = document.getElementById(dropdownContentId);
+    alert(dropdownButtonId)
+
+    dropdownButton.addEventListener("click", function (e) {
+        if (window.innerWidth < 768) {
+            e.preventDefault();
+        }
+    });
+
+    dropdownButton.addEventListener("mouseenter", function () {
+        if (window.innerWidth >= 768) {
+            dropdownContent.classList.add("active");
+        }
+    });
+
+    dropdownButton.addEventListener("mouseleave", function () {
+        if (window.innerWidth >= 768) {
+            setTimeout(() => {
+                if (!dropdownContent.matches(":hover")) {
+                    dropdownContent.classList.remove("active");
+                }
+            },10);
+        }
+    });
+    dropdownContent.addEventListener("mouseenter", function () {
+        dropdownContent.classList.add("active");
+    });
+
+    dropdownContent.addEventListener("mouseleave", function () {
+        dropdownContent.classList.remove("active");
+    });
+}
+
 const buttons = document.querySelectorAll("[class*='button-']");
 for (const button of buttons) {
     button.addEventListener("click", rippleEffect);
@@ -43,7 +79,30 @@ profilePictureInput.onchange = () => {
     profilePicture.src = URL.createObjectURL(profilePictureInput.files[0]);
 }
 
-window.onload = function() {
-    var shadowRoot = document.querySelector('spline-viewer').shadowRoot;
-    shadowRoot.querySelector('#logo').remove();
+document.addEventListener("DOMContentLoaded", function () {
+    //Karim
+    const toggleButton = document.querySelector("[data-collapse-toggle='navbar-sticky']");
+    const navbar = document.getElementById("navbar-sticky");
+
+    toggleButton.addEventListener("click", function () {
+        navbar.classList.toggle("hidden");
+    });
+
+    setupDropdown("dropdownOffres", "dropdownContentOffres");
+    setupDropdown("dropdownButtonEntreprise", "dropdownContentEntreprise");
+    setupDropdown("dropdownButtonMission", "dropdownContentMission");
+});
+
+//Karim
+function toggleContent(id) {
+    const contents = document.querySelectorAll(".toggleable-content");
+    const isContentCurrentlyHidden = document.getElementById(id).classList.contains("hidden");
+
+    contents.forEach(content => {
+        content.classList.add("hidden");
+    });
+    if (isContentCurrentlyHidden) {
+        document.getElementById(id).classList.remove("hidden");
+        document.getElementById(id).classList.add("flex");
+    }
 }

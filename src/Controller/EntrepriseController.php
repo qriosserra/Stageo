@@ -555,7 +555,7 @@ class EntrepriseController
             (new OffreRepository())->delete($condition);
             return new Response(
                 action: Action::HOME,
-            );
+            );  
         }
         else{
             throw new ControllerException(
