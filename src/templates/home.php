@@ -13,6 +13,7 @@ include "macros/offre.php";
  * @var Offre[] $offres
  */
 ?>
+
 <main class="mt-[8rem]">
     <section class="w-full h-[35rem] sm:h-[29rem] border-b">
         <h1 class="mt-16 text-center font-bold leading-[3rem] font-custom text-gray-700 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-6xl">
@@ -30,7 +31,7 @@ include "macros/offre.php";
             Avec la participation du CFA Sud Montpellier, Univerisité de Montpellier et l'IUT Montpellier/Sète
         </span>
     </section>
-    <section class="w-full md:h-[38rem] mt-[5rem] md:mt-auto h-[64rem] border-b flex flex-col justify-center items-center">
+    <section class="section-2 w-full md:h-[38rem] mt-[5rem] md:mt-auto h-[64rem] border-b flex flex-col justify-center items-center">
         <div>
             <h4 class="second-titre mt-4 text-center font-bold leading-[3rem]  font-custom text-gray-700
             text-1xl sm:text-2xl md:text-1xl lg:text-2xl xl:text-3xl">
@@ -82,7 +83,7 @@ include "macros/offre.php";
                             <i class="fi fi-br-plus flex-shrink-0 w-6 h-6 text-blue-500"></i>
                             <span class="mx-4 text-xl">Quelles sont les heures du stage/alternance ?</span>
                         </button>
-                        <div class="hidden transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq1">
+                        <div class="hiddene transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq1">
                             <span class="border border-blue-500"></span>
                             <p class="max-w-3xl px-4">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
@@ -95,7 +96,7 @@ include "macros/offre.php";
                             <i class="fi fi-br-plus flex-shrink-0 w-6 h-6 text-blue-500"></i>
                             <span class="mx-4 text-xl ">Y'a t-il des gratifications ?</span>
                         </button>
-                        <div class="hidden transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq2">
+                        <div class="hiddene transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq2">
                             <span class="border border-blue-500"></span>
                             <p class="max-w-3xl px-4">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
@@ -108,7 +109,7 @@ include "macros/offre.php";
                             <i class="fi fi-br-plus flex-shrink-0 w-6 h-6 text-blue-500"></i>
                             <span class="mx-4 text-xl ">What are your opening house ?</span>
                         </button>
-                        <div class="hidden transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq3">
+                        <div class="hiddene transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq3">
                             <span class="border border-blue-500"></span>
                             <p class="max-w-3xl px-4  ">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
@@ -121,7 +122,7 @@ include "macros/offre.php";
                             <i class="fi fi-br-plus flex-shrink-0 w-6 h-6 text-blue-500"></i>
                             <span class="mx-4 text-xl ">Do i need a referral ?</span>
                         </button>
-                        <div class="hidden transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq4">
+                        <div class="hiddene transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq4">
                             <span class="border border-blue-500"></span>
                             <p class="max-w-3xl px-4">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
@@ -136,7 +137,7 @@ include "macros/offre.php";
                                 Is the cost of the appoinment covered by private health insurance ?
                             </span>
                         </button>
-                        <div class="hidden transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq5">
+                        <div class="hiddene transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq5">
                             <span class="border border-blue-500"></span>
                             <p class="max-w-3xl px-4">
                                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
@@ -147,4 +148,15 @@ include "macros/offre.php";
             </div>
         </div>
     </section>
+    <style>
+        @media screen and (min-width: 768px) and (max-width: 784px) {
+            .section-2 {
+                margin-top: 10rem;
+            }
+        }
+        .hiddene {
+            display: none;
+            transition: all 0.5s ease-in-out;
+        }
+    </style>
 </main>
