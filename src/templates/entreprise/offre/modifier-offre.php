@@ -22,12 +22,16 @@ include __DIR__ . "/../../macros/offre.php";
         <?=field("secteur", "Secteur de l'offre", "text", "", Pattern::NAME, true, $offre->getSecteur(), null)?>
         <?=field("thematique", "Thématique de l'offre", "text", null, Pattern::NAME,true, $offre->getThematique(), null)?>
         <?=textarea("description", "Description", "", 4, false, $offre->getDescription(), "col-span-2")?>
-        <?=textarea("taches", "Fonctions et tâches", "", 4,false,$offre->getTaches())?>
-        <?=textarea("commentaires", "Commentaires sur l'offre", "",4,false,$offre->getCommentaires())?>
+        <div class="col-span-2 sm:col-span-1">
+            <?=textarea("taches", "Fonctions et tâches", "", 4,false,$offre->getTaches())?>
+        </div>
+        <div class="col-span-2 sm:col-span-1">
+            <?=textarea("commentaires", "Commentaires sur l'offre", "",4,false,$offre->getCommentaires())?>
+        </div>
         <?=field("gratification", "Gratification par heure", "float", "", null, true, $offre->getGratification())?>
         <?=dropdown("id_unite_gratification", "Unité de gratification", null, null, $offre->getIdUniteGratification(), $unite_gratifications)?>
         <div class="flex items-center col-span-2">
-            <div class="grid grid-cols-3 gap-4 w-full">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
                 <div>
                     <input id="alternance" type="radio" value="alternance" name="emploi" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
                         <?php if ($offre->getType() === 'alternance') echo 'checked'; ?>>
