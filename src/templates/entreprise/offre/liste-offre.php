@@ -39,6 +39,7 @@ include __DIR__ . "/../../macros/offre.php";
                                 <div class="flex items-center">
                                     <input name="categoriesSelectionnees[<?= $category->getLibelle() ?>]" id="<?= $category->getIdCategorie() ?>" type="checkbox" value="<?= $category->getIdCategorie() ?>" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
                                     <label for="<?= $category->getLibelle() ?>" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" ><?= $category->getLibelle() ?></label>
+
                                 </div>
                             </li>
                         <?php endforeach ?>
