@@ -475,10 +475,10 @@ class EntrepriseController
     /**
      * @throws ControllerException
      */
-    public static function afficherFormulaireMiseAJourOffre(string $idOffre): Response
+    public static function afficherFormulaireMiseAJourOffre(string $id): Response
     {
         $user = UserConnection::getSignedInUser();
-        $offre = (new OffreRepository)->getById($idOffre);
+        $offre = (new OffreRepository)->getById($id);
         if (!$user) {
             throw new ControllerException(
                 message: "Veillez vous connecter",
@@ -508,7 +508,7 @@ class EntrepriseController
 
     public static function mettreAJourOffre() : Response
     {
-        $idOffre = $_REQUEST["idOffre"];
+        $idOffre = $_REQUEST["id"];
         $offre = (new OffreRepository)->getById($idOffre);
         $login = $_REQUEST["login"];
         $description = $_REQUEST["description"];
@@ -547,11 +547,12 @@ class EntrepriseController
         );
     }
 
-    public static function deleteOffre(string $idOffre) : Response{
-        $offre = (new OffreRepository())->getById($idOffre);
+    public static function deleteOffre() : Response{
+        $id = $_REQUEST["id"];
+        $offre = (new OffreRepository())->getById($id);
         $user = UserConnection::getSignedInUser();
         if($user and (UserConnection::isInstance(new Admin())) or (UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise())){
-            $condition = new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre);
+            $condition = new QueryCondition("id_offre",ComparisonOperator::EQUAL,$id);
             (new OffreRepository())->delete($condition);
             return new Response(
                 action: Action::HOME,

@@ -12,13 +12,10 @@ include __DIR__ . "/../../macros/offre.php";
  */
 ?>
 
-<main class="w-[64rem]">
+<main class="h-screen flex flex-col items-center justify-center">
     <?=button("Retour", "fi-rr-angle-small-left", Action::LISTE_OFFRE, "!absolute !pl-2 top-16 left-0")?>
-    <section class="bg-gray-100 py-8  flex justify-center items-center ">
-        <h5 class="align-middle"><?=$offre->getThematique()?></h5>
-    </section>
-    <section class="flex flex-col">
-        <div class="flex flex-row !space-x-9">
+    <h5 class="font-bold py-6"><?=$offre->getThematique()?></h5>
+        <div class="flex flex-row !space-x-9 max-w-50">
             <dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
                 <div class="flex flex-col pb-3">
                     <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400 underline-offset-1">Secteur</dt>
@@ -29,18 +26,25 @@ include __DIR__ . "/../../macros/offre.php";
                     <dd class="text-lg text-black font-semibold"><?=$offre->getTaches()?></dd>
                 </div>
                 <div class="flex flex-col pt-3">
+                    <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400 underline-offset-1">Description</dt>
+                    <dd class="block p-2.5 w-full text-sm text-gray-900 dark:text-white"><?=$offre->getDescription()?></dd>
+                </div>
+                <div class="flex flex-col pt-3">
+                    <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400 underline-offset-1">Commentaire</dt>
+                    <dd class="text-lg text-black font-semibold"><?=$offre->getCommentaires()?></dd>
+                </div>
+                <div class="flex flex-col pt-3">
                     <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400 underline-offset-1">Gratification</dt>
                     <dd class="text-lg text-black font-semibold"><?=$offre->getGratification()?>€ <?=$unite_gratification?>/heure</dd>
                 </div>
             </dl>
         </div>
-        <div class="grid grid-rows-2 gap-4 ">
-            <p class="flex pl-2 justify-center items-center">
-                <?=$offre->getDescription()?>
-            </p>
-            <p class="flex pl-2 justify-center items-center">
-                <?=$offre->getCommentaires()?>
-            </p>
-        </div>
-    </section>
+    <?php if(\Stageo\Lib\UserConnection::isSignedIn() and \Stageo\Lib\UserConnection::isInstance(new \Stageo\Model\Object\Entreprise) and \Stageo\Lib\UserConnection::getSignedInUser()->getIdEntreprise()==$offre->getIdEntreprise()):?>
+        <a href="<?=Action::ENTREPRISE_MODIFICATION_OFFRE_FORM->value?>&id=<?=$offre->getIdOffre()?>">
+            Modifier
+        </a>
+        <a href="<?=Action::ENTREPRISE_DELETE_OFFRE->value?>&id=<?=$offre->getIdOffre()?>">
+            Delete
+        </a>
+    <?php endif?>
 </main>

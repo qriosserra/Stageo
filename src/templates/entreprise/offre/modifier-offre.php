@@ -17,7 +17,7 @@ include __DIR__ . "/../../macros/offre.php";
 <main class="h-screen flex flex-col items-center justify-center">
     <?=button("Accueil", "fi-rr-home", Action::HOME, "!absolute !pl-2 top-16 left-0")?>
     <h5 class="font-bold py-6">Modifier une offre</h5>
-    <form class="w-[60vw] grid grid-cols-2 gap-8" action="<?=Action::ENTREPRISE_MODIFICATION_OFFRE->value?>" method="post">
+    <form class="w-[60vw] grid grid-cols-2 gap-8" action="<?=Action::ENTREPRISE_MODIFICATION_OFFRE->value?>&id=<?=$offre->getIdOffre()?>" method="post">
         <input type="hidden" name="idOffre" value="<?= $offre->getIdOffre() ?>">
         <?=field("secteur", "Secteur de l'offre", "text", "", Pattern::NAME, true, $offre->getSecteur(), null)?>
         <?=field("thematique", "Thématique de l'offre", "text", null, Pattern::NAME,true, $offre->getThematique(), null)?>
