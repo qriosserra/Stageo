@@ -47,10 +47,14 @@ class MainController
         $tabla = $option === "description"
             ? "description"
             : "secteur";
+        $offres = [];
       /*  $offres = isset($search)
             ? (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%".$search."%"))
             : (new OffreRepository)->select();*/
-
+        $categoriesSelect = [];
+        if (isset($_REQUEST['categoriesSelectionnees'])){
+            $categoriesSelect = $_REQUEST['categoriesSelectionnees'];
+        }
         if (isset($search)){
             if ($option == "Categories"){
                $categories =  (new CategorieRepository()) ->select(new QueryCondition("libelle",ComparisonOperator::LIKE,"%".$search."%"));
@@ -60,11 +64,31 @@ class MainController
                }
                foreach ($idOffres as $idOffre){
                   $offres [] =  (new OffreRepository)->getById($idOffre->getIdOffre());
+                  //$offres [] =  (new OffreRepository)->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,"%".$idOffre->getIdOffre()."%"));
                }
             }else {
-                $offres = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%".$search."%"));
+                if (sizeof($categoriesSelect) >0){
+                    $categories = [];
+                    $res = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
+                    foreach ($categoriesSelect as $category){
+                       // $categories [] =  (new DeCategorieRepository()) ->select(new QueryCondition("id_categorie",ComparisonOperator::EQUAL,"%".$category."%"));
+                        $categories [] =  (new DeCategorieRepository()) ->getByIdCategorie($category);
+                    }
+                    foreach ($res as $resu){
+                        foreach ($categories as $category){
+                            if ($resu->getIdOffre() == $category->getIdCategorie()){
+                                $offres []= $resu;
+                            }
+                        }
+                    }
+                }else {
+                    $offres = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
+                }
             }
         }else{
+            $offres = (new OffreRepository)->select();
+        }
+        if (sizeof($offres) == 0){
             $offres = (new OffreRepository)->select();
         }
         $selA = $option === "description"
@@ -76,6 +100,7 @@ class MainController
         $selC = $option === "Categories"
             ? "selected"
             : null;
+        $Categories = (new CategorieRepository()) ->select();
         return new Response(
             template: "entreprise/offre/liste-offre.php",
             params: [
@@ -84,6 +109,7 @@ class MainController
                 "selA" => $selA,
                 "selB" => $selB,
                 "selC" => $selC,
+                "Categories" => $Categories,
                 "search" => $search
             ]
         );
