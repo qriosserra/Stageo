@@ -68,16 +68,18 @@ class MainController
                }
             }else {
                 if (sizeof($categoriesSelect) >0){
-                    $categories = [];
+                    //$categories = [];
                     $res = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
                     foreach ($categoriesSelect as $category){
                        // $categories [] =  (new DeCategorieRepository()) ->select(new QueryCondition("id_categorie",ComparisonOperator::EQUAL,"%".$category."%"));
                         $categories [] =  (new DeCategorieRepository()) ->getByIdCategorie($category);
                     }
-                    foreach ($res as $resu){
-                        foreach ($categories as $category){
-                            if ($resu->getIdOffre() == $category->getIdCategorie()){
-                                $offres []= $resu;
+                    foreach ($res as $resu) {
+                        foreach ($categories as $category) {
+                            if ($category !=null) {
+                                if ($resu->getIdOffre() == $category->getIdOffre()) {
+                                    $offres [] = $resu;
+                                }
                             }
                         }
                     }
@@ -86,9 +88,6 @@ class MainController
                 }
             }
         }else{
-            $offres = (new OffreRepository)->select();
-        }
-        if (sizeof($offres) == 0){
             $offres = (new OffreRepository)->select();
         }
         $selA = $option === "description"

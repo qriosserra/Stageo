@@ -23,14 +23,6 @@ include __DIR__ . "/../../macros/offre.php";
 
 <main class="w-[64rem] flex flex-col gap-8 mt-8">
 
-
-
-
-
-
-
-
-
     <div>
         <form class="mb-3" action="<?=Action::LISTE_OFFRE->value?>" method="post">
             <div>
@@ -71,8 +63,6 @@ include __DIR__ . "/../../macros/offre.php";
             </div>
         </form>
     </div>
-
-
 
     <div class="grid grid-cols-2 gap-4 overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100">
         <?php foreach ($offres as $offre):?>
