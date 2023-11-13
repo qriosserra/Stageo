@@ -60,7 +60,8 @@ class EtudiantController
             action: Action::ETUDIANT_SIGN_IN_FORM,
             params: ["login" => $login]
         );
-        if (is_null((new EtudiantRepository)->getByLogin($login))){
+        $etudiant =(new EtudiantRepository)->getByLogin($login);
+        if (is_null($etudiant)){
             $etudiant = new Etudiant(
                 login: $login,
                 nom: $response["nom"],

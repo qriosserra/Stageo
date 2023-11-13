@@ -86,13 +86,13 @@ use Stageo\Model\Object\Etudiant;
     </style>
 </head>
 <body style="overflow-x:hidden;">
-<header >
+<header class="fixed w-full z-20 top-0 left-0">
     <?php if ($nav):?>
         <button data-drawer-target="sidenav" data-drawer-toggle="sidenav" aria-controls="sidenav" type="button" class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
             <span class="sr-only">Open sidebar</span>
             <i class="fi fi-sr-menu-burger text-2xl"></i>
         </button>
-        <nav class="bg-white fixed w-full z-20 top-0 left-0 border-b border-gray-200 dark:border-gray-200">
+        <nav class="bg-white w-full z-20 border-b border-gray-200 dark:border-gray-200">
             <div class="max-w-screen-xl flex flex-wrap md:pl-4 md:pr-4 items-center justify-between mx-auto md:p-0 p-4">
                 <a href="" class="flex items-center">
                     <img src="assets/img/logo.png" alt="logo" class="h-[1.8rem] w-[7rem] mr-3">
@@ -568,7 +568,7 @@ use Stageo\Model\Object\Etudiant;
         <!--                        <button type="button" data-dropdown-toggle="language-dropdown" class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:hover:text-white dark:text-gray-400 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600">-->
         <!--                            <img src="" class="h-6 w-6 rounded-full mt-0.5" alt="">-->
         <!--                        </button>-->
-        <!--                        <!-- Dropdown -->-->
+        <!--                        Dropdown -->
         <!--                        <div class="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700" id="language-dropdown">-->
         <!--                            <ul class="py-1" role="none">-->
         <!--                                <li>-->
