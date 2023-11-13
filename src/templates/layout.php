@@ -94,7 +94,7 @@ use Stageo\Model\Object\Etudiant;
         </button>
         <nav class="bg-white w-full z-20 border-b border-gray-200 dark:border-gray-200">
             <div class="max-w-screen-xl flex flex-wrap md:pl-4 md:pr-4 items-center justify-between mx-auto md:p-0 p-4">
-                <a href="" class="flex items-center">
+                <a href="<?=Action::HOME->value?>" class="flex items-center">
                     <img src="assets/img/logo.png" alt="logo" class="h-[1.8rem] w-[7rem] mr-3">
                 </a>
                 <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">

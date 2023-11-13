@@ -21,7 +21,8 @@ class AdminController
     public function dashboard(): Response
     {
         return new Response(
-            template: "admin/dashboard.php"
+            template: "admin/dashboard.php",
+            params:["title"=>"dashboard"]
         );
     }
 
