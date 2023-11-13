@@ -50,7 +50,7 @@ include __DIR__ . "/../macros/breadcrumb.php";
 
 <body class="bg-gray-100">
     <nav class="flex justify-between items-center border-b">
-        <a href="www.google.fr" class="inline-flex items-center">
+        <a href="<?=Action::HOME->value?>" class="inline-flex items-center">
             <div class="mt-3 ml-3">
                 <img src="assets/img/logo.png" class="h-[1.8rem] w-[7rem] ">
                 <p style="font-family: Montserrat;" class="text-blue-900">Pour les entreprises</p>
