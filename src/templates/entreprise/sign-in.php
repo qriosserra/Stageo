@@ -53,7 +53,7 @@ include __DIR__ . "/../macros/breadcrumb.php";
                 <?=submit("Connexion")?>
                 </div>
                 <div class="text-center">
-                <a href="<?=Action::ENTREPRISE_ADD_STEP_1_FORM->value?>">Inscrire son entreprise</a>
+                <a href="<?=Action::ENTREPRISE_SIGN_UP_FORM->value?>">Inscrire son entreprise</a>
                 <?=token($token)?>
 
                 </div>

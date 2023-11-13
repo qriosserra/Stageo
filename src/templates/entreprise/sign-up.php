@@ -1,3 +1,18 @@
+<?php
+
+use Stageo\Lib\enums\Action;
+use Stageo\Lib\enums\Pattern;
+use Stageo\Model\Object\Entreprise;
+
+include __DIR__ . "/../macros/button.php";
+include __DIR__ . "/../macros/input.php";
+include __DIR__ . "/../macros/breadcrumb.php";
+/**
+ * @var Entreprise $entreprise
+ * @var string $token
+ */
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -37,7 +52,7 @@
     <nav class="flex justify-between items-center border-b">
         <a href="www.google.fr" class="inline-flex items-center">
             <div class="mt-3 ml-3">
-                <img src="logo/logo.png" class="h-[1.8rem] w-[7rem] ">
+                <img src="assets/img/logo.png" class="h-[1.8rem] w-[7rem] ">
                 <p style="font-family: Montserrat;" class="text-blue-900">Pour les entreprises</p>
             </div>
 
