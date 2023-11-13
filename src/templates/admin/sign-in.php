@@ -1,4 +1,5 @@
 <?php
+use Stageo\Lib\enums\Pattern;
 
 use Stageo\Lib\enums\Action;
 
@@ -11,27 +12,56 @@ include __DIR__ . "/../macros/token.php";
  * @var array $pattern
  */
 ?>
-<main class="h-screen flex items-center justify-center gap-8 relative">
-    <?=button("Accueil", "fi-rr-angle-small-left", Action::HOME, "!absolute !pl-2 top-16 left-0")?>
-    <h1 class="w-[36rem]">Connection d'Admin</h1>
-    <form class="flex flex-col items-center gap-4" action="<?=Action::ADMIN_SIGN_IN->value?>" method="post">
-        <?=input("email", "Email", "text", "fi-rr-at", "required", null, $email ?? null)?>
-        <?=input("password", "Mot de passe", "password", "fi-rr-lock", "required")?>
-        <?=token($token)?>
-        <input class="button-primary" type="submit" value="Se connecter">
-    </form>
+<body class="">
+<nav class="flex justify-between items-center border-b bg-slate-50 shadow">
+        <a href="www.google.fr" class="inline-flex items-center">
+            <div class="mt-3 ml-3">
+                <img src="assets/img/logo.png" class="h-[1.8rem] w-[7rem] ">
+                <p style="font-family: Montserrat;" class="text-blue-900">Pour les admins</p>
+            </div>
+        </a>
 
-<!-- check box -->
-    <!-- Checkbox pour étudiant -->
-    <input type="checkbox" id="etudiant" onchange="redirectToLink('admin', '<?=Action::ETUDIANT_SIGN_IN_FORM->value?>')">
-    <label for="etudiant">Étudiant</label>
+    </nav>
+    <div class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
+        <h2 class="text-2xl font-bold mb-6 text-center">Connectez-vous au Centre administrateurs</h2>
+        <form class="space-y-4" action="<?=Action::ADMIN_SIGN_IN->value?>" method="post">
+            <div>
+            <?=field("email", "Email*", "email", "Entrez l'email utilisé par l'entreprise", null, true, $email ?? null)?>
 
-    <!-- Checkbox pour admin -->
-    <input type="checkbox" id="admin" disabled checked>
-    <label for="admin">Admin</label>
+            </div>
 
-    <!-- Checkbox pour entreprise -->
-    <input type="checkbox" id="entreprise" onchange="">
-    <label for="entreprise">Entreprise</label>
-<!------------------------------------------->
-</main>
+            <div>
+            <?=field("password", "Mot de passe", "password", "Entrez le mot de passe d'entreprise", Pattern::PASSWORD, true)?>
+            <?=token($token)?>
+
+            </div>
+
+            <div class="flex items-center justify-between">
+                <div class="text-sm">
+                    <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">Mot de passe oublié ?</a>
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    Connexion
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+    <footer class="bg-gray-200 ">
+
+
+        <!-- Bottom text -->
+        <div class=" border-t border-gray-300 pt-3">
+            <p class="text-gray-600 text-center">Se connecter en tant que : Etudiant, Entreprise</p>
+            <p class="text-gray-500 text-xs text-center mt-4">Copyright © 2023, Stageo « Stageo » et son logo
+                sont des branches officiel de l'IUT Montpellier/Sète.
+            </p>
+        </div>
+        </div>
+    </footer>
+</body>
