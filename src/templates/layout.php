@@ -481,6 +481,15 @@ use Stageo\Model\Object\Etudiant;
                                 </div>
                             </div>
                         </li>
+                        <?php if($user instanceof Admin) :?>
+                        <li class="relative ">
+                            <button
+                                    class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500"
+                                    id="dropdownButtonEntreprise">
+                                <a href="<?=Action::ADMIN_DASH->value?>">Dashboard</a>
+                            </button>
+                        </li>
+                        <?php endif ?>
                     </ul>
                 </div>
                 <div class="flex md:order-2">

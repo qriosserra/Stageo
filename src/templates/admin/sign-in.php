@@ -5,7 +5,6 @@ use Stageo\Lib\enums\Action;
 
 include __DIR__ . "/../macros/input.php";
 include __DIR__ . "/../macros/button.php";
-include __DIR__ . "/../macros/token.php";
 /**
  * @var string $token
  * @var string $email
@@ -14,7 +13,7 @@ include __DIR__ . "/../macros/token.php";
 ?>
 <body class="">
 <nav class="flex justify-between items-center border-b bg-slate-50 shadow">
-        <a href="www.google.fr" class="inline-flex items-center">
+    <a href="<?=Action::HOME->value?>" class="inline-flex items-center">
             <div class="mt-3 ml-3">
                 <img src="assets/img/logo.png" class="h-[1.8rem] w-[7rem] ">
                 <p style="font-family: Montserrat;" class="text-blue-900">Pour les admins</p>

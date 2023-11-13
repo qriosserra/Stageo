@@ -1,8 +1,7 @@
 <?php use Stageo\Lib\enums\Action;
 include __DIR__."/../macros/button.php";
 ?>
-<div id="dashboard" class="flex justify-between m-10 w-[75%] mx-auto h-[60vh]">
-
+<main id="dashboard" class="flex justify-between m-10 w-[75%] mx-auto h-[60vh] mt-[8rem]">
 <div id="colonne1">
     <a href="<?= Action::ADMIN_SIGN_UP_FORM->value ?>" class="button-ghost ">
         <i class="fi fi-rr-user"></i>
@@ -21,5 +20,4 @@ include __DIR__."/../macros/button.php";
         <span>Accéder la liste des offre [work in progress]</span>
     </a>
 </div>
-</div>
-
+</main>
