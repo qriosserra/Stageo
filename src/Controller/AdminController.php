@@ -20,9 +20,16 @@ class AdminController
 {
     public function dashboard(): Response
     {
-        return new Response(
-            template: "admin/dashboard.php",
-            params:["title"=>"dashboard"]
+        $user =UserConnection::getSignedInUser();
+        if ($user instanceof Admin){
+            return new Response(
+                template: "admin/dashboard.php",
+                params: ["title" => "dashboard"]
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
         );
     }
 
