@@ -32,15 +32,15 @@ use Stageo\Model\Repository\UniteGratificationRepository;
 
 class EntrepriseController
 {
-    public function addStep1Form(): Response {
+    public function signUpStep1Form(): Response {
         return new Response(
-            template: "entreprise/add-step-1.php",
+            template: "entreprise/sign-up-step-1.php",
             params: [
                 "title" => "Ajouter son entreprise",
                 "nav" => false,
                 "footer" => false,
                 "entreprise" => Session::get("entreprise"),
-                "token" => Token::generateToken(Action::ENTREPRISE_ADD_STEP_1_FORM)
+                "token" => Token::generateToken(Action::ENTREPRISE_SIGN_UP_STEP_1_FORM)
             ]
         );
     }
@@ -50,7 +50,7 @@ class EntrepriseController
      * @throws ControllerException
      * @throws InvalidTokenException
      */
-    public function addStep1():  Response
+    public function signUpStep1():  Response
     {
         $raison_sociale = $_REQUEST["raison_sociale"];
         $telephone = $_REQUEST["telephone"];
@@ -64,36 +64,36 @@ class EntrepriseController
         $entreprise->setFax($fax);
         Session::set("entreprise", $entreprise);
 
-        if (!Token::verify(Action::ENTREPRISE_ADD_STEP_1_FORM, $_REQUEST["token"])) {
+        if (!Token::verify(Action::ENTREPRISE_SIGN_UP_STEP_1_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
         }
-        if (Token::isTimeout(Action::ENTREPRISE_ADD_STEP_1_FORM)) {
+        if (Token::isTimeout(Action::ENTREPRISE_SIGN_UP_STEP_1_FORM)) {
             throw new TokenTimeoutException(
-                action: Action::ENTREPRISE_ADD_STEP_1_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_1_FORM
             );
         }
         if (!Validate::isPhoneNumber($telephone)) {
             throw new ControllerException(
                 message: "Le numéro de téléphone n'est pas valide",
-                action: Action::ENTREPRISE_ADD_STEP_1_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_1_FORM
             );
         }
         if (!Validate::isPhoneNumber($fax)) {
             throw new ControllerException(
                 message: "Le numéro de fax n'est pas valide",
-                action: Action::ENTREPRISE_ADD_STEP_1_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_1_FORM
             );
         }
         if (!Validate::isName($raison_sociale)) {
             throw new ControllerException(
                 message: "Le nom de l'entreprise n'est pas valide",
-                action: Action::ENTREPRISE_ADD_STEP_1_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_1_FORM
             );
         }
         if (!Validate::isUrl($site)) {
             throw new ControllerException(
                 message: "L'url du site n'est pas valide",
-                action: Action::ENTREPRISE_ADD_STEP_1_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_1_FORM
             );
         }
 
@@ -102,10 +102,10 @@ class EntrepriseController
         );
     }
 
-    public function addStep2Form(): Response
+    public function signUpStep2Form(): Response
     {
         return new Response(
-            template: "entreprise/add-step-2.php",
+            template: "entreprise/sign-up-step-2.php",
             params: [
                 "title" => "Ajouter son entreprise",
                 "nav" => false,
@@ -119,7 +119,7 @@ class EntrepriseController
         );
     }
 
-    public function addStep2(): Response
+    public function signUpStep2(): Response
     {
         $siret = $_REQUEST["siret"];
         $code_naf = $_REQUEST["code_naf"];
@@ -179,28 +179,22 @@ class EntrepriseController
         );
     }
 
-    public function addStep3Form(): Response
+    public function signUpStep3Form(): Response
     {
-        /**
-         * @var DistributionCommune $distribution
-         */
-        foreach ((new DistributionCommuneRepository)->select() as $distribution) {
-            $distributions_commune[] = "{$distribution->getCommune()} ({$distribution->getCodePostal()})";
-        }
         return new Response(
-            template: "entreprise/add-step-3.php",
+            template: "entreprise/sign-up-step-3.php",
             params: [
                 "title" => "Ajouter son entreprise",
                 "nav" => false,
                 "footer" => false,
                 "entreprise" => Session::get("entreprise"),
-                "distributions_commune" => $distributions_commune,
+                "distributions_commune" => array_map(fn($distribution) => "{$distribution->getCommune()} ({$distribution->getCodePostal()})", (new DistributionCommuneRepository)->select()),
                 "token" => Token::generateToken(Action::ENTREPRISE_ADD_STEP_3_FORM)
             ]
         );
     }
 
-    public function addStep3(): Response
+    public function signUpStep3(): Response
     {
         $numero_voie = $_REQUEST["numero_voie"];
         $id_distribution_commune = $_REQUEST["id_distribution_commune"];
@@ -236,10 +230,10 @@ class EntrepriseController
         );
     }
 
-    public function addStep4Form(): Response
+    public function signUpStep4Form(): Response
     {
         return new Response(
-            template: "entreprise/add-step-4.php",
+            template: "entreprise/sign-up-step-4.php",
             params: [
                 "title" => "Ajouter son entreprise",
                 "nav" => false,
@@ -250,7 +244,7 @@ class EntrepriseController
         );
     }
 
-    public function addStep4(): Response
+    public function signUpsignUpStep4(): Response
     {
         $email = $_REQUEST["email"];
         $password = $_REQUEST["password"];

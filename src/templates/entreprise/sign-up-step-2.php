@@ -18,7 +18,7 @@ include __DIR__ . "/../macros/breadcrumb.php";
 
 <main class="h-screen flex flex-col items-center justify-center gap-2 relative">
     <?=breadcrumb(2, [
-        "Information générale" => Action::ENTREPRISE_ADD_STEP_1_FORM->value,
+        "Information générale" => Action::ENTREPRISE_SIGN_UP_STEP_1_FORM->value,
         "Détails techniques" => Action::ENTREPRISE_ADD_STEP_2_FORM->value,
         "Adresse postale" => Action::ENTREPRISE_ADD_STEP_3_FORM->value,
         "Authentification" => Action::ENTREPRISE_ADD_STEP_4_FORM->value

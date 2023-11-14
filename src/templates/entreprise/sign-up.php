@@ -19,7 +19,6 @@ include __DIR__ . "/../macros/button.php";
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
     <style>
         .btn3 {
             transform: scale(1);
@@ -54,21 +53,18 @@ include __DIR__ . "/../macros/button.php";
                 <img src=" assets/img/logo.png" class="h-[1.8rem] w-[7rem] ">
                 <p style="font-family: Montserrat;" class="text-blue-900">Pour les entreprises</p>
             </div>
-
-
         </a>
         <button class="btn3 border  uppercase font-semibold tracking-wider mr-5 leading-none  rounded"
             type="button">
             <span class="absolute inset-0 "></span>
-            <a  href="<?=Action::ENTREPRISE_SIGN_IN_FORM->value?>" style="background-color: rgba(21, 129, 230, 0.75);" class="relative px-12 py-3 rounded  text-white text-1xl font-bold ">
+            <a  href="<?=Action::ENTREPRISE_SIGN_IN_FORM->value?>" class="relative px-12 py-3 rounded bg-blue-500 text-white text-1xl font-bold">
                 Se connecter
             </a>
         </button>
     </nav>
 
 
-    <div class="flex items-center justify-center h-40 bg-cover font-bold text-white"
-        style="background: linear-gradient(120deg, rgba(21, 129, 230, 0.75) 0%, rgba(0, 45, 141, 0.75) 50%, rgba(1, 7, 68, 0.75) 100%), url('/path-to-your-image.jpg');">
+    <div class="flex items-center justify-center h-40 bg-gradient-to-r from-cyan-500 via-blue-800 to-blue-400 font-bold text-white">
         <span class="text-lg sm:text-xl lg:text-2xl xl:text-4xl">Créer votre compte entreprise</span>
     </div>
 
@@ -77,7 +73,7 @@ include __DIR__ . "/../macros/button.php";
             Présentez-vous là où ils cherchent et démontrez-leur les raisons pour lesquelles rejoindre votre équipe
             serait une opportunité incontournable pour eux.</p>
 
-        <form class="bg-white p-6 rounded shadow-md border-t-4 border-blue-500">
+        <form class="bg-white p-6 rounded shadow-md border-t-4 border-blue-500" method="post">
 
             <div class="mb-4">
             <?=field("raison_sociale", "Nom de l'entreprise*", "text", "Entrez le nom de l'entreprise", Pattern::NAME, true, $entreprise->getRaisonSociale())?>
@@ -118,9 +114,6 @@ include __DIR__ . "/../macros/button.php";
     </div>
 
     <footer class="bg-gray-100 mt-10">
-
-
-        <!-- Bottom text -->
         <div class="mt-4 border-t border-gray-300 pt-3">
             <p class="text-gray-600 text-center">Se connecter en tant que : Etudiant, Entreprise</p>
             <p class="text-gray-500 text-xs text-center mt-4">Copyright © 2023, Stageo « Stageo » et son logo
