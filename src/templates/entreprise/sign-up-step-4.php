@@ -15,11 +15,11 @@ include __DIR__ . "/../macros/breadcrumb.php";
 <main class="h-screen flex items-center justify-center gap-2 relative">
     <?=breadcrumb(4, [
         "Information générale" => Action::ENTREPRISE_SIGN_UP_STEP_1_FORM->value,
-        "Détails techniques" => Action::ENTREPRISE_ADD_STEP_2_FORM->value,
-        "Adresse postale" => Action::ENTREPRISE_ADD_STEP_3_FORM->value,
-        "Authentification" => Action::ENTREPRISE_ADD_STEP_4_FORM->value
+        "Détails techniques" => Action::ENTREPRISE_SIGN_UP_STEP_2_FORM->value,
+        "Adresse postale" => Action::ENTREPRISE_SIGN_UP_STEP_3_FORM->value,
+        "Authentification" => Action::ENTREPRISE_SIGN_UP_STEP_4_FORM->value
     ])?>
-    <form class="bg-white p-12 text-gray-600 rounded-lg shadow-lg grid gap-8" action="<?=Action::ENTREPRISE_ADD_STEP_4->value?>" method="post">
+    <form class="bg-white p-12 text-gray-600 rounded-lg shadow-lg grid gap-8" action="<?=Action::ENTREPRISE_SIGN_UP_STEP_4->value?>" method="post">
         <h4 class="sm:col-span-2">4. Authentification</h4>
         <?=field("email", "Email*", "email", "Entrez un email de contact", null, true, $entreprise->getUnverifiedEmail(), "sm:col-span-2")?> // FIXME : EMAIL enlever, et mis dans sign-up.php/entreprise
         <?=field("password", "Mot de passe*", "password", "Entrez un mot de passe", null, true)?> // FIXME : MPD enlever, et mis dans sign-up.php/entreprise

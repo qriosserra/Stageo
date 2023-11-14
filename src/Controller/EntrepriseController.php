@@ -98,7 +98,7 @@ class EntrepriseController
         }
 
         return new Response(
-            action: Action::ENTREPRISE_ADD_STEP_2_FORM
+            action: Action::ENTREPRISE_SIGN_UP_STEP_2_FORM
         );
     }
 
@@ -114,7 +114,7 @@ class EntrepriseController
                 "taille_entreprises" => array_column(array_map(fn($e) => $e->toArray(), (new TailleEntrepriseRepository)->select()), "libelle", "id_taille_entreprise"),
                 "type_structures" => array_column(array_map(fn($e) => $e->toArray(), (new TypeStructureRepository())->select()), "libelle", "id_type_structure"),
                 "statut_juridiques" => array_column(array_map(fn($e) => $e->toArray(), (new StatutJuridiqueRepository())->select()), "libelle", "id_statut_juridique"),
-                "token" => Token::generateToken(Action::ENTREPRISE_ADD_STEP_2_FORM)
+                "token" => Token::generateToken(Action::ENTREPRISE_SIGN_UP_STEP_2_FORM)
             ]
         );
     }
@@ -135,47 +135,47 @@ class EntrepriseController
         $entreprise->setIdStatutJuridique($id_statut_juridique);
         Session::set("entreprise", $entreprise);
 
-        if (!Token::verify(Action::ENTREPRISE_ADD_STEP_2_FORM, $_REQUEST["token"])) {
+        if (!Token::verify(Action::ENTREPRISE_SIGN_UP_STEP_2_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
         }
-        if (Token::isTimeout(Action::ENTREPRISE_ADD_STEP_2_FORM)) {
+        if (Token::isTimeout(Action::ENTREPRISE_SIGN_UP_STEP_2_FORM)) {
             throw new TokenTimeoutException(
-                action: Action::ENTREPRISE_ADD_STEP_2_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_2_FORM
             );
         }
         if (!Validate::isSiret($siret)) {
             throw new ControllerException(
                 message: "Le numéro de SIRET n'est pas valide",
-                action: Action::ENTREPRISE_ADD_STEP_2_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_2_FORM
             );
         }
         if (!Validate::isCodeNaf($code_naf)) {
             throw new ControllerException(
                 message: "Le code NAF n'est pas valide",
-                action: Action::ENTREPRISE_ADD_STEP_2_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_2_FORM
             );
         }
         if (is_null((new TailleEntrepriseRepository)->getTailleEntrepriseById($id_taille_entreprise))) {
             throw new ControllerException(
                 message: "La taille de l'entreprise n'est pas valide",
-                action: Action::ENTREPRISE_ADD_STEP_2_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_2_FORM
             );
         }
         if (is_null((new TypeStructureRepository)->getTypeStructureById($id_type_structure))) {
             throw new ControllerException(
                 message: "Le type de structure n'est pas valide",
-                action: Action::ENTREPRISE_ADD_STEP_2_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_2_FORM
             );
         }
         if (is_null((new StatutJuridiqueRepository)->getStatutJuridiqueById($id_statut_juridique))) {
             throw new ControllerException(
                 message: "Le statut juridique n'est pas valide",
-                action: Action::ENTREPRISE_ADD_STEP_2_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_2_FORM
             );
         }
 
         return new Response(
-            action: Action::ENTREPRISE_ADD_STEP_3_FORM
+            action: Action::ENTREPRISE_SIGN_UP_STEP_3_FORM
         );
     }
 
@@ -189,7 +189,7 @@ class EntrepriseController
                 "footer" => false,
                 "entreprise" => Session::get("entreprise"),
                 "distributions_commune" => array_map(fn($distribution) => "{$distribution->getCommune()} ({$distribution->getCodePostal()})", (new DistributionCommuneRepository)->select()),
-                "token" => Token::generateToken(Action::ENTREPRISE_ADD_STEP_3_FORM)
+                "token" => Token::generateToken(Action::ENTREPRISE_SIGN_UP_STEP_3_FORM)
             ]
         );
     }
@@ -204,29 +204,29 @@ class EntrepriseController
         $entreprise->setIdDistributioncommune($id_distribution_commune);
         Session::set("entreprise", $entreprise);
 
-        if (!Token::verify(Action::ENTREPRISE_ADD_STEP_3_FORM, $_REQUEST["token"])) {
+        if (!Token::verify(Action::ENTREPRISE_SIGN_UP_STEP_3_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
         }
-        if (Token::isTimeout(Action::ENTREPRISE_ADD_STEP_3_FORM)) {
+        if (Token::isTimeout(Action::ENTREPRISE_SIGN_UP_STEP_3_FORM)) {
             throw new TokenTimeoutException(
-                action: Action::ENTREPRISE_ADD_STEP_3_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_3_FORM
             );
         }
         if (!Validate::isName($numero_voie)) {
             throw new ControllerException(
                 message: "Le numéro et la voie n'est pas valide",
-                action: Action::ENTREPRISE_ADD_STEP_3_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_3_FORM
             );
         }
         if (is_null((new DistributionCommuneRepository)->getById($id_distribution_commune))) {
             throw new ControllerException(
                 message: "Choisissez une distribution de commune valide",
-                action: Action::ENTREPRISE_ADD_STEP_3_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_3_FORM
             );
         }
 
         return new Response(
-            action: Action::ENTREPRISE_ADD_STEP_4_FORM
+            action: Action::ENTREPRISE_SIGN_UP_STEP_4_FORM
         );
     }
 
@@ -239,12 +239,12 @@ class EntrepriseController
                 "nav" => false,
                 "footer" => false,
                 "entreprise" => Session::get("entreprise"),
-                "token" => Token::generateToken(Action::ENTREPRISE_ADD_STEP_4_FORM)
+                "token" => Token::generateToken(Action::ENTREPRISE_SIGN_UP_STEP_4_FORM)
             ]
         );
     }
 
-    public function signUpsignUpStep4(): Response
+    public function signUpStep4(): Response
     {
         $email = $_REQUEST["email"];
         $password = $_REQUEST["password"];
@@ -253,30 +253,30 @@ class EntrepriseController
         $entreprise->setEmail($email);
         Session::set("entreprise", $entreprise);
 
-        if (!Token::verify(Action::ENTREPRISE_ADD_STEP_4_FORM, $_REQUEST["token"])) {
+        if (!Token::verify(Action::ENTREPRISE_SIGN_UP_STEP_4_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
         }
-        if (Token::isTimeout(Action::ENTREPRISE_ADD_STEP_4_FORM)) {
+        if (Token::isTimeout(Action::ENTREPRISE_SIGN_UP_STEP_4_FORM)) {
             throw new TokenTimeoutException(
-                action: Action::ENTREPRISE_ADD_STEP_4_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_4_FORM
             );
         }
         if (!Validate::isEmail($email)) {
             throw new ControllerException(
                 message: "L'email n'est pas valide",
-                action: Action::ENTREPRISE_ADD_STEP_4_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_4_FORM
             );
         }
         if (!Validate::isPassword($password)) {
             throw new ControllerException(
                 message: "Le mot de passe n'est pas valide",
-                action: Action::ENTREPRISE_ADD_STEP_4_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_4_FORM
             );
         }
         if ($password !== $_REQUEST["confirm"]) {
             throw new ControllerException(
                 message: "Les mots de passe ne correspondent pas",
-                action: Action::ENTREPRISE_ADD_STEP_4_FORM
+                action: Action::ENTREPRISE_SIGN_UP_STEP_4_FORM
             );
         }
 
