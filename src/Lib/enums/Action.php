@@ -37,4 +37,6 @@ enum Action: string
     case ADMIN_SIGN_IN = "?c=admin&a=signIn";
     case ADMIN_DASH = "?c=admin&a=dashboard";
     case ABOUT = "?a=about";
+    case ETUDIANT_CONVENTION_ADD_FORM = "?c=etudiant&a=conventionAddForm";
+    case ETUDIANT_CONVENTION_ADD = "?c=etudiant&a=conventionAdd";
 }
