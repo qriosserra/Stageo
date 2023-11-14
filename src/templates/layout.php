@@ -557,7 +557,7 @@ use Stageo\Model\Object\Etudiant;
         </header>
         <?php require_once $template?>
         <?php if ($footer):?>
-            <footer class="bg-gray-100">
+            <footer class="bg-slate-50">
                 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
                         <div class="space-y-4">
