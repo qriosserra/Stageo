@@ -1,6 +1,18 @@
 
 
 document.addEventListener('DOMContentLoaded', function () {
+
+    var flashMessages = document.querySelectorAll('.flash-messages-container');
+    function hideFlashMessage(message) {
+        message.classList.add('!hidden');
+        console.log("dans la fonction")
+    }
+    console.log("dans le listeneur");
+    flashMessages.forEach(function(message) {
+        setTimeout(function() {
+            console.log("dans le minuteur");hideFlashMessage(message); }, 10000);
+    });
+
     const toggleButton = document.querySelector('[data-collapse-toggle="navbar-sticky"]');
     const navbar = document.getElementById('navbar-sticky');
 
@@ -108,4 +120,3 @@ let profilePictureInput = document.querySelector("#profilePicture");
 profilePictureInput.onchange = () => {
     profilePicture.src = URL.createObjectURL(profilePictureInput.files[0]);
 }
-

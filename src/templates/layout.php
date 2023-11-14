@@ -624,5 +624,6 @@ use Stageo\Model\Object\Etudiant;
                 </div>
             </footer>
         <?php endif ?>
+    <p id="cssgenerator" class="!hidden"></p>
     </body>
 </html>
