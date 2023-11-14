@@ -23,7 +23,7 @@ include __DIR__ . "/../macros/breadcrumb.php";
     ])?>
     <form class="bg-white p-12 text-gray-600 rounded-lg shadow-lg grid gap-8" action="<?=Action::ENTREPRISE_ADD_STEP_1->value?>" method="post">
         <h4 class="sm:col-span-2">1. Information générale</h4>
-        <?=field("raison_sociale", "Nom de l'entreprise*", "text", "Entrez le nom de l'entreprise", Pattern::NAME, true, $entreprise->getRaisonSociale())?>
+        <?=field("raison_sociale", "Nom de l'entreprise*", "text", "Entrez le nom de l'entreprise", Pattern::NAME, true, $entreprise->getRaisonSociale())?> // FIXME : Nom entreprise enlever, et mis dans sign-up.php/entreprise
         <?=field("telephone", "Téléphone", "text", "0412345678", Pattern::PHONE_NUMBER, false, $entreprise->getTelephone())?>
         <?=field("site", "Site web", "text", "www.example.com", Pattern::URL, false, $entreprise->getSite())?>
         <?=field("fax", "Fax", "text", "Entrez un numéro de fax", Pattern::PHONE_NUMBER, false, $entreprise->getFax())?>

@@ -21,9 +21,9 @@ include __DIR__ . "/../macros/breadcrumb.php";
     ])?>
     <form class="bg-white p-12 text-gray-600 rounded-lg shadow-lg grid gap-8" action="<?=Action::ENTREPRISE_ADD_STEP_4->value?>" method="post">
         <h4 class="sm:col-span-2">4. Authentification</h4>
-        <?=field("email", "Email*", "email", "Entrez un email de contact", null, true, $entreprise->getUnverifiedEmail(), "sm:col-span-2")?>
-        <?=field("password", "Mot de passe*", "password", "Entrez un mot de passe", null, true)?>
-        <?=field("confirm", "Confirmer le mot de passe*", "password", "Confirmez le mot de passe", null, true)?>
+        <?=field("email", "Email*", "email", "Entrez un email de contact", null, true, $entreprise->getUnverifiedEmail(), "sm:col-span-2")?> // FIXME : EMAIL enlever, et mis dans sign-up.php/entreprise
+        <?=field("password", "Mot de passe*", "password", "Entrez un mot de passe", null, true)?> // FIXME : MPD enlever, et mis dans sign-up.php/entreprise
+        <?=field("confirm", "Confirmer le mot de passe*", "password", "Confirmez le mot de passe", null, true)?> // FIXME : MPD enlever, et mis dans sign-up.php/entreprise
         <div class="sm:col-span-2">
             <p>Le mot de passe doit au moins contenir:</p>
             <ul>

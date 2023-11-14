@@ -1,15 +1,14 @@
 <?php
+use Stageo\Lib\enums\Pattern;
 
 use Stageo\Lib\enums\Action;
-use Stageo\Lib\enums\Pattern;
-use Stageo\Model\Object\Entreprise;
 
-include __DIR__ . "/../macros/button.php";
 include __DIR__ . "/../macros/input.php";
-include __DIR__ . "/../macros/breadcrumb.php";
+include __DIR__ . "/../macros/button.php";
 /**
- * @var Entreprise $entreprise
  * @var string $token
+ * @var string $email
+ * @var array $pattern
  */
 ?>
 
@@ -50,20 +49,20 @@ include __DIR__ . "/../macros/breadcrumb.php";
 
 <body class="bg-gray-100">
     <nav class="flex justify-between items-center border-b">
-        <a href="<?=Action::HOME->value?>" class="inline-flex items-center">
+        <a href="www.google.fr" class="inline-flex items-center">
             <div class="mt-3 ml-3">
-                <img src="assets/img/logo.png" class="h-[1.8rem] w-[7rem] ">
+                <img src=" assets/img/logo.png" class="h-[1.8rem] w-[7rem] ">
                 <p style="font-family: Montserrat;" class="text-blue-900">Pour les entreprises</p>
             </div>
 
 
         </a>
-        <button class="btn3 border border-black uppercase font-semibold tracking-wider mr-5 leading-none  rounded"
+        <button class="btn3 border  uppercase font-semibold tracking-wider mr-5 leading-none  rounded"
             type="button">
             <span class="absolute inset-0 "></span>
-            <div style="background-color: rgba(21, 129, 230, 0.75);" class="relative px-12 py-3  text-white text-1xl font-bold">
+            <a  href="<?=Action::ENTREPRISE_SIGN_IN_FORM->value?>" style="background-color: rgba(21, 129, 230, 0.75);" class="relative px-12 py-3 rounded  text-white text-1xl font-bold ">
                 Se connecter
-            </div>
+            </a>
         </button>
     </nav>
 
@@ -81,18 +80,19 @@ include __DIR__ . "/../macros/breadcrumb.php";
         <form class="bg-white p-6 rounded shadow-md border-t-4 border-blue-500">
 
             <div class="mb-4">
-                <input type="text" name="company" placeholder="Nom de l'Entreprise" class="w-full p-2 border rounded">
+            <?=field("raison_sociale", "Nom de l'entreprise*", "text", "Entrez le nom de l'entreprise", Pattern::NAME, true, $entreprise->getRaisonSociale())?>
             </div>
             <div class="mb-4">
-                <input type="email" name="email" placeholder="Adresse e-mail professionnelle"
-                    class="w-full p-2 border rounded">
+            <?=field("email", "Email*", "email", "Entrez un email de contact", null, true, $entreprise->getUnverifiedEmail(), "sm:col-span-2")?>
+
+                    
             </div>
             <div class="mb-4">
-                <input type="password" name="password" placeholder="Mot de passe" class="w-full p-2 border rounded">
+            <?=field("password", "Mot de passe*", "password", "Entrez un mot de passe", null, true)?>
             </div>
             <div class="mb-4">
-                <input type="password" name="password" placeholder="Confirmer votre Mot de passe"
-                    class="w-full p-2 border rounded">
+            <?=field("confirm", "Confirmer le mot de passe*", "password", "Confirmez le mot de passe", null, true)?>
+
             </div>
             <div class="mb-4">
                 <label class="block">
@@ -111,7 +111,8 @@ include __DIR__ . "/../macros/breadcrumb.php";
                     class="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-700 transition-colors">S'inscrire</button>
             </div>
             <div class="text-center">
-                <a href="#" class="text-sm text-blue-600 hover:underline">Vous avez déjà un compte ? Se connecter</a>
+
+            <a href="<?=Action::ENTREPRISE_SIGN_IN_FORM->value?>" class="text-sm text-blue-600 hover:underline">Vous avez déjà un compte ? Se connecter</a>
             </div>
         </form>
     </div>
