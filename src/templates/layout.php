@@ -674,7 +674,9 @@ use Stageo\Model\Object\Etudiant;
                 <div class="space-y-4 mt-8 sm:mt-0">
                     <h2 class="text-lg font-semibold text-gray-800">Travailler avec nous</h2>
                     <ul class="text-gray-600 space-y-2">
-                        <a href="">Annonceurs</a>
+                        <li>
+                            <a href="">Annonceurs</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -685,6 +687,7 @@ use Stageo\Model\Object\Etudiant;
                 <p class="text-gray-500 text-xs text-center mt-4">
                     Copyright © 2023, Stageo « Stageo » et son logo sont des branches officiel de l'IUT Montpellier/Sète.
                 </p>
+                <p class="text-gray-500 text-xs text-center mt-4"><a href="<?=Action::ADMIN_SIGN_IN_FORM->value ?>">Espace Admin</a></p>
             </div>
         </div>
     </footer>
