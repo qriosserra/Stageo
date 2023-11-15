@@ -11,6 +11,8 @@ enum Action: string
     case SIGN_OUT = "?a=signOut";
     case ETUDIANT_SIGN_IN_FORM = "?c=etudiant&a=signInForm";
     case ETUDIANT_SIGN_IN = "?c=etudiant&a=signIn";
+    case ETUDIANT_POSTULER_OFFRE = "?c=etudiant&a=postuler";
+    case ETUDIANT_POSTULER_OFFRE_FORM = "?c=etudiant&a=afficherFormulairePostuler";
     case ENTREPRISE_ADD_STEP_1_FORM = "?c=entreprise&a=addStep1Form";
     case ENTREPRISE_ADD_STEP_1 = "?c=entreprise&a=addStep1";
     case ENTREPRISE_ADD_STEP_2_FORM = "?c=entreprise&a=addStep2Form";
