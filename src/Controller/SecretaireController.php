@@ -13,18 +13,18 @@ use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
-use Stageo\Model\Object\Admin;
+use Stageo\Model\Object\Secretaire;
 use Stageo\Model\Repository\AdminRepository;
 use Stageo\Model\Repository\SecretaireRepository;
 
-class AdminController
+class SecretaireController
 {
     public function dashboard(): Response
     {
         $user =UserConnection::getSignedInUser();
-        if ($user instanceof Admin){
+        if ($user instanceof Secretaire){
             return new Response(
-                template: "admin/dashboard.php",
+                template: "secretaire/dashboard.php",
                 params: ["title" => "dashboard"]
             );
         }
@@ -38,50 +38,40 @@ class AdminController
     {
         $password = $_REQUEST["password"];
         $email= $_REQUEST["email"];
-        $nom =$_REQUEST["nom"];
-        $prenom=$_REQUEST["prenom"];
-        if (!Token::verify(Action::ADMIN_SIGN_UP_FORM, $_REQUEST["token"]))
+        if (!Token::verify(Action::SECRETAIRE_SIGN_UP_FORM, $_REQUEST["token"]))
             throw new InvalidTokenException();
-        if (Token::isTimeout(Action::ADMIN_SIGN_UP_FORM)) {
+        if (Token::isTimeout(Action::SECRETAIRE_SIGN_UP_FORM)) {
             throw new TokenTimeoutException(
-                action: Action::ADMIN_SIGN_UP_FORM,
+                action: Action::SECRETAIRE_SIGN_UP_FORM,
                 params: [
                     "email" => $email,
-                    "nom" => $nom,
-                    "prenom" => $prenom
                 ]
             );
         }
         if (!Validate::isPassword($password)) {
             throw new ControllerException(
                 message: "Le mot de passe ne respecte pas les critères de sécurité",
-                action: Action::ADMIN_SIGN_UP_FORM,
+                action: Action::SECRETAIRE_SIGN_UP_FORM,
                 params: [
                     "email" => $email,
-                    "nom" => $nom,
-                    "prenom" => $prenom
                 ]
             );
         }
         if (!Validate::isEmail($email)) {
             throw new ControllerException(
                 message: "$email ne correspond pas à une email valide",
-                action: Action::ADMIN_SIGN_UP_FORM,
+                action: Action::SECRETAIRE_SIGN_UP_FORM,
                 params: [
                     "email" => $email,
-                    "nom" => $nom,
-                    "prenom" => $prenom
                 ]
             );
         }
         if ($password !== $_REQUEST["confirm"]) {
             throw new ControllerException(
                 message: "Les mots de passe ne correspondent pas",
-                action: Action::ADMIN_SIGN_UP_FORM,
+                action: Action::SECRETAIRE_SIGN_UP_FORM,
                 params: [
                     "email" => $email,
-                    "nom" => $nom,
-                    "prenom" => $prenom
                 ]
             );
         }
@@ -90,14 +80,12 @@ class AdminController
             content: "Inscription réalisée avec succès",
             type: FlashType::SUCCESS
         );
-        $admin = new Admin(
+        $secretaire = new Secretaire(
             email: $email,
-            nom: $nom,
-            prenom: $prenom,
             hashed_password: Password::hash($password),
         );
-        UserConnection::signIn($admin);
-        (new AdminRepository())->insert($admin);
+        UserConnection::signIn($secretaire);
+        (new SecretaireRepository())->insert($secretaire);
         return new Response(
             action: Action::HOME
         );
@@ -105,62 +93,23 @@ class AdminController
     public function signUpForm(): Response
     {
         return new Response(
-            template: "admin/sign-up.php",
+            template: "secretaire/sign-up.php",
             params: [
                 "title" => "Se connecter",
                 "nav" => false,
                 "footer" => false,
-                "token" => Token::generateToken(Action::ADMIN_SIGN_UP_FORM)
+                "token" => Token::generateToken(Action::SECRETAIRE_SIGN_UP_FORM)
             ]
         );
     }
-
-    public function signInForm(string $login = null): Response
-    {
-        return new Response(
-            template: "admin/sign-in.php",
-            params: [
-                "title" => "Se connecter",
-                "nav" => false,
-                "footer" => false,
-                "login" => $login,
-                "token" => Token::generateToken(Action::ADMIN_SIGN_IN_FORM)
-            ]
-        );
-    }
-
     /**
      * @throws TokenTimeoutException
      * @throws ControllerException
      * @throws InvalidTokenException
      */
-    public function signIn(): Response
+    public function signIn(Secretaire $secretaire, string $password): Response
     {
-        $email = $_REQUEST["email"];
-        $password = $_REQUEST["password"];
-        if (!Token::verify(Action::ADMIN_SIGN_IN_FORM, $_REQUEST["token"]))
-            throw new InvalidTokenException();
-        if (Token::isTimeout(Action::ADMIN_SIGN_IN_FORM)) {
-            throw new TokenTimeoutException(
-                action: Action::ADMIN_SIGN_IN_FORM,
-                params: ["email" => $email]
-            );
-        }
-        $admin = (new AdminRepository())->getByEmail($email);
-        if (is_null($admin)) {
-            $secretaire = (new SecretaireRepository())->getByEmail($email);
-            (new SecretaireController())->signIn($secretaire,$password);
-            if (is_null($secretaire)) {
-                throw new ControllerException(
-                    message: "Aucun compte n'existe avec ce login",
-                    action: Action::ADMIN_SIGN_IN_FORM,
-                    params: [
-                        "email" => $email
-                    ]
-                );
-            }
-        }
-        if (!Password::verify($password, $admin->getHashedPassword())) {
+        if (!Password::verify($password, $secretaire->getHashedPassword())) {
             throw new ControllerException(
                 message: "Le mot de passe est incorrect",
                 action: Action::ADMIN_SIGN_IN_FORM,
@@ -174,8 +123,7 @@ class AdminController
             content: "Connexion réalisée avec succès",
             type: FlashType::SUCCESS
         );
-        UserConnection::signIn($admin);
-        // a modifier
+        UserConnection::signIn($secretaire);
 
         return new Response(
             action: Action::HOME
