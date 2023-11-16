@@ -114,6 +114,7 @@ class EtudiantController
             params: [
                 "etudiant" => $user,
                 "offre" => (new OffreRepository)->getById($id),
+                "token" => Token::generateToken(Action::ETUDIANT_POSTULER_OFFRE_FORM)
             ]
         );
     }
