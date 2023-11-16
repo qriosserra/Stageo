@@ -54,17 +54,17 @@ class EtudiantController
         }
 
         $url = $_ENV["LDAP_API"] . "?" . http_build_query([
-            "login" => $login,
-            "password" => $password
-        ]);
+                "login" => $login,
+                "password" => $password
+            ]);
         $response = json_decode(file_get_contents($url), true);
         if (empty($response)) throw new ControllerException(
             message: "Le login ou le mot de passe est incorrect",
             action: Action::ETUDIANT_SIGN_IN_FORM,
             params: ["login" => $login]
         );
-        $etudiant =(new EtudiantRepository)->getByLogin($login);
-        if (is_null($etudiant)){
+        $etudiant = (new EtudiantRepository)->getByLogin($login);
+        if (is_null($etudiant)) {
             $etudiant = new Etudiant(
                 login: $login,
                 nom: $response["nom"],
@@ -87,94 +87,101 @@ class EtudiantController
 
     public static function afficherFormulairePostuler(string $id): Response
     {
+        if (!UserConnection::isSignedIn()) {
+            throw new ControllerException(
+                message: "Vous devez être connecté pour acceder à cette page",
+                action: Action::ETUDIANT_SIGN_IN_FORM
+            );
+        }
+        if (!UserConnection::isInstance(new Etudiant)) {
+            throw new ControllerException(
+                message: "Vous ne pouvez pas acceder à cette page",
+                action: Action::HOME
+            );
+        }
+        /**
+         * @var Etudiant $user
+         */
         $user = UserConnection::getSignedInUser();
-        $offre = (new OffreRepository())->getById($id);
-        if(!$user){
-            throw new ControllerException(
-                message: "Veillez vous connecter",
-                action: Action::HOME
-            );
-        }
-        else if (!UserConnection::isInstance(new Etudiant)) {
+        if (!(new PostulerRepository)->a_Postuler($user->getLogin(), $id)){
             throw new ControllerException(
                 message: "Vous n'avez pas à acceder à cette page",
                 action: Action::HOME
-            );
-        }
-        /*else if(!(new PostulerRepository())->a_Postuler($user->getLogin(),$id)){
-            throw new ControllerException(
-                message: "Vous n'avez pas à acceder à cette page",
-                action: Action::HOME
-            );
-        }*/
-        else {
-            return new Response(
-                template: "entreprise/offre/postuler.php",
-                params: [
-                    "etudiant" => $user,
-                    "offre" => $offre,
-                ]
-            );
-        }
-    }
-
-    public function postuler(): Response{
-        $login = $_REQUEST["login"];
-        $idOffre = $_REQUEST["id"];
-        $cv = $_FILES["cv"];
-        $lettre_motivation = $_FILES["lm"];
-        $complement = $_REQUEST["complement"];
-        if($cv["size"] == 0){
-            return new Response(
-                action:Action::ETUDIANT_POSTULER_OFFRE_FORM,
-                params:[
-                    "login" => $login,
-                    "id" => $idOffre
-                ]
-            );
-        }
-        if(UserConnection::isSignedIn() and UserConnection::isInstance(new Etudiant) and UserConnection::getSignedInUser()->getLogin()==$login){
-            $lm_chemin = null;
-            if ($cv["error"] == UPLOAD_ERR_OK) {
-                $cvFileName = "cv_" . uniqid() . "_" . basename($cv["name"]);
-                move_uploaded_file($cv["tmp_name"], "assets/document/cv/" . $cvFileName);
-                $cv_chemin = "asset/document/cv/".$cvFileName;
-            }
-            else{
-                return new Response(
-                    action:Action::ETUDIANT_POSTULER_OFFRE_FORM,
-                    params:[
-                       "login" => $login,
-                       "id" => $idOffre
-                    ]
-                );
-            }
-            if ($lettre_motivation["error"] == UPLOAD_ERR_OK) {
-                $lmFileName = "lm_" . uniqid() . "_" . basename($lettre_motivation["name"]);
-                move_uploaded_file($lettre_motivation["tmp_name"], "assets/document/lm/" . $lmFileName);
-                $lm_chemin = "asset/document/lm/".$lmFileName;
-            }
-            else{
-                return new Response(
-                    action:Action::ETUDIANT_POSTULER_OFFRE_FORM,
-                    params:[
-                        "login" => $login,
-                        "id" => $idOffre
-                    ]
-                );
-            }
-            (new PostulerRepository())->insert(new Postuler(null,$cv_chemin,$login,$idOffre,$lm_chemin,$complement));
-        }
-        else{
-            FlashMessage::add(
-                content: "Information incorrecte pour postuler",
-                type: FlashType::WARNING
             );
         }
         return new Response(
+            template: "entreprise/offre/postuler.php",
+            params: [
+                "etudiant" => $user,
+                "offre" => (new OffreRepository)->getById($id),
+            ]
+        );
+    }
+
+    public function postuler(): Response
+    {
+        $login = $_REQUEST["login"];
+        $id_offre = $_REQUEST["id"];
+        $cv = $_FILES["cv"];
+        $lm = $_FILES["lm"];
+        $complement = $_REQUEST["complement"];
+
+        if (!Token::verify(Action::ETUDIANT_POSTULER_OFFRE_FORM, $_REQUEST["token"])) {
+            throw new InvalidTokenException();
+        }
+        if (Token::isTimeout(Action::ETUDIANT_POSTULER_OFFRE_FORM)) {
+            throw new TokenTimeoutException(
+                action: Action::ETUDIANT_POSTULER_OFFRE_FORM
+            );
+        }
+        if (UserConnection::isSignedIn() and UserConnection::isInstance(new Etudiant) and UserConnection::getSignedInUser()->getLogin() === $login) {
+            throw new ControllerException(
+                message: "Vous n'avez pas à acceder à cette page",
+                action: Action::ETUDIANT_POSTULER_OFFRE_FORM,
+                params: [
+                    "login" => $login,
+                    "id" => $id_offre
+                ]
+            );
+        }
+        if ($cv["error"] != UPLOAD_ERR_OK) {
+            throw new ControllerException(
+                message: "Erreur lors de l'upload du fichier",
+                action: Action::ETUDIANT_POSTULER_OFFRE_FORM,
+                params: [
+                    "login" => $login,
+                    "id" => $id_offre
+                ]
+            );
+        }
+        if ($lm["error"] != UPLOAD_ERR_OK) {
+            throw new ControllerException(
+                message: "Erreur lors de l'upload du fichier",
+                action: Action::ETUDIANT_POSTULER_OFFRE_FORM,
+                params: [
+                    "login" => $login,
+                    "id" => $id_offre
+                ]
+            );
+        }
+
+        $cvName = uniqid("", true) . pathinfo($cv["name"], PATHINFO_EXTENSION);
+        move_uploaded_file($cv["tmp_name"], "assets/document/cv/$cvName");
+
+        $lmName = uniqid("", true) . pathinfo($lm["name"], PATHINFO_EXTENSION);
+        move_uploaded_file($lm["tmp_name"], "assets/document/lm/$lmName");
+
+        (new PostulerRepository)->insert(new Postuler(
+            cv: $cvName,
+            login: $login,
+            id_offre: $id_offre,
+            lettre_motivation: $lmName,
+            complement: $complement
+        ));
+        return new Response(
             action: Action::AFFICHER_OFFRE,
             params: [
-                "id" => $idOffre
+                "id" => $id_offre
             ]
         );
     }
