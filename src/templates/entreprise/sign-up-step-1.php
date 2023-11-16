@@ -26,18 +26,12 @@ include __DIR__ . "/../macros/button.php";
         </button>
     </nav>
     <div class="flex items-center justify-center h-40 bg-gradient-to-r from-cyan-500 via-blue-800 to-blue-400 font-bold text-white">
-        <span class="text-lg sm:text-xl lg:text-2xl xl:text-4xl">Créer votre compte entreprise</span>
+        <span class="text-center" style="font-size: clamp(1rem, 5vw, 2rem)">Créer votre compte entreprise</span>
     </div>
-    <div class="max-w-lg mx-auto  p-8">
-        <p class="text-lg text-center font-semibold mb-5">
-            Attirez ici les futurs piliers de votre organisation.
-            Présentez-vous là où ils cherchent et démontrez-leur les raisons pour lesquelles rejoindre votre équipe
-            serait une opportunité incontournable pour eux.
-        </p>
+    <div class="max-w-lg mx-auto p-8 space-y-4">
+        <h4 class="text-center">Information générale</h4>
         <form action="<?=Action::ENTREPRISE_SIGN_UP_STEP_1->value?>" method="post" class="bg-white p-6 rounded shadow-md border-t-4 border-blue-500 space-y-4">
-            <?=button("Accueil", "fi-rr-home", Action::HOME, "!absolute !pl-2 bottom-16 left-0")?>
             <form class="bg-white p-12 text-gray-600 rounded-lg shadow-lg grid gap-8" action="<?=Action::ENTREPRISE_SIGN_UP_STEP_1->value?>" method="post">
-                <h4 class="sm:col-span-2">1. Information générale</h4>
                 <?=field("raison_sociale", "Nom de l'entreprise*", "text", "Entrez le nom de l'entreprise", Pattern::NAME, true, $entreprise->getRaisonSociale())?>
                 <?=field("telephone", "Téléphone", "text", "0412345678", Pattern::PHONE_NUMBER, false, $entreprise->getTelephone())?>
                 <?=field("site", "Site web", "text", "www.example.com", Pattern::URL, false, $entreprise->getSite())?>

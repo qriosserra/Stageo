@@ -12,7 +12,7 @@ include __DIR__ . "/../macros/breadcrumb.php";
  * @var string $token
  */
 ?>
-<body class="h-screen" >
+<div class="h-screen" >
     <nav class="flex justify-between items-center border-b bg-slate-50 shadow">
         <a href="<?=Action::HOME->value?>" class="inline-flex items-center">
             <div class="mt-3 ml-3">
@@ -27,36 +27,21 @@ include __DIR__ . "/../macros/breadcrumb.php";
         " > 
             <img src="assets/img/business.svg"  class="le-svg"  alt="">  
         </aside>
-        <aside class=" aside-2 flex justify-center items-center w-1/2  min-h-[915px] h-screen" >
-            <form class="forme bg-white p-6 rounded shadow-md border-t-4 min-w-[60%] min-h-[40%] border-blue-500 mx-auto max-w-sm " action="<?=Action::ENTREPRISE_SIGN_IN->value?>" method="post">
-
+        <aside class="aside-2 flex justify-center items-center w-1/2  min-h-[915px] h-screen" >
+            <form class="forme bg-white p-6 rounded shadow-md border-t-4 min-w-[60%] min-h-[40%] border-blue-500 mx-auto max-w-sm space-y-8" action="<?=Action::ENTREPRISE_SIGN_IN->value?>" method="post">
                 <h1 class="text-center mb-4 text-2xl font-bold mt-8">Centre Entreprise</h1>
-                <div class="mb-4">
                 <?=field("email", "Email*", "email", "Entrez l'email utilisé par l'entreprise", null, true, $email ?? null)?>
-                </div>
-                <div class="mb-4">
                 <?=field("password", "Mot de passe", "password", "Entrez le mot de passe d'entreprise", Pattern::PASSWORD, true)?>
-                </div>
-
-                <div class="mb-4">
-                    <label class="block">
-                        <input type="checkbox" name="terms" class="mr-2 leading-tight">
-                        <span class="text-sm">
-                            Restez connecté ?
-                        </span>
-                        <a class="text-blue-600 sm:float-right">Mot de passe oublié ?</a>
-
-                    </label>
-                </div>
-    
-                <div class="mb-4">
-                <?=submit("Connexion")?>
-                </div>
-                <div class="text-center">
-                <a href="<?=Action::ENTREPRISE_SIGN_UP_FORM->value?>">Inscrire son entreprise</a>
+                <label class="block">
+                    <input type="checkbox" name="terms" class="mr-2 leading-tight">
+                    <span class="text-sm">
+                        Restez connecté ?
+                    </span>
+                    <a class="text-blue-600 sm:float-right">Mot de passe oublié ?</a>
+                </label>
+                <?=submit("Connexion", "w-full")?>
                 <?=token($token)?>
-
-                </div>
+                <a href="<?=Action::ENTREPRISE_SIGN_UP_STEP_1_FORM->value?>" class="block text-center">Inscrire son entreprise</a>
             </form>
         </aside>
     </section>
@@ -98,4 +83,4 @@ body {
     }
 }
     </style>
-</body>
+</div>

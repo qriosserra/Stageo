@@ -9,7 +9,7 @@ enum Pattern: string
     case NUMBER = "[0-9]{1,64}";
     case FLOAT = "[0-9]{1,64}\.[0-9]{1,2}";
     case EMAIL = "\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b";
-    case PASSWORD = "*"; //"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,64}$";
+    case PASSWORD = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,64}$";
     case URL = "^(https?:\/\/)?([\da-z\.-]+\.[a-z\.]{2,6}|[\d\.]+)([\/:?=&#]{1}[\da-z\.-]+)*[\/\?]?$";
     case ID_ETUDIANT = "[0-9]{8}";
     case SIRET = "[0-9]{14}";

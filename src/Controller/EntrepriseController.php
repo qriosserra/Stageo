@@ -303,19 +303,6 @@ class EntrepriseController
         );
     }
 
-    public function signUpForm(string $email = null): Response {
-        return new Response(
-            template: "entreprise/sign-up.php",
-            params: [
-                "title" => "Inscrire son entreprise",
-                "nav" => false,
-                "footer" => false,
-                "email" => $email,
-                "token" => Token::generateToken(Action::ENTREPRISE_SIGN_UP_FORM)
-            ]
-        );
-    }
-
     public function signIn(): Response {
         $email = $_REQUEST["email"];
         $password = $_REQUEST["password"];

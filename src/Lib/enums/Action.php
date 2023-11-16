@@ -6,8 +6,6 @@ enum Action: string
 {
     case HOME = "?a=home";
     case ERROR = "?a=error";
-    case ETUDIANT_SIGN_UP_FORM = "?c=etudiant&a=signUpForm";
-    case ETUDIANT_SIGN_UP = "?c=etudiant&a=signUp";
     case SIGN_OUT = "?a=signOut";
     case ETUDIANT_SIGN_IN_FORM = "?c=etudiant&a=signInForm";
     case ETUDIANT_SIGN_IN = "?c=etudiant&a=signIn";
@@ -19,8 +17,6 @@ enum Action: string
     case ENTREPRISE_SIGN_UP_STEP_3 = "?c=entreprise&a=signUpStep3";
     case ENTREPRISE_SIGN_UP_STEP_4_FORM = "?c=entreprise&a=signUpStep4Form";
     case ENTREPRISE_SIGN_UP_STEP_4 = "?c=entreprise&a=signUpStep4";
-    case ENTREPRISE_SIGN_UP_FORM = "?c=entreprise&a=signUpForm";
-    case ENTREPRISE_SIGN_UP = "?c=entreprise&a=signUp";
     case ENTREPRISE_SIGN_IN_FORM = "?c=entreprise&a=signInForm";
     case ENTREPRISE_SIGN_IN = "?c=entreprise&a=signIn";
     case LISTE_OFFRE = "?a=listeOffre";
