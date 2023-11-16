@@ -15,7 +15,6 @@ use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Admin;
 use Stageo\Model\Repository\AdminRepository;
-use Stageo\Model\Repository\SecretaireRepository;
 
 class AdminController
 {
@@ -146,19 +145,18 @@ class AdminController
                 params: ["email" => $email]
             );
         }
+        /**
+         * @var Etudiant|null $etudiant
+         */
         $admin = (new AdminRepository())->getByEmail($email);
         if (is_null($admin)) {
-            $secretaire = (new SecretaireRepository())->getByEmail($email);
-            (new SecretaireController())->signIn($secretaire,$password);
-            if (is_null($secretaire)) {
-                throw new ControllerException(
-                    message: "Aucun compte n'existe avec ce login",
-                    action: Action::ADMIN_SIGN_IN_FORM,
-                    params: [
-                        "email" => $email
-                    ]
-                );
-            }
+            throw new ControllerException(
+                message: "Aucun compte n'existe avec ce login",
+                action: Action::ADMIN_SIGN_IN_FORM,
+                params: [
+                    "email" => $email
+                ]
+            );
         }
         if (!Password::verify($password, $admin->getHashedPassword())) {
             throw new ControllerException(
@@ -181,4 +179,5 @@ class AdminController
             action: Action::HOME
         );
     }
+
 }

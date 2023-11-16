@@ -11,7 +11,7 @@ use Stageo\Lib\HTTP\Cookie;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Etudiant;
 
-class Request
+class   Request
 {
     public function process(string $controller, string $action, array $params): void
     {

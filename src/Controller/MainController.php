@@ -42,7 +42,6 @@ class MainController
 
     public function listeOffre(): Response
     {
-        if (UserConnection::isSignedIn()) {
         $search = $_REQUEST["search"] ?? "";
         $option = $_POST["OptionL"] ?? "description";
         $tabla = $option === "description"
@@ -112,12 +111,7 @@ class MainController
                 "Categories" => $Categories,
                 "search" => $search
             ]
-        );}
-        throw new ControllerException(
-            message: "Vous n'avez pas accès à cette page.",
-            action: Action::HOME
         );
-
     }
 
     public function afficherOffre(string $id): Response

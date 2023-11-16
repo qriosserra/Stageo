@@ -8,6 +8,7 @@ include __DIR__ . "/../../macros/input.php";
 /**
  * @var string $token
  * @var array $unite_gratifications
+ * @var float $gratification
  */
 ?>
 <main class="h-screen flex flex-col items-center justify-center">
@@ -19,7 +20,7 @@ include __DIR__ . "/../../macros/input.php";
         <?=textarea("description", "Description", "Entrez une description brève de l'offre", 4, false, null, "lg:col-span-2")?>
         <?=textarea("taches", "Fonctions et tâches", "Entrez les fonctions et tâches que sera amené à faire l'étudiant", 4,false)?>
         <?=textarea("commentaires", "Commentaires sur l'offre", "Entrez des commentaires optionnels sur l'offre")?>
-        <?=field("gratification", "Gratification par heure", "float", null, null, true, 4.05)?>
+        <?=field("gratification", "Gratification par heure", "float", null, null, true, $gratification)?>
         <?=dropdown("id_unite_gratification", "Unité de gratification", null, null, 2, $unite_gratifications)?>
         <div class="flex items-center lg:col-span-2">
             <div class="grid grid-cols-3 gap-4 w-full">

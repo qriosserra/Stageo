@@ -137,13 +137,18 @@ use Stageo\Model\Object\Secretaire;
                                         <a href="#"
                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
                                     </li>
+                                    <?php if (UserConnection::isInstance(new Etudiant())) {
+                                        echo "<li>
+                                        <a href=\"".Action::ETUDIANT_CONVENTION_ADD_FORM->value."\"
+                                           class=\"block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white\">Deposer une convention</a>";
+                                    } ?>
                                     <li>
                                         <a href="<?=Action::SIGN_OUT->value?>"
                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
                                     </li>
                                 </ul>
                             </div>
-                    </div>
+                        </div>
                     <?php endif ?>
                     <!----------------------------Menu Burger !!! ----------------------------------------->
                     <button data-collapse-toggle="navbar-user" type="button"
@@ -155,7 +160,7 @@ use Stageo\Model\Object\Secretaire;
                                   d="M1 1h15M1 7h15M1 13h15" />
                         </svg>
                     </button>
-            </div>
+                </div>
                 <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 lg:mr-32" id="navbar-user">
                     <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white  dark:border-gray-700">
                         <li class="relative">
