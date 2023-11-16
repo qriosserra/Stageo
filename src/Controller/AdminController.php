@@ -214,4 +214,9 @@ class AdminController
             action: Action::ADMIN_LISTEENTREPRISE
         );
     }
+
+    public function bla(){
+        $pass= "Stageo1234";
+        echo Password::hash($pass);
+    }
 }
