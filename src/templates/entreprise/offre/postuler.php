@@ -12,6 +12,7 @@ include __DIR__ . "/../../macros/input.php";
 include __DIR__ . "/../../macros/offre.php";
 /**
  * @var Offre $offre
+ * @var string $token
  */
 ?>
 
@@ -23,6 +24,7 @@ include __DIR__ . "/../../macros/offre.php";
         <label for="lm">Lettre de motivation :</label>
         <input type="file" name="lm" id="lm" accept=".pdf, .doc, .docx">
         <?=textarea("complement", "Complement", "Entrez des information complémentaire", 4, false, null, "lg:col-span-2")?>
+        <?=token($token)?>
         <?=submit("Postuler")?>
     </form>
 </main>

@@ -9,6 +9,8 @@ enum Action: string
     case SIGN_OUT = "?a=signOut";
     case ETUDIANT_SIGN_IN_FORM = "?c=etudiant&a=signInForm";
     case ETUDIANT_SIGN_IN = "?c=etudiant&a=signIn";
+    case ETUDIANT_POSTULER_OFFRE_FORM = "?c=etudiant&a=afficherFormulairePostuler";
+    case ETUDIANT_POSTULER_OFFRE = "?c=etudiant&a=postuler";
     case ENTREPRISE_SIGN_UP_STEP_1_FORM = "?c=entreprise&a=signUpStep1Form";
     case ENTREPRISE_SIGN_UP_STEP_1 = "?c=entreprise&a=signUpStep1";
     case ENTREPRISE_SIGN_UP_STEP_2_FORM = "?c=entreprise&a=signUpStep2Form";
@@ -21,6 +23,7 @@ enum Action: string
     case ENTREPRISE_SIGN_IN = "?c=entreprise&a=signIn";
     case LISTE_OFFRE = "?a=listeOffre";
     case AFFICHER_OFFRE = "?a=afficherOffre";
+    case ENTREPRISE_POSTULE_OFFRE_ETUDIANT = "?c=entreprise&a=voirAPostuler";
     case ENTREPRISE_CREATION_OFFRE_FORM = "?c=entreprise&a=offreAddForm";
     case ENTREPRISE_CREATION_OFFRE = "?c=entreprise&a=offreAdd";
     case ENTREPRISE_AFFICHER_OFFRE = "?c=entreprise&a=afficherOffreEntreprise";

@@ -3,6 +3,7 @@
 namespace Stageo\Model\Repository;
 
 use Stageo\Lib\Database\ComparisonOperator;
+use Stageo\Lib\Database\LogicalOperator;
 use Stageo\Lib\Database\QueryCondition;
 use Stageo\Model\Object\CoreObject;
 use Stageo\Model\Object\Postuler;
@@ -21,7 +22,7 @@ class PostulerRepository extends CoreRepository
 
     public function a_Postuler(string $login,int $id){
         $conditions = [
-            new QueryCondition("login", ComparisonOperator::EQUAL, $login),
+            new QueryCondition("login", ComparisonOperator::EQUAL, $login,LogicalOperator::AND),
             new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id)
         ];
         return $this->select($conditions)[0] ?? null;
