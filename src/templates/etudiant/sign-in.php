@@ -43,10 +43,6 @@ include __DIR__ . "/../macros/input.php";
                             <form class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7" action="<?=Action::ETUDIANT_SIGN_IN->value?>" method="post">
                                 <?=field("login", "Login", "text", "Entrez votre login", Pattern::NAME, true, $login)?>
                                 <?=field("password", "Mot de passe", "password", "Entrez votre mot de passe", null, true)?>
-                                <div class="flex flex-col sm:flex-row justify-between gap-2">
-                                    <?=checkbox("stay_connected", "Rester connecté ?")?>
-                                    <a class="text-blue-600 sm:float-right">Mot de passe oublié ?</a>
-                                </div>
                                 <?=token($token)?>
                                 <?=submit("Connexion")?>
                             </form>

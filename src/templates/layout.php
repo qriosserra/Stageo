@@ -101,7 +101,7 @@ use Stageo\Model\Object\Etudiant;
                     <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white  dark:border-gray-700">
                         <li class="relative">
                             <button class="block py-2 pl-3 pr-4 h-[4rem] text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700  md:dark:hover:text-blue-500 focus:outline-none" id="dropdownOffres">
-                                Offres
+                                <a href="<?=Action::LISTE_OFFRE->value?>">Offres</a>
                             </button>
                             <div id="dropdownContentOffres" class="block opacity-0 absolute bg-white invisible active:opacity-100 active:visible text-gray-700 pt-1 border border-slate-300 w-[500px] h-[210px]">
                                 <div class="rounded  ease-in-out ml-3 mt-3 flex flex-row ">
@@ -199,7 +199,7 @@ use Stageo\Model\Object\Etudiant;
                             <button
                                     class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500"
                                     id="dropdownButtonMission">
-                                Notre mission
+                                <a href="<?=Action::ABOUT->value?>">Notre mission</a>
                             </button>
                             <div class="absolute hidden text-gray-700 pt-1 border border-slate-300 "
                                  id="dropdownContentMission">
@@ -385,7 +385,7 @@ use Stageo\Model\Object\Etudiant;
                             <button
                                     class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500"
                                     id="dropdownButtonEntreprise">
-                                Espace Entreprise
+                                <a href="<?=Action::ENTREPRISE_SIGN_IN_FORM->value?>">Espace Entreprise</a>
                             </button>
                             <div class="relative hidden text-gray-700 border border-slate-300"
                                  id="dropdownContentEntreprise">

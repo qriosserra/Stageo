@@ -52,8 +52,6 @@ include __DIR__ . "/../macros/input.php";
                                 <?=field("login", "Login", "text", "Entrez votre login", Pattern::NAME, true, $login)?>
                                 <?=dropdown("id_distribution_commune", "Commune", "Sélectionnez une commune", null, $etudiant->getIdDistributioncommune(), $distributions_commune ?? [])?>
                                 <div class="flex flex-col sm:flex-row justify-between gap-2">
-                                    <?=checkbox("stay_connected", "Rester connecté ?")?>
-                                    <a class="text-blue-600 sm:float-right">Mot de passe oublié ?</a>
                                 </div>
                                 <?=token($token)?>
                                 <?=submit("Connexion")?>
