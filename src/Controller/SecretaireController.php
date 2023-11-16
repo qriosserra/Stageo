@@ -16,6 +16,7 @@ use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Secretaire;
 use Stageo\Model\Repository\AdminRepository;
 use Stageo\Model\Repository\SecretaireRepository;
+//
 
 class SecretaireController
 {
