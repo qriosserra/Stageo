@@ -39,12 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("dans le minuteur");hideFlashMessage(message); }, 3000);
     });
 
-    const toggleButton = document.querySelector('[data-collapse-toggle="navbar-use"]');
-    const navbar = document.getElementById('navbar-use');
-
-    toggleButton.addEventListener('click', function () {
-        navbar.classList.toggle('hidden');
-    });
 
     function setupDropdown(dropdownButtonId, dropdownContentId) {
         const dropdownButton = document.getElementById(dropdownButtonId);
@@ -85,6 +79,11 @@ document.addEventListener('DOMContentLoaded', function () {
     setupDropdown('dropdownOffres', 'dropdownContentOffres');
     setupDropdown('dropdownButtonEntreprise', 'dropdownContentEntreprise');
     setupDropdown('dropdownButtonMission', 'dropdownContentMission');
+});
+const toggleButton = document.querySelector('[data-collapse-toggle="navbar-use"]');
+const navbar = document.getElementById('navbar-use');
+toggleButton.addEventListener('click', function () {
+    navbar.classList.toggle('hidden');
 });
 function toggleContent(id) {
 
