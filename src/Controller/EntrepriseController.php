@@ -10,7 +10,6 @@ use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
 use Stageo\Lib\HTTP\Session;
-use Stageo\Lib\Request;
 use Stageo\Lib\Response;
 use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
@@ -18,7 +17,6 @@ use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
 use Stageo\Lib\Database\QueryCondition;
 use Stageo\Model\Object\Admin;
-use Stageo\Model\Object\DistributionCommune;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\DatabaseConnection;
@@ -581,6 +579,5 @@ class EntrepriseController
             message: "Vous n'avez pas accès à cette page.",
             action: Action::HOME
         );
-
     }
 }

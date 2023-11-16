@@ -1,6 +1,9 @@
 <?php
 
 $query = <<<SQL
+INSERT INTO stg_configuration(gratification_minimale) VALUES
+(4.35);
+
 INSERT INTO stg_categorie (libelle) VALUES
 ('PHP'),
 ('CSS'),
