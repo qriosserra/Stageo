@@ -58,6 +58,9 @@ INSERT INTO stg_distribution_commune(code_postal, commune, id_pays) VALUES
 (1110,'Aranc',1),
 (1230,'Arandas',1);
 
+INSERT INTO `stg_etudiant` (`login`, `nom`, `prenom`, `telephone`, `telephone_fixe`, `email_etudiant`, `annee`, `civilite`, `numero_voie`, `id_ufr`, `id_departement_universitaire`, `id_etape`, `id_distribution_commune`)
+VALUES ('levys', 'Levy', 'Sascha', '0612345678', NULL, 'sascha.levy@etu.umontpellier.fr', 'Ann2', 'M', '99 Av. Occitanie', NULL, NULL, NULL, '1');
+
 INSERT INTO `stg_entreprise` (`id_entreprise`, `unverified_email`, `email`, `nonce`, `nonce_timestamp`, `hashed_password`, `raison_sociale`, `siret`, `numero_voie`, `code_naf`, `telephone`, `fax`, `site`, `id_taille_entreprise`, `id_type_structure`, `id_statut_juridique`, `id_distribution_commune`)
 VALUES (NULL, NULL, 'entreprise@gmail.com', NULL, NULL, NULL, 'L\'entreprise', '12345678901234', '99 av. du champs de Mars', '1234F', '0412345678', NULL, 'entreprise.com', 'ETI', '2', 'EI', '1');
 

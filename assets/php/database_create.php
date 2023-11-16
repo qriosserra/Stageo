@@ -213,7 +213,7 @@ CREATE TABLE stg_convention(
    numero_voie VARCHAR(256),
    id_unite_gratification INT,
    id_enseignant INT,
-   id_tuteur INT NOT NULL,
+   id_tuteur INT NULL,
    id_entreprise INT,
    id_distribution_commune INT NOT NULL,
    login VARCHAR(256) NOT NULL,

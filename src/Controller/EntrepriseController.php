@@ -188,7 +188,7 @@ class EntrepriseController
                 "nav" => false,
                 "footer" => false,
                 "entreprise" => Session::get("entreprise"),
-                "distributions_commune" => array_map(fn($distribution) => "{$distribution->getCommune()} ({$distribution->getCodePostal()})", (new DistributionCommuneRepository)->select()),
+                "distributions_commune" => array_reduce((new DistributionCommuneRepository)->select(), fn($carry, $distribution) => $carry + [$distribution->getIdDistributionCommune() => "{$distribution->getCommune()} ({$distribution->getCodePostal()})"], []),
                 "token" => Token::generateToken(Action::ENTREPRISE_ADD_STEP_3_FORM)
             ]
         );
@@ -367,6 +367,7 @@ class EntrepriseController
                 "nav" => false,
                 "footer" => false,
                 "offre" => Session::get("offre"),
+                "gratification" => 4.35,
                 "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
                 "token" => Token::generateToken(Action::ENTREPRISE_CREATION_OFFRE_FORM)
             ]
