@@ -61,4 +61,5 @@ class Secretaire extends User
     {
         $this->hashed_password = $hashed_password;
     }
+    //
 }

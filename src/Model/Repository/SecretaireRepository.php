@@ -19,4 +19,5 @@ class SecretaireRepository extends CoreRepository
     {
         return $this->select([new QueryCondition("email", ComparisonOperator::EQUAL, $email)])[0] ?? null;
     }
+    //
 }

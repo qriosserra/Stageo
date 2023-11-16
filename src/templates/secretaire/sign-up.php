@@ -2,6 +2,7 @@
 
 use Stageo\Lib\enums\Action;
 use \Stageo\Lib\enums\Pattern;
+//
 
 include __DIR__ . "/../macros/input.php";
 include __DIR__ . "/../macros/button.php";

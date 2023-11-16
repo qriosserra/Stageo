@@ -1,5 +1,6 @@
 <?php use Stageo\Lib\enums\Action;
 include __DIR__."/../macros/button.php";
+//
 ?>
 <main id="dashboard" class="flex justify-between m-10 w-[75%] mx-auto h-[60vh] mt-[8rem]">
 <div id="colonne1" class="flex flex-col justify-between">
