@@ -442,7 +442,6 @@ use Stageo\Model\Object\Secretaire;
                                 </div>
                             </div>
                         </li>
-                        <?php if (!UserConnection::isSignedIn() || UserConnection::isInstance(new Entreprise())) : ?>
                         <li class="relative ">
                             <button
                                     class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500"
@@ -548,7 +547,7 @@ use Stageo\Model\Object\Secretaire;
                                     </div>
                                 </div>
                             </div>
-                        </li><?php endif ?>
+                        </li>
                         <?php if($user instanceof Admin || $user instanceof Secretaire) :?>
                             <li class="relative ">
                                 <button
@@ -721,10 +720,10 @@ use Stageo\Model\Object\Secretaire;
                     </ul>
                 </div>
                 <div class="space-y-4 mt-8 sm:mt-0">
-                    <h2 class="text-lg font-semibold text-gray-800">Travailler avec nous</h2>
+                    <h2 class="text-lg font-semibold text-gray-800">Mention légales</h2>
                     <ul class="text-gray-600 space-y-2">
                         <li>
-                            <a href="">Annonceurs</a>
+                            <a href="">Mentions</a>
                         </li>
                     </ul>
                 </div>
