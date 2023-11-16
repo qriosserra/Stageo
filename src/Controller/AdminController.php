@@ -179,4 +179,18 @@ class AdminController
             action: Action::HOME
         );
     }
+    public function listeConventions(): Response
+    {
+        $user =UserConnection::getSignedInUser();
+        if ($user instanceof Etudiant){
+            return new Response(
+                template: "admin/listeConventions.php",
+                params: ["title" => "listeConventions"]
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
+        );
+    }
 }

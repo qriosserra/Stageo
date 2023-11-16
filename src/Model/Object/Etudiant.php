@@ -154,4 +154,8 @@ class Etudiant extends User
     {
         $this->id_ufr = $id_ufr;
     }
+    public function getEmail(): string|NullDataType|null
+    {
+        return $this->email_etudiant;
+    }
 }

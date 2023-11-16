@@ -1,7 +1,33 @@
 
 
 document.addEventListener('DOMContentLoaded', function () {
+    var dropdownElementList = [].slice.call(document.querySelectorAll('[data-dropdown-toggle]'));
 
+    dropdownElementList.forEach(function (dropdownToggle) {
+      dropdownToggle.addEventListener('click', function (event) {
+        // Prevent the default behaviour and stop propagation
+        event.preventDefault();
+        event.stopPropagation();
+
+        // Find the dropdown content
+        var dropdownContent = document.getElementById(dropdownToggle.getAttribute('data-dropdown-toggle'));
+
+        // Toggle the 'hidden' class
+        dropdownContent.classList.toggle('hidden');
+      });
+    });
+
+    // Clicking outside the dropdown to close it
+    document.addEventListener('click', function (event) {
+      dropdownElementList.forEach(function (dropdownToggle) {
+        var dropdownContent = document.getElementById(dropdownToggle.getAttribute('data-dropdown-toggle'));
+
+        // If clicked outside and dropdown is not hidden, then hide it
+        if (!dropdownContent.classList.contains('hidden')) {
+          dropdownContent.classList.add('hidden');
+        }
+      });
+    });
     var flashMessages = document.querySelectorAll('.flash-messages-container');
     function hideFlashMessage(message) {
         message.classList.add('!hidden');
@@ -10,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("dans le listeneur");
     flashMessages.forEach(function(message) {
         setTimeout(function() {
-            console.log("dans le minuteur");hideFlashMessage(message); }, 10000);
+            console.log("dans le minuteur");hideFlashMessage(message); }, 3000);
     });
 
     const toggleButton = document.querySelector('[data-collapse-toggle="navbar-sticky"]');
