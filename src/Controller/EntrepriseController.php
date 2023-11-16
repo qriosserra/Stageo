@@ -23,6 +23,7 @@ use Stageo\Model\Repository\DatabaseConnection;
 use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\OffreRepository;
+use Stageo\Model\Repository\PostulerRepository;
 use Stageo\Model\Repository\StatutJuridiqueRepository;
 use Stageo\Model\Repository\TailleEntrepriseRepository;
 use Stageo\Model\Repository\TypeStructureRepository;
@@ -558,6 +559,33 @@ class EntrepriseController
         }
     }
 
+    public static function voirAPostuler():Response{
+        if(UserConnection::isSignedIn()){
+            $id = $_REQUEST["id"];
+            $offre = (new OffreRepository())->getById($id);
+            $user = UserConnection::getSignedInUser();
+            $idEntreprise = $user->getIdEntreprise();
+            if($user and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
+                $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
+                $liste_offrePostuler = (new PostulerRepository())->select($condition);
+                return new Response(
+                    template: "entreprise/offre/etudiant_postulant_offre.php",
+                    params: [
+                        "title" => "Liste des etudiant ayant postuler",
+                        "postuler" => $liste_offrePostuler,
+                    ]
+                );
+            }
+            return new Response(
+                action: Action::HOME,
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
+        );
+    }
+
     public static function afficherOffreEntreprise():Response{
         if (UserConnection::isSignedIn()) {
             $user = UserConnection::getSignedInUser();
@@ -579,5 +607,6 @@ class EntrepriseController
             message: "Vous n'avez pas accès à cette page.",
             action: Action::HOME
         );
+
     }
 }

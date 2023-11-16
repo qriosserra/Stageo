@@ -5,6 +5,8 @@ namespace Stageo\Controller;
 use Stageo\Controller\Exception\ControllerException;
 use Stageo\Controller\Exception\InvalidTokenException;
 use Stageo\Controller\Exception\TokenTimeoutException;
+use Stageo\Lib\Database\ComparisonOperator;
+use Stageo\Lib\Database\QueryCondition;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
@@ -14,7 +16,9 @@ use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Admin;
+use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Repository\AdminRepository;
+use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\SecretaireRepository;
 
 class AdminController
@@ -179,6 +183,35 @@ class AdminController
 
         return new Response(
             action: Action::HOME
+        );
+    }
+
+    public function listeEntreprises(){
+        $listeEntreprises = (new EntrepriseRepository())->getEntreprisesNonValidees();
+        return new Response(
+            template: "admin/listeEntreprises.php",
+            params: [
+                "title" => "Liste entreprises à valider",
+                "listeEntreprise" => $listeEntreprises
+            ]
+        );
+    }
+    public function validerEntreprise(){
+        $entreprise = (new EntrepriseRepository())->getById($_REQUEST["idEntreprise"]);
+        /** @var Entreprise $entreprise **/
+        $entreprise->setConfirmer(1);
+        (new EntrepriseRepository())->update($entreprise);
+        $listeEntreprises = (new EntrepriseRepository())->getEntreprisesNonValidees();
+        return new Response(
+            action: Action::ADMIN_LISTEENTREPRISE
+        );
+    }
+
+    public function suprimerEntreprise(){
+        (new EntrepriseRepository())->delete([new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $_REQUEST["idEntreprise"])]);
+        $listeEntreprises = (new EntrepriseRepository())->getEntreprisesNonValidees();
+        return new Response(
+            action: Action::ADMIN_LISTEENTREPRISE
         );
     }
 }
