@@ -32,6 +32,9 @@ enum Action: string
     case ADMIN_SIGN_IN_FORM = "?c=admin&a=signInForm";
     case ADMIN_SIGN_IN = "?c=admin&a=signIn";
     case ADMIN_DASH = "?c=admin&a=dashboard";
+    case ADMIN_LISTEENTREPRISE = "?c=admin&a=listeEntreprises";
+    case ADMIN_VALIDEENTREPRISE = "?c=admin&a=validerEntreprise";
+    case ADMIN_SUPRIMERENTREPRISE = "?c=admin&a=suprimerEntreprise";
     case ABOUT = "?a=about";
     case SECRETAIRE_SIGN_UP_FORM = "?c=secretaire&a=signUpForm";
     case SECRETAIRE_SIGN_UP = "?c=secretaire&a=signUp";
