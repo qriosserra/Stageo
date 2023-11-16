@@ -56,35 +56,24 @@ include __DIR__ . "/../macros/input.php";
                         <!-- Insérez ici vos champs de formulaire avec les classes Bootstrap -->
                         <!-- Type de convention -->
                         <div class="form-group">
-                            <label for="type_convention" class="form-label">Type de convention*</label>
-                            <select id="type_convention" name="type_convention" class="select-input" required>
-                                <option value="stage">Stage</option>
-                                <option value="alternance">Alternance</option>
-                            </select>
+                           <?=field("type_convention", "Type de convention*", "text", "Entrez le type de convention", null, true) ?>
                         </div>
                         <!-- Année universitaire -->
                         <div class="form-group">
-                            <label for="annee_universitaire" class="form-label">Année universitaire*</label>
-                            <select id="annee_universitaire" name="annee_universitaire" class="select-input" required>
-                                <option value="2022-2023">2022-2023</option>
-                                <option value="2023-2024">2023-2024</option>
+                            <?=field("annee_universitaire", "Année universitaire*", "text", "Entrez l'année universitaire", null, true) ?>
                                 <!-- Ajoutez les autres années universitaires au besoin -->
-                            </select>
                         </div>
                         <!-- Origine du stage -->
                         <div class="form-group">
-                            <label for="origine_stage" class="form-label">Origine du stage*</label>
-                            <input type="text" id="origine_stage" name="origine_stage" class="form-input" placeholder="Entrez l'origine du stage" required>
-                        </div>
+                            <?=field("origine_stage", "Origine du stage*", "text", "Entrez l'origine du stage", null, true) ?>
+                            </div>
                         <!-- Sujet -->
                         <div class="form-group">
-                            <label for="sujet" class="form-label">Sujet*</label>
-                            <input type="text" id="sujet" name="sujet" class="form-input" placeholder="Entrez le sujet" required>
-                        </div>
+                            <?=field("sujet", "Sujet*", "text", "Entrez le sujet", null, true) ?>
+                            </div>
                         <!-- Tâches -->
                         <div class="form-group">
-                            <label for="taches" class="form-label">Tâches*</label>
-                            <input type="text" id="taches" name="taches" class="form-input" placeholder="Entrez les tâches" required>
+                            <?=field("taches", "Tâches*", "text", "Entrez les tâches", null, true) ?>
                         </div>
                         <!-- Commentaires -->
 
@@ -92,14 +81,12 @@ include __DIR__ . "/../macros/input.php";
 
                         <!-- Date de début -->
                         <div class="form-group">
-                            <label for="date_debut" class="form-label">Date de début*</label>
-                            <input type="date" id="date_debut" name="date_debut" class="form-input" required>
-                        </div>
+                            <?=field("date_debut", "Date de début*", "date", "Entrez la date de début", null, true) ?>
+                            </div>
                         <!-- Date de fin -->
                         <div class="form-group">
-                            <label for="date_fin" class="form-label">Date de fin*</label>
-                            <input type="date" id="date_fin" name="date_fin" class="form-input" required>
-                        </div>
+                            <?=field("date_fin", "Date de fin*", "date", "Entrez la date de fin", null, true) ?>
+                            </div>
                         <!-- Interruption -->
 
                         <!-- Date de début de l'interruption -->
@@ -108,25 +95,21 @@ include __DIR__ . "/../macros/input.php";
 
                         <!-- Heures total -->
                         <div class="form-group">
-                            <label for="heures_total" class="form-label">Heures total*</label>
-                            <input type="text" id="heures_total" name="heures_total" class="form-input" placeholder="Entrez les heures total" required>
+                            <?=field("heures_total", "Heures total*", "text", "Entrez les heures total", null, true) ?>
                         </div>
                         <!-- Jours hebdomadaire -->
                         <div class="form-group">
-                            <label for="jours_hebdomadaire" class="form-label">Jours hebdomadaire*</label>
-                            <input type="text" id="jours_hebdomadaire" name="jours_hebdomadaire" class="form-input" placeholder="Entrez les jours hebdomadaire" required>
+                           <?=field("jours_hebdomadaire", "Jours hebdomadaire*", "text", "Entrez les jours hebdomadaire", null, true) ?>
                         </div>
                         <!-- Heures hebdomadaire -->
                         <div class="form-group">
-                            <label for="heures_hebdomadaire" class="form-label">Heures hebdomadaire*</label>
-                            <input type="text" id="heures_hebdomadaire" name="heures_hebdomadaire" class="form-input" placeholder="Entrez les heures hebdomadaires" required>
+                            <?=field("heures_hebdomadaire", "Heures hebdomadaire*", "text", "Entrez les heures hebdomadaire", null, true) ?>
                         </div>
                         <!-- Commentaires durée -->
 
                         <!-- Gratification -->
                         <div class="form-group">
-                            <label for="gratification" class="form-label">Gratification*</label>
-                            <input type="text" id="gratification" name="gratification" class="form-input" placeholder="Entrez la gratification" required>
+                           <?=field("gratification", "Gratification*", "text", "Entrez la gratification", null, true) ?>
                         </div>
                         <!-- Avantages nature -->
 
@@ -146,13 +129,12 @@ include __DIR__ . "/../macros/input.php";
 
                         <!-- Login -->
                         <div class="form-group">
-                            <label for="login" class="form-label">Login*</label>
-                            <input type="text" id="login" name="login" class="form-input" placeholder="Entrez le login" required>
+                            <?= field("login", "Login*", "text", "Entrez le login", null, true, $login) ?>
                         </div>
                         <!-- Bouton de soumission -->
                         <div class="form-group">
-                            <input type="hidden" name="token" value="<?= $token ?>">
-                            <button type="submit" class="btn btn-primary">Déposer la convention</button>
+                            <?= submit("Déposer la convention") ?>
+                            <?= token($token) ?>
                         </div>
                     </form>
                 </div>

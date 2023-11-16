@@ -84,7 +84,7 @@ class EtudiantController
         );
     }
 
-    public function conventionAddForm(): Response
+    public function conventionAddForm(String $login = null): Response
     {
         return new Response(
             template: "etudiant/conventionAdd.php",
@@ -92,43 +92,41 @@ class EtudiantController
                 "title" => "Déposer une convention",
                 "nav" => true,
                 "footer" => true,
+                "login" => $login,
                 "token" => Token::generateToken(Action::ETUDIANT_CONVENTION_ADD)
             ]
         );
     }
     public function conventionAdd(): Response
     {
-        $etudiant = UserConnection::getUser();
-        if (!Token::verify(Action::ETUDIANT_CONVENTION_ADD, $_REQUEST["token"]))
-            throw new InvalidTokenException();
-        if (Token::isTimeout(Action::ETUDIANT_CONVENTION_ADD)) {
-            throw new TokenTimeoutException(
-                action: Action::ETUDIANT_CONVENTION_ADD,
-                params: ["login" => $etudiant->getLogin()]
-            );
-        }
-
-
+        $type_convention = $_REQUEST["type_convention"];
+        $annee_universitaire = $_REQUEST["annee_universitaire"];
+        $origine_stage = $_REQUEST["origine_stage"];
+        $sujet = $_REQUEST["sujet"];
+        $taches = $_REQUEST["taches"];
+        $date_debut = $_REQUEST["date_debut"];
+        $date_fin = $_REQUEST["date_fin"];
+        $login = $_REQUEST["login"];
         $convention = new Convention(
-            login: $etudiant->getLogin(),
-            type_convention: $_REQUEST["type_convention"],
-            origine_stage: $_REQUEST["origine_stage"],
-            annee_universitaire: $_REQUEST["annee_universitaire"],
-            thematique: $_REQUEST["thematique"],
-            sujet: $_REQUEST["sujet"],
-            taches: $_REQUEST["taches"],
-            date_debut: $_REQUEST["date_debut"],
-            date_fin: $_REQUEST["date_fin"]
+            login: $login,
+            type_convention: $type_convention,
+            annee_universitaire: $annee_universitaire,
+            origine_stage: $origine_stage,
+            sujet: $sujet,
+            taches: $taches,
+            date_debut: $date_debut,
+            date_fin: $date_fin
         );
         (new ConventionRepository)->insert($convention);
         FlashMessage::add(
             content: "Convention ajoutée avec succès",
             type: FlashType::SUCCESS
         );
-
         return new Response(
             action: Action::HOME
         );
+
+
     }
 
 
