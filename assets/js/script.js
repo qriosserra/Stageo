@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     console.log("dans le listeneur");
     flashMessages.forEach(function(message) {
         setTimeout(function() {
-            console.log("dans le minuteur");hideFlashMessage(message); }, 10000);
+            console.log("dans le minuteur");hideFlashMessage(message); }, 3000);
     });
 
     const toggleButton = document.querySelector('[data-collapse-toggle="navbar-sticky"]');
