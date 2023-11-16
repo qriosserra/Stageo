@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wdth,wght,YTLC@6..12,75..125,200..1000,440..540&display=swap");
 @import url(https://db.onlinewebfonts.com/c/98023254fbc516186b4aa88d1e4415fc?family=Aspira+Wide+W01+Heavy);
 /*
-! tailwindcss v3.3.3 | MIT License | https://tailwindcss.com
+! tailwindcss v3.3.5 | MIT License | https://tailwindcss.com
 */
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -838,9 +838,6 @@ video {
 }
 .w-screen{
   width: 100vw;
-}
-.w-9{
-  width: 2.25rem;
 }
 .min-w-0{
   min-width: 0px;
@@ -2580,9 +2577,6 @@ footer .footer-information-container .footer-description-container .footer-descr
   }
   .sm\:mt-auto{
     margin-top: auto;
-  }
-  .sm\:hidden{
-    display: none;
   }
   .sm\:h-\[29rem\]{
     height: 29rem;

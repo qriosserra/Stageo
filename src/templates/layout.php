@@ -90,12 +90,70 @@ use Stageo\Model\Object\Etudiant;
 <body style="overflow-x:hidden;">
 <header class="fixed w-full z-20 top-0 left-0">
     <?php if ($nav):?>
-        <nav class="bg-white w-full z-20 border-b border-gray-200 dark:border-gray-200">
+        <nav class="bg-white w-full z-20 border-b border-gray-200 dark:border-gray-200" >
             <div class="max-w-screen-xl flex flex-wrap md:pl-4 md:pr-4 items-center justify-between mx-auto md:p-0 p-4">
                 <a href="<?=Action::HOME->value?>" class="flex items-center">
                     <img src="assets/img/logo.png" alt="logo" class="h-[1.8rem] w-[7rem] mr-3">
                 </a>
-                <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
+                <div class="flex md:order-2">
+                    <!----------------------------Drop down User !!! ----------------------------------------->
+                    <?php if (is_null($user)) : ?>
+                        <a href="<?=Action::ETUDIANT_SIGN_IN_FORM->value?>" class="space-x-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <i class="fi fi-rr-sign-in-alt flex align-middle text-lg float-left"></i>
+                            <span>Se connecter</span>
+                        </a>
+                    <?php else : ?>
+                        <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                            <button type="button"
+                                    class="flex text-sm rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                                    id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
+                                    data-dropdown-placement="bottom">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="w-8 h-8 rounded-full" src="assets/img/utilisateur.png" alt="user photo">
+                                <!-- //TODO : Photo -->
+                            </button>
+                            <!-- Dropdown menu -->
+                            <div
+                                    class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                                    id="user-dropdown">
+                                <div class="px-4 py-3">
+                                    <span class="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
+                                    <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
+                                    <!-- //TODO : email du mec et tout -->
+                                </div>
+                                <ul class="py-2" aria-labelledby="user-menu-button">
+                                    <li>
+                                        <a href="#"
+                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Tableau de bord</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"
+                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"
+                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?=Action::SIGN_OUT->value?>"
+                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
+                                    </li>
+                                </ul>
+                            </div>
+                    </div>
+                    <?php endif ?>
+                    <!----------------------------Menu Burger !!! ----------------------------------------->
+                    <button data-collapse-toggle="navbar-user" type="button"
+                            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                            aria-controls="navbar-user" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M1 1h15M1 7h15M1 13h15" />
+                        </svg>
+                    </button>
+            </div>
+                <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 lg:mr-32" id="navbar-user">
                     <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white  dark:border-gray-700">
 
                         <li class="relative">
@@ -199,7 +257,7 @@ use Stageo\Model\Object\Etudiant;
                         <li class="relative">
                             <button class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500"
                                     id=
-                                <?php if(UserConnection::isInstance(new Etudiant())) :?>""><a href="<?=Action::ABOUT->value?>">Fonctionement</a>
+                                    <?php if(UserConnection::isInstance(new Etudiant())) :?>""><a href="<?=Action::ABOUT->value?>">Fonctionement</a>
                                 <?php else :?>"dropdownButtonMission"><a href="<?=Action::ABOUT->value?>">Notre mission</a><?php endif?>
                             </button>
                             <div class="absolute hidden text-gray-700 pt-1 border border-slate-300 "
@@ -499,55 +557,6 @@ use Stageo\Model\Object\Etudiant;
                         <?php endif ?>
                     </ul>
                 </div>
-                <div class="flex md:order-2">
-                    <!----------------------------Drop down User !!! ----------------------------------------->
-                    <?php if (is_null($user)) : ?>
-                        <a href="<?=Action::ETUDIANT_SIGN_IN_FORM->value?>" class="space-x-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            <i class="fi fi-rr-sign-in-alt flex align-middle text-lg float-left"></i>
-                            <span>Se connecter</span>
-                        </a>
-                    <?php else : ?>
-                        <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                            <button type="button"
-                                    class="flex text-sm rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                                    id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
-                                    data-dropdown-placement="bottom">
-                                <span class="sr-only">Open user menu</span>
-                                <img class="w-8 h-8 rounded-full" src="assets/img/utilisateur.png" alt="user photo">
-                                <!-- //TODO : Photo -->
-                            </button>
-                            <!-- Dropdown menu -->
-                            <div
-                                    class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                                    id="user-dropdown">
-                                <div class="px-4 py-3">
-                                    <span class="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
-                                    <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
-                                    <!-- //TODO : email du mec et tout -->
-                                </div>
-                                <ul class="py-2" aria-labelledby="user-menu-button">
-                                    <li>
-                                        <a href="#"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Tableau de bord</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?=Action::SIGN_OUT->value?>"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
-                                    </li>
-                                </ul>
-                            </div>
-                    </div>
-                    <?php endif ?>
-                    <!----------------------------Menu Burger !!! ----------------------------------------->
-            </div>
         </nav>
         <!--                <nav id="sidenav" class="hidden transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidenav">-->
         <!--                    <div>-->
