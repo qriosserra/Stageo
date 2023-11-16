@@ -141,9 +141,14 @@ use Stageo\Model\Object\Secretaire;
                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
                                     </li>
                                     <li>
+                                    <a href="<?=Action::ETUDIANT_CONVENTION_ADD_FORM->value?>"
+                                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déposer une convention</a>
+                                    </li>
+                                    <li>
                                         <a href="<?=Action::SIGN_OUT->value?>"
                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
                                     </li>
+
                                 </ul>
                             </div>
                     </div>
@@ -263,7 +268,8 @@ use Stageo\Model\Object\Secretaire;
                         <li class="relative">
                             <button class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500"
                                     id=
-                                    <?php if(UserConnection::isInstance(new Etudiant())) :?>""><a href="<?=Action::ABOUT->value?>">Fonctionement</a>
+                                    <?php if(UserConnection::isInstance(new Etudiant())) :?>""><a href="<?=Action::ABOUT->value?>">Fonctionnement</a>
+                                <?php elseif(UserConnection::isInstance(new Secretaire())) :?>""><a href="<?=Action::ADMIN_LISTE_CONVENTIONS?>">Liste Conventions</a>
                                 <?php else :?>"dropdownButtonMission"><a href="<?=Action::ABOUT->value?>">Notre mission</a><?php endif?>
                             </button>
                             <div class="absolute hidden text-gray-700 pt-1 border border-slate-300 "
