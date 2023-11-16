@@ -90,10 +90,6 @@ use Stageo\Model\Object\Etudiant;
 <body style="overflow-x:hidden;">
 <header class="fixed w-full z-20 top-0 left-0">
     <?php if ($nav):?>
-        <button data-drawer-target="sidenav" data-drawer-toggle="sidenav" aria-controls="sidenav" type="button" class="inline-flex items-center p-2 mt-2 ml-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-            <span class="sr-only">Open sidebar</span>
-            <i class="fi fi-sr-menu-burger text-2xl"></i>
-        </button>
         <nav class="bg-white w-full z-20 border-b border-gray-200 dark:border-gray-200">
             <div class="max-w-screen-xl flex flex-wrap md:pl-4 md:pr-4 items-center justify-between mx-auto md:p-0 p-4">
                 <a href="<?=Action::HOME->value?>" class="flex items-center">
@@ -101,9 +97,12 @@ use Stageo\Model\Object\Etudiant;
                 </a>
                 <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
                     <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white  dark:border-gray-700">
+
                         <li class="relative">
                             <button class="block py-2 pl-3 pr-4 h-[4rem] text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700  md:dark:hover:text-blue-500 focus:outline-none" id="dropdownOffres">
-                                <a href="<?=Action::LISTE_OFFRE->value?>">Offres</a>
+
+                                <?php if(UserConnection::isSignedIn()) :?><a href="<?=Action::LISTE_OFFRE->value?>">Offres</a>
+                                <?php else : ?><a href="<?=Action::ETUDIANT_SIGN_IN_FORM->value?>">Offres</a><?php endif ?>
                             </button>
                             <div id="dropdownContentOffres" class="block opacity-0 absolute bg-white invisible active:opacity-100 active:visible text-gray-700 pt-1 border border-slate-300 w-[500px] h-[210px]">
                                 <div class="rounded  ease-in-out ml-3 mt-3 flex flex-row ">
@@ -198,10 +197,10 @@ use Stageo\Model\Object\Etudiant;
                             </div>
                         </li>
                         <li class="relative">
-                            <button
-                                    class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500"
-                                    id="dropdownButtonMission">
-                                <a href="<?=Action::ABOUT->value?>">Notre mission</a>
+                            <button class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500"
+                                    id=
+                                <?php if(UserConnection::isInstance(new Etudiant())) :?>""><a href="<?=Action::ABOUT->value?>">Fonctionement</a>
+                                <?php else :?>"dropdownButtonMission"><a href="<?=Action::ABOUT->value?>">Notre mission</a><?php endif?>
                             </button>
                             <div class="absolute hidden text-gray-700 pt-1 border border-slate-300 "
                                  id="dropdownContentMission">
@@ -387,20 +386,26 @@ use Stageo\Model\Object\Etudiant;
                             <button
                                     class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500"
                                     id="dropdownButtonEntreprise">
-                                <a href="<?=Action::ENTREPRISE_SIGN_IN_FORM->value?>">Espace Entreprise</a>
+
+                                <?php if (!UserConnection::isSignedIn()) : ?><a href="<?=Action::ENTREPRISE_SIGN_IN_FORM->value?>">Espace Entreprise</a>
+                                <?php elseif(UserConnection::isInstance(new Entreprise())) :?><a href="<?=Action::ENTREPRISE_AFFICHER_OFFRE->value?>">Espace Offre</a>
+                                <?php endif?>
+
                             </button>
                             <div class="relative hidden text-gray-700 border border-slate-300"
                                  id="dropdownContentEntreprise">
                                 <div class="flex flex-wrap -mx-2">
-                                    <a href="http://www.google.com" class="w-1/2 p-4" target="_blank"
-                                       rel="noopener noreferrer">
-                                        <div class="card-entreprise p-5 mr-3">
-                                            <span class="font-bold">Connectez-vous à l'Espace Entreprise</span>
-                                            <p>Administrez les opportunités de stage et d'alternance de votre entreprise,
-                                                consultez et réagissez aux retours des candidats.</p>
-                                        </div>
-                                    </a>
-                                    <a href="http://www.google.com" class="w-1/2 p-4" target="_blank"
+                                    <?php if(!UserConnection::isInstance(new Entreprise())) :?>
+                                        <a href="<?=Action::ENTREPRISE_SIGN_IN_FORM->value?>" class="w-1/2 p-4" target=""
+                                           rel="noopener noreferrer">
+                                            <div class="card-entreprise p-5 mr-3">
+                                                <span class="font-bold">Connectez-vous à l'Espace Entreprise</span>
+                                                <p>Administrez les opportunités de stage et d'alternance de votre entreprise,
+                                                    consultez et réagissez aux retours des candidats.</p>
+                                            </div>
+                                        </a>
+                                    <?php endif?>
+                                    <a href="<?php if(UserConnection::isInstance(new Entreprise())) :?><?=Action::ENTREPRISE_CREATION_OFFRE_FORM->value?><?php else :?><?=Action::ENTREPRISE_SIGN_IN_FORM->value?><?php endif?>" class="w-1/2 p-4" target=""
                                        rel="noopener noreferrer">
                                         <div class="card-entreprise  p-4  h-full">
                                             <span class="font-bold">Vous voulez proposer des offres ?</span>
@@ -409,7 +414,7 @@ use Stageo\Model\Object\Etudiant;
                                                 prêts à s'engager dans des stages et alternances enrichissants.</p>
                                         </div>
                                     </a>
-                                    <a href="http://www.google.com" class="w-1/2 p-4" target="_blank"
+                                    <a href="<?php if(UserConnection::isInstance(new Entreprise())) :?><?=Action::HOME->value?><?php else :?><?=Action::ENTREPRISE_SIGN_IN_FORM->value?><?php endif?>" class="w-1/2 p-4" target=""
                                        rel="noopener noreferrer">
                                         <div class="card-entreprise p-4">
                                         <span class="font-bold">Besoin d'Information? Contactez l'IUT et le
@@ -495,25 +500,53 @@ use Stageo\Model\Object\Etudiant;
                     </ul>
                 </div>
                 <div class="flex md:order-2">
-
+                    <!----------------------------Drop down User !!! ----------------------------------------->
                     <?php if (is_null($user)) : ?>
                         <a href="<?=Action::ETUDIANT_SIGN_IN_FORM->value?>" class="space-x-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                             <i class="fi fi-rr-sign-in-alt flex align-middle text-lg float-left"></i>
                             <span>Se connecter</span>
                         </a>
                     <?php else : ?>
-                        <a href="<?=Action::SIGN_OUT->value?>" class="space-x-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                            <i class="fi fi-rr-sign-in-alt flex align-middle text-lg float-left"></i>
-                            <span>Se deconnecter</span>
-                        </a>
+                        <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                            <button type="button"
+                                    class="flex text-sm rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                                    id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
+                                    data-dropdown-placement="bottom">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="w-8 h-8 rounded-full" src="assets/img/utilisateur.png" alt="user photo">
+                                <!-- //TODO : Photo -->
+                            </button>
+                            <!-- Dropdown menu -->
+                            <div
+                                    class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                                    id="user-dropdown">
+                                <div class="px-4 py-3">
+                                    <span class="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
+                                    <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
+                                    <!-- //TODO : email du mec et tout -->
+                                </div>
+                                <ul class="py-2" aria-labelledby="user-menu-button">
+                                    <li>
+                                        <a href="#"
+                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Tableau de bord</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"
+                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
+                                    </li>
+                                    <li>
+                                        <a href="#"
+                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?=Action::SIGN_OUT->value?>"
+                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
+                                    </li>
+                                </ul>
+                            </div>
+                    </div>
                     <?php endif ?>
-                    <button data-collapse-toggle="navbar-sticky" type="button" class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm  rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-sticky" aria-expanded="false">
-                        <span class="sr-only">Open main menu</span>
-                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15" />
-                        </svg>
-                    </button>
-                </div>
+                    <!----------------------------Menu Burger !!! ----------------------------------------->
             </div>
         </nav>
         <!--                <nav id="sidenav" class="hidden transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidenav">-->

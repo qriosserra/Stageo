@@ -360,7 +360,7 @@ class EntrepriseController
         UserConnection::signIn($entreprise);
         FlashMessage::add("Vous êtes connecté", FlashType::SUCCESS);
         return new Response(
-            action: Action::HOME
+            action: Action::ENTREPRISE_AFFICHER_OFFRE
         );
     }
 
@@ -580,19 +580,25 @@ class EntrepriseController
     }
 
     public static function afficherOffreEntreprise():Response{
-        $user = UserConnection::getSignedInUser();
-        $idEntreprise = $user->getIdEntreprise();
-        $condition = new QueryCondition("id_entreprise",ComparisonOperator::EQUAL,$idEntreprise);
-        $liste_offre = (new OffreRepository())->select($condition);
-        return new Response(
-            template: "entreprise/offre/liste-offre.php",
-            params: [
-                "title" => "Liste des offres",
-                "offres" => $liste_offre,
-                "selA" => null,
-                "selB" => null,
-                "search" => null
+        if (UserConnection::isSignedIn()) {
+            $user = UserConnection::getSignedInUser();
+            $idEntreprise = $user->getIdEntreprise();
+            $condition = new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $idEntreprise);
+            $liste_offre = (new OffreRepository())->select($condition);
+            return new Response(
+                template: "entreprise/offre/liste-offre.php",
+                params: [
+                    "title" => "Liste des offres",
+                    "offres" => $liste_offre,
+                    "selA" => null,
+                    "selB" => null,
+                    "search" => null
                 ]
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
         );
 
     }

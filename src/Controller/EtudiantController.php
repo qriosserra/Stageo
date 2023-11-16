@@ -81,7 +81,7 @@ class EtudiantController
         );
         UserConnection::signIn($etudiant);
         return new Response(
-            action: Action::HOME
+            action: Action::LISTE_OFFRE
         );
     }
 
