@@ -39,8 +39,8 @@ document.addEventListener('DOMContentLoaded', function () {
             console.log("dans le minuteur");hideFlashMessage(message); }, 3000);
     });
 
-    const toggleButton = document.querySelector('[data-collapse-toggle="navbar-sticky"]');
-    const navbar = document.getElementById('navbar-sticky');
+    const toggleButton = document.querySelector('[data-collapse-toggle="navbar-use"]');
+    const navbar = document.getElementById('navbar-use');
 
     toggleButton.addEventListener('click', function () {
         navbar.classList.toggle('hidden');

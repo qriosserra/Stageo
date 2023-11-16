@@ -17,7 +17,7 @@ class Secretaire extends User
     /**
      * @return int|null
      */
-    public function getIdAdmin(): ?int
+    public function getIdSecretaire(): ?int
     {
         return $this->id_secretaire;
     }
@@ -25,7 +25,7 @@ class Secretaire extends User
     /**
      * @param int|null $id_secretaire
      */
-    public function setId_secretaire(?int $id_secretaire): void
+    public function setIdsecretaire(?int $id_secretaire): void
     {
         $this->id_secretaire = $id_secretaire;
     }
