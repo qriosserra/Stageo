@@ -7,7 +7,7 @@ include __DIR__."/../macros/button.php";
         <i class="fi fi-rr-user"></i>
         <span>Crée un compte d'admin</span>
     </a>
-    <a href="<?=Action::SECRETAIRE_SIGN_UP_FORM?>" class="button-ghost ">
+    <a href="<?=Action::SECRETAIRE_SIGN_UP_FORM->value?>" class="button-ghost ">
         <i class="fi fi-rr-user"></i>
         <span>Crée un compte secretaire</span>
     </a>

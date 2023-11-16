@@ -12,6 +12,7 @@ use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Admin;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Etudiant;
+use Stageo\Model\Object\Secretaire;
 
 ?>
 
@@ -551,12 +552,13 @@ use Stageo\Model\Object\Etudiant;
                                 </div>
                             </div>
                         </li>
-                        <?php if($user instanceof Admin) :?>
+                        <?php if($user instanceof Admin || $user instanceof Secretaire) :?>
                             <li class="relative ">
                                 <button
                                         class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500"
                                         id="dropdownButtonEntreprise">
-                                    <a href="<?=Action::ADMIN_DASH->value?>">Dashboard</a>
+                                    <a href="<?php if($user instanceof Admin) :?><?=Action::ADMIN_DASH->value?>
+                                    <?php else: ?><?=Action::SECRETAIRE_DASH->value?><?php endif ?>">Dashboard</a>
                                 </button>
                             </li>
                         <?php endif ?>
