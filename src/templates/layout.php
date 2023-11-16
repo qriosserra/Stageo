@@ -31,15 +31,11 @@ use Stageo\Model\Object\Secretaire;
     <link rel='stylesheet' href="https://cdn-uicons.flaticon.com/2.0.0/uicons-bold-rounded/css/uicons-bold-rounded.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <script src="https://cdn.jsdelivr.net/npm/flowbite/dist/flowbite.min.js"></script>
-
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <script async src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.0.0/flowbite.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script defer src="assets/js/script.js"></script>
-    <script>
-
-    </script>
     <style>
         #dropdownContentEntreprise,
         #dropdownContentOffres,
@@ -88,7 +84,7 @@ use Stageo\Model\Object\Secretaire;
         }
     </style>
 </head>
-<body style="overflow-x:hidden;">
+<body class="overflow-x-hidden">
 <header class="fixed w-full z-20 top-0 left-0">
     <?php if ($nav):?>
         <nav class="bg-white w-full z-20 border-b border-gray-200 dark:border-gray-200" >
@@ -729,10 +725,10 @@ use Stageo\Model\Object\Secretaire;
                     </ul>
                 </div>
                 <div class="space-y-4 mt-8 sm:mt-0">
-                    <h2 class="text-lg font-semibold text-gray-800">Travailler avec nous</h2>
+                    <h2 class="text-lg font-semibold text-gray-800">Mention légales</h2>
                     <ul class="text-gray-600 space-y-2">
                         <li>
-                            <a href="">Annonceurs</a>
+                            <a href="">Mentions</a>
                         </li>
                     </ul>
                 </div>

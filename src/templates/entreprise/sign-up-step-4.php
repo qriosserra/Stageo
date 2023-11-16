@@ -1,39 +1,65 @@
 <?php
 
+use Stageo\Lib\enums\Pattern;
 use Stageo\Lib\enums\Action;
 use Stageo\Model\Object\Entreprise;
 
-include __DIR__ . "/../macros/button.php";
 include __DIR__ . "/../macros/input.php";
-include __DIR__ . "/../macros/breadcrumb.php";
 /**
- * @var Entreprise $entreprise
  * @var string $token
+ * @var Entreprise $entreprise
  */
 ?>
-
-<main class="h-screen flex items-center justify-center gap-2 relative">
-    <?=breadcrumb(4, [
-        "Information générale" => Action::ENTREPRISE_SIGN_UP_STEP_1_FORM->value,
-        "Détails techniques" => Action::ENTREPRISE_ADD_STEP_2_FORM->value,
-        "Adresse postale" => Action::ENTREPRISE_ADD_STEP_3_FORM->value,
-        "Authentification" => Action::ENTREPRISE_ADD_STEP_4_FORM->value
-    ])?>
-    <form class="bg-white p-12 text-gray-600 rounded-lg shadow-lg grid gap-8" action="<?=Action::ENTREPRISE_ADD_STEP_4->value?>" method="post">
-        <h4 class="sm:col-span-2">4. Authentification</h4>
-        <?=field("email", "Email*", "email", "Entrez un email de contact", null, true, $entreprise->getUnverifiedEmail(), "sm:col-span-2")?> // FIXME : EMAIL enlever, et mis dans sign-up.php/entreprise
-        <?=field("password", "Mot de passe*", "password", "Entrez un mot de passe", null, true)?> // FIXME : MPD enlever, et mis dans sign-up.php/entreprise
-        <?=field("confirm", "Confirmer le mot de passe*", "password", "Confirmez le mot de passe", null, true)?> // FIXME : MPD enlever, et mis dans sign-up.php/entreprise
-        <div class="sm:col-span-2">
-            <p>Le mot de passe doit au moins contenir:</p>
-            <ul>
-                <li>- 8 caractères</li>
-                <li>- Une lettre minuscule</li>
-                <li>- Une lettre majuscule</li>
-                <li>- Un chiffre</li>
-            </ul>
-        </div>
-        <?=submit("Finaliser l'inscription", "sm:col-span-2")?>
-        <?=token($token)?>
-    </form>
+<main class="bg-gray-100 w-full">
+    <nav class="flex justify-between items-center border-b">
+        <a href="<?=Action::HOME->value?>" class="inline-flex items-center">
+            <div class="mt-3 ml-3">
+                <img src="assets/img/logo.png" class="h-[1.8rem] w-[7rem]">
+                <p style="font-family: Montserrat,serif;" class="text-blue-900">Pour les entreprises</p>
+            </div>
+        </a>
+        <button class="hidden sm:block scale-100 hover:scale-110 transition border uppercase font-semibold tracking-wider mr-5 leading-none rounded">
+            <a  href="<?=Action::ENTREPRISE_SIGN_IN_FORM->value?>" class="relative px-12 py-3 rounded bg-blue-500 text-white text-1xl font-bold">
+                Se connecter
+            </a>
+        </button>
+    </nav>
+    <div class="flex items-center justify-center h-40 bg-gradient-to-r from-cyan-500 via-blue-800 to-blue-400 font-bold text-white">
+        <span class="text-center" style="font-size: clamp(1rem, 5vw, 2rem)">Créer votre compte entreprise</span>
+    </div>
+    <div class="max-w-lg mx-auto p-8 space-y-4">
+        <h4 class="text-center">Authentification</h4>
+        <form action="<?=Action::ENTREPRISE_SIGN_UP_STEP_4->value?>" method="post" class="bg-white p-6 rounded shadow-md border-t-4 border-blue-500 space-y-4">
+            <?=field("email", "Email professionelle*", "email", "Entrez un email de contact", null, true, $entreprise->getEmail(), "sm:col-span-2")?>
+            <?=field("password", "Mot de passe*", "password", "Entrez un mot de passe", Pattern::PASSWORD, true)?>
+            <?=field("confirm", "Confirmer le mot de passe*", "password", "Confirmez le mot de passe", Pattern::PASSWORD, true)?>
+            <label class="block">
+                <input type="checkbox" name="terms" class="mr-2 leading-tight">
+                <span class="text-sm">
+                    En cochant cette case, je certifie occuper un poste au sein des ressources humaines, de l'équipe
+                    de recrutement, du département marketing ou des relations publiques, ou faire partie du corps
+                    dirigeant de ma société. J'adhère ainsi aux termes et conditions et je valide la politique de
+                    confidentialité de Stageo au nom de mon entreprise.
+                </span>
+            </label>
+            <?=submit("S'inscrire", "w-full")?>
+            <?=token($token)?>
+        </form>
+        <p class="text-lg text-center font-semibold mb-5">
+            Attirez ici les futurs piliers de votre organisation.
+            Présentez-vous là où ils cherchent et démontrez-leur les raisons pour lesquelles rejoindre votre équipe
+            serait une opportunité incontournable pour eux.
+        </p>
+    </div>
 </main>
+<footer class="bg-gray-100 mt-10">
+    <div class="mt-4 border-t border-gray-300 pt-3">
+        <p class="text-gray-600 text-center">
+            Se connecter en tant que : Etudiant, Entreprise
+        </p>
+        <p class="text-gray-500 text-xs text-center mt-4">
+            Copyright © 2023, Stageo « Stageo » et son logo sont des branches officiel de l'IUT Montpellier-Sète.
+        </p>
+    </div>
+    </div>
+</footer>

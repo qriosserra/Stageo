@@ -106,12 +106,12 @@ function checkbox(
         <div class="checkbox-container $class">
             <input id="$name" name="$name" type="checkbox" $checked>
             <label for="$name">
-                <span>$label</span>
                 <span class="checkbox-button">
                     <svg viewbox="-4 -4 20 20">
                         <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
                     </svg>
                 </span>
+                <span>$label</span>
             </label>
         </div>
     HTML;

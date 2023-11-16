@@ -30,11 +30,22 @@ CREATE TABLE stg_enseignant(
    PRIMARY KEY(id_enseignant)
 );
 
+CREATE TABLE stg_commune(
+   id_commune INT AUTO_INCREMENT,
+   commune VARCHAR(256),
+   PRIMARY KEY(id_commune)
+);
+
 CREATE TABLE stg_pays(
-   id_pays INT AUTO_INCREMENT,
+   stg_pays INT AUTO_INCREMENT,
    nom VARCHAR(256),
-   PRIMARY KEY(id_pays),
+   PRIMARY KEY(stg_pays),
    UNIQUE(nom)
+);
+
+CREATE TABLE stg_code_postal(
+   id_code_postal VARCHAR(50),
+   PRIMARY KEY(id_code_postal)
 );
 
 CREATE TABLE stg_categorie(
@@ -71,18 +82,32 @@ CREATE TABLE stg_type_structure(
 );
 
 CREATE TABLE stg_distribution_commune(
-   id_distribution_commune INT AUTO_INCREMENT,
-   code_postal VARCHAR(5) NOT NULL,
+   id_commune INT,
+   id_code_postal VARCHAR(5) NOT NULL,
    commune VARCHAR(256),
-   id_pays INT,
-   PRIMARY KEY(id_distribution_commune),
-   FOREIGN KEY(id_pays) REFERENCES stg_pays(id_pays)
+   stg_pays INT,
+   PRIMARY KEY(id_commune),
+   FOREIGN KEY(stg_pays) REFERENCES stg_pays(stg_pays)
 );
 
 CREATE TABLE stg_unite_gratification(
    id_unite_gratification INT AUTO_INCREMENT,
    libelle VARCHAR(4) NOT NULL,
    PRIMARY KEY(id_unite_gratification)
+);
+
+CREATE TABLE stg_configuration(
+   id_configuration VARCHAR(50),
+   gratification_minimale DECIMAL(15,2),
+   annee_scolaire VARCHAR(256),
+   PRIMARY KEY(id_configuration)
+);
+
+CREATE TABLE stg_secretaire(
+   id_secretaire INT AUTO_INCREMENT,
+   email VARCHAR(320) NOT NULL,
+   hashed_password VARCHAR(256),
+   PRIMARY KEY(id_secretaire)
 );
 
 CREATE TABLE stg_etudiant(
@@ -95,23 +120,20 @@ CREATE TABLE stg_etudiant(
    annee VARCHAR(256),
    civilite CHAR(1),
    numero_voie VARCHAR(256),
-   id_ufr VARCHAR(4),
-   id_departement_universitaire VARCHAR(32),
-   id_etape VARCHAR(64),
-   id_distribution_commune INT,
+   id_ufr VARCHAR(4) NOT NULL,
+   id_departement_universitaire VARCHAR(32) NOT NULL,
+   id_etape VARCHAR(64) NOT NULL,
+   id_commune INT NOT NULL,
    PRIMARY KEY(login),
    FOREIGN KEY(id_ufr) REFERENCES stg_ufr(id_ufr),
    FOREIGN KEY(id_departement_universitaire) REFERENCES stg_departement_universitaire(id_departement_universitaire),
    FOREIGN KEY(id_etape) REFERENCES stg_etape(id_etape),
-   FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune)
+   FOREIGN KEY(id_commune) REFERENCES stg_distribution_commune(id_commune)
 );
 
 CREATE TABLE stg_entreprise(
    id_entreprise INT AUTO_INCREMENT,
-   unverified_email VARCHAR(320),
    email VARCHAR(256),
-   nonce VARCHAR(256),
-   nonce_timestamp INT,
    hashed_password VARCHAR(256),
    raison_sociale VARCHAR(256),
    siret CHAR(14),
@@ -120,15 +142,16 @@ CREATE TABLE stg_entreprise(
    telephone VARCHAR(20),
    fax VARCHAR(20),
    site VARCHAR(256),
+   confirmer LOGICAL NOT NULL DEFAULT FALSE,
    id_taille_entreprise VARCHAR(3),
    id_type_structure INT,
    id_statut_juridique VARCHAR(4),
-   id_distribution_commune INT NOT NULL,
+   id_commune INT NOT NULL,
    PRIMARY KEY(id_entreprise),
    FOREIGN KEY(id_taille_entreprise) REFERENCES stg_taille_entreprise(id_taille_entreprise),
    FOREIGN KEY(id_type_structure) REFERENCES stg_type_structure(id_type_structure),
    FOREIGN KEY(id_statut_juridique) REFERENCES stg_statut_juridique(id_statut_juridique),
-   FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune)
+   FOREIGN KEY(id_commune) REFERENCES stg_distribution_commune(id_commune)
 );
 
 CREATE TABLE stg_tuteur(
@@ -151,41 +174,25 @@ CREATE TABLE stg_offre(
    taches TEXT,
    commentaires TEXT,
    gratification DECIMAL(15,2),
+   login VARCHAR(256),
    id_unite_gratification INT,
    id_entreprise INT NOT NULL,
-   login VARCHAR(256),
-   type VARCHAR(32),
    PRIMARY KEY(id_offre),
+   FOREIGN KEY(login) REFERENCES stg_etudiant(login),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
-   FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise),
-   FOREIGN KEY(login) REFERENCES stg_etudiant(login)
-   ON DELETE CASCADE
-);
-
-CREATE TABLE stg_postuler(
-    id_postuler INT AUTO_INCREMENT,
-    cv VARCHAR(256),
-    lettre_motivation VARCHAR(256),
-    complement VARCHAR(1024),
-    login VARCHAR(256),
-    id_offre INT,
-    PRIMARY KEY (id_postuler),
-    FOREIGN KEY (login) REFERENCES stg_etudiant(login),
-    FOREIGN KEY (id_offre) REFERENCES stg_offre(id_offre)
+   FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise)
 );
 
 CREATE TABLE stg_offre_alternance(
    id_offre INT,
    PRIMARY KEY(id_offre),
    FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
-   ON DELETE CASCADE
 );
 
 CREATE TABLE stg_offre_stage(
    id_offre INT,
    PRIMARY KEY(id_offre),
    FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
-   ON DELETE CASCADE
 );
 
 CREATE TABLE stg_convention(
@@ -213,16 +220,16 @@ CREATE TABLE stg_convention(
    numero_voie VARCHAR(256),
    id_unite_gratification INT,
    id_enseignant INT,
-   id_tuteur INT NULL,
+   id_tuteur INT,
    id_entreprise INT,
-   id_distribution_commune INT NOT NULL,
+   id_commune INT NOT NULL,
    login VARCHAR(256) NOT NULL,
    PRIMARY KEY(id_convention),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
    FOREIGN KEY(id_enseignant) REFERENCES stg_enseignant(id_enseignant),
    FOREIGN KEY(id_tuteur) REFERENCES stg_tuteur(id_tuteur),
    FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise),
-   FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune),
+   FOREIGN KEY(id_commune) REFERENCES stg_distribution_commune(id_commune),
    FOREIGN KEY(login) REFERENCES stg_etudiant(login)
 );
 
@@ -242,6 +249,14 @@ CREATE TABLE stg_suivi(
    FOREIGN KEY(id_convention) REFERENCES stg_convention(id_convention)
 );
 
+CREATE TABLE stg_code_postal_commune(
+   id_commune INT,
+   id_code_postal VARCHAR(50),
+   PRIMARY KEY(id_commune, id_code_postal),
+   FOREIGN KEY(id_commune) REFERENCES stg_commune(id_commune),
+   FOREIGN KEY(id_code_postal) REFERENCES stg_code_postal(id_code_postal)
+);
+
 CREATE TABLE stg_etape_visee(
    id_etape VARCHAR(64),
    id_offre INT,
@@ -256,6 +271,17 @@ CREATE TABLE stg_offre_categorie(
    PRIMARY KEY(id_offre, id_categorie),
    FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre),
    FOREIGN KEY(id_categorie) REFERENCES stg_categorie(id_categorie)
+);
+
+CREATE TABLE stg_postule(
+   login VARCHAR(256),
+   id_offre INT,
+   cv VARCHAR(256),
+   lettre_motivation VARCHAR(256),
+   complement TEXT,
+   PRIMARY KEY(login, id_offre),
+   FOREIGN KEY(login) REFERENCES stg_etudiant(login),
+   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
 );
 
 SQL;
