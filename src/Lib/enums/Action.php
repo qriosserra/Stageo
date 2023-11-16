@@ -39,4 +39,5 @@ enum Action: string
     case ABOUT = "?a=about";
     case ETUDIANT_CONVENTION_ADD_FORM = "?c=etudiant&a=conventionAddForm";
     case ETUDIANT_CONVENTION_ADD = "?c=etudiant&a=conventionAdd";
+
 }
