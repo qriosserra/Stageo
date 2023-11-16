@@ -79,13 +79,6 @@ CREATE TABLE stg_distribution_commune(
    FOREIGN KEY(id_pays) REFERENCES stg_pays(id_pays)
 );
 
-CREATE TABLE stg_postulation(
-   id_postulation INT AUTO_INCREMENT,
-   cv VARCHAR(256),
-   lettre_motivation VARCHAR(256),
-   PRIMARY KEY(id_postulation)
-);
-
 CREATE TABLE stg_unite_gratification(
    id_unite_gratification INT AUTO_INCREMENT,
    libelle VARCHAR(4) NOT NULL,
@@ -161,14 +154,24 @@ CREATE TABLE stg_offre(
    id_unite_gratification INT,
    id_entreprise INT NOT NULL,
    login VARCHAR(256),
-   id_postulation INT,
    type VARCHAR(32),
    PRIMARY KEY(id_offre),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
    FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise),
-   FOREIGN KEY(login) REFERENCES stg_etudiant(login),
-   FOREIGN KEY(id_postulation) REFERENCES stg_postulation(id_postulation)
+   FOREIGN KEY(login) REFERENCES stg_etudiant(login)
    ON DELETE CASCADE
+);
+
+CREATE TABLE stg_postuler(
+    id_postuler INT AUTO_INCREMENT,
+    cv VARCHAR(256),
+    lettre_motivation VARCHAR(256),
+    complement VARCHAR(1024),
+    login VARCHAR(256),
+    id_offre INT,
+    PRIMARY KEY (id_postuler),
+    FOREIGN KEY (login) REFERENCES stg_etudiant(login),
+    FOREIGN KEY (id_offre) REFERENCES stg_offre(id_offre)
 );
 
 CREATE TABLE stg_offre_alternance(

@@ -13,8 +13,10 @@ use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
+use Stageo\Model\Object\Convention;
 use Stageo\Model\Object\Etudiant;
 use Stageo\Model\Repository\EtudiantRepository;
+use Stageo\Model\Repository\ConventionRepository;
 
 class EtudiantController
 {
@@ -81,4 +83,53 @@ class EtudiantController
             action: Action::HOME
         );
     }
+
+    public function conventionAddForm(): Response
+    {
+        return new Response(
+            template: "etudiant/conventionAdd.php",
+            params: [
+                "title" => "Déposer une convention",
+                "nav" => true,
+                "footer" => true,
+                "token" => Token::generateToken(Action::ETUDIANT_CONVENTION_ADD)
+            ]
+        );
+    }
+    public function conventionAdd(): Response
+    {
+        $etudiant = UserConnection::getUser();
+        if (!Token::verify(Action::ETUDIANT_CONVENTION_ADD, $_REQUEST["token"]))
+            throw new InvalidTokenException();
+        if (Token::isTimeout(Action::ETUDIANT_CONVENTION_ADD)) {
+            throw new TokenTimeoutException(
+                action: Action::ETUDIANT_CONVENTION_ADD,
+                params: ["login" => $etudiant->getLogin()]
+            );
+        }
+
+
+        $convention = new Convention(
+            login: $etudiant->getLogin(),
+            type_convention: $_REQUEST["type_convention"],
+            origine_stage: $_REQUEST["origine_stage"],
+            annee_universitaire: $_REQUEST["annee_universitaire"],
+            thematique: $_REQUEST["thematique"],
+            sujet: $_REQUEST["sujet"],
+            taches: $_REQUEST["taches"],
+            date_debut: $_REQUEST["date_debut"],
+            date_fin: $_REQUEST["date_fin"]
+        );
+        (new ConventionRepository)->insert($convention);
+        FlashMessage::add(
+            content: "Convention ajoutée avec succès",
+            type: FlashType::SUCCESS
+        );
+
+        return new Response(
+            action: Action::HOME
+        );
+    }
+
+
 }
