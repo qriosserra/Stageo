@@ -117,8 +117,13 @@ use Stageo\Model\Object\Etudiant;
                                     class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
                                     id="user-dropdown">
                                 <div class="px-4 py-3">
-                                    <span class="block text-sm text-gray-900 dark:text-white">Bonnie Green</span>
-                                    <span class="block text-sm  text-gray-500 truncate dark:text-gray-400">name@flowbite.com</span>
+                                    <span class="block text-sm text-gray-900 dark:text-white">
+                                        <?php if (UserConnection::isInstance(new Admin()) || UserConnection::isInstance(new Etudiant())) :?><?=/** @var Admin|Etudiant $user */ $user->getNom()." ".$user->getPrenom()?>
+                                        <?php elseif (UserConnection::isInstance(new Entreprise())) : ?><?=/** @var Entreprise $user */ $user->getRaisonSociale()?>
+                                        <?php else : ?>secrétariat
+                                        <?php endif ?>
+                                    </span>
+                                    <span class="block text-sm  text-gray-500 truncate dark:text-gray-400"><?=$user->getEmail()?></span>
                                     <!-- //TODO : email du mec et tout -->
                                 </div>
                                 <ul class="py-2" aria-labelledby="user-menu-button">
@@ -144,7 +149,7 @@ use Stageo\Model\Object\Etudiant;
                     <?php endif ?>
                     <!----------------------------Menu Burger !!! ----------------------------------------->
                     <button data-collapse-toggle="navbar-user" type="button"
-                            class="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                            class=" ml-4 inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
                             aria-controls="navbar-user" aria-expanded="false">
                         <span class="sr-only">Open main menu</span>
                         <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
