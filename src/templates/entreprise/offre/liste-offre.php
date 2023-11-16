@@ -18,6 +18,8 @@ include __DIR__ . "/../../macros/offre.php";
  * @var string $selC
  * @var string $search
  * @var Categorie $Categories
+ * @var int $nbRechercheTrouver
+ * @var string $communeTaper
  */
 ?>
 
@@ -132,17 +134,16 @@ include __DIR__ . "/../../macros/offre.php";
       <div class="w-full md:w-1/2 lg:w-2/6">
         <div class="mb-6">
           <label for="job-field" class="block text-sm font-medium text-gray-700">Postes, mots clés, ...</label>
-          <input id="job-field" name="job-field"
+          <input id="job-field" name="search"
             class="mt-1 block w-full rounded-full border-gray-700 border-[1px] shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-lg p-3"
-            type="text" placeholder="Exemples : Développeur web, Devops...">
+            type="search" placeholder="<?=$search = (strlen($search) == 0) ? "Exemples : Développeur web, Devops..." : $search?>">
         </div>
 
         <div>
           <label for="location-field" class="block text-sm font-medium text-gray-700">Localisation</label>
-          <input id="location-field" 
+          <input id="location-field" name ="Commune"
             class="mt-1 block w-full rounded-full border-gray-700 border-[1px] shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-lg p-3 transition duration-1000 ease-in-out"
-            type="text" placeholder="Exemples : Montpellier, Sète...">
-
+            type="text" placeholder="<?=$communeTaper = (strlen($communeTaper) == 0) ? "Exemples : Montpellier, Sète..." : $communeTaper?>">
         </div>
       </div>
 
@@ -150,9 +151,12 @@ include __DIR__ . "/../../macros/offre.php";
       <div class="w-full md:w-1/2 lg:w-2/6">
         <div class="mb-6">
           <label for="domain-field" class="block text-sm font-medium text-gray-700">Secteur</label>
-          <select id="domain-field"
+          <select id="domain-field" name="categoriesSelectionnees[]"
             class="mt-1 block w-full rounded-full border-gray-700 border-[1px] shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-lg p-3">
-            <option>Sélectionnez vos choix</option>
+             <option>Sélectionnez vos choix</option>
+              <?php foreach ($Categories as $category):?>
+              <option name="categoriesSelectionnees[<?= $category->getLibelle() ?>]" id="<?= $category->getIdCategorie() ?>  value="<?= $category->getIdCategorie() ?>"><?= $category->getLibelle() ?></option>
+              <?php endforeach;?>
             <!-- Add other options here -->
           </select>
         </div>
@@ -204,7 +208,7 @@ include __DIR__ . "/../../macros/offre.php";
 
     <!-- Internship offers -->
  
-    <div class="text-lg font-semibold mb-4">37550 offres de stage*</div>
+    <div class="text-lg font-semibold mb-4"><?=$nbRechercheTrouver ?> offres de stage*</div>
 
     <!-- Offer Cards in a single column -->
     <div class="space-y-4">
