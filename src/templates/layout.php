@@ -92,6 +92,7 @@ use Stageo\Model\Object\Secretaire;
                 <a href="<?=Action::HOME->value?>" class="flex items-center">
                     <img src="assets/img/logo.png" alt="logo" class="h-[1.8rem] w-[7rem] mr-3">
                 </a>
+
                 <div class="flex md:order-2">
                     <!----------------------------Drop down User !!! ----------------------------------------->
                     <?php if (is_null($user)) : ?>
@@ -157,7 +158,6 @@ use Stageo\Model\Object\Secretaire;
             </div>
                 <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 lg:mr-32" id="navbar-user">
                     <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white  dark:border-gray-700">
-
                         <li class="relative">
                             <button class="block py-2 pl-3 pr-4 h-[4rem] text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700  md:dark:hover:text-blue-500 focus:outline-none" id="dropdownOffres">
 
@@ -560,6 +560,7 @@ use Stageo\Model\Object\Secretaire;
                         <?php endif ?>
                     </ul>
                 </div>
+
         </nav>
         <!--                <nav id="sidenav" class="hidden transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidenav">-->
         <!--                    <div>-->
