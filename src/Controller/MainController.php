@@ -71,14 +71,20 @@ class MainController
                 if (sizeof($categoriesSelect) >0){
                     //$categories = [];
                     $res = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
-                    foreach ($categoriesSelect as $category){
-                       // $categories [] =  (new DeCategorieRepository()) ->select(new QueryCondition("id_categorie",ComparisonOperator::EQUAL,"%".$category."%"));
-                        $categories [] =  (new DeCategorieRepository()) ->getByIdCategorie($category);
+                    $cate = [];
+                    foreach ($categoriesSelect as $category) {
+                        //$cate [] = (new CategorieRepository())->select(new QueryCondition("libelle", ComparisonOperator::LIKE, "%" . $category . "%"));
+                        $cate [] = (new CategorieRepository())->getByLibelle($category);
                     }
+                    /*foreach ($cate as  $category){
+                        //$categories [] =  (new DeCategorieRepository()) ->select(new QueryCondition("id_categorie",ComparisonOperator::EQUAL,"%".$category."%"));
+                        $categories [] = (new DeCategorieRepository())->getByIdCategorie($category);
+                    }*/
+                    $categories = (new DeCategorieRepository())->getByIdCategorieliste($cate);
                     foreach ($res as $resu) {
                         foreach ($categories as $category) {
                             if ($category !=null) {
-                                if ($resu->getIdOffre() == $category->getIdOffre()) {
+                                if ($resu->getIdOffre() == $category && !in_array($resu,$offres)) {
                                     $offres [] = $resu;
                                 }
                             }
@@ -110,6 +116,7 @@ class MainController
                 "selB" => $selB,
                 "selC" => $selC,
                 "Categories" => $Categories,
+                "nbRechercheTrouver" => count($offres),
                 "search" => $search
             ]
         );}

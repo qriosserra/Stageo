@@ -19,7 +19,7 @@ enum Action: string
     case ENTREPRISE_SIGN_UP_STEP_4 = "?c=entreprise&a=signUpStep4";
     case ENTREPRISE_SIGN_IN_FORM = "?c=entreprise&a=signInForm";
     case ENTREPRISE_SIGN_IN = "?c=entreprise&a=signIn";
-    case LISTE_OFFRE = "?a=listeOffre";
+    case LISTE_OFFRE = "?a=listeOffre&XDEBUG_SESSION_START=";
     case AFFICHER_OFFRE = "?a=afficherOffre";
     case ENTREPRISE_CREATION_OFFRE_FORM = "?c=entreprise&a=offreAddForm";
     case ENTREPRISE_CREATION_OFFRE = "?c=entreprise&a=offreAdd";
