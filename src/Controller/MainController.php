@@ -33,7 +33,7 @@ class MainController
         return new Response(
             template: "home.php",
             params: [
-                "title" => "Home",
+                "title" => "Accueil",
                 "categories" => (new CategorieRepository)->select(),
                 "offres" => (new OffreRepository())->select()
             ]
