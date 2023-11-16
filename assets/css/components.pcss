@@ -177,13 +177,13 @@ p, input {
     @apply bg-none text-gray-700 transition-all hover:bg-gray-500/25;
 }
 
-i.fi {
-    /*@apply text-2xl h-6 text-font-600;*/
-}
-
 /*ripple effect*/
 [class*="button-"] {
     @apply relative;
+
+    i.fi {
+        @apply text-2xl h-6 text-font-600;
+    }
 }
 
 span.ripple {
