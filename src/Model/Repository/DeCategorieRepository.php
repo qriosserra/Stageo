@@ -7,6 +7,8 @@ use Stageo\Lib\Database\QueryCondition;
 use Stageo\Model\Object\Categorie;
 use Stageo\Model\Object\CoreObject;
 use Stageo\Model\Object\DeCategorie;
+use Stageo\Model\Object\Offre;
+use Stageo\Model\Repository\OffreRepository;
 use Stageo\Model\Repository\CoreRepository;
 
 class DeCategorieRepository extends CoreRepository
@@ -26,7 +28,7 @@ class DeCategorieRepository extends CoreRepository
     {
         return $this->select(new QueryCondition("id_categorie", ComparisonOperator::EQUAL, $id))[0] ?? null;
     }
-    public function getByIdCategorieliste(  $cate ): ?array
+    public function getByIdCategorieliste(  $cate ): array
     {
         foreach ($cate as $item) {
             if (!Null && $item instanceof Categorie) {
@@ -44,7 +46,8 @@ class DeCategorieRepository extends CoreRepository
             FROM {$this->getTable()}
             WHERE id_categorie = ".$listeprepare[$i]["tag"];
         }*/
-        $categories = array_column($listeprepare, 'tag');
+        if (isset($listeprepare)&&$listeprepare != NULL) {
+            $categories = array_column($listeprepare, 'tag');
 
 // Construire la requête SQL avec des sous-requêtes
         /* $sql = "SELECT id_offre
@@ -76,7 +79,6 @@ class DeCategorieRepository extends CoreRepository
         foreach ($listeprepare as list("libelle" => $libelle, "id" => $id)) {
             $res[$libelle] = $id;
         }
-        $categories = array_column($listeprepare, 'tag');
             $sql = "SELECT t0.id_offre
                 FROM {$this->getTable()} t0";
 
@@ -98,5 +100,8 @@ class DeCategorieRepository extends CoreRepository
                 $objects[] = $objectArray[0];
             }
             return $objects ?? [];
+        }
+
+        return (new OffreRepository())->getAllOffreId();
     }
 }

@@ -16,7 +16,7 @@ class CategorieRepository extends CoreRepository
     }
     public function getByLibelle(String $libelle): ?Categorie{
         $res =  $this->select(new QueryCondition("libelle", ComparisonOperator::LIKE, "%" . $libelle . "%"));
-        if ($res[0] != NUll){
+        if (isset($res[0]) && $res[0] != NUll){
             return $res[0];
         }else{
             return Null;

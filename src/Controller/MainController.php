@@ -14,6 +14,7 @@ use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\CategorieRepository;
 use Stageo\Model\Repository\DeCategorieRepository;
+use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\OffreRepository;
 use Stageo\Model\Repository\UniteGratificationRepository;
@@ -44,6 +45,7 @@ class MainController
     {
         if (UserConnection::isSignedIn()) {
         $search = $_REQUEST["search"] ?? "";
+        $commune = $_REQUEST["Commune"] ?? "";
         $option = $_POST["OptionL"] ?? "description";
         $tabla = $option === "description"
             ? "description"
@@ -52,7 +54,6 @@ class MainController
       /*  $offres = isset($search)
             ? (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%".$search."%"))
             : (new OffreRepository)->select();*/
-        $categoriesSelect = [];
         if (isset($_REQUEST['categoriesSelectionnees'])){
             $categoriesSelect = $_REQUEST['categoriesSelectionnees'];
         }
@@ -68,9 +69,10 @@ class MainController
                   //$offres [] =  (new OffreRepository)->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,"%".$idOffre->getIdOffre()."%"));
                }
             }else {
-                if (sizeof($categoriesSelect) >0){
+                if (isset($categoriesSelect)){
                     //$categories = [];
-                    $res = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
+                    //$res = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
+                    $res = (new OffreRepository)->getByTextAndLocalisation($search,$commune);
                     $cate = [];
                     foreach ($categoriesSelect as $category) {
                         //$cate [] = (new CategorieRepository())->select(new QueryCondition("libelle", ComparisonOperator::LIKE, "%" . $category . "%"));
@@ -91,7 +93,8 @@ class MainController
                         }
                     }
                 }else {
-                    $offres = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
+                    //$offres = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
+                    (new OffreRepository)->getByTextAndLocalisation($search,$commune);
                 }
             }
         }else{
@@ -117,6 +120,7 @@ class MainController
                 "selC" => $selC,
                 "Categories" => $Categories,
                 "nbRechercheTrouver" => count($offres),
+                "communeTaper" => $commune,
                 "search" => $search
             ]
         );}

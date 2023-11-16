@@ -19,6 +19,7 @@ include __DIR__ . "/../../macros/offre.php";
  * @var string $search
  * @var Categorie $Categories
  * @var int $nbRechercheTrouver
+ * @var string $communeTaper
  */
 ?>
 
@@ -140,10 +141,9 @@ include __DIR__ . "/../../macros/offre.php";
 
         <div>
           <label for="location-field" class="block text-sm font-medium text-gray-700">Localisation</label>
-          <input id="location-field" 
+          <input id="location-field" name ="Commune"
             class="mt-1 block w-full rounded-full border-gray-700 border-[1px] shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-lg p-3 transition duration-1000 ease-in-out"
-            type="text" placeholder="Exemples : Montpellier, Sète...">
-
+            type="text" placeholder="<?=$communeTaper = (strlen($communeTaper) == 0) ? "Exemples : Montpellier, Sète..." : $communeTaper?>">
         </div>
       </div>
 
