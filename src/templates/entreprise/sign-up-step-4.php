@@ -30,7 +30,7 @@ include __DIR__ . "/../macros/input.php";
     <div class="max-w-lg mx-auto p-8 space-y-4">
         <h4 class="text-center">Authentification</h4>
         <form action="<?=Action::ENTREPRISE_SIGN_UP_STEP_4->value?>" method="post" class="bg-white p-6 rounded shadow-md border-t-4 border-blue-500 space-y-4">
-            <?=field("email", "Email professionelle*", "email", "Entrez un email de contact", null, true, $entreprise->getUnverifiedEmail(), "sm:col-span-2")?>
+            <?=field("email", "Email professionelle*", "email", "Entrez un email de contact", null, true, $entreprise->getEmail(), "sm:col-span-2")?>
             <?=field("password", "Mot de passe*", "password", "Entrez un mot de passe", Pattern::PASSWORD, true)?>
             <?=field("confirm", "Confirmer le mot de passe*", "password", "Confirmez le mot de passe", Pattern::PASSWORD, true)?>
             <label class="block">
