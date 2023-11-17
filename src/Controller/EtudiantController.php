@@ -191,6 +191,10 @@ class EtudiantController
 
     public function conventionAddForm(String $login = null): Response
     {
+        $type_conventions = array(
+            "1" => "Stage",
+            "2" => "Alternance"
+        );
         return new Response(
             template: "etudiant/conventionAdd.php",
             params: [
@@ -203,6 +207,7 @@ class EtudiantController
                 "gratification" => 4.35,
                 "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
                 "token" => Token::generateToken(Action::ETUDIANT_CONVENTION_ADD),
+                "type_conventions" => $type_conventions
             ]
         );
     }
@@ -225,6 +230,7 @@ class EtudiantController
         $id_unite_gratification = $_REQUEST["id_unite_gratification"];
         $numero_voie = $_REQUEST["numero_voie"];
         $id_distribution_commune = $_REQUEST["id_distribution_commune"];
+
         $convention = new Convention(
             login: $etudiant->getLogin(),
             type_convention: $type_convention,

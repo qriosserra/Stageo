@@ -14,12 +14,13 @@ include __DIR__ . "/../macros/input.php";
  * @var array $distributions_commune
  * @var array $unite_gratifications
  * @var float $gratification
+ * @var array $type_conventions
  */
 ?>
 <main class="mt-24">
     <form action="<?=Action::ETUDIANT_CONVENTION_ADD->value?>" method="post" class="bg-white w-[60vw] p-12 mx-auto text-gray-600 rounded-lg shadow-lg grid grid-cols-2 gap-8">
         <h5 class="col-span-2">Déposer une convention</h5>
-        <?=field("type_convention", "Type de convention*", "text", "Entrez le type de convention", null, true)?>
+        <?=dropdown("type_convention", "Type de convention*", "Sélectionnez un type de convention", null, $convention->getTypeConvention(), $type_conventions)?>
         <?=field("annee_universitaire", "Année universitaire*", "text", "Entrez l'année universitaire", null, true)?>
         <?=field("origine_stage", "Origine du stage*", "text", "Entrez l'origine du stage", null, true)?>
         <?=field("sujet", "Sujet*", "text", "Entrez le sujet", null, true)?>
