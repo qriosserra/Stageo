@@ -16,9 +16,12 @@ use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Convention;
 use Stageo\Model\Object\Etudiant;
+use Stageo\Model\Object\Postuler;
 use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EtudiantRepository;
 use Stageo\Model\Repository\ConventionRepository;
+use Stageo\Model\Repository\OffreRepository;
+use Stageo\Model\Repository\PostulerRepository;
 use Stageo\Model\Repository\UniteGratificationRepository;
 
 class EtudiantController

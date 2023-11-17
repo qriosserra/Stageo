@@ -17,7 +17,6 @@ include __DIR__ . "/../../macros/offre.php";
 ?>
 
 <main class="h-screen flex flex-col items-center justify-center">
-    <?=button("Accueil", "fi-rr-home", Action::HOME, "!absolute !pl-2 top-16 left-0")?>
     <form enctype="multipart/form-data" class="bg-white h-screen lg:h-auto w-screen lg:w-[64rem] overflow-scroll p-12 text-gray-600 rounded-lg shadow-lg grid gap-8" action="<?=Action::ETUDIANT_POSTULER_OFFRE->value . '&id=' . $offre->getIdOffre() . '&login='.UserConnection::getSignedInUser()->getLogin()?>" method="post">
         <label for="cv">CV :</label>
         <input type="file" name="cv" id="cv" accept=".pdf, .doc, .docx">

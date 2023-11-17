@@ -8,11 +8,13 @@ use Stageo\Lib\enums\Action;
 
 include __DIR__ . "/../../macros/button.php";
 include __DIR__ . "/../../macros/input.php";
-include __DIR__ . "/../../macros/offre.php";
+include __DIR__ . "/../../macros/newOffre.php";
 /**
  * @var Categorie[] $categories
  * @var Etudiant $etudiant
  * @var Offre[] $offres
+ * @var array $listeoffres
+ * @var int [] $idOffres
  * @var string $selA
  * @var string $selB
  * @var string $selC
@@ -140,35 +142,16 @@ include __DIR__ . "/../../macros/offre.php";
 
     <!-- Internship offers -->
 
-    <div class="text-lg font-semibold mb-4"><?=$nbRechercheTrouver ?> offres de stage*</div>
+    <div class="text-lg font-semibold mb-4"><?=$nbRechercheTrouver ?> offres de stage</div>
+<?php foreach ($listeoffres as $offre):?>
+    <?php if (in_array($offre["id_offre"],$idOffres)):?>
+    <?= newOffre($offre["description"],$offre["type"],$offre["raison_sociale"], $offre["taches"],"08/05/2024",$offre["categories"],$offre["id_offre"])?>
+    <?php endif;?>
+<?php endforeach; ?>
 
-    <!-- Offer Cards in a single column -->
-    <div class="space-y-4">
-        <!-- Card 1 with reserved area for image -->
-        <div class="flex border rounded-lg">
-            <div class="flex-none w-24 h-24 bg-gray-200" aria-hidden="true"> <!-- Placeholder for image --> </div>
-            <div class="p-4 flex-grow">
-                <div class="mb-2 font-bold">Assistant communication et événementiel H/F</div>
-                <div class="mb-2 text-sm text-gray-600">Klaxit</div>
-                <div class="mb-2 text-xs bg-blue-100 text-blue-800 py-1 px-2 rounded">Communication</div>
-                <div class="text-xs">6 mois</div>
-                <div class="text-xs">Débute le : 01/01/2023</div>
-                <a href="#" class="text-blue-600 hover:text-blue-800 text-sm mt-2 inline-block">En savoir plus</a>
-            </div>
-        </div>
 
-        <!-- Card 2 with reserved area for image -->
-        <div class="flex border rounded-lg">
-            <div class="flex-none w-24 h-24 bg-gray-200" aria-hidden="true"> <!-- Placeholder for image --> </div>
-            <div class="p-4 flex-grow">
-                <div class="mb-2 font-bold">Stage de pré-embauche - Ingénieur Etudes et Développement Java</div>
-                <div class="mb-2 text-sm text-gray-600">Axelor</div>
-                <div class="mb-2 text-xs bg-blue-100 text-blue-800 py-1 px-2 rounded">6 mois</div>
-                <div class="text-xs">Débute le : 11/11/2023</div>
-                <a href="#" class="text-blue-600 hover:text-blue-800 text-sm mt-2 inline-block">En savoir plus</a>
-            </div>
-        </div>
-    </div>
+
+
 </div>
 
 </body>

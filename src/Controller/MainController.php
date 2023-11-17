@@ -93,17 +93,22 @@ class MainController
                             if ($category !=null) {
                                 if ($resu->getIdOffre() == $category && !in_array($resu,$offres)) {
                                     $offres [] = $resu;
+                                    $idOffres [] = $resu->getIdOffre();
                                 }
                             }
                         }
                     }
                 }else {
                     //$offres = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
-                    (new OffreRepository)->getByTextAndLocalisation($search,$commune,$Togle);
+                    $offres =  (new OffreRepository)->getByTextAndLocalisation($search,$commune,$Togle);
+                    foreach ($offres as $o){
+                        $idOffres [] = $o->getIdOffre();
+                    }
                 }
             }
         }else{
             $offres = (new OffreRepository)->select();
+            $idOffres = (new OffreRepository())->getAllOffreId();
         }
         $selA = $option === "description"
             ? "selected"
@@ -114,12 +119,15 @@ class MainController
         $selC = $option === "Categories"
             ? "selected"
             : null;
+        $listeoffres = (new OffreRepository())->getOffresDetailsAvecCategories();
         $Categories = (new CategorieRepository()) ->select();
         return new Response(
             template: "entreprise/offre/liste-offre.php",
             params: [
                 "title" => "Liste des offres",
                 "offres" => $offres,
+                "listeoffres" => $listeoffres,
+                "idOffres" => $idOffres,
                 "selA" => $selA,
                 "selB" => $selB,
                 "selC" => $selC,
