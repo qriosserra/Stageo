@@ -54,6 +54,11 @@ class MainController
       /*  $offres = isset($search)
             ? (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%".$search."%"))
             : (new OffreRepository)->select();*/
+        $Togle = [
+            isset($_REQUEST['toggle']["Alternances"]) ? "oui" : "non",
+            isset($_REQUEST['toggle']["Stages"]) ? "oui" : "non",
+        ];
+
         if (isset($_REQUEST['categoriesSelectionnees'])){
             $categoriesSelect = $_REQUEST['categoriesSelectionnees'];
         }
@@ -72,7 +77,7 @@ class MainController
                 if (isset($categoriesSelect)){
                     //$categories = [];
                     //$res = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
-                    $res = (new OffreRepository)->getByTextAndLocalisation($search,$commune);
+                    $res = (new OffreRepository)->getByTextAndLocalisation($search,$commune,$Togle);
                     $cate = [];
                     foreach ($categoriesSelect as $category) {
                         //$cate [] = (new CategorieRepository())->select(new QueryCondition("libelle", ComparisonOperator::LIKE, "%" . $category . "%"));
@@ -94,7 +99,7 @@ class MainController
                     }
                 }else {
                     //$offres = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
-                    (new OffreRepository)->getByTextAndLocalisation($search,$commune);
+                    (new OffreRepository)->getByTextAndLocalisation($search,$commune,$Togle);
                 }
             }
         }else{
