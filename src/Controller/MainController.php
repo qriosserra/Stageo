@@ -133,6 +133,7 @@ class MainController
 
     public function afficherOffre(string $id): Response
     {
+        if (UserConnection::isSignedIn()) {
         /**
          * @var Offre $offre
          */
@@ -145,6 +146,10 @@ class MainController
                 "offre" => $offre,
                 "unite_gratification" => (new UniteGratificationRepository)->getById($offre->getIdUniteGratification())->getLibelle()
             ]
+        );}
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
         );
     }
 

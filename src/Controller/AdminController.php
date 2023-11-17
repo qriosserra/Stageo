@@ -108,14 +108,20 @@ class AdminController
     }
     public function signUpForm(): Response
     {
-        return new Response(
-            template: "admin/sign-up.php",
-            params: [
-                "title" => "Se connecter",
-                "nav" => false,
-                "footer" => false,
-                "token" => Token::generateToken(Action::ADMIN_SIGN_UP_FORM)
-            ]
+        if (UserConnection::isInstance(new Admin())) {
+            return new Response(
+                template: "admin/sign-up.php",
+                params: [
+                    "title" => "Se connecter",
+                    "nav" => false,
+                    "footer" => false,
+                    "token" => Token::generateToken(Action::ADMIN_SIGN_UP_FORM)
+                ]
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
         );
     }
 
@@ -187,31 +193,49 @@ class AdminController
     }
 
     public function listeEntreprises(){
-        $listeEntreprises = (new EntrepriseRepository())->getEntreprisesNonValidees();
-        return new Response(
-            template: "admin/listeEntreprises.php",
-            params: [
-                "title" => "Liste entreprises à valider",
-                "listeEntreprise" => $listeEntreprises
-            ]
+        if (UserConnection::isInstance(new Admin())) {
+            $listeEntreprises = (new EntrepriseRepository())->getEntreprisesNonValidees();
+            return new Response(
+                template: "admin/listeEntreprises.php",
+                params: [
+                    "title" => "Liste entreprises à valider",
+                    "listeEntreprise" => $listeEntreprises
+                ]
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
         );
     }
     public function validerEntreprise(){
-        $entreprise = (new EntrepriseRepository())->getById($_REQUEST["idEntreprise"]);
-        /** @var Entreprise $entreprise **/
-        $entreprise->setConfirmer(1);
-        (new EntrepriseRepository())->update($entreprise);
-        $listeEntreprises = (new EntrepriseRepository())->getEntreprisesNonValidees();
-        return new Response(
-            action: Action::ADMIN_LISTEENTREPRISE
+        if (UserConnection::isInstance(new Admin())) {
+            $entreprise = (new EntrepriseRepository())->getById($_REQUEST["idEntreprise"]);
+            /** @var Entreprise $entreprise **/
+            $entreprise->setConfirmer(1);
+            (new EntrepriseRepository())->update($entreprise);
+            $listeEntreprises = (new EntrepriseRepository())->getEntreprisesNonValidees();
+            return new Response(
+                action: Action::ADMIN_LISTEENTREPRISE
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
         );
     }
 
     public function suprimerEntreprise(){
+        if (UserConnection::isInstance(new Admin())) {
         (new EntrepriseRepository())->delete([new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $_REQUEST["idEntreprise"])]);
         $listeEntreprises = (new EntrepriseRepository())->getEntreprisesNonValidees();
         return new Response(
             action: Action::ADMIN_LISTEENTREPRISE
+        );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
         );
     }
 }

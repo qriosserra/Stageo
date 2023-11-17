@@ -345,17 +345,23 @@ class EntrepriseController
     }
 
     public function offreAddForm(string $email = null): Response {
-        return new Response(
-            template: "entreprise/offre/add.php",
-            params: [
-                "email" => $email,
-                "title" => "Création d'une offre",
-                "nav" => false,
-                "footer" => false,
-                "offre" => Session::get("offre"),
-                "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
-                "token" => Token::generateToken(Action::ENTREPRISE_CREATION_OFFRE_FORM)
-            ]
+        if (UserConnection::isInstance(new Entreprise())) {
+            return new Response(
+                template: "entreprise/offre/add.php",
+                params: [
+                    "email" => $email,
+                    "title" => "Création d'une offre",
+                    "nav" => false,
+                    "footer" => false,
+                    "offre" => Session::get("offre"),
+                    "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
+                    "token" => Token::generateToken(Action::ENTREPRISE_CREATION_OFFRE_FORM)
+                ]
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
         );
     }
 
@@ -587,7 +593,7 @@ class EntrepriseController
     }
 
     public static function afficherOffreEntreprise():Response{
-        if (UserConnection::isSignedIn()) {
+        if (UserConnection::isInstance(new Entreprise())) {
             $user = UserConnection::getSignedInUser();
             $idEntreprise = $user->getIdEntreprise();
             $condition = new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $idEntreprise);
