@@ -13,9 +13,9 @@ include __DIR__."/../macros/button.php";
     </a>
 </div>
 <div id="colonne2">
-    <a href="" class="button-ghost">
+    <a href="<?=Action::ADMIN_LISTEENTREPRISE->value?>" class="button-ghost">
         <i class="fi fi-rr-building"></i>
-        <span>Accéder aux entreprises à valider [work in progress]</span>
+        <span>Accéder aux entreprises à valider</span>
     </a>
 </div>
 <div id="colonne3">

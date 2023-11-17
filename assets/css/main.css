@@ -667,6 +667,12 @@ video {
 .mt-\[8rem\]{
   margin-top: 8rem;
 }
+.mt-\[10rem\]{
+  margin-top: 10rem;
+}
+.mt-\[4rem\]{
+  margin-top: 4rem;
+}
 .block{
   display: block;
 }
