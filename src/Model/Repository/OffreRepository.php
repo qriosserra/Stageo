@@ -28,7 +28,7 @@ class OffreRepository extends CoreRepository
         }
         return $resulat;
     }
-    public function getByTextAndLocalisation (String $texte, String $localisation): ?array{
+    public function getByTextAndLocalisation (String $texte, String $localisation, array $Togle): ?array{
        /* $val ["text1"] = $texte;
         $val ["text2"] = $texte;
         $val ["text3"] = $texte;
@@ -43,6 +43,10 @@ class OffreRepository extends CoreRepository
                 )";
         $pdo = DatabaseConnection::getPdo()->prepare($sql);
         $pdo->execute($val);*/
+        $toglle = ($Togle[0] == "oui" && $Togle[1] == "oui") ? "%Stages et Alternances%"
+            : ($Togle[0] == "oui" ? "Alternances"
+                : ($Togle[1] == "oui" ? "Stages" : "%%"));
+
         $texte = (strlen($texte)>0) ?$texte : "";
         $localisation = (strlen($localisation)>0) ?$localisation : "";
         $val["text1"] = "%".$texte."%";
@@ -50,6 +54,7 @@ class OffreRepository extends CoreRepository
         $val["text3"] = "%".$texte."%";
         $val["text4"] = "%".$texte."%";
         $val["localisation"] = "%".$localisation."%";
+        $val["Togle"] = $toglle;
 
         $sql = "SELECT *
         FROM {$this->getTable()} 
@@ -58,8 +63,8 @@ class OffreRepository extends CoreRepository
             SELECT t1.id_entreprise
             FROM stg_entreprise t1
             JOIN stg_distribution_commune t3 ON t1.id_distribution_commune = t3.id_distribution_commune
-            WHERE t3.commune LIKE :localisation
-        )";
+            WHERE t3.commune LIKE :localisation 
+        ) AND type LIKE :Togle ";
 
         $pdo = DatabaseConnection::getPdo()->prepare($sql);
         $pdo->execute($val);

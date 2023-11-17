@@ -93,7 +93,7 @@ include __DIR__ . "/../../macros/offre.php";
                     <!-- toggle -->
                     <div class="relative">
                         <!-- input -->
-                        <input name="toggleA" id="toggleA" type="checkbox" class="sr-only" />
+                        <input name="toggle[Alternances]=Alternances" id="toggleA" type="checkbox" class="sr-only" />
                         <!-- line -->
                         <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
                         <!-- dot -->
@@ -108,7 +108,7 @@ include __DIR__ . "/../../macros/offre.php";
                     <!-- toggle -->
                     <div class="relative">
                         <!-- input -->
-                        <input name="toggleB" id="toggleB" type="checkbox" class="sr-only" />
+                        <input name="toggle[Stages]=Stages" id="toggleB" type="checkbox" class="sr-only" />
                         <!-- line -->
                         <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
                         <!-- dot -->
