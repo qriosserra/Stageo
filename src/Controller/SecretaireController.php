@@ -143,9 +143,9 @@ class SecretaireController
             );
         }
         return new Response(
-            template: "secretaire/listeConventions.php",
+            template: "secretaire/liste-conventions.php",
             params: [
-                "title" => "listeConventions",
+                "title" => "Conventions",
                 "conventions" => (new ConventionRepository)->select(),
             ]
         );
