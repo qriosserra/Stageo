@@ -281,7 +281,7 @@ class EntrepriseController
 
         $entreprise->setHashedPassword((Password::hash($password)));
         (new EntrepriseRepository)->insert($entreprise);
-        UserConnection::signIn($entreprise);
+        UserConnection::signIn((new EntrepriseRepository)->getByEmail($entreprise->getEmail()));
         Session::delete("entreprise");
         FlashMessage::add("L'entreprise a été ajoutée avec succès", FlashType::SUCCESS);
         return new Response(
@@ -390,16 +390,15 @@ class EntrepriseController
          * @var Entreprise $entreprise
          */
         $entreprise = UserConnection::getSignedInUser();
-
         $offre = Session::set("offre", new Offre(
-            id_entreprise: $entreprise->getIdEntreprise(),
             description: $description,
-            secteur: $secteur,
             thematique: $thematique,
+            secteur: $secteur,
             taches: $taches,
             commentaires: $commentaires,
             gratification: $gratification,
-            id_unite_gratification: $id_unite_gratification
+            id_unite_gratification: $id_unite_gratification,
+            id_entreprise: $entreprise->getIdEntreprise()
         ));
 
         if (!Token::verify(Action::ENTREPRISE_CREATION_OFFRE_FORM, $_REQUEST["token"])) {

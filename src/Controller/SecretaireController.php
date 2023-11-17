@@ -90,8 +90,8 @@ class SecretaireController
             email: $email,
             hashed_password: Password::hash($password),
         );
-        UserConnection::signIn($secretaire);
-        (new SecretaireRepository())->insert($secretaire);
+
+        UserConnection::signIn((new SecretaireRepository())->getByEmail($email));
         return new Response(
             action: Action::HOME
         );

@@ -101,8 +101,9 @@ class AdminController
             prenom: $prenom,
             hashed_password: Password::hash($password),
         );
-        UserConnection::signIn($admin);
         (new AdminRepository())->insert($admin);
+        $admin = (new AdminRepository())->getByEmail($email);
+        UserConnection::signIn($admin);
         return new Response(
             action: Action::HOME
         );
