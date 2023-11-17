@@ -164,7 +164,6 @@ class AdminController
         $admin = (new AdminRepository())->getByEmail($email);
         if (is_null($admin)) {
             $secretaire = (new SecretaireRepository())->getByEmail($email);
-            (new SecretaireController())->signIn($secretaire,$password);
             if (is_null($secretaire)) {
                 throw new ControllerException(
                     message: "Aucun compte n'existe avec ce login",
@@ -174,6 +173,7 @@ class AdminController
                     ]
                 );
             }
+            (new SecretaireController())->signIn($secretaire,$password);
         }
         if (!Password::verify($password, $admin->getHashedPassword())) {
             throw new ControllerException(

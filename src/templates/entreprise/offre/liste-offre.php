@@ -52,6 +52,13 @@ include __DIR__ . "/../../macros/offre.php";
     </h1>
 </div>
 <div class="container mx-auto px-4 mb-8 mt-12">
+    <?php if(!isset($search)){
+        $search="";
+    }if(!isset($communeTaper)){
+        $communeTaper="";
+    }if (!isset($nbRechercheTrouver)){
+        $nbRechercheTrouver=0;
+    }?>
 
     <!-- Search area with two sets of inputs stacked -->
     <form class="flex flex-wrap justify-center gap-6 "  action="<?=Action::LISTE_OFFRE->value?>"  method="post">
