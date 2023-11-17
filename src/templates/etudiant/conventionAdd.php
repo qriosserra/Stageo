@@ -22,7 +22,7 @@ include __DIR__ . "/../macros/input.php";
         <h5 class="col-span-2">Déposer une convention</h5>
         <?=dropdown("type_convention", "Type de convention*", "Sélectionnez un type de convention", null, $convention->getTypeConvention(), $type_conventions)?>
         <?=field("annee_universitaire", "Année universitaire*", "text", "Entrez l'année universitaire", null, true)?>
-        <?=field("origine_stage", "Origine du stage*", "text", "Entrez l'origine du stage", null, true)?>
+        <?=field("origine_stage", "Origine du stage*", "text", "Entrez l'origine de la mission", null, true)?>
         <?=field("sujet", "Sujet*", "text", "Entrez le sujet", null, true)?>
         <?=field("taches", "Tâches*", "text", "Entrez les tâches", null, true)?>
         <?=field("numero_voie", "Adresse de l'établissement où se déroule la mission", "text", null, Pattern::NAME, false, $convention->getNumeroVoie())?>
