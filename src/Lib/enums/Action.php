@@ -21,7 +21,7 @@ enum Action: string
     case ENTREPRISE_SIGN_UP_STEP_4 = "?c=entreprise&a=signUpStep4";
     case ENTREPRISE_SIGN_IN_FORM = "?c=entreprise&a=signInForm";
     case ENTREPRISE_SIGN_IN = "?c=entreprise&a=signIn";
-    case LISTE_OFFRE = "?a=listeOffre&XDEBUG_SESSION_START=";
+    case LISTE_OFFRE = "?a=listeOffre";
     case AFFICHER_OFFRE = "?a=afficherOffre";
     case ENTREPRISE_POSTULE_OFFRE_ETUDIANT = "?c=entreprise&a=voirAPostuler";
     case ENTREPRISE_CREATION_OFFRE_FORM = "?c=entreprise&a=offreAddForm";
@@ -43,4 +43,8 @@ enum Action: string
     case SECRETAIRE_SIGN_UP = "?c=secretaire&a=signUp";
     case SECRETAIRE_SIGN_IN = "?c=secretaire&a=signIn";
     case SECRETAIRE_DASH = "?c=secretaire&a=dashboard";
+    case ETUDIANT_CONVENTION_ADD_FORM = "?c=etudiant&a=conventionAddForm";
+    case ETUDIANT_CONVENTION_ADD = "?c=etudiant&a=conventionAdd";
+    case SECRETAIRE_LISTE_CONVENTIONS = "?c=secretaire&a=listeConventions";
+    case SECRETAIRE_CONVENTION_DETAILS = "?c=secretaire&a=conventionDetails&id_convention=";
 }

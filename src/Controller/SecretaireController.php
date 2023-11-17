@@ -5,6 +5,8 @@ namespace Stageo\Controller;
 use Stageo\Controller\Exception\ControllerException;
 use Stageo\Controller\Exception\InvalidTokenException;
 use Stageo\Controller\Exception\TokenTimeoutException;
+use Stageo\Lib\Database\ComparisonOperator;
+use Stageo\Lib\Database\QueryCondition;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
@@ -14,8 +16,10 @@ use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Admin;
+use Stageo\Model\Object\Convention;
 use Stageo\Model\Object\Secretaire;
 use Stageo\Model\Repository\AdminRepository;
+use Stageo\Model\Repository\ConventionRepository;
 use Stageo\Model\Repository\SecretaireRepository;
 //
 
@@ -123,7 +127,7 @@ class SecretaireController
                 message: "Le mot de passe est incorrect",
                 action: Action::ADMIN_SIGN_IN_FORM,
                 params: [
-                    "email" => $email
+                    "email" => $secretaire->getEmail(),
                 ]
             );
         }
@@ -136,6 +140,38 @@ class SecretaireController
 
         return new Response(
             action: Action::HOME
+        );
+    }
+    public function listeConventions(): Response
+    {
+        if (!UserConnection::isInstance(new Secretaire)){
+            throw new ControllerException(
+                message: "Vous n'avez pas accès à cette page",
+                action: Action::HOME,
+            );
+        }
+        return new Response(
+            template: "secretaire/liste-conventions.php",
+            params: [
+                "title" => "Conventions",
+                "conventions" => (new ConventionRepository)->select(),
+            ]
+        );
+    }
+
+    public function conventionDetails(int $id_convention): Response {
+        if (!UserConnection::isInstance(new Secretaire)) {
+            throw new ControllerException(
+                message: "Vous n'êtes pas authorisé à accéder à cette page",
+                action: Action::HOME,
+            );
+        }
+        return new Response(
+            template: "secretaire/convention-details.php",
+            params: [
+                "title" => "Détails de la convention",
+                "convention" => (new ConventionRepository)->select(new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention))
+            ]
         );
     }
 }

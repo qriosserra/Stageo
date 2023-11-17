@@ -43,7 +43,6 @@ class MainController
 
     public function listeOffre(): Response
     {
-        if (UserConnection::isSignedIn()) {
         $search = $_REQUEST["search"] ?? "";
         $commune = $_REQUEST["Commune"] ?? "";
         $option = $_POST["OptionL"] ?? "description";
@@ -123,12 +122,7 @@ class MainController
                 "communeTaper" => $commune,
                 "search" => $search
             ]
-        );}
-        throw new ControllerException(
-            message: "Vous n'avez pas accès à cette page.",
-            action: Action::HOME
         );
-
     }
 
     public function afficherOffre(string $id): Response

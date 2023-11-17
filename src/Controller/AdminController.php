@@ -156,6 +156,9 @@ class AdminController
                 params: ["email" => $email]
             );
         }
+        /**
+         * @var Etudiant|null $etudiant
+         */
         $admin = (new AdminRepository())->getByEmail($email);
         if (is_null($admin)) {
             $secretaire = (new SecretaireRepository())->getByEmail($email);

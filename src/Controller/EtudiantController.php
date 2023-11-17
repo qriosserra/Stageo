@@ -8,16 +8,18 @@ use Stageo\Controller\Exception\TokenTimeoutException;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
+use Stageo\Lib\HTTP\Session;
 use Stageo\Lib\Response;
 use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
+use Stageo\Model\Object\Convention;
 use Stageo\Model\Object\Etudiant;
-use Stageo\Model\Object\Postuler;
+use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EtudiantRepository;
-use Stageo\Model\Repository\OffreRepository;
-use Stageo\Model\Repository\PostulerRepository;
+use Stageo\Model\Repository\ConventionRepository;
+use Stageo\Model\Repository\UniteGratificationRepository;
 
 class EtudiantController
 {
@@ -54,9 +56,9 @@ class EtudiantController
         }
 
         $url = $_ENV["LDAP_API"] . "?" . http_build_query([
-                "login" => $login,
-                "password" => $password
-            ]);
+            "login" => $login,
+            "password" => $password
+        ]);
         $response = json_decode(file_get_contents($url), true);
         if (empty($response)) throw new ControllerException(
             message: "Le login ou le mot de passe est incorrect",
@@ -208,6 +210,75 @@ class EtudiantController
             params: [
                 "id" => $id_offre
             ]
+        );
+    }
+
+    public function conventionAddForm(String $login = null): Response
+    {
+        return new Response(
+            template: "etudiant/conventionAdd.php",
+            params: [
+                "title" => "Déposer une convention",
+                "nav" => true,
+                "footer" => true,
+                "login" => $login,
+                "convention" => Session::get("convention") ?? new Convention(),
+                "distributions_commune" => array_reduce((new DistributionCommuneRepository)->select(), fn($carry, $distribution) => $carry + [$distribution->getIdDistributionCommune() => "{$distribution->getCommune()} ({$distribution->getCodePostal()})"], []),
+                "gratification" => 4.35,
+                "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
+                "token" => Token::generateToken(Action::ETUDIANT_CONVENTION_ADD),
+            ]
+        );
+    }
+    public function conventionAdd(): Response
+    {
+        /**
+         * @var Etudiant $etudiant
+         */
+        $etudiant = UserConnection::getSignedInUser();
+        //TODO: Enlever la ligne du dessous une fois qu'il y aura une vérification pour que l'étudiant soit connecté
+        $etudiant = new Etudiant("levys");
+        $type_convention = $_REQUEST["type_convention"];
+        $annee_universitaire = $_REQUEST["annee_universitaire"];
+        $origine_stage = $_REQUEST["origine_stage"];
+        $sujet = $_REQUEST["sujet"];
+        $taches = $_REQUEST["taches"];
+        $date_debut = $_REQUEST["date_debut"];
+        $date_fin = $_REQUEST["date_fin"];
+        $gratification = $_REQUEST["gratification"];
+        $id_unite_gratification = $_REQUEST["id_unite_gratification"];
+        $numero_voie = $_REQUEST["numero_voie"];
+        $id_distribution_commune = $_REQUEST["id_distribution_commune"];
+        $convention = new Convention(
+            login: $etudiant->getLogin(),
+            type_convention: $type_convention,
+            origine_stage: $origine_stage,
+            annee_universitaire: $annee_universitaire,
+            sujet: $sujet,
+            taches: $taches,
+            date_debut: $date_debut,
+            date_fin: $date_fin,
+            gratification: $gratification,
+            id_unite_gratification: $id_unite_gratification,
+            numero_voie: $numero_voie,
+            id_distribution_commune: $id_distribution_commune
+        );
+
+        if (!Token::verify(Action::ETUDIANT_CONVENTION_ADD, $_REQUEST["token"]))
+            throw new InvalidTokenException();
+        if (Token::isTimeout(Action::ETUDIANT_CONVENTION_ADD)) {
+            throw new TokenTimeoutException(
+                action: Action::ETUDIANT_CONVENTION_ADD,
+                params: ["convention" => $convention]
+            );
+        }
+        (new ConventionRepository)->insert($convention);
+        FlashMessage::add(
+            content: "Convention ajoutée avec succès",
+            type: FlashType::SUCCESS
+        );
+        return new Response(
+            action: Action::HOME
         );
     }
 }
