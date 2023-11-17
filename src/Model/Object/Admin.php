@@ -9,7 +9,7 @@ use Stageo\Lib\Database\Table;
 #[Table("admin")]
 class Admin extends User
 {
-    public function __construct(#[PrimaryKey] private ?int                     $id_admin = null,
+    public function __construct(#[PrimaryKey] private ?int       $id_admin = null,
                                 private string|NullDataType|null $email = null,
                                 private string|NullDataType|null $nom = null,
                                 private string|NullDataType|null $prenom = null,

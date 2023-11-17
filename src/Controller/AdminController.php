@@ -2,6 +2,7 @@
 
 namespace Stageo\Controller;
 
+use http\Params;
 use Stageo\Controller\Exception\ControllerException;
 use Stageo\Controller\Exception\InvalidTokenException;
 use Stageo\Controller\Exception\TokenTimeoutException;
@@ -238,6 +239,96 @@ class AdminController
         }
         throw new ControllerException(
             message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
+        );
+    }
+
+    public function afficherFormulaireMiseAJour(): Response{
+        $user = UserConnection::getSignedInUser();
+        if (!$user) {
+            throw new ControllerException(
+                message: "Veillez vous connecter",
+                action: Action::HOME
+            );
+        }
+        else if (!UserConnection::isInstance(new Admin())) {
+            throw new ControllerException(
+                message: "Vous n'avez pas à acceder à cette page",
+                action: Action::HOME
+            );
+        }
+        else{
+            return new Response(
+                template: "admin/update.php",
+                params: [
+                    "user" => UserConnection::getSignedInUser(),
+                    "token" => Token::generateToken(Action::ADMIN_MODIFICATION_INFO_FORM)
+                ]
+            );
+        }
+    }
+
+    public static function mettreAJourAdmin():Response
+    {
+        $user = UserConnection::getSignedInUser();
+        $id = (int)$_REQUEST["id"];
+        $email = $_REQUEST["email"];
+        $nom = $_REQUEST["nom"];
+        $prenom = $_REQUEST["prenom"];
+        $password = $_REQUEST["password"];
+        $new_password1 = $_REQUEST["new_password1"];
+        $new_password2 = $_REQUEST["new_password2"];
+        if (!Token::verify(Action::ADMIN_MODIFICATION_INFO_FORM, $_REQUEST["token"])) {
+            throw new InvalidTokenException();
+        }
+        if (Token::isTimeout(Action::ADMIN_MODIFICATION_INFO_FORM)) {
+            throw new TokenTimeoutException(
+                action: Action::ADMIN_MODIFICATION_INFO_FORM
+            );
+        }
+        if(!$user){
+            throw new ControllerException(
+                message: "Veillez vous connecter",
+                action: Action::ADMIN_MODIFICATION_INFO_FORM
+            );
+        }
+        else if(!UserConnection::isInstance(new Admin())){
+            throw new ControllerException(
+                message: "Vous n'avez pas à acceder à cette page",
+                action: Action::ADMIN_MODIFICATION_INFO_FORM
+            );
+        }
+        else if($id!=$user->getIdAdmin()){
+            throw new ControllerException(
+                message: "Vous ne pouvez pas modifier les autres admin",
+                action: Action::ADMIN_MODIFICATION_INFO_FORM
+            );
+        }
+        else if (!Password::verify($password, $user->getHashedPassword())) {
+            throw new ControllerException(
+                message: "Mot de Passe incorect",
+                action: Action::ADMIN_MODIFICATION_INFO_FORM
+            );
+        }
+        else if ($new_password1!=$new_password2) {
+            throw new ControllerException(
+                message: "Les nouveau mod de passe ne correspondent pas",
+                action: Action::ADMIN_MODIFICATION_INFO_FORM
+            );
+        }
+        if(!$new_password1 || !$new_password2){
+            $new_password1 = $password;
+        }
+        /**
+         * @var Admin $a
+         */
+        $a = UserConnection::getSignedInUser();
+        $a->setEmail($email);
+        $a->setNom($nom);
+        $a->setPrenom($prenom);
+        $a->setHashedPassword(Password::hash($new_password1));
+        (new AdminRepository())->update($a);
+        return new Response(
             action: Action::HOME,
         );
     }

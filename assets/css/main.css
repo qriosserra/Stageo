@@ -685,9 +685,6 @@ video {
 .inline-flex{
   display: inline-flex;
 }
-.table{
-  display: table;
-}
 .grid{
   display: grid;
 }
@@ -1356,10 +1353,6 @@ video {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
-.py-4{
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-}
 .\!pl-2{
   padding-left: 0.5rem !important;
 }
@@ -1390,14 +1383,8 @@ video {
 .pt-5{
   padding-top: 1.25rem;
 }
-.text-left{
-  text-align: left;
-}
 .text-center{
   text-align: center;
-}
-.text-right{
-  text-align: right;
 }
 .text-justify{
   text-align: justify;
@@ -2271,10 +2258,6 @@ footer .footer-information-container .footer-description-container .footer-descr
   --tw-bg-opacity: 1;
   background-color: rgb(67 56 202 / var(--tw-bg-opacity));
 }
-.hover\:bg-gray-50:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgb(249 250 251 / var(--tw-bg-opacity));
-}
 .hover\:text-blue-100:hover{
   --tw-text-opacity: 1;
   color: rgb(219 234 254 / var(--tw-text-opacity));
@@ -2290,9 +2273,6 @@ footer .footer-information-container .footer-description-container .footer-descr
 .hover\:text-indigo-500:hover{
   --tw-text-opacity: 1;
   color: rgb(99 102 241 / var(--tw-text-opacity));
-}
-.hover\:underline:hover{
-  text-decoration-line: underline;
 }
 .hover\:shadow-\[0_8px_9px_-4px_rgba\(20\2c 164\2c 77\2c 0\.3\)\2c 0_4px_18px_0_rgba\(20\2c 164\2c 77\2c 0\.2\)\]:hover{
   --tw-shadow: 0 8px 9px -4px rgba(20,164,77,0.3),0 4px 18px 0 rgba(20,164,77,0.2);
@@ -2459,9 +2439,6 @@ footer .footer-information-container .footer-description-container .footer-descr
 :is([dir="rtl"] .rtl\:space-x-reverse) > :not([hidden]) ~ :not([hidden]){
   --tw-space-x-reverse: 1;
 }
-:is([dir="rtl"] .rtl\:text-right){
-  text-align: right;
-}
 :is(.dark .dark\:divide-gray-600) > :not([hidden]) ~ :not([hidden]){
   --tw-divide-opacity: 1;
   border-color: rgb(75 85 99 / var(--tw-divide-opacity));
@@ -2533,10 +2510,6 @@ footer .footer-information-container .footer-description-container .footer-descr
 :is(.dark .dark\:text-white){
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
-}
-:is(.dark .dark\:text-blue-500){
-  --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity));
 }
 :is(.dark .dark\:placeholder-gray-400)::-moz-placeholder{
   --tw-placeholder-opacity: 1;
@@ -2668,9 +2641,6 @@ footer .footer-information-container .footer-description-container .footer-descr
   }
   .sm\:rounded-3xl{
     border-radius: 1.5rem;
-  }
-  .sm\:rounded-lg{
-    border-radius: 0.5rem;
   }
   .sm\:p-20{
     padding: 5rem;
