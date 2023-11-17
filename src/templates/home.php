@@ -81,12 +81,24 @@ include "macros/offre.php";
                     <div>
                         <button class="flex items-center focus:outline-none" onclick="toggleContent('faq1')">
                             <i class="fi fi-br-plus flex-shrink-0 w-6 h-6 text-blue-500"></i>
-                            <span class="mx-4 text-xl">Quelles sont les heures du stage/alternance ?</span>
+                            <span class="mx-4 text-xl">Quelles sont les dates du stage/alternance ?</span>
                         </button>
                         <div class="hiddene transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq1">
                             <span class="border border-blue-500"></span>
+                            <br> BUT2: 10 semaines minimum du 8 avril au 15 juin 2024 (extensible au 5 Juillet voir FAQ) <br>
+
+                            BUT3: 16 semaines minimum du 25 Mars  au 12 juillet 2024 (extensible au 28 Aout).
                             <p class="max-w-3xl px-4">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
+                                <br>Pour l'alternance : <br>
+                                <span class="ml-4">22 à 26 semaines</span>
+                            </p>
+                            <br>
+                            <p class="max-w-3xl px-4">
+                                Pour le stage :
+                                <br>
+                                <span class="ml-4">BUT2: 10 semaines minimum du 8 avril au 15 juin 2024 (extensible au 5 Juillet voir FAQ)</span>
+                                <br>
+                                <span class="ml-4">BUT3: 16 semaines minimum du 25 Mars  au 12 juillet 2024 (extensible au 28 Aout).</span>
                             </p>
                         </div>
                     </div>
@@ -94,12 +106,16 @@ include "macros/offre.php";
                     <div>
                         <button class="flex items-center focus:outline-none" onclick="toggleContent('faq2')">
                             <i class="fi fi-br-plus flex-shrink-0 w-6 h-6 text-blue-500"></i>
-                            <span class="mx-4 text-xl ">Y'a t-il des gratifications ?</span>
+                            <span class="mx-4 text-xl ">Quels sont les gratifications ?</span>
                         </button>
                         <div class="hiddene transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq2">
                             <span class="border border-blue-500"></span>
                             <p class="max-w-3xl px-4">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
+                                En première année en alternance, le montant de la rémunération peut varier de 27% à 100% du salaire minimum interprofessionnel de croissance (SMIC), en fonction de l'âge de l'alternant. Ainsi, pour les moins de 18 ans, la rémunération représente 27% du SMIC, pour ceux âgés de 18 à 20 ans, elle est de 43%, pour ceux de 21 à 25 ans, elle s'élève à 53%, et enfin, pour les alternants de 26 ans et plus, la rémunération atteint 100% du SMIC.
+                            </p>
+                            <br>
+                            <p class="max-w-3xl px-4">
+                                Pour un stage cette rémunération s'élèvera à 4.05euros par heures en général étant la gratification minimale est exonérée de cotisations sociales
                             </p>
                         </div>
                     </div>
@@ -107,12 +123,22 @@ include "macros/offre.php";
                     <div>
                         <button class="flex items-center focus:outline-none" onclick="toggleContent('faq3')">
                             <i class="fi fi-br-plus flex-shrink-0 w-6 h-6 text-blue-500"></i>
-                            <span class="mx-4 text-xl ">What are your opening house ?</span>
+                            <span class="mx-4 text-xl ">Quel type de contrat est proposé pour le stage/alternance ?</span>
                         </button>
                         <div class="hiddene transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq3">
                             <span class="border border-blue-500"></span>
                             <p class="max-w-3xl px-4  ">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
+                                Stage:<br>
+                                <br>
+                                Bien que le contrat de stage ne soit pas juridiquement assimilé à un contrat de travail, contrairement à ce dernier, il implique la participation de trois parties signataires et comporte une rémunération moindre. Cependant, il offre toujours certains avantages, tels que le remboursement des frais de transport.
+                            </p>
+                            <br>
+                            <p class="max-w-3xl px-4 ">
+                                Alternance: <br>
+                                <br>
+                                Le contrat d’apprentissage peut être conclu en CDD (contrat à Durée Déterminée) pour une durée de 1 à 3 ans ou signé en CDI (Contrat à Durée Indéterminée).
+
+                                La durée minimale de la formation en apprentissage est de 1 an à raison de 400 heures de formation minimum. Dans le cadre d’un CDI, la durée de la formation ne peut excéder 3 ans.
                             </p>
                         </div>
                     </div>
@@ -120,13 +146,25 @@ include "macros/offre.php";
                     <div>
                         <button class="flex items-center focus:outline-none" onclick="toggleContent('faq4')">
                             <i class="fi fi-br-plus flex-shrink-0 w-6 h-6 text-blue-500"></i>
-                            <span class="mx-4 text-xl ">Do i need a referral ?</span>
+                            <span class="mx-4 text-xl ">À quelles conditions un employeur peut-il avoir recours à un stagiaire ?</span>
                         </button>
                         <div class="hiddene transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq4">
                             <span class="border border-blue-500"></span>
-                            <p class="max-w-3xl px-4">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
-                            </p>
+                            <h2 class="mb-2 text-lg">Un stage d'étudiant ne peut pas être proposé pour les missions suivantes :</h2>
+                            <ul class="max-w-md space-y-1 text-gray-500 list-disc list-inside dark:text-gray-400">
+                                <li>
+                                    Remplacer un salarié en cas d'absence, de suspension de son contrat de travail ou de licenciement
+                                </li>
+                                <li>
+                                    Exécuter une tâche régulière correspondant à un poste de travail permanent (le stagiaire n'a pas d'obligation de production comme un salarié)
+                                </li>
+                                <li>
+                                    Faire face à un accroissement temporaire d'activité
+                                </li>
+                                <li>
+                                    Occuper un emploi saisonnier
+                                </li>
+                            </ul>
                         </div>
                     </div>
                     <hr class="my-8 border-gray-200 dark:border-gray-700">
@@ -134,13 +172,19 @@ include "macros/offre.php";
                         <button class="flex items-center focus:outline-none" onclick="toggleContent('faq5')">
                             <i class="fi fi-br-plus flex-shrink-0 w-6 h-6 text-blue-500"></i>
                             <span class="mx-4 text-xl">
-                                Is the cost of the appoinment covered by private health insurance ?
+                                Dans quels cas peut-on rompre un contrat d’apprentissage ?
                             </span>
                         </button>
                         <div class="hiddene transition-all duration-500 ease-in-out mt-8 md:mx-10 toggleable-content" id="faq5">
                             <span class="border border-blue-500"></span>
                             <p class="max-w-3xl px-4">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni, eum quae. Harum officiis reprehenderit ex quia ducimus minima id provident molestias optio nam vel, quidem iure voluptatem, repellat et ipsa.
+                                En principe, le contrat prend fin à son terme s’il est conclu en CDD pour la durée de la formation. S’il est conclu en CDI, les règles communes de rupture du contrat à durée déterminée s’appliquent.
+
+                                Il existe différents cas de rupture du contrat d’apprentissage :
+
+                                Avant échéance de la période d’essai, employeur ou apprenti peuvent rompre le contrat sans justificatif précis.
+                                Après la période d’essai, la rupture peut être conclue d’un commun accord entre l’employeur et l’apprenti ou par décision unilatérale de l’un deux.
+                                L’employeur peut rompre le contrat pour faute grave de l’apprenti ou inaptitude à exercer ses fonctions.
                             </p>
                         </div>
                     </div>
