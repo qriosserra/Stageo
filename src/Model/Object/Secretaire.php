@@ -3,12 +3,13 @@
 namespace Stageo\Model\Object;
 
 use Stageo\Lib\Database\NullDataType;
+use Stageo\Lib\Database\PrimaryKey;
 use Stageo\Lib\Database\Table;
 
 #[Table("secretaire")]
 class Secretaire extends User
 {
-    public function __construct(private ?int                     $id_secretaire = null,
+    public function __construct(#[PrimaryKey] private ?int                     $id_secretaire = null,
                                 private string|NullDataType|null $email = null,
                                 private string|NullDataType|null $hashed_password = null)
     {
