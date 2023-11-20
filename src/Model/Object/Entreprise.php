@@ -249,4 +249,5 @@ class Entreprise extends User
     {
         $this->id_distribution_commune = $id_distribution_commune;
     }
+
 }

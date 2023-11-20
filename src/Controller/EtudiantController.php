@@ -5,6 +5,8 @@ namespace Stageo\Controller;
 use Stageo\Controller\Exception\ControllerException;
 use Stageo\Controller\Exception\InvalidTokenException;
 use Stageo\Controller\Exception\TokenTimeoutException;
+use Stageo\Lib\Database\ComparisonOperator;
+use Stageo\Lib\Database\QueryCondition;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
@@ -15,8 +17,10 @@ use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Convention;
+use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Etudiant;
 use Stageo\Model\Repository\DistributionCommuneRepository;
+use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\EtudiantRepository;
 use Stageo\Model\Repository\ConventionRepository;
 use Stageo\Model\Repository\UniteGratificationRepository;
@@ -195,6 +199,28 @@ class EtudiantController
             "1" => "Stage",
             "2" => "Alternance"
         );
+        $annees_universitaires = array(
+            "2020-2021" => "2020-2021",
+            "2021-2022" => "2021-2022",
+            "2022-2023" => "2022-2023",
+            "2023-2024" => "2023-2024",
+            "2024-2025" => "2024-2025"
+        );
+        $thematiques = array(
+            "1" => "Développement",
+            "2" => "Réseau",
+            "3" => "Sécurité",
+            "4" => "Base de données",
+            "5" => "Web",
+            "6" => "Autre"
+        );
+        $interruption = array(
+            "1" => "Oui",
+            "0" => "Non"
+        );
+        $entreprisesNom = array_reduce((new EntrepriseRepository)->select(), fn($carry, $entreprise) => $carry + [$entreprise->getIdEntreprise() => $entreprise->getRaisonSociale()], []);
+
+
         return new Response(
             template: "etudiant/conventionAdd.php",
             params: [
@@ -207,7 +233,11 @@ class EtudiantController
                 "gratification" => 4.35,
                 "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
                 "token" => Token::generateToken(Action::ETUDIANT_CONVENTION_ADD),
-                "type_conventions" => $type_conventions
+                "type_conventions" => $type_conventions,
+                "annees_universitaires" => $annees_universitaires,
+                "thematiques" => $thematiques,
+                "entreprisesNom" => $entreprisesNom,
+                "interruption" => $interruption
             ]
         );
     }
@@ -217,8 +247,6 @@ class EtudiantController
          * @var Etudiant $etudiant
          */
         $etudiant = UserConnection::getSignedInUser();
-        //TODO: Enlever la ligne du dessous une fois qu'il y aura une vérification pour que l'étudiant soit connecté
-        $etudiant = new Etudiant("levys");
         $type_convention = $_REQUEST["type_convention"];
         $annee_universitaire = $_REQUEST["annee_universitaire"];
         $origine_stage = $_REQUEST["origine_stage"];
@@ -230,6 +258,23 @@ class EtudiantController
         $id_unite_gratification = $_REQUEST["id_unite_gratification"];
         $numero_voie = $_REQUEST["numero_voie"];
         $id_distribution_commune = $_REQUEST["id_distribution_commune"];
+        $thematique = $_REQUEST["thematique"];
+        $commentaires = $_REQUEST["commentaires"];
+        $details = $_REQUEST["details"];
+        $interruption = $_REQUEST["interruption"];
+        $date_debut_interruption = $_REQUEST["date_debut_interruption"];
+        $date_fin_interruption = $_REQUEST["date_fin_interruption"];
+        if ($interruption == "0"){
+            $date_debut_interruption = null;
+            $date_fin_interruption = null;
+        }
+        $heures_total = $_REQUEST["heures_total"];
+        $jours_hebdomadaire = $_REQUEST["jours_hebdomadaire"];
+        $heures_hebdomadaire = $_REQUEST["heures_hebdomadaire"];
+        $commentaire_duree = $_REQUEST["commentaire_duree"];
+        $avantages_nature = $_REQUEST["avantages_nature"];
+        $code_elp = $_REQUEST["code_elp"];
+        $entreprise = $_REQUEST["entreprise"];
 
         $convention = new Convention(
             login: $etudiant->getLogin(),
@@ -243,7 +288,20 @@ class EtudiantController
             gratification: $gratification,
             id_unite_gratification: $id_unite_gratification,
             numero_voie: $numero_voie,
-            id_distribution_commune: $id_distribution_commune
+            id_distribution_commune: $id_distribution_commune,
+            thematique: $thematique,
+            commentaires:$commentaires,
+            details: $details,
+            interruption: $interruption,
+            date_interruption_debut: $date_debut_interruption,
+            date_interruption_fin: $date_fin_interruption,
+            heures_total: $heures_total,
+            jours_hebdomadaire: $jours_hebdomadaire,
+            heures_hebdomadaire: $heures_hebdomadaire,
+            commentaires_duree: $commentaire_duree,
+            avantages_nature: $avantages_nature,
+            code_elp: $code_elp,
+            id_entreprise: $entreprise
         );
 
         if (!Token::verify(Action::ETUDIANT_CONVENTION_ADD, $_REQUEST["token"]))
@@ -251,7 +309,19 @@ class EtudiantController
         if (Token::isTimeout(Action::ETUDIANT_CONVENTION_ADD)) {
             throw new TokenTimeoutException(
                 action: Action::ETUDIANT_CONVENTION_ADD,
-                params: ["convention" => $convention]
+                params: ["convention" => $convention,
+                    "type_convention" => $type_convention,
+                    "annee_universitaire" => $annee_universitaire,
+                    "origine_stage" => $origine_stage,
+                    "sujet" => $sujet,
+                    "taches" => $taches,
+                    "date_debut" => $date_debut,
+                    "date_fin" => $date_fin,
+                    "gratification" => $gratification,
+                    "id_unite_gratification" => $id_unite_gratification,
+                    "numero_voie" => $numero_voie,
+                    "id_distribution_commune" => $id_distribution_commune,
+                    ]
             );
         }
         (new ConventionRepository)->insert($convention);

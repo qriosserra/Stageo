@@ -152,6 +152,7 @@ class SecretaireController
     }
 
     public function conventionDetails(int $id_convention): Response {
+        $convention = (new ConventionRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0] ?? null;
         if (!UserConnection::isInstance(new Secretaire)) {
             throw new ControllerException(
                 message: "Vous n'êtes pas authorisé à accéder à cette page",
@@ -162,7 +163,7 @@ class SecretaireController
             template: "secretaire/convention-details.php",
             params: [
                 "title" => "Détails de la convention",
-                "convention" => (new ConventionRepository)->select(new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention))
+                "convention" => $convention,
             ]
         );
     }

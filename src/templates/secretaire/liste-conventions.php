@@ -46,9 +46,9 @@ include __DIR__ . "/../macros/input.php";
     <div class="contenu" id="stages">
         <?php foreach ($conventions as $convention):?>
         <?php if ($convention->getTypeConvention() == "1"):?>
-            <a href="<?=Action::SECRETAIRE_CONVENTION_DETAILS->value . "&{$convention->getIdConvention()}"?>" class="flex flex-col justify-between items-center bg-white p-4 rounded-lg shadow-lg">
+            <a href="<?=Action::SECRETAIRE_CONVENTION_DETAILS->value . "{$convention->getIdConvention()}"?>" class="flex flex-col justify-between items-center bg-white p-4 rounded-lg shadow-lg">
                 <div class="inline-flex">
-                    <h3 class="text-lg font-semibold"><?=$convention->getLogin()?></h3>
+                    <p class="text-sm text-gray-500"><?=$convention->getLogin()?></p>
                     <p class="text-sm text-gray-500"><?=$convention->getSujet()?></p>
                 </div>
                 <div class="inline-flex">
@@ -64,7 +64,7 @@ include __DIR__ . "/../macros/input.php";
     <div class="contenu" id="alternances">
         <?php foreach ($conventions as $convention):?>
         <?php if ($convention->getTypeConvention() == "2"):?>
-            <a href="<?=Action::SECRETAIRE_CONVENTION_DETAILS->value . "&{$convention->getIdConvention()}"?>" class="flex flex-col justify-between items-center bg-white p-4 rounded-lg shadow-lg">
+            <a href="<?=Action::SECRETAIRE_CONVENTION_DETAILS->value . "{$convention->getIdConvention()}"?>" class="flex flex-col justify-between items-center bg-white p-4 rounded-lg shadow-lg">
                 <div class="inline-flex">
                     <h3 class="text-lg font-semibold"><?=$convention->getLogin()?></h3>
                     <p class="text-sm text-gray-500"><?=$convention->getSujet()?></p>

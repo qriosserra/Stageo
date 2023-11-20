@@ -22,7 +22,7 @@ class Convention extends CoreObject
                                 private string|NullDataType|null $details = null,
                                 private string|NullDataType|null $date_debut = null,
                                 private string|NullDataType|null $date_fin = null,
-                                private string|NullDataType|null $interruption = null,
+                                private bool|NullDataType|null $interruption = null,
                                 private string|NullDataType|null $date_interruption_debut = null,
                                 private string|NullDataType|null $date_interruption_fin = null,
                                 private string|NullDataType|null $heures_total = null,
@@ -321,14 +321,4 @@ class Convention extends CoreObject
         $this->id_enseignant = $id_enseignant;
     }
 
-    public static function getConventionById(string $id_convention): Convention
-    { //faire une requête sql pour récupérer la convention avec l'id $id_convention en faisant attention aux valeurs nulles :
-        $sql = "SELECT * FROM stg_convention WHERE id_convention = :id_convention";
-        $pdo = DatabaseConnection::getPdo()->prepare($sql);
-        $pdo->execute([
-            "id_convention" => $id_convention
-        ]);
-        $convention = $pdo->fetch();
-        return new Convention($convention['id_convention'], $convention['login'], $convention['type_convention'], $convention['origine_stage'], $convention['annee_universitaire'], $convention['thematique'], $convention['sujet'], $convention['taches'], $convention['commentaires'], $convention['details'], $convention['date_debut'], $convention['date_fin'], $convention['interruption'], $convention['date_interruption_debut'], $convention['date_interruption_fin'], $convention['heures_total'], $convention['jours_hebdomadaire'], $convention['heures_hebdomadaire'], $convention['commentaires_duree'], $convention['gratification'], $convention['id_unite_gratification'], $convention['avantages_nature'], $convention['code_elp'], $convention['numero_voie'], $convention['id_distribution_commune'], $convention['id_entreprise'], $convention['id_tuteur'], $convention['id_enseignant']);
-    }
 }
