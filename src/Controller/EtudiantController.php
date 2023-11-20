@@ -233,14 +233,7 @@ class EtudiantController
             "2023-2024" => "2023-2024",
             "2024-2025" => "2024-2025"
         );
-        $thematiques = array(
-            "1" => "Développement",
-            "2" => "Réseau",
-            "3" => "Sécurité",
-            "4" => "Base de données",
-            "5" => "Web",
-            "6" => "Autre"
-        );
+        $thematiques = array_reduce((new OffreRepository)->select(), fn($carry, $offre) => $carry + [$offre->getIdOffre() => $offre->getThematique()] , []);
         $interruption = array(
             "1" => "Oui",
             "0" => "Non"
