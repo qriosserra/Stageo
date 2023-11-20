@@ -14,6 +14,7 @@ use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\CategorieRepository;
 use Stageo\Model\Repository\DeCategorieRepository;
+use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\OffreRepository;
 use Stageo\Model\Repository\UniteGratificationRepository;
@@ -42,7 +43,9 @@ class MainController
 
     public function listeOffre(): Response
     {
+        if (UserConnection::isSignedIn()) {
         $search = $_REQUEST["search"] ?? "";
+        $commune = $_REQUEST["Commune"] ?? "";
         $option = $_POST["OptionL"] ?? "description";
         $tabla = $option === "description"
             ? "description"
@@ -51,7 +54,11 @@ class MainController
       /*  $offres = isset($search)
             ? (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%".$search."%"))
             : (new OffreRepository)->select();*/
-        $categoriesSelect = [];
+        $Togle = [
+            isset($_REQUEST['toggle']["Alternances"]) ? "oui" : "non",
+            isset($_REQUEST['toggle']["Stages"]) ? "oui" : "non",
+        ];
+
         if (isset($_REQUEST['categoriesSelectionnees'])){
             $categoriesSelect = $_REQUEST['categoriesSelectionnees'];
         }
@@ -67,28 +74,41 @@ class MainController
                   //$offres [] =  (new OffreRepository)->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,"%".$idOffre->getIdOffre()."%"));
                }
             }else {
-                if (sizeof($categoriesSelect) >0){
+                if (isset($categoriesSelect)){
                     //$categories = [];
-                    $res = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
-                    foreach ($categoriesSelect as $category){
-                       // $categories [] =  (new DeCategorieRepository()) ->select(new QueryCondition("id_categorie",ComparisonOperator::EQUAL,"%".$category."%"));
-                        $categories [] =  (new DeCategorieRepository()) ->getByIdCategorie($category);
+                    //$res = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
+                    $res = (new OffreRepository)->getByTextAndLocalisation($search,$commune,$Togle);
+                    $cate = [];
+                    foreach ($categoriesSelect as $category) {
+                        //$cate [] = (new CategorieRepository())->select(new QueryCondition("libelle", ComparisonOperator::LIKE, "%" . $category . "%"));
+                        $cate [] = (new CategorieRepository())->getByLibelle($category);
                     }
+                    /*foreach ($cate as  $category){
+                        //$categories [] =  (new DeCategorieRepository()) ->select(new QueryCondition("id_categorie",ComparisonOperator::EQUAL,"%".$category."%"));
+                        $categories [] = (new DeCategorieRepository())->getByIdCategorie($category);
+                    }*/
+                    $categories = (new DeCategorieRepository())->getByIdCategorieliste($cate);
                     foreach ($res as $resu) {
                         foreach ($categories as $category) {
                             if ($category !=null) {
-                                if ($resu->getIdOffre() == $category->getIdOffre()) {
+                                if ($resu->getIdOffre() == $category && !in_array($resu,$offres)) {
                                     $offres [] = $resu;
+                                    $idOffres [] = $resu->getIdOffre();
                                 }
                             }
                         }
                     }
                 }else {
-                    $offres = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
+                    //$offres = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
+                    $offres =  (new OffreRepository)->getByTextAndLocalisation($search,$commune,$Togle);
+                    foreach ($offres as $o){
+                        $idOffres [] = $o->getIdOffre();
+                    }
                 }
             }
         }else{
             $offres = (new OffreRepository)->select();
+            $idOffres = (new OffreRepository())->getAllOffreId();
         }
         $selA = $option === "description"
             ? "selected"
@@ -99,23 +119,33 @@ class MainController
         $selC = $option === "Categories"
             ? "selected"
             : null;
+        $listeoffres = (new OffreRepository())->getOffresDetailsAvecCategories();
         $Categories = (new CategorieRepository()) ->select();
         return new Response(
             template: "entreprise/offre/liste-offre.php",
             params: [
                 "title" => "Liste des offres",
                 "offres" => $offres,
+                "listeoffres" => $listeoffres,
+                "idOffres" => $idOffres,
                 "selA" => $selA,
                 "selB" => $selB,
                 "selC" => $selC,
                 "Categories" => $Categories,
+                "nbRechercheTrouver" => count($offres),
+                "communeTaper" => $commune,
                 "search" => $search
             ]
+        );}
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
         );
     }
 
     public function afficherOffre(string $id): Response
     {
+        if (UserConnection::isSignedIn()) {
         /**
          * @var Offre $offre
          */
@@ -128,6 +158,10 @@ class MainController
                 "offre" => $offre,
                 "unite_gratification" => (new UniteGratificationRepository)->getById($offre->getIdUniteGratification())->getLibelle()
             ]
+        );}
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
         );
     }
 

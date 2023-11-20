@@ -23,6 +23,7 @@ use Stageo\Model\Repository\DatabaseConnection;
 use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\OffreRepository;
+use Stageo\Model\Repository\PostulerRepository;
 use Stageo\Model\Repository\StatutJuridiqueRepository;
 use Stageo\Model\Repository\TailleEntrepriseRepository;
 use Stageo\Model\Repository\TypeStructureRepository;
@@ -280,7 +281,7 @@ class EntrepriseController
 
         $entreprise->setHashedPassword((Password::hash($password)));
         (new EntrepriseRepository)->insert($entreprise);
-        UserConnection::signIn($entreprise);
+        UserConnection::signIn((new EntrepriseRepository)->getByEmail($entreprise->getEmail()));
         Session::delete("entreprise");
         FlashMessage::add("L'entreprise a été ajoutée avec succès", FlashType::SUCCESS);
         return new Response(
@@ -344,17 +345,23 @@ class EntrepriseController
     }
 
     public function offreAddForm(string $email = null): Response {
-        return new Response(
-            template: "entreprise/offre/add.php",
-            params: [
-                "email" => $email,
-                "title" => "Création d'une offre",
-                "nav" => false,
-                "footer" => false,
-                "offre" => Session::get("offre"),
-                "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
-                "token" => Token::generateToken(Action::ENTREPRISE_CREATION_OFFRE_FORM)
-            ]
+        if (UserConnection::isInstance(new Entreprise())) {
+            return new Response(
+                template: "entreprise/offre/add.php",
+                params: [
+                    "email" => $email,
+                    "title" => "Création d'une offre",
+                    "nav" => false,
+                    "footer" => false,
+                    "offre" => Session::get("offre"),
+                    "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
+                    "token" => Token::generateToken(Action::ENTREPRISE_CREATION_OFFRE_FORM)
+                ]
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
         );
     }
 
@@ -383,16 +390,15 @@ class EntrepriseController
          * @var Entreprise $entreprise
          */
         $entreprise = UserConnection::getSignedInUser();
-
         $offre = Session::set("offre", new Offre(
-            id_entreprise: $entreprise->getIdEntreprise(),
             description: $description,
-            secteur: $secteur,
             thematique: $thematique,
+            secteur: $secteur,
             taches: $taches,
             commentaires: $commentaires,
             gratification: $gratification,
-            id_unite_gratification: $id_unite_gratification
+            id_unite_gratification: $id_unite_gratification,
+            id_entreprise: $entreprise->getIdEntreprise()
         ));
 
         if (!Token::verify(Action::ENTREPRISE_CREATION_OFFRE_FORM, $_REQUEST["token"])) {
@@ -558,8 +564,35 @@ class EntrepriseController
         }
     }
 
+    public static function voirAPostuler():Response{
+        if(UserConnection::isSignedIn()){
+            $id = $_REQUEST["id"];
+            $offre = (new OffreRepository())->getById($id);
+            $user = UserConnection::getSignedInUser();
+            $idEntreprise = $user->getIdEntreprise();
+            if($user and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
+                $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
+                $liste_offrePostuler = (new PostulerRepository())->select($condition);
+                return new Response(
+                    template: "entreprise/offre/etudiant_postulant_offre.php",
+                    params: [
+                        "title" => "Liste des etudiant ayant postuler",
+                        "postuler" => $liste_offrePostuler,
+                    ]
+                );
+            }
+            return new Response(
+                action: Action::HOME,
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
+        );
+    }
+
     public static function afficherOffreEntreprise():Response{
-        if (UserConnection::isSignedIn()) {
+        if (UserConnection::isInstance(new Entreprise())) {
             $user = UserConnection::getSignedInUser();
             $idEntreprise = $user->getIdEntreprise();
             $condition = new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $idEntreprise);
@@ -579,5 +612,6 @@ class EntrepriseController
             message: "Vous n'avez pas accès à cette page.",
             action: Action::HOME
         );
+
     }
 }

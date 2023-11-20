@@ -19,10 +19,13 @@ use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Convention;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Etudiant;
+use Stageo\Model\Object\Postuler;
 use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\EtudiantRepository;
 use Stageo\Model\Repository\ConventionRepository;
+use Stageo\Model\Repository\OffreRepository;
+use Stageo\Model\Repository\PostulerRepository;
 use Stageo\Model\Repository\UniteGratificationRepository;
 
 class EtudiantController
@@ -109,7 +112,7 @@ class EtudiantController
          * @var Etudiant $user
          */
         $user = UserConnection::getSignedInUser();
-        if (!(new PostulerRepository)->a_Postuler($user->getLogin(), $id)){
+        if ((new PostulerRepository)->a_Postuler($user->getLogin(), $id)){
             throw new ControllerException(
                 message: "Vous n'avez pas à acceder à cette page",
                 action: Action::HOME
@@ -141,7 +144,7 @@ class EtudiantController
                 action: Action::ETUDIANT_POSTULER_OFFRE_FORM
             );
         }
-        if (UserConnection::isSignedIn() and UserConnection::isInstance(new Etudiant) and UserConnection::getSignedInUser()->getLogin() === $login) {
+        if (!UserConnection::isSignedIn() or !UserConnection::isInstance(new Etudiant) or !UserConnection::getSignedInUser()->getLogin() === $login) {
             throw new ControllerException(
                 message: "Vous n'avez pas à acceder à cette page",
                 action: Action::ETUDIANT_POSTULER_OFFRE_FORM,
@@ -151,9 +154,9 @@ class EtudiantController
                 ]
             );
         }
-        if ($cv["error"] != UPLOAD_ERR_OK) {
+        if (!$cv["size"]==0 and $cv["error"] != UPLOAD_ERR_OK) {
             throw new ControllerException(
-                message: "Erreur lors de l'upload du fichier",
+                message: "Erreur lors de l'upload du fichier cv",
                 action: Action::ETUDIANT_POSTULER_OFFRE_FORM,
                 params: [
                     "login" => $login,
@@ -161,9 +164,9 @@ class EtudiantController
                 ]
             );
         }
-        if ($lm["error"] != UPLOAD_ERR_OK) {
+        if (!$lm["size"]==0 and $lm["error"] != UPLOAD_ERR_OK) {
             throw new ControllerException(
-                message: "Erreur lors de l'upload du fichier",
+                message: "Erreur lors de l'upload du fichier lm",
                 action: Action::ETUDIANT_POSTULER_OFFRE_FORM,
                 params: [
                     "login" => $login,
@@ -172,11 +175,31 @@ class EtudiantController
             );
         }
 
-        $cvName = uniqid("", true) . pathinfo($cv["name"], PATHINFO_EXTENSION);
-        move_uploaded_file($cv["tmp_name"], "assets/document/cv/$cvName");
+        if($cv["size"]!=0) {
+            $cvName = uniqid("", true) . pathinfo($cv["name"], PATHINFO_EXTENSION);
+            move_uploaded_file($cv["tmp_name"], "assets/document/cv/$cvName");
+        }
+        else{
+            FlashMessage::add(
+                content: "Il faut déposer un cv",
+                type: FlashType::WARNING
+            );
+            return new Response(
+                action: Action::ETUDIANT_POSTULER_OFFRE_FORM,
+                params: [
+                    "login" => $login,
+                    "id" => $id_offre
+                ]
+            );
+        }
 
-        $lmName = uniqid("", true) . pathinfo($lm["name"], PATHINFO_EXTENSION);
-        move_uploaded_file($lm["tmp_name"], "assets/document/lm/$lmName");
+        if($lm["size"]!=0) {
+            $lmName = uniqid("", true) . pathinfo($lm["name"], PATHINFO_EXTENSION);
+            move_uploaded_file($lm["tmp_name"], "assets/document/lm/$lmName");
+        }
+        else{
+            $lmName = null;
+        }
 
         (new PostulerRepository)->insert(new Postuler(
             cv: $cvName,
@@ -185,6 +208,10 @@ class EtudiantController
             lettre_motivation: $lmName,
             complement: $complement
         ));
+        FlashMessage::add(
+            content: "Vous avez postuler avec succes",
+            type: FlashType::SUCCESS
+        );
         return new Response(
             action: Action::AFFICHER_OFFRE,
             params: [

@@ -14,4 +14,12 @@ class CategorieRepository extends CoreRepository
     {
         return new Categorie();
     }
+    public function getByLibelle(String $libelle): ?Categorie{
+        $res =  $this->select(new QueryCondition("libelle", ComparisonOperator::LIKE, "%" . $libelle . "%"));
+        if (isset($res[0]) && $res[0] != NUll){
+            return $res[0];
+        }else{
+            return Null;
+        }
+    }
 }

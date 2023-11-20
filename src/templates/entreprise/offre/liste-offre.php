@@ -8,72 +8,150 @@ use Stageo\Lib\enums\Action;
 
 include __DIR__ . "/../../macros/button.php";
 include __DIR__ . "/../../macros/input.php";
-include __DIR__ . "/../../macros/offre.php";
+include __DIR__ . "/../../macros/newOffre.php";
 /**
  * @var Categorie[] $categories
  * @var Etudiant $etudiant
  * @var Offre[] $offres
+ * @var array $listeoffres
+ * @var int [] $idOffres
  * @var string $selA
  * @var string $selB
  * @var string $selC
  * @var string $search
  * @var Categorie $Categories
+ * @var int $nbRechercheTrouver
+ * @var string $communeTaper
  */
 ?>
 
-<main class="w-[64rem] flex flex-col gap-8 mt-8">
+<style>
+    /* Toggle A */
+    #toggleA:checked~.dot {
+        transform: translateX(100%);
+        background-color: #48bb78;
+    }
 
-    <div>
-        <form class="mb-3" action="<?=Action::LISTE_OFFRE->value?>" method="post">
+    /* Toggle B */
+    #toggleB:checked~.dot {
+        transform: translateX(100%);
+        background-color: #48bb78;
+    }
+
+    .text-shadow {
+        text-shadow: -0.5px -0.5px 0 #000, 0.5px -0.5px 0 #000, -0.5px 0.5px 0 #000, 0.5px 0.5px 0 #000;
+    }
+
+
+</style>
+</head>
+
+<body class="bg-slate-50">
+<div class="h-40 flex justify-center items-center mt-[4rem]"
+     style="background: linear-gradient(120deg, rgba(21, 129, 230, 0.75) 0%, rgba(0, 45, 141, 0.75) 50%, rgba(1, 7, 68, 0.75) 100%)">
+    <h1 class="text-center font-medium text-white text-3xl text-shadow">
+        Des Offres allant du stage à l'Alternance validées par l'IUT !
+    </h1>
+</div>
+<div class="container mx-auto px-4 mb-8 mt-12">
+    <?php if(!isset($search)){
+        $search="";
+    }if(!isset($communeTaper)){
+        $communeTaper="";
+    }if (!isset($nbRechercheTrouver)){
+        $nbRechercheTrouver=0;
+    }?>
+
+    <!-- Search area with two sets of inputs stacked -->
+    <form class="flex flex-wrap justify-center gap-6 "  action="<?=Action::LISTE_OFFRE->value?>"  method="post">
+
+        <div class="w-full md:w-1/2 lg:w-2/6">
+            <div class="mb-6">
+                <label for="job-field" class="block text-sm font-medium text-gray-700">Postes, mots clés, ...</label>
+                <input id="job-field" name="search"
+                       class="mt-1 block w-full rounded-full border-gray-700 border-[1px] shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-lg p-3"
+                       type="search" placeholder="<?=$search = (strlen($search) == 0) ? "Exemples : Développeur web, Devops..." : $search?>">
+            </div>
+
             <div>
-                <button id="dropdownCheckboxButton" data-dropdown-toggle="dropdownDefaultCheckbox" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Dropdown checkbox <svg class="w-2.5 h-2.5 ml-2.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                    </svg>
-                </button>
-                <!-- Dropdown menu -->
-                <div id="dropdownDefaultCheckbox" class="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600">
-
-                    <ul class="p-3 space-y-3 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownCheckboxButton">
-                        <?php foreach ($Categories as $category):?>
-                            <li>
-                                <div class="flex items-center">
-                                    <input name="categoriesSelectionnees[<?= $category->getLibelle() ?>]" id="<?= $category->getIdCategorie() ?>" type="checkbox" value="<?= $category->getIdCategorie() ?>" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-700 dark:focus:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500">
-                                    <label for="<?= $category->getLibelle() ?>" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" ><?= $category->getLibelle() ?></label>
-
-                                </div>
-                            </li>
-                        <?php endforeach ?>
-                    </ul>
-                </div>
+                <label for="location-field" class="block text-sm font-medium text-gray-700">Localisation</label>
+                <input id="location-field" name ="Commune"
+                       class="mt-1 block w-full rounded-full border-gray-700 border-[1px] shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-lg p-3 transition duration-1000 ease-in-out"
+                       type="text" placeholder="<?=$communeTaper = (strlen($communeTaper) == 0) ? "Exemples : Montpellier, Sète..." : $communeTaper?>">
             </div>
-            <div class="relative flex flex-row flex-wrap items-stretch">
-                <div class="w-64 ">
-                    <select id="Option" name="OptionL" class="rounded-l-lg  w-full bg-white border border-blue-500 text-gray-700 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="description" <?=$selA?>>Description</option>
-                        <option value="secteur" <?=$selB?>>Secteur</option>
-                        <option value="Categories" <?=$selC?>> Categories </option>
-                    </select>
-                </div>
-                <input type="search"
-                       class="relative bg-white m-0 -mr-0.5 block w-[1px] min-w-0 flex-auto border border-solid border-blue-500 bg-transparent bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:focus:border-primary"
-                       name="search"
-                       placeholder="<?=$search = (strlen($search) == 0) ? "Search" : $search?>"
-                       aria-label="Search"
-                       aria-describedby="button-addon1"  />
-                <input type="submit" value="Rechercher" class="bg-blue-500 rounded-none !rounded-l-none !rounded-r-lg flex justify-center items-center">
-            </div>
-        </form>
-    </div>
+        </div>
 
-    <div class="grid grid-cols-2 gap-4 overflow-hidden overflow-x-auto whitespace-no-wrap bg-gray-100">
-        <?php foreach ($offres as $offre):?>
-            <?=offre(
-                thematique: $offre->getThematique(),
-                description: $offre->getDescription(),
-                id_offre: $offre->getIdOffre(),
-                nom_entreprise: $offre->getIdEntreprise(),
-                entreprise_picture_path: "assets/img/DuréeB.jpg")
-            ?>
-        <?php endforeach ?>
-    </div>
-</main>
+        <!-- Second column for domain and duration fields -->
+        <div class="w-full md:w-1/2 lg:w-2/6">
+            <div class="mb-6">
+                <label for="domain-field" class="block text-sm font-medium text-gray-700">Secteur</label>
+                <select id="domain-field" name="categoriesSelectionnees[]"
+                        class="mt-1 block w-full rounded-full border-gray-700 border-[1px] shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-lg p-3">
+                    <option>Sélectionnez vos choix</option>
+                    <?php foreach ($Categories as $category):?>
+                        <option name="categoriesSelectionnees[<?= $category->getLibelle() ?>]" id="<?= $category->getIdCategorie() ?>  value="<?= $category->getIdCategorie() ?>"><?= $category->getLibelle() ?></option>
+                    <?php endforeach;?>
+                    <!-- Add other options here -->
+                </select>
+            </div>
+            <h1 class="text-center text-xl font-medium underline-offset-1 ">Afficher les offres :</h1>
+
+            <div class="flex flex-col lg:flex-row items-center justify-center space-x-4 w-full mb-12 ">
+
+                <label for="toggleA" class="flex items-center cursor-pointer mt-4">
+                    <!-- toggle -->
+                    <div class="relative">
+                        <!-- input -->
+                        <input name="toggle[Alternances]=Alternances" id="toggleA" type="checkbox" class="sr-only" />
+                        <!-- line -->
+                        <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+                        <!-- dot -->
+                        <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+                    </div>
+                    <!-- label -->
+                    <div class="ml-0 lg:ml-3 text-gray-700 font-medium">
+                        Alternances
+                    </div>
+                </label>
+                <label for="toggleB" class="flex items-center cursor-pointer mt-4">
+                    <!-- toggle -->
+                    <div class="relative">
+                        <!-- input -->
+                        <input name="toggle[Stages]=Stages" id="toggleB" type="checkbox" class="sr-only" />
+                        <!-- line -->
+                        <div class="w-10 h-4 bg-gray-400 rounded-full shadow-inner"></div>
+                        <!-- dot -->
+                        <div class="dot absolute w-6 h-6 bg-white rounded-full shadow -left-1 -top-1 transition"></div>
+                    </div>
+                    <!-- label -->
+                    <div class="ml-0 lg:ml-3 text-gray-700 font-medium mr-4">
+                        Stages
+                    </div>
+                </label>
+            </div>
+        </div>
+        <div class="w-full flex justify-center">
+            <button
+                    id="search-button"
+                    class="rounded-lg px-8 py-2 text-xl border-2 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-blue-100 duration-300">
+                Recherche
+            </button>
+        </div>
+    </form>
+
+
+    <!-- Internship offers -->
+
+    <div class="text-lg font-semibold mb-4"><?=$nbRechercheTrouver ?> offres de stage</div>
+<?php foreach ($listeoffres as $offre):?>
+    <?php if (in_array($offre["id_offre"],$idOffres)):?>
+    <?= newOffre($offre["description"],$offre["type"],$offre["raison_sociale"], $offre["taches"],"08/05/2024",$offre["categories"],$offre["id_offre"])?>
+    <?php endif;?>
+<?php endforeach; ?>
+
+
+
+
+</div>
+
+</body>

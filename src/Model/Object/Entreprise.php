@@ -22,9 +22,27 @@ class Entreprise extends User
                                 private string|NullDataType|null $id_taille_entreprise = null,
                                 private string|NullDataType|null $site = null,
                                 private string|NullDataType|null $fax = null,
-                                private int|NullDataType|null $id_distribution_commune = null)
+                                private int|NullDataType|null $id_distribution_commune = null,
+                                private int|NullDataType|null $confirmer = 0)
     {
     }
+
+    /**
+     * @return int|NullDataType|null
+     */
+    public function getConfirmer(): int|NullDataType|null
+    {
+        return $this->confirmer;
+    }
+
+    /**
+     * @param int|NullDataType|null $confirmer
+     */
+    public function setConfirmer(int|NullDataType|null $confirmer): void
+    {
+        $this->confirmer = $confirmer;
+    }
+
 
     /**
      * @return int|null

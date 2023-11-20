@@ -15,6 +15,7 @@ use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
+use Stageo\Model\Object\Admin;
 use Stageo\Model\Object\Convention;
 use Stageo\Model\Object\Secretaire;
 use Stageo\Model\Repository\AdminRepository;
@@ -89,23 +90,30 @@ class SecretaireController
             email: $email,
             hashed_password: Password::hash($password),
         );
-        UserConnection::signIn($secretaire);
-        (new SecretaireRepository())->insert($secretaire);
+
+        UserConnection::signIn((new SecretaireRepository())->getByEmail($email));
         return new Response(
             action: Action::HOME
         );
     }
     public function signUpForm(): Response
     {
-        return new Response(
-            template: "secretaire/sign-up.php",
-            params: [
-                "title" => "Se connecter",
-                "nav" => false,
-                "footer" => false,
-                "token" => Token::generateToken(Action::SECRETAIRE_SIGN_UP_FORM)
-            ]
-        );
+        if (UserConnection::isInstance(new Admin()) || UserConnection::isInstance(new Secretaire())){
+            return new Response(
+                template: "secretaire/sign-up.php",
+                params: [
+                    "title" => "Se connecter",
+                    "nav" => false,
+                    "footer" => false,
+                    "token" => Token::generateToken(Action::SECRETAIRE_SIGN_UP_FORM)
+                ]
+            );
+        }else{
+            throw new ControllerException(
+                message: "Vous n'êtes pas authorisé à accéder à cette page",
+                action: Action::HOME,
+            );
+        }
     }
     /**
      * @throws TokenTimeoutException

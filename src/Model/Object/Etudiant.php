@@ -19,7 +19,7 @@ class Etudiant extends User
                                 private string|NullDataType|null $civilite = null,
                                 private string|NullDataType|null $numero_voie = null,
                                 private int|NullDataType|null $id_distribution_commune = null,
-                                private string|NullDataType|null $id_departement = null,
+                                private string|NullDataType|null $id_departement_universitaire = null,
                                 private string|NullDataType|null $id_etape = null,
                                 private string|NullDataType|null $id_ufr = null)
     {
@@ -125,14 +125,14 @@ class Etudiant extends User
         $this->id_distribution_commune = $id_distribution_commune;
     }
 
-    public function getIdDepartement(): string|NullDataType|null
+    public function getIdDepartementUniversitaire(): string|NullDataType|null
     {
-        return $this->id_departement;
+        return $this->id_departement_universitaire;
     }
 
-    public function setIdDepartement(string|NullDataType|null $id_departement): void
+    public function setIdDepartementUniversitaire(string|NullDataType|null $id_departement_universitaire): void
     {
-        $this->id_departement = $id_departement;
+        $this->id_departement_universitaire = $id_departement_universitaire;
     }
 
     public function getIdEtape(): string|NullDataType|null

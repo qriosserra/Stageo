@@ -13,6 +13,9 @@ INSERT INTO stg_categorie (libelle) VALUES
 INSERT INTO stg_etape (id_etape, libelle) VALUES
 ('TAIB21', 'BUT 2 Informatique - Réalisation d''application, conception, développement et validation');
 
+INSERT INTO stg_admin (email, hashed_password, nom, prenom) VALUES
+('stageo@gmail.com', '\$argon2id\$v=19\$m=65536,t=4,p=1\$VEJ2VUlvRHZLUTdsemc1QQ\$MRn17cUbNTGBKeyMdY2fB8bW22IhptVUESASM4t7jew','stageo','stageo');
+
 INSERT INTO stg_statut_juridique (id_statut_juridique, libelle) VALUES
 ('EI', 'EI - Entreprise individuelle'),
 ('EURL', 'EURL - Entreprise unipersonnelle à responsabilité limitée'),
@@ -64,8 +67,8 @@ INSERT INTO stg_distribution_commune(code_postal, commune, id_pays) VALUES
 INSERT INTO `stg_etudiant` (`login`, `nom`, `prenom`, `telephone`, `telephone_fixe`, `email_etudiant`, `annee`, `civilite`, `numero_voie`, `id_ufr`, `id_departement_universitaire`, `id_etape`, `id_distribution_commune`)
 VALUES ('levys', 'Levy', 'Sascha', '0612345678', NULL, 'sascha.levy@etu.umontpellier.fr', 'Ann2', 'M', '99 Av. Occitanie', NULL, NULL, NULL, '1');
 
-INSERT INTO `stg_entreprise` (`id_entreprise`, `unverified_email`, `email`, `nonce`, `nonce_timestamp`, `hashed_password`, `raison_sociale`, `siret`, `numero_voie`, `code_naf`, `telephone`, `fax`, `site`, `id_taille_entreprise`, `id_type_structure`, `id_statut_juridique`, `id_distribution_commune`)
-VALUES (NULL, NULL, 'entreprise@gmail.com', NULL, NULL, NULL, 'L\'entreprise', '12345678901234', '99 av. du champs de Mars', '1234F', '0412345678', NULL, 'entreprise.com', 'ETI', '2', 'EI', '1');
+INSERT INTO `stg_entreprise` (`id_entreprise`, `email`,`hashed_password`, `raison_sociale`, `siret`, `numero_voie`, `code_naf`, `telephone`, `fax`, `site`, `id_taille_entreprise`, `id_type_structure`, `id_statut_juridique`, `id_distribution_commune`)
+VALUES (NULL,'entreprise@gmail.com',NULL, 'L\'entreprise', '12345678901234', '99 av. du champs de Mars', '1234F', '0412345678', NULL, 'entreprise.com', 'ETI', '2', 'EI', '1');
 
 INSERT INTO `stg_offre` (`id_offre`, `description`, `thematique`, `secteur`, `taches`, `commentaires`, `gratification`, `id_unite_gratification`, `id_entreprise`, `login`,`type`) VALUES
 (NULL, 'Recherche d\'un stagiaire en informatique pour participer au développement de l\'interface utilisateur d\'un site web e-commerce.', 'Développement Web Front-End', 'Informatique / E-commerce', 'Développement de fonctionnalités front-end, intégration HTML/CSS, création de composants React.', 'Le stagiaire aura l\'opportunité de travailler sur des technologies modernes et de participer à des réunions de conception.', '4.05', '2', '1', NULL, NULL),

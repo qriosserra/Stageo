@@ -11,16 +11,16 @@ use Stageo\Lib\Database\Table;
 class Offre extends CoreObject
 {
     public function __construct(#[PrimaryKey] private ?int       $id_offre = null,
-                                private int|null                 $id_entreprise = null,
                                 private string|null              $description = null,
-                                private string|NullDataType|null $secteur = null,
                                 private string|NullDataType|null $thematique = null,
+                                private string|NullDataType|null $secteur = null,
                                 private string|NullDataType|null $taches = null,
                                 private string|NullDataType|null $commentaires = null,
                                 private float|NullDataType|null  $gratification = null,
-                                private string|NullDataType|null $id_unite_gratification = null,
-                                private int|NullDataType|null    $login = null,
                                 private string|NullDataType|null $type = null,//Alternance, stage ou les deux
+                                private int|NullDataType|null    $login = null,
+                                private string|NullDataType|null $id_unite_gratification = null,
+                                private int|null                 $id_entreprise = null,
                                 )
     {
     }
