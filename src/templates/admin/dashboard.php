@@ -24,4 +24,10 @@ include __DIR__."/../macros/button.php";
         <span>Accéder la liste des offre [work in progress]</span>
     </a>
 </div>
+    <div id="colonne4">
+        <a href=<?= Action::SECRETAIRE_LISTE_CONVENTIONS->value?> class="button-ghost">
+            <i class="fi fi-rr-document"></i>
+            <span>Accéder la liste des conventions [work in progress]</span>
+        </a>
+    </div>
 </main>

@@ -91,7 +91,7 @@ class SecretaireController
             hashed_password: Password::hash($password),
         );
 
-        UserConnection::signIn((new SecretaireRepository())->getByEmail($email));
+        UserConnection::signIn($secretaire);
         return new Response(
             action: Action::HOME
         );
@@ -144,7 +144,7 @@ class SecretaireController
     }
     public function listeConventions(): Response
     {
-        if (!UserConnection::isInstance(new Secretaire)){
+        if (!UserConnection::isInstance(new Secretaire) && !UserConnection::isInstance(new Admin)){
             throw new ControllerException(
                 message: "Vous n'avez pas accès à cette page",
                 action: Action::HOME,
@@ -161,7 +161,7 @@ class SecretaireController
 
     public function conventionDetails(int $id_convention): Response {
         $convention = (new ConventionRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0] ?? null;
-        if (!UserConnection::isInstance(new Secretaire)) {
+        if (!UserConnection::isInstance(new Secretaire) && !UserConnection::isInstance(new Admin)) {
             throw new ControllerException(
                 message: "Vous n'êtes pas authorisé à accéder à cette page",
                 action: Action::HOME,
