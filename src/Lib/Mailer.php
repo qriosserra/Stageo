@@ -2,41 +2,25 @@
 
 namespace Stageo\Lib;
 
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mailer\Envelope;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mailer\Transport;
-use Symfony\Component\Mime\RawMessage;
-
-class Mailer implements MailerInterface
+class Mailer
 {
     /**
-     * @throws TransportExceptionInterface
+     * @param Email $email
+     * @return bool
      */
-    public static function sendEmail(string $to,
-                                     string $subject,
-                                     string $content): void
+    public static function send(Email $email): bool
     {
-        $email = (new TemplatedEmail())
-            ->from($_ENV["MAILER_USER"])
-            ->to($to)
-            ->subject($subject)
-            ->text('Sending emails is fun again!')
-            ->html($content);
-        (new Mailer)->send($email);
-    }
+        $header = <<<EOD
+            From: "Stageo" {$_ENV["MAILER_USER"]}
+            Content-Type: text/html; charset=UTF-8
+            MIME-Version: 1.0
+            X-Mailer: PHP/8.1.0
+        EOD;
 
-    /**
-     * @param RawMessage $message
-     * @param Envelope|null $envelope
-     * @return void
-     * @throws TransportExceptionInterface
-     */
-    public function send(RawMessage $message,
-                         Envelope   $envelope = null): void
-    {
-        $transport = Transport::fromDsn($_ENV["MAILER_DSN"]);
-        $transport->send($message, $envelope);
+        return mail(
+            to: $email->getDestinataire(),
+            subject: $email->getObjet(),
+            message: $email->getContenu(),
+        );
     }
 }
