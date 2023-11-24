@@ -174,7 +174,7 @@ CREATE TABLE stg_offre(
    taches TEXT,
    commentaires TEXT,
    gratification DECIMAL(15,2),
-   type VARCHAR(256),
+   type VARCHAR(256) NOT NULL DEFAULT 'Stage&Alternance',
    login VARCHAR(256),
    id_unite_gratification INT,
    id_entreprise INT NOT NULL,
