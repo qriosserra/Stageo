@@ -17,7 +17,7 @@ class Offre extends CoreObject
                                 private string|NullDataType|null $taches = null,
                                 private string|NullDataType|null $commentaires = null,
                                 private float|NullDataType|null  $gratification = null,
-                                private string|NullDataType|null $type = null,//Alternance, stage ou les deux
+                                private string|NullDataType|null $type = "Stage&Alternance",//Alternance, stage ou les deux
                                 private int|NullDataType|null    $login = null,
                                 private string|NullDataType|null $id_unite_gratification = null,
                                 private int|null                 $id_entreprise = null,

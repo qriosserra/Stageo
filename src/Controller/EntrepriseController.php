@@ -397,6 +397,7 @@ class EntrepriseController
             taches: $taches,
             commentaires: $commentaires,
             gratification: $gratification,
+            type: $type,
             id_unite_gratification: $id_unite_gratification,
             id_entreprise: $entreprise->getIdEntreprise()
         ));
