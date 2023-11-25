@@ -125,15 +125,17 @@ CREATE TABLE stg_etudiant(
    id_etape VARCHAR(64),
    id_distribution_commune INT,
    PRIMARY KEY(login),
-   FOREIGN KEY(id_ufr) REFERENCES stg_ufr(id_ufr) ON DELETE SET NULL,
-   FOREIGN KEY(id_departement_universitaire) REFERENCES stg_departement_universitaire(id_departement_universitaire) ON DELETE SET NULL,
-   FOREIGN KEY(id_etape) REFERENCES stg_etape(id_etape) ON DELETE SET NULL,
-   FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune) ON DELETE SET NULL
+   FOREIGN KEY(id_ufr) REFERENCES stg_ufr(id_ufr),
+   FOREIGN KEY(id_departement_universitaire) REFERENCES stg_departement_universitaire(id_departement_universitaire),
+   FOREIGN KEY(id_etape) REFERENCES stg_etape(id_etape),
+   FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune)
 );
 
 CREATE TABLE stg_entreprise(
    id_entreprise INT AUTO_INCREMENT,
    email VARCHAR(256),
+   unverified_email VARCHAR(320),
+   nonce VARCHAR(256),
    hashed_password VARCHAR(256),
    raison_sociale VARCHAR(256),
    siret CHAR(14),
@@ -148,10 +150,10 @@ CREATE TABLE stg_entreprise(
    id_statut_juridique VARCHAR(4),
    id_distribution_commune INT,
    PRIMARY KEY(id_entreprise),
-   FOREIGN KEY(id_taille_entreprise) REFERENCES stg_taille_entreprise(id_taille_entreprise) ON DELETE SET NULL,
-   FOREIGN KEY(id_type_structure) REFERENCES stg_type_structure(id_type_structure) ON DELETE SET NULL,
-   FOREIGN KEY(id_statut_juridique) REFERENCES stg_statut_juridique(id_statut_juridique) ON DELETE SET NULL,
-   FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune) ON DELETE SET NULL
+   FOREIGN KEY(id_taille_entreprise) REFERENCES stg_taille_entreprise(id_taille_entreprise),
+   FOREIGN KEY(id_type_structure) REFERENCES stg_type_structure(id_type_structure),
+   FOREIGN KEY(id_statut_juridique) REFERENCES stg_statut_juridique(id_statut_juridique),
+   FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune)
 );
 
 CREATE TABLE stg_tuteur(
@@ -163,7 +165,7 @@ CREATE TABLE stg_tuteur(
    fonction VARCHAR(256),
    id_entreprise INT NOT NULL,
    PRIMARY KEY(id_tuteur),
-   FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise)ON DELETE CASCADE 
+   FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise)
 );
 
 CREATE TABLE stg_offre(
@@ -174,26 +176,26 @@ CREATE TABLE stg_offre(
    taches TEXT,
    commentaires TEXT,
    gratification DECIMAL(15,2),
-   type VARCHAR(256) NOT NULL DEFAULT 'Stage&Alternance',
+   type VARCHAR(256) DEFAULT 'Stage&Alternance',
    login VARCHAR(256),
    id_unite_gratification INT,
    id_entreprise INT NOT NULL,
    PRIMARY KEY(id_offre),
-   FOREIGN KEY(login) REFERENCES stg_etudiant(login) ON DELETE SET NULL,
-   FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification) ON DELETE SET NULL,
-   FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise) ON DELETE CASCADE
+   FOREIGN KEY(login) REFERENCES stg_etudiant(login),
+   FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
+   FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise)
 );
 
 CREATE TABLE stg_offre_alternance(
    id_offre INT,
    PRIMARY KEY(id_offre),
-   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre) ON DELETE CASCADE
+   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
 );
 
 CREATE TABLE stg_offre_stage(
    id_offre INT,
    PRIMARY KEY(id_offre),
-   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre) ON DELETE CASCADE
+   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
 );
 
 CREATE TABLE stg_convention(
@@ -226,18 +228,19 @@ CREATE TABLE stg_convention(
    id_distribution_commune INT,
    login VARCHAR(256),
    PRIMARY KEY(id_convention),
-   FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification) ON DELETE SET NULL,
-   FOREIGN KEY(id_enseignant) REFERENCES stg_enseignant(id_enseignant) ON DELETE SET NULL,
-   FOREIGN KEY(id_tuteur) REFERENCES stg_tuteur(id_tuteur) ON DELETE SET NULL,
-   FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise) ON DELETE SET NULL,
-   FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune) ON DELETE SET NULL,
-   FOREIGN KEY(login) REFERENCES stg_etudiant(login) ON DELETE CASCADE
+   FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
+   FOREIGN KEY(id_enseignant) REFERENCES stg_enseignant(id_enseignant),
+   FOREIGN KEY(id_tuteur) REFERENCES stg_tuteur(id_tuteur),
+   FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise),
+   FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune),
+   FOREIGN KEY(login) REFERENCES stg_etudiant(login)
 );
 
 CREATE TABLE stg_suivi(
    id_suivi INT AUTO_INCREMENT,
    date_creation DATETIME,
    date_modification DATETIME,
+   modifiable BOOL NOT NULL DEFAULT TRUE,
    valide BOOL NOT NULL,
    raison_refus VARCHAR(3064),
    valide_pedagogiquement BOOL NOT NULL DEFAULT FALSE,
@@ -247,31 +250,31 @@ CREATE TABLE stg_suivi(
    id_convention INT NOT NULL,
    PRIMARY KEY(id_suivi),
    UNIQUE(id_convention),
-   FOREIGN KEY(id_convention) REFERENCES stg_convention(id_convention) ON DELETE CASCADE
+   FOREIGN KEY(id_convention) REFERENCES stg_convention(id_convention)
 );
 
 CREATE TABLE stg_code_postal_commune(
    id_commune INT,
    id_code_postal VARCHAR(50),
    PRIMARY KEY(id_commune, id_code_postal),
-   FOREIGN KEY(id_commune) REFERENCES stg_commune(id_commune)ON DELETE CASCADE,
-   FOREIGN KEY(id_code_postal) REFERENCES stg_code_postal(id_code_postal)ON DELETE CASCADE
+   FOREIGN KEY(id_commune) REFERENCES stg_commune(id_commune),
+   FOREIGN KEY(id_code_postal) REFERENCES stg_code_postal(id_code_postal)
 );
 
 CREATE TABLE stg_etape_visee(
    id_etape VARCHAR(64),
    id_offre INT,
    PRIMARY KEY(id_etape, id_offre),
-   FOREIGN KEY(id_etape) REFERENCES stg_etape(id_etape) ON DELETE CASCADE,
-   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre) ON DELETE CASCADE
+   FOREIGN KEY(id_etape) REFERENCES stg_etape(id_etape),
+   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
 );
 
 CREATE TABLE stg_offre_categorie(
    id_offre INT,
    id_categorie INT,
    PRIMARY KEY(id_offre, id_categorie),
-   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre) ON DELETE CASCADE,
-   FOREIGN KEY(id_categorie) REFERENCES stg_categorie(id_categorie) ON DELETE CASCADE
+   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre),
+   FOREIGN KEY(id_categorie) REFERENCES stg_categorie(id_categorie)
 );
 
 CREATE TABLE stg_postule(
@@ -281,8 +284,8 @@ CREATE TABLE stg_postule(
    lettre_motivation VARCHAR(256),
    complement TEXT,
    PRIMARY KEY(login, id_offre),
-   FOREIGN KEY(login) REFERENCES stg_etudiant(login) ON DELETE CASCADE,
-   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre) ON DELETE CASCADE
+   FOREIGN KEY(login) REFERENCES stg_etudiant(login),
+   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
 );
 
 SQL;
