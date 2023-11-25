@@ -148,17 +148,17 @@ class Offre extends CoreObject
     }
 
     /**
-     * @return NullDataType|string|null
+     * @return NullDataType|float|null
      */
-    public function getGratification(): string|NullDataType|null
+    public function getGratification(): float|NullDataType|null
     {
         return $this->gratification;
     }
 
     /**
-     * @param NullDataType|string|null $gratification
+     * @param NullDataType|float|null $gratification
      */
-    public function setGratification(string|NullDataType|null $gratification): void
+    public function setGratification(float|NullDataType|null $gratification): void
     {
         $this->gratification = $gratification;
     }
