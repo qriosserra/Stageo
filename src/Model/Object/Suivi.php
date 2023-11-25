@@ -10,6 +10,7 @@ class Suivi extends CoreObject
     public function __construct(#[PrimaryKey] private ?string    $id_suivi = null,
                                 private string|NullDataType|null $date_creation = null,
                                 private string|NullDataType|null $date_modification = null,
+                                private ?bool                    $modifiable = true,
                                 private ?bool                    $valide = false,
                                 private string|NullDataType|null $raison_refus = null,
                                 private ?bool                    $valide_pedagogiquement = false,
@@ -18,6 +19,16 @@ class Suivi extends CoreObject
                                 private string|NullDataType|null $date_retour = null,
                                 private string|NullDataType|null $id_convention = null)
     {
+    }
+
+    public function getModifiable(): ?bool
+    {
+        return $this->modifiable;
+    }
+
+    public function setModifiable(?bool $modifiable): void
+    {
+        $this->modifiable = $modifiable;
     }
 
     /**
