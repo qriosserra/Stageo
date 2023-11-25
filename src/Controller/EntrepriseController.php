@@ -353,7 +353,7 @@ class EntrepriseController
                     "title" => "Création d'une offre",
                     "nav" => false,
                     "footer" => false,
-                    "offre" => Session::get("offre"),
+                    "offre" => Session::get("offre") ?? new Offre(),
                     "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
                     "token" => Token::generateToken(Action::ENTREPRISE_CREATION_OFFRE_FORM)
                 ]
@@ -455,6 +455,8 @@ class EntrepriseController
 
         FlashMessage::add("L'offre a été ajoutée avec succès", FlashType::SUCCESS);
         $id_offre = (new OffreRepository)->insert($offre);
+
+        Session::delete("offre");
 
         //A MODIFIER PLUS TARD !!!!!!!!!!!!!
         $pdo = DatabaseConnection::getPdo();
