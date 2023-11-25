@@ -186,18 +186,6 @@ CREATE TABLE stg_offre(
    FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise)
 );
 
-CREATE TABLE stg_offre_alternance(
-   id_offre INT,
-   PRIMARY KEY(id_offre),
-   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
-);
-
-CREATE TABLE stg_offre_stage(
-   id_offre INT,
-   PRIMARY KEY(id_offre),
-   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
-);
-
 CREATE TABLE stg_convention(
    id_convention INT AUTO_INCREMENT,
    type_convention VARCHAR(256),
@@ -277,7 +265,7 @@ CREATE TABLE stg_offre_categorie(
    FOREIGN KEY(id_categorie) REFERENCES stg_categorie(id_categorie)
 );
 
-CREATE TABLE stg_postule(
+CREATE TABLE stg_postuler(
    login VARCHAR(256),
    id_offre INT,
    cv VARCHAR(256),

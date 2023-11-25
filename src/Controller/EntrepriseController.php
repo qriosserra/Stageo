@@ -457,17 +457,6 @@ class EntrepriseController
         $id_offre = (new OffreRepository)->insert($offre);
 
         Session::delete("offre");
-
-        //A MODIFIER PLUS TARD !!!!!!!!!!!!!
-        $pdo = DatabaseConnection::getPdo();
-        if (stripos($type, "stage") !== false) {
-            $sql = $pdo->prepare("INSERT INTO stg_offre_stage (id_offre) VALUES ($id_offre)");
-            $sql->execute();
-        }
-        if (stripos($type, "alternance") !== false) {
-            $sql = $pdo->prepare("INSERT INTO stg_offre_alternance (id_offre) VALUES ($id_offre)");
-            $sql->execute();
-        }
         return new Response(
             action: Action::HOME,
         );
