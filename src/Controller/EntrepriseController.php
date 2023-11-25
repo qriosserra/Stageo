@@ -497,10 +497,11 @@ class EntrepriseController
             );
         } else {
             return new Response(
-                template: "entreprise/offre/modifier-offre.php",
+                template: "entreprise/offre/add.php",
                 params: [
                     "entreprise" => $user,
                     "offre" => $offre,
+                    "token" => Token::generateToken(Action::ENTREPRISE_MODIFICATION_OFFRE_FORM),
                     "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository())->select()), "libelle", "id_unite_gratification")
                 ]
             );
@@ -511,7 +512,6 @@ class EntrepriseController
     {
         $idOffre = $_REQUEST["id"];
         $offre = (new OffreRepository)->getById($idOffre);
-        $login = $_REQUEST["login"];
         $description = $_REQUEST["description"];
         $secteur = $_REQUEST["secteur"];
         $thematique = $_REQUEST["thematique"];
@@ -521,6 +521,14 @@ class EntrepriseController
         $id_unite_gratification = $_REQUEST["id_unite_gratification"];
         $type = $_REQUEST["emploi"];
         $user = UserConnection::getSignedInUser();
+        if (!Token::verify(Action::ENTREPRISE_MODIFICATION_OFFRE_FORM, $_REQUEST["token"])) {
+            throw new InvalidTokenException();
+        }
+        if (Token::isTimeout(Action::ENTREPRISE_MODIFICATION_OFFRE_FORM)) {
+            throw new TokenTimeoutException(
+                action: Action::ENTREPRISE_MODIFICATION_OFFRE_FORM,
+            );
+        }
         if(!$user){
             throw new ControllerException(
                 message: "Veillez vous connecter",
@@ -540,7 +548,7 @@ class EntrepriseController
             );
         }
         else {
-            $o = new Offre($idOffre, $user->getIdEntreprise(), $description, $secteur, $thematique, $taches, $commentaires, $gratification, $id_unite_gratification, $login, $type);
+            $o = new Offre($idOffre, $description, $thematique,$secteur , $taches, $commentaires, $gratification,$type , null,$id_unite_gratification, $user->getIdEntreprise());
             (new OffreRepository())->update($o);
         }
             return new Response(
