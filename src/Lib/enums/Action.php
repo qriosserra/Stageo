@@ -49,4 +49,5 @@ enum Action: string
     case ETUDIANT_CONVENTION_ADD = "?c=etudiant&a=conventionAdd";
     case SECRETAIRE_LISTE_CONVENTIONS = "?c=secretaire&a=listeConventions";
     case SECRETAIRE_CONVENTION_DETAILS = "?c=secretaire&a=conventionDetails&id_convention=";
+    case TEST_EMAIL = "?a=testEmail";
 }
