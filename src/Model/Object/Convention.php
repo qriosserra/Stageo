@@ -285,7 +285,10 @@ class Convention extends CoreObject
     {
         return $this->id_distribution_commune;
     }
-
+    public function getEntreprise(): string|NullDataType|null
+    {
+        return $this->id_entreprise;
+    }
     public function setIdDistributionCommune(int|NullDataType|null $id_distribution_commune): void
     {
         $this->id_distribution_commune = $id_distribution_commune;

@@ -33,8 +33,12 @@ class ConventionRepository extends CoreRepository
      * @return Convention[]|null
      * @throws Exception
      */
-    public function getByLoginEtudiant(int $id): ?array
+    public function getByLoginEtudiant(string $login): ?array
     {
-        return $this->select(["login" => $id]) ?? null;
+        return $this->select(["login" => $login]) ?? null;
+    }
+    public function getIdConvention(): ?int
+    {
+        return $this->select(["id_convention" => $id])[0] ?? null;
     }
 }

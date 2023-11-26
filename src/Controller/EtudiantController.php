@@ -20,12 +20,14 @@ use Stageo\Model\Object\Convention;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Etudiant;
 use Stageo\Model\Object\Postuler;
+use Stageo\Model\Object\Suivi;
 use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\EtudiantRepository;
 use Stageo\Model\Repository\ConventionRepository;
 use Stageo\Model\Repository\OffreRepository;
 use Stageo\Model\Repository\PostulerRepository;
+use Stageo\Model\Repository\SuiviRepository;
 use Stageo\Model\Repository\UniteGratificationRepository;
 
 class EtudiantController
@@ -395,6 +397,17 @@ class EtudiantController
             code_elp: $code_elp,
             id_entreprise: $entreprise
         );
+        $date_creation = date("Y-m-d");
+        $date_modification = date("Y-m-d");
+        $modifiable = 0;
+        $valide = 0;
+        $raison_refus = null;
+        $valide_pedagogiquement = 0;
+        $avenants = 0;
+        $details_avenants = null;
+        $date_retour = null;
+
+
 
         if (!Token::verify(Action::ETUDIANT_CONVENTION_ADD, $_REQUEST["token"]))
             throw new InvalidTokenException();
@@ -416,7 +429,23 @@ class EtudiantController
                     ]
             );
         }
+
+
         (new ConventionRepository)->insert($convention);
+        $id_convention = (new ConventionRepository)->select()[count((new ConventionRepository)->select())-1]->getIdConvention();
+        $suivi = new Suivi(
+            date_creation: $date_creation,
+            date_modification: $date_modification,
+            modifiable: $modifiable,
+            valide: $valide,
+            raison_refus: $raison_refus,
+            valide_pedagogiquement: $valide_pedagogiquement,
+            avenants: $avenants,
+            details_avenants: $details_avenants,
+            date_retour: $date_retour,
+            id_convention:  $id_convention
+        );
+        (new SuiviRepository)->insert($suivi);
         FlashMessage::add(
             content: "Convention ajoutée avec succès",
             type: FlashType::SUCCESS
@@ -425,4 +454,186 @@ class EtudiantController
             action: Action::HOME
         );
     }
+    public function conventionBrouillon(): Response
+    {
+        /**
+         * @var Etudiant $etudiant
+         */
+        $etudiant = UserConnection::getSignedInUser();
+        $type_convention = $_REQUEST["type_convention"];
+        $annee_universitaire = $_REQUEST["annee_universitaire"];
+        $origine_stage = $_REQUEST["origine_stage"];
+        $sujet = $_REQUEST["sujet"];
+        $taches = $_REQUEST["taches"];
+        $date_debut = $_REQUEST["date_debut"];
+        $date_fin = $_REQUEST["date_fin"];
+        $gratification = $_REQUEST["gratification"];
+        $id_unite_gratification = $_REQUEST["id_unite_gratification"];
+        $numero_voie = $_REQUEST["numero_voie"];
+        $id_distribution_commune = $_REQUEST["id_distribution_commune"];
+        $thematique = $_REQUEST["thematique"];
+        $commentaires = $_REQUEST["commentaires"];
+        $details = $_REQUEST["details"];
+        $interruption = $_REQUEST["interruption"];
+        $date_debut_interruption = $_REQUEST["date_debut_interruption"];
+        $date_fin_interruption = $_REQUEST["date_fin_interruption"];
+        if ($interruption == "0") {
+            $date_debut_interruption = null;
+            $date_fin_interruption = null;
+        }
+        if ($_REQUEST["date_fin_interruption"] == "") {
+            $date_fin_interruption = null;
+        }
+        if ($_REQUEST["date_debut_interruption"] == "") {
+            $date_debut_interruption = null;
+        }
+        $heures_total = $_REQUEST["heures_total"];
+        $jours_hebdomadaire = $_REQUEST["jours_hebdomadaire"];
+        $heures_hebdomadaire = $_REQUEST["heures_hebdomadaire"];
+        $commentaire_duree = $_REQUEST["commentaire_duree"];
+        $avantages_nature = $_REQUEST["avantages_nature"];
+        $code_elp = $_REQUEST["code_elp"];
+        $entreprise = $_REQUEST["entreprise"];
+        if ($date_debut > $date_fin) {
+            throw new ControllerException(
+                message: "La date de début doit être inférieur à la date de fin",
+                action: Action::ETUDIANT_CONVENTION_ADD_FORM,
+                params: [
+                    "type_convention" => $type_convention,
+                    "annee_universitaire" => $annee_universitaire,
+                    "origine_stage" => $origine_stage,
+                    "sujet" => $sujet,
+                    "taches" => $taches,
+                    "date_debut" => $date_debut,
+                    "date_fin" => $date_fin,
+                    "gratification" => $gratification,
+                    "id_unite_gratification" => $id_unite_gratification,
+                    "numero_voie" => $numero_voie,
+                    "id_distribution_commune" => $id_distribution_commune,
+                ]
+            );
+        }
+        if ($date_debut_interruption > $date_fin_interruption) {
+            throw new ControllerException(
+                message: "La date de début de l'interruption doit être inférieur à la date de fin de l'interruption",
+                action: Action::ETUDIANT_CONVENTION_ADD_FORM,
+                params: [
+                    "type_convention" => $type_convention,
+                    "annee_universitaire" => $annee_universitaire,
+                    "origine_stage" => $origine_stage,
+                    "sujet" => $sujet,
+                    "taches" => $taches,
+                    "date_debut" => $date_debut,
+                    "date_fin" => $date_fin,
+                    "gratification" => $gratification,
+                    "id_unite_gratification" => $id_unite_gratification,
+                    "numero_voie" => $numero_voie,
+                    "id_distribution_commune" => $id_distribution_commune,
+                ]
+            );
+        }
+        if ($interruption == 1 and ($date_debut_interruption == null or $date_fin_interruption == null)) {
+            throw new ControllerException(
+                message: "Vous devez renseigner les dates de début et de fin de l'interruption",
+                action: Action::ETUDIANT_CONVENTION_ADD_FORM,
+                params: [
+                    "type_convention" => $type_convention,
+                    "annee_universitaire" => $annee_universitaire,
+                    "origine_stage" => $origine_stage,
+                    "sujet" => $sujet,
+                    "taches" => $taches,
+                    "date_debut" => $date_debut,
+                    "date_fin" => $date_fin,
+                    "gratification" => $gratification,
+                    "id_unite_gratification" => $id_unite_gratification,
+                    "numero_voie" => $numero_voie,
+                    "id_distribution_commune" => $id_distribution_commune,
+                ]
+            );
+        }
+
+        $convention = new Convention(
+            login: $etudiant->getLogin(),
+            type_convention: $type_convention,
+            origine_stage: $origine_stage,
+            annee_universitaire: $annee_universitaire,
+            sujet: $sujet,
+            taches: $taches,
+            date_debut: $date_debut,
+            date_fin: $date_fin,
+            gratification: $gratification,
+            id_unite_gratification: $id_unite_gratification,
+            numero_voie: $numero_voie,
+            id_distribution_commune: $id_distribution_commune,
+            thematique: $thematique,
+            commentaires: $commentaires,
+            details: $details,
+            interruption: $interruption,
+            date_interruption_debut: $date_debut_interruption,
+            date_interruption_fin: $date_fin_interruption,
+            heures_total: $heures_total,
+            jours_hebdomadaire: $jours_hebdomadaire,
+            heures_hebdomadaire: $heures_hebdomadaire,
+            commentaires_duree: $commentaire_duree,
+            avantages_nature: $avantages_nature,
+            code_elp: $code_elp,
+            id_entreprise: $entreprise
+        );
+        $date_creation = date("Y-m-d");
+        $date_modification = date("Y-m-d");
+        $modifiable = 1;
+        $valide = 0;
+        $raison_refus = null;
+        $valide_pedagogiquement = 0;
+        $avenants = 0;
+        $details_avenants = null;
+        $date_retour = null;
+        $id_convention = (new ConventionRepository)->select()[count((new ConventionRepository)->select())-1]->getIdConvention();
+        $suivi = new Suivi(
+            date_creation: $date_creation,
+            date_modification: $date_modification,
+            modifiable: $modifiable,
+            valide: $valide,
+            raison_refus: $raison_refus,
+            valide_pedagogiquement: $valide_pedagogiquement,
+            avenants: $avenants,
+            details_avenants: $details_avenants,
+            date_retour: $date_retour,
+            id_convention: $id_convention
+        );
+        if (!Token::verify(Action::ETUDIANT_CONVENTION_ADD_BROUILLON, $_REQUEST["token"]))
+            throw new InvalidTokenException();
+        if (Token::isTimeout(Action::ETUDIANT_CONVENTION_ADD_BROUILLON)) {
+            throw new TokenTimeoutException(
+                action: Action::ETUDIANT_CONVENTION_ADD,
+                params: ["convention" => $convention,
+                    "type_convention" => $type_convention,
+                    "annee_universitaire" => $annee_universitaire,
+                    "origine_stage" => $origine_stage,
+                    "sujet" => $sujet,
+                    "taches" => $taches,
+                    "date_debut" => $date_debut,
+                    "date_fin" => $date_fin,
+                    "gratification" => $gratification,
+                    "id_unite_gratification" => $id_unite_gratification,
+                    "numero_voie" => $numero_voie,
+                    "id_distribution_commune" => $id_distribution_commune,
+                ]
+            );
+        }
+        (new ConventionRepository)->insert($convention);
+        (new SuiviRepository)->insert($suivi);
+        FlashMessage::add(
+            content: "Convention enregistrée en tant que brouillon avec succès",
+            type: FlashType::SUCCESS
+        );
+        return new Response(
+            action: Action::HOME
+        );
+
+
+
+    }
+
+
 }
