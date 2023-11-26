@@ -410,6 +410,12 @@ class EntrepriseController
                 action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
             );
         }
+        if(!UserConnection::isInstance(new Entreprise)){
+            throw new ControllerException(
+                message: "Vous n'êtes pas une entreprise",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
         if (!Validate::isName($secteur)) {
             throw new ControllerException(
                 message: "Le secteur n'est pas valide",

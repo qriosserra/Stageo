@@ -21,8 +21,30 @@ class Offre extends CoreObject
                                 private int|NullDataType|null    $login = null,
                                 private string|NullDataType|null $id_unite_gratification = null,
                                 private int|null                 $id_entreprise = null,
+                                private string|NullDataType|null $date_debut = null,
+                                private string|NullDataType|null $date_fin = null,
     )
     {
+    }
+
+    public function getDateDebut(): string|NullDataType|null
+    {
+        return $this->date_debut;
+    }
+
+    public function setDateDebut(string|NullDataType|null $date_debut): void
+    {
+        $this->date_debut = $date_debut;
+    }
+
+    public function getDateFin(): string|NullDataType|null
+    {
+        return $this->date_fin;
+    }
+
+    public function setDateFin(string|NullDataType|null $date_fin): void
+    {
+        $this->date_fin = $date_fin;
     }
 
     public function getType(): string|NullDataType|null

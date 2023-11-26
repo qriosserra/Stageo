@@ -17,7 +17,6 @@ include __DIR__ . "/../../macros/offre.php";
  * @var float $gratification
  */
 ?>
-
 <main class="h-screen flex flex-col items-center justify-center">
     <?=button("Accueil", "fi-rr-home", Action::HOME, "!absolute !pl-2 top-16 left-0")?>
     <h5 class="font-bold py-6"><?= $offre->getIdOffre() !== null ? 'Modifier' : 'Ajouter' ?> une offre</h5>
@@ -49,6 +48,16 @@ include __DIR__ . "/../../macros/offre.php";
         <?=field("gratification", "Gratification par heure", "float", "", null, true,$offre->getGratification())?>
         <?=dropdown("id_unite_gratification", "Unité de gratification", null, null, 2, $unite_gratifications)?>
 
+        <div date-rangepicker class="flex items-center col-span-2">
+            <div class="relative flex items-center">
+                <input name="start" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date début">
+            </div>
+            <span class="mx-4 text-gray-500">to</span>
+            <div class="relative flex items-center">
+                <input name="end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date fin">
+            </div>
+        </div>
+
         <div class="flex items-center col-span-2">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
                 <div>
@@ -77,4 +86,18 @@ include __DIR__ . "/../../macros/offre.php";
         <?=submit($offre->getIdOffre() !== null ? "Modifier" : "Publier")?>
         <?=token($token)?>
     </form>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr("[name='start']", {
+                enableTime: false, // Si vous avez besoin de sélectionner une heure également
+                dateFormat: "Y-m-d",
+            });
+
+            flatpickr("[name='end']", {
+                enableTime: false,
+                dateFormat: "Y-m-d",
+            });
+        });
+    </script>
+
 </main>
