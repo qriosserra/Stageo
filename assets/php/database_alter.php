@@ -45,7 +45,7 @@ ALTER TABLE stg_offre_categorie
 ADD FOREIGN KEY (id_offre) REFERENCES stg_offre(id_offre) ON DELETE CASCADE,
 ADD FOREIGN KEY (id_categorie) REFERENCES stg_categorie(id_categorie) ON DELETE CASCADE;
 
-ALTER TABLE stg_postule
+ALTER TABLE stg_postuler
 ADD FOREIGN KEY (login) REFERENCES stg_etudiant(login) ON DELETE CASCADE,
 ADD FOREIGN KEY (id_offre) REFERENCES stg_offre(id_offre) ON DELETE CASCADE;
 
