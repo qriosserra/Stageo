@@ -10,7 +10,11 @@ use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
 use Stageo\Lib\HTTP\Session;
+use Stageo\Lib\Mailer\Email;
+use Stageo\Lib\Mailer\Mailer;
 use Stageo\Lib\Response;
+use Stageo\Lib\Security\Crypto;
+use Stageo\Lib\Security\EmailVerification;
 use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
@@ -279,11 +283,18 @@ class EntrepriseController
             );
         }
 
+        if (is_null((new EntrepriseRepository)->getByEmail($email))) {
+            $entreprise->setNonce(EmailVerification::sendVerificationEmail($email));
+        }
+        else {
+            EmailVerification::sendAlertEmail($email);
+        }
+
         $entreprise->setHashedPassword((Password::hash($password)));
         (new EntrepriseRepository)->insert($entreprise);
         UserConnection::signIn((new EntrepriseRepository)->getByEmail($entreprise->getEmail()));
         Session::delete("entreprise");
-        FlashMessage::add("L'entreprise a été ajoutée avec succès", FlashType::SUCCESS);
+        FlashMessage::add("Veuillez vérifier votre email depuis votre boîte de réception", FlashType::INFO);
         return new Response(
             action: Action::HOME
         );
