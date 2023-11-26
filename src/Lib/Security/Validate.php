@@ -31,10 +31,7 @@ class Validate
 
     public static function isFloat(string $float, bool $required = true): bool
     {
-        return self::match(
-            pattern: Pattern::FLOAT->value,
-            subject: $float,
-            required: $required);
+        return $required ? is_numeric($float) : (empty($float) || is_numeric($float));
     }
 
     public static function isEmail(string $email, bool $required = true): bool

@@ -33,12 +33,12 @@ function newOffre(string $description = null,
 <div class="flex rounded-lg border">
   <div class="h-24 w-24 flex-none bg-gray-200" aria-hidden="true"><!-- Placeholder for image --></div>
   <div class="flex-grow p-4">
-    <div class="mb-2 font-bold">$description</div>
-    <div class="rounded bg-blue-50 text-sm text-gray-600">$type</div>
-    <div class="mb-2 mt-1 text-sm text-gray-600">$nomEntreprise</div>
-    <div class="mb-2 rounded bg-blue-50 px-2 py-1 text-xs text-blue-800">$durée</div>
-    <div class="text-xs">Débute le : $dateDeDebuts</div>
-    <div class="mt-2 rounded bg-blue-50 px-2 py-1 text-xs text-blue-800">$libelle  </div>
+    <p class="mb-2 font-bold">$description</p>
+    <p class="rounded bg-blue-50 text-sm text-gray-600">$type</p>
+    <p class="mb-2 mt-1 text-sm text-gray-600">$nomEntreprise</p>
+    <p class="mb-2 rounded bg-blue-50 px-2 py-1 text-xs text-blue-800">$durée</p>
+    <p class="text-xs">Débute le : $dateDeDebuts</p>
+    <p class="mt-2 rounded bg-blue-50 px-2 py-1 text-xs text-blue-800">$libelle  </p>
     <a href="$action" class="mt-2 inline-block text-sm text-blue-600 hover:text-blue-800">En savoir plus</a>
   </div>
 </div>

@@ -142,12 +142,18 @@ include __DIR__ . "/../../macros/newOffre.php";
 
     <!-- Internship offers -->
 
-    <div class="text-lg font-semibold mb-4"><?=$nbRechercheTrouver ?> offres de stage</div>
-<?php foreach ($listeoffres as $offre):?>
-    <?php if (in_array($offre["id_offre"],$idOffres)):?>
-    <?= newOffre($offre["description"],$offre["type"],$offre["raison_sociale"], $offre["taches"],"08/05/2024",$offre["categories"],$offre["id_offre"])?>
-    <?php endif;?>
-<?php endforeach; ?>
+    <?php if (!is_null($idOffres)) :?>
+    <p class="text-lg font-semibold mb-4"><?=$nbRechercheTrouver ?> offres de stage</p>
+        <?php foreach ($listeoffres as $offre):?>
+            <?php if (in_array($offre["id_offre"],$idOffres)):?>
+            <?= newOffre($offre["description"],$offre["type"],$offre["raison_sociale"], $offre["taches"],"08/05/2024",$offre["categories"],$offre["id_offre"])?>
+            <?php endif;?>
+        <?php endforeach; ?>
+    <?php else:?>
+
+        <p class="text-lg font-semibold mb-4">Aucune offre disponible selon vos recherches !</p>
+    <?php endif ?>
+
 
 
 

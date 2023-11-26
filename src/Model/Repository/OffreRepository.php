@@ -129,9 +129,9 @@ class OffreRepository extends CoreRepository
                 )";
         $pdo = DatabaseConnection::getPdo()->prepare($sql);
         $pdo->execute($val);*/
-        $toglle = ($Togle[0] == "oui" && $Togle[1] == "oui") ? "%Stages et Alternances%"
-            : ($Togle[0] == "oui" ? "%Alternances%"
-                : ($Togle[1] == "oui" ? "%Stages%" : "%%"));
+        $toglle = ($Togle[0] == "oui" && $Togle[1] == "oui") ? "%%"
+            : ($Togle[0] == "oui" ? "%Alternance%"
+                : ($Togle[1] == "oui" ? "%Stage%" : "%%"));
 
         $texte = (strlen($texte)>0) ?$texte : "";
         $localisation = (strlen($localisation)>0) ?$localisation : "";
@@ -141,7 +141,6 @@ class OffreRepository extends CoreRepository
         $val["text4"] = "%".$texte."%";
         $val["localisation"] = "%".$localisation."%";
         $val["Togle"] = $toglle;
-
         $sql = "SELECT *
         FROM {$this->getTable()} 
         WHERE (description LIKE :text1 OR secteur LIKE :text2 OR thematique LIKE :text3 OR taches LIKE :text4)

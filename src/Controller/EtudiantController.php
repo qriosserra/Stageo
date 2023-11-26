@@ -160,7 +160,9 @@ class EtudiantController
                 action: Action::ETUDIANT_POSTULER_OFFRE_FORM,
                 params: [
                     "login" => $login,
-                    "id" => $id_offre
+                    "id" => $id_offre,
+                    "lm" => $lm,
+                    "complement" => $complement
                 ]
             );
         }
@@ -170,14 +172,18 @@ class EtudiantController
                 action: Action::ETUDIANT_POSTULER_OFFRE_FORM,
                 params: [
                     "login" => $login,
-                    "id" => $id_offre
+                    "id" => $id_offre,
+                    "cv" => $cv,
+                    "complement" => $complement
                 ]
             );
         }
 
         if($cv["size"]!=0) {
-            $cvName = uniqid("", true) . pathinfo($cv["name"], PATHINFO_EXTENSION);
+            $cvName = "cv_" . pathinfo($cv["name"], PATHINFO_FILENAME) . "_" . uniqid() . "." . strtolower(pathinfo($cv["name"], PATHINFO_EXTENSION));
             move_uploaded_file($cv["tmp_name"], "assets/document/cv/$cvName");
+            //$cvName = uniqid("", true) . pathinfo($cv["name"], PATHINFO_EXTENSION);
+            //move_uploaded_file($cv["tmp_name"], "assets/document/cv/$cvName");
         }
         else{
             FlashMessage::add(
@@ -188,13 +194,16 @@ class EtudiantController
                 action: Action::ETUDIANT_POSTULER_OFFRE_FORM,
                 params: [
                     "login" => $login,
-                    "id" => $id_offre
+                    "id" => $id_offre,
+                    "lm" => $lm,
+                    "complement" => $complement
                 ]
             );
         }
 
         if($lm["size"]!=0) {
-            $lmName = uniqid("", true) . pathinfo($lm["name"], PATHINFO_EXTENSION);
+            $lmName = "lm_" . pathinfo($lm["name"], PATHINFO_FILENAME) . "_" . uniqid() . "." . strtolower(pathinfo($lm["name"], PATHINFO_EXTENSION));
+            //$lmName = uniqid("", true) . pathinfo($lm["name"], PATHINFO_EXTENSION);
             move_uploaded_file($lm["tmp_name"], "assets/document/lm/$lmName");
         }
         else{

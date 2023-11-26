@@ -217,7 +217,7 @@ class AdminController
         if (UserConnection::isInstance(new Admin())) {
             $entreprise = (new EntrepriseRepository())->getById($_REQUEST["idEntreprise"]);
             /** @var Entreprise $entreprise **/
-            $entreprise->setConfirmer(1);
+            $entreprise->setValide(true);
             (new EntrepriseRepository())->update($entreprise);
             $listeEntreprises = (new EntrepriseRepository())->getEntreprisesNonValidees();
             return new Response(

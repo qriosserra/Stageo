@@ -51,9 +51,6 @@ class MainController
             ? "description"
             : "secteur";
         $offres = [];
-      /*  $offres = isset($search)
-            ? (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%".$search."%"))
-            : (new OffreRepository)->select();*/
         $Togle = [
             isset($_REQUEST['toggle']["Alternances"]) ? "oui" : "non",
             isset($_REQUEST['toggle']["Stages"]) ? "oui" : "non",

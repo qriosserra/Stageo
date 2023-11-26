@@ -353,7 +353,7 @@ class EntrepriseController
                     "title" => "Création d'une offre",
                     "nav" => false,
                     "footer" => false,
-                    "offre" => Session::get("offre"),
+                    "offre" => Session::get("offre") ?? new Offre(),
                     "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
                     "token" => Token::generateToken(Action::ENTREPRISE_CREATION_OFFRE_FORM)
                 ]
@@ -397,6 +397,7 @@ class EntrepriseController
             taches: $taches,
             commentaires: $commentaires,
             gratification: $gratification,
+            type: $type,
             id_unite_gratification: $id_unite_gratification,
             id_entreprise: $entreprise->getIdEntreprise()
         ));
@@ -406,6 +407,12 @@ class EntrepriseController
         }
         if (Token::isTimeout(Action::ENTREPRISE_CREATION_OFFRE_FORM)) {
             throw new TokenTimeoutException(
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if(!UserConnection::isInstance(new Entreprise)){
+            throw new ControllerException(
+                message: "Vous n'êtes pas une entreprise",
                 action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
             );
         }
@@ -455,16 +462,7 @@ class EntrepriseController
         FlashMessage::add("L'offre a été ajoutée avec succès", FlashType::SUCCESS);
         $id_offre = (new OffreRepository)->insert($offre);
 
-        //A MODIFIER PLUS TARD !!!!!!!!!!!!!
-        $pdo = DatabaseConnection::getPdo();
-        if (stripos($type, "stage") !== false) {
-            $sql = $pdo->prepare("INSERT INTO stg_offre_stage (id_offre) VALUES ($id_offre)");
-            $sql->execute();
-        }
-        if (stripos($type, "alternance") !== false) {
-            $sql = $pdo->prepare("INSERT INTO stg_offre_alternance (id_offre) VALUES ($id_offre)");
-            $sql->execute();
-        }
+        Session::delete("offre");
         return new Response(
             action: Action::HOME,
         );
@@ -494,10 +492,11 @@ class EntrepriseController
             );
         } else {
             return new Response(
-                template: "entreprise/offre/modifier-offre.php",
+                template: "entreprise/offre/add.php",
                 params: [
                     "entreprise" => $user,
                     "offre" => $offre,
+                    "token" => Token::generateToken(Action::ENTREPRISE_MODIFICATION_OFFRE_FORM),
                     "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository())->select()), "libelle", "id_unite_gratification")
                 ]
             );
@@ -508,7 +507,6 @@ class EntrepriseController
     {
         $idOffre = $_REQUEST["id"];
         $offre = (new OffreRepository)->getById($idOffre);
-        $login = $_REQUEST["login"];
         $description = $_REQUEST["description"];
         $secteur = $_REQUEST["secteur"];
         $thematique = $_REQUEST["thematique"];
@@ -518,6 +516,14 @@ class EntrepriseController
         $id_unite_gratification = $_REQUEST["id_unite_gratification"];
         $type = $_REQUEST["emploi"];
         $user = UserConnection::getSignedInUser();
+        if (!Token::verify(Action::ENTREPRISE_MODIFICATION_OFFRE_FORM, $_REQUEST["token"])) {
+            throw new InvalidTokenException();
+        }
+        if (Token::isTimeout(Action::ENTREPRISE_MODIFICATION_OFFRE_FORM)) {
+            throw new TokenTimeoutException(
+                action: Action::ENTREPRISE_MODIFICATION_OFFRE_FORM,
+            );
+        }
         if(!$user){
             throw new ControllerException(
                 message: "Veillez vous connecter",
@@ -537,7 +543,7 @@ class EntrepriseController
             );
         }
         else {
-            $o = new Offre($idOffre, $user->getIdEntreprise(), $description, $secteur, $thematique, $taches, $commentaires, $gratification, $id_unite_gratification, $login, $type);
+            $o = new Offre($idOffre, $description, $thematique,$secteur , $taches, $commentaires, $gratification,$type , null,$id_unite_gratification, $user->getIdEntreprise());
             (new OffreRepository())->update($o);
         }
             return new Response(
