@@ -3,6 +3,7 @@
 namespace Stageo\Lib\Security;
 
 use Exception;
+use Stageo\Lib\enums\Action;
 use Stageo\Lib\Mailer\Email;
 use Stageo\Lib\Mailer\Mailer;
 use Stageo\Model\Object\User;
@@ -22,7 +23,7 @@ class EmailVerification
             "email" => $email,
             "nonce" => $nonce
         ]);
-        $url = $_ENV["ABSOLUTE_URL"] . "?c=entreprise&a=verifierEmail&data=$data";
+        $url = $_ENV["ABSOLUTE_URL"] . Action::ENTREPRISE_VERIFIER->value . "&data=$data";
 
         Mailer::send(new Email(
             destinataire: $email,

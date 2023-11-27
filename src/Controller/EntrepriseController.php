@@ -2,10 +2,12 @@
 
 namespace Stageo\Controller;
 
+use Exception;
 use Stageo\Controller\Exception\ControllerException;
 use Stageo\Controller\Exception\InvalidTokenException;
 use Stageo\Controller\Exception\TokenTimeoutException;
 use Stageo\Lib\Database\ComparisonOperator;
+use Stageo\Lib\Database\NullDataType;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
@@ -247,13 +249,18 @@ class EntrepriseController
         );
     }
 
+    /**
+     * @throws TokenTimeoutException
+     * @throws ControllerException
+     * @throws InvalidTokenException
+     * @throws Exception
+     */
     public function signUpStep4(): Response
     {
         $email = $_REQUEST["email"];
         $password = $_REQUEST["password"];
-
         $entreprise = Session::get("entreprise") ?? new Entreprise();
-        $entreprise->setEmail($email);
+        $entreprise->setUnverifiedEmail($email);
         Session::set("entreprise", $entreprise);
 
         if (!Token::verify(Action::ENTREPRISE_SIGN_UP_STEP_4_FORM, $_REQUEST["token"])) {
@@ -283,20 +290,40 @@ class EntrepriseController
             );
         }
 
-        if (is_null((new EntrepriseRepository)->getByEmail($email))) {
+        if (is_null((new EntrepriseRepository)->getByEmail($email)))
             $entreprise->setNonce(EmailVerification::sendVerificationEmail($email));
-        }
-        else {
-            EmailVerification::sendAlertEmail($email);
-        }
+        else EmailVerification::sendAlertEmail($email);
 
         $entreprise->setHashedPassword((Password::hash($password)));
         (new EntrepriseRepository)->insert($entreprise);
-        UserConnection::signIn((new EntrepriseRepository)->getByEmail($entreprise->getEmail()));
+        UserConnection::signIn($entreprise);
         Session::delete("entreprise");
         FlashMessage::add("Veuillez vérifier votre email depuis votre boîte de réception", FlashType::INFO);
         return new Response(
             action: Action::HOME
+        );
+    }
+
+    public function verifier(string $data): Response
+    {
+        $decodedData = Crypto::decode($data);
+        $email = $decodedData["email"];
+        $nonce = $decodedData["nonce"];
+        $entreprise = (new EntrepriseRepository)->getByUnverifiedEmail($email);
+        if (!EmailVerification::verify($entreprise, $nonce)) {
+            throw new ControllerException(
+                message: "Le lien de vérification n'est pas valide",
+                action: Action::HOME
+            );
+        }
+
+        $entreprise->setEmail($email);
+        $entreprise->setUnverifiedEmail(new NullDataType);
+        return new Response(
+            action: Action::ENTREPRISE_SIGN_IN_FORM,
+            params: [
+                "email" => $email
+            ]
         );
     }
 
