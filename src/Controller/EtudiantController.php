@@ -305,7 +305,6 @@ class EtudiantController
                 action: Action::HOME
             );
         }else{
-
             $id = $_REQUEST['Entreprise']['id'];
             //$i[] = ['oo' => ['a','b']];
             $Favorie = Session::get('favorie') ?? [];
