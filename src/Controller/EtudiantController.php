@@ -318,7 +318,8 @@ class EtudiantController
             );
 
             return new Response(
-                action: Action::AFFICHER_OFFRE."&id=".urlencode($id)
+                action: Action::AFFICHER_OFFRE,
+                params: ["id" => urlencode($id)]
             );
         }
     }
