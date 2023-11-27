@@ -293,4 +293,34 @@ class EtudiantController
             action: Action::HOME
         );
     }
+    public function sauvegarderEntreprise(): Response {
+
+        if (!isset($_REQUEST['Entreprise']) && (!isset($_REQUEST['Entreprise']['id']) || !isset($_REQUEST['Entreprise']['nom'])) ){
+            FlashMessage::add(
+                content: "erreur identifiant de l'entreprise non trouvée",
+                type: FlashType::ERROR
+            );
+
+            return new Response(
+                action: Action::HOME
+            );
+        }else{
+
+            $id = $_REQUEST['Entreprise']['id'];
+            //$i[] = ['oo' => ['a','b']];
+            $Favorie = Session::get('favorie') ?? [];
+            $Favorie[$_REQUEST['Entreprise']['nom']] = $id;
+            Session::set('favorie', $Favorie);
+
+            FlashMessage::add(
+                content: "Entreprise Sauvegarder",
+                type: FlashType::SUCCESS
+            );
+
+            return new Response(
+                action: Action::AFFICHER_OFFRE."&id=".urlencode($id)
+            );
+        }
+    }
+
 }
