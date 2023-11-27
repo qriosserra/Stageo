@@ -3,7 +3,7 @@
         <div class="flex justify-center bg-blue-50">
             <span class="tracking-wide">Profil</span>
         </div>
-        <div class="grid grid-cols-1 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div class="grid grid-cols-1 sm:grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             <div class="grid grid-cols-2 rounded px-4 py-2 text-sm text-gray-600">
                 <span class="font-semibold tracking-wide">nom Info 1 :</span>
                 <p>info 1</p>
@@ -42,7 +42,7 @@
         <div class="flex justify-center bg-blue-50">
             <span class="tracking-wide">offres postuler</span>
         </div>
-        <div class="grid grid-cols-1 sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div class="grid grid-cols-1 sm:grid sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             <div class="grid grid-cols-2 rounded px-4 py-2 text-sm text-gray-600">
                 <span class="font-semibold tracking-wide">nom Info 1 :</span>
                 <p>info 1</p>
