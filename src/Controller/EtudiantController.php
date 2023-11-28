@@ -295,7 +295,7 @@ class EtudiantController
     }
     public function sauvegarderEntreprise(): Response {
 
-        if (!isset($_REQUEST['Entreprise']) && (!isset($_REQUEST['Entreprise']['id']) || !isset($_REQUEST['Entreprise']['nom'])) ){
+        if (!isset($_REQUEST['Entreprise']) || !isset($_REQUEST['Entreprise']['id']) || !isset($_REQUEST['Entreprise']['nom']) ){
             FlashMessage::add(
                 content: "erreur identifiant de l'entreprise non trouvée",
                 type: FlashType::ERROR
