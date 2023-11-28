@@ -2,15 +2,19 @@
 
 namespace Stageo\Controller;
 
+use Exception;
 use Stageo\Controller\Exception\ControllerException;
 use Stageo\Controller\Exception\InvalidTokenException;
 use Stageo\Controller\Exception\TokenTimeoutException;
 use Stageo\Lib\Database\ComparisonOperator;
+use Stageo\Lib\Database\NullDataType;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
 use Stageo\Lib\HTTP\Session;
 use Stageo\Lib\Response;
+use Stageo\Lib\Security\Crypto;
+use Stageo\Lib\Security\EmailVerification;
 use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
@@ -19,7 +23,6 @@ use Stageo\Lib\Database\QueryCondition;
 use Stageo\Model\Object\Admin;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Offre;
-use Stageo\Model\Repository\DatabaseConnection;
 use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\OffreRepository;
@@ -31,7 +34,14 @@ use Stageo\Model\Repository\UniteGratificationRepository;
 
 class EntrepriseController
 {
-    public function signUpStep1Form(): Response {
+    public function signUpStep1Form(): Response
+    {
+        if (UserConnection::isSignedIn()) {
+            throw new ControllerException(
+                message: "Vous êtes déjà connecté",
+                action: Action::HOME
+            );
+        }
         return new Response(
             template: "entreprise/sign-up-step-1.php",
             params: [
@@ -63,6 +73,12 @@ class EntrepriseController
         $entreprise->setFax($fax);
         Session::set("entreprise", $entreprise);
 
+        if (UserConnection::isSignedIn()) {
+            throw new ControllerException(
+                message: "Vous êtes déjà connecté",
+                action: Action::HOME
+            );
+        }
         if (!Token::verify(Action::ENTREPRISE_SIGN_UP_STEP_1_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
         }
@@ -103,6 +119,12 @@ class EntrepriseController
 
     public function signUpStep2Form(): Response
     {
+        if (UserConnection::isSignedIn()) {
+            throw new ControllerException(
+                message: "Vous êtes déjà connecté",
+                action: Action::HOME
+            );
+        }
         return new Response(
             template: "entreprise/sign-up-step-2.php",
             params: [
@@ -134,6 +156,12 @@ class EntrepriseController
         $entreprise->setIdStatutJuridique($id_statut_juridique);
         Session::set("entreprise", $entreprise);
 
+        if (UserConnection::isSignedIn()) {
+            throw new ControllerException(
+                message: "Vous êtes déjà connecté",
+                action: Action::HOME
+            );
+        }
         if (!Token::verify(Action::ENTREPRISE_SIGN_UP_STEP_2_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
         }
@@ -180,6 +208,12 @@ class EntrepriseController
 
     public function signUpStep3Form(): Response
     {
+        if (UserConnection::isSignedIn()) {
+            throw new ControllerException(
+                message: "Vous êtes déjà connecté",
+                action: Action::HOME
+            );
+        }
         return new Response(
             template: "entreprise/sign-up-step-3.php",
             params: [
@@ -203,6 +237,12 @@ class EntrepriseController
         $entreprise->setIdDistributioncommune($id_distribution_commune);
         Session::set("entreprise", $entreprise);
 
+        if (UserConnection::isSignedIn()) {
+            throw new ControllerException(
+                message: "Vous êtes déjà connecté",
+                action: Action::HOME
+            );
+        }
         if (!Token::verify(Action::ENTREPRISE_SIGN_UP_STEP_3_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
         }
@@ -231,6 +271,12 @@ class EntrepriseController
 
     public function signUpStep4Form(): Response
     {
+        if (UserConnection::isSignedIn()) {
+            throw new ControllerException(
+                message: "Vous êtes déjà connecté",
+                action: Action::HOME
+            );
+        }
         return new Response(
             template: "entreprise/sign-up-step-4.php",
             params: [
@@ -243,15 +289,26 @@ class EntrepriseController
         );
     }
 
+    /**
+     * @throws TokenTimeoutException
+     * @throws ControllerException
+     * @throws InvalidTokenException
+     * @throws Exception
+     */
     public function signUpStep4(): Response
     {
         $email = $_REQUEST["email"];
         $password = $_REQUEST["password"];
-
         $entreprise = Session::get("entreprise") ?? new Entreprise();
-        $entreprise->setEmail($email);
+        $entreprise->setUnverifiedEmail($email);
         Session::set("entreprise", $entreprise);
 
+        if (UserConnection::isSignedIn()) {
+            throw new ControllerException(
+                message: "Vous êtes déjà connecté",
+                action: Action::HOME
+            );
+        }
         if (!Token::verify(Action::ENTREPRISE_SIGN_UP_STEP_4_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
         }
@@ -279,17 +336,50 @@ class EntrepriseController
             );
         }
 
+        if (is_null((new EntrepriseRepository)->getByEmail($email)))
+            $entreprise->setNonce(EmailVerification::sendVerificationEmail($email));
+        else EmailVerification::sendAlertEmail($email);
+
         $entreprise->setHashedPassword((Password::hash($password)));
         (new EntrepriseRepository)->insert($entreprise);
-        UserConnection::signIn((new EntrepriseRepository)->getByEmail($entreprise->getEmail()));
+        UserConnection::signIn($entreprise);
         Session::delete("entreprise");
-        FlashMessage::add("L'entreprise a été ajoutée avec succès", FlashType::SUCCESS);
+        FlashMessage::add("Veuillez vérifier votre email depuis votre boîte de réception", FlashType::INFO);
         return new Response(
             action: Action::HOME
         );
     }
 
-    public function signInForm(string $email = null): Response {
+    public function verifier(string $data): Response
+    {
+        $decodedData = Crypto::decrypt($data);
+        $email = $decodedData["email"];
+        $nonce = $decodedData["nonce"];
+        $entreprise = (new EntrepriseRepository)->getByUnverifiedEmail($email);
+        if (!EmailVerification::verify($entreprise, $nonce)) {
+            throw new ControllerException(
+                message: "Le lien de vérification n'est pas valide",
+                action: Action::HOME
+            );
+        }
+        UserConnection::signOut();
+
+        $entreprise->setEmail($email);
+        $entreprise->setUnverifiedEmail(new NullDataType);
+        $entreprise->setNonce(new NullDataType);
+        (new EntrepriseRepository)->update($entreprise);
+        FlashMessage::add("Votre email a été vérifié avec succès", FlashType::SUCCESS);
+        return new Response(
+            action: Action::ENTREPRISE_SIGN_IN_FORM,
+            params: [
+                "email" => $email
+            ]
+        );
+    }
+
+    public function signInForm(string $email = null): Response
+    {
+        UserConnection::signOut();
         return new Response(
             template: "entreprise/sign-in.php",
             params: [

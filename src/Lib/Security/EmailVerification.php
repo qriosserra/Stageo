@@ -3,7 +3,9 @@
 namespace Stageo\Lib\Security;
 
 use Exception;
-use Stageo\Lib\Mailer;
+use Stageo\Lib\enums\Action;
+use Stageo\Lib\Mailer\Email;
+use Stageo\Lib\Mailer\Mailer;
 use Stageo\Model\Object\User;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
@@ -16,19 +18,18 @@ class EmailVerification
      */
     public static function sendVerificationEmail(string $email): string
     {
-        $absoluteURL = $_ENV["ABSOLUTE_URL"];
         $nonce = Token::generateToken(16);
-        $encodedData = Crypto::encrypt([
+        $data = Crypto::encrypt([
             "email" => $email,
             "nonce" => $nonce
         ]);
-        $url = "$absoluteURL/verify/$encodedData";
+        $url = $_ENV["ABSOLUTE_URL"] . Action::ENTREPRISE_VERIFIER->value . "&data=$data";
 
-        Mailer::send(
-            to: $email,
-            subject: "Verify your email",
-            content: "<a href='$url'>Verify your email</a>"
-        );
+        Mailer::send(new Email(
+            destinataire: $email,
+            objet: "Verify your email",
+            message: "<a href='$url'>Vérifier mon email</a>"
+        ));
         return $nonce;
     }
 
@@ -37,11 +38,11 @@ class EmailVerification
      */
     public static function sendAlertEmail(string $email): void
     {
-        Mailer::send(
-            to: $email,
-            subject: "Your email has been used to sign up",
-            content: ""
-        );
+        Mailer::send(new Email(
+            destinataire: $email,
+            objet: "Votre email a été utilisé pour s'inscrire",
+            message: "Si vous n'êtes pas à l'origine de cette action, veuillez contacter l'administrateur du site."
+        ));
     }
 
     public static function verify(?User  $user,
