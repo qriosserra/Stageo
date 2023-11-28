@@ -144,7 +144,7 @@ CREATE TABLE stg_entreprise(
    telephone VARCHAR(20),
    fax VARCHAR(20),
    site VARCHAR(256),
-   confirmer BOOL NOT NULL DEFAULT FALSE,
+   valide BOOL NOT NULL DEFAULT FALSE,
    id_taille_entreprise VARCHAR(3),
    id_type_structure INT,
    id_statut_juridique VARCHAR(4),
@@ -176,7 +176,9 @@ CREATE TABLE stg_offre(
    taches TEXT,
    commentaires TEXT,
    gratification DECIMAL(15,2),
-   type VARCHAR(256) DEFAULT 'Stage&Alternance',
+   type VARCHAR(256) NOT NULL DEFAULT 'Stage&Alternance',
+   date_debut DATE,
+   date_fin DATE,
    login VARCHAR(256),
    id_unite_gratification INT,
    id_entreprise INT NOT NULL,
@@ -184,18 +186,6 @@ CREATE TABLE stg_offre(
    FOREIGN KEY(login) REFERENCES stg_etudiant(login),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
    FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise)
-);
-
-CREATE TABLE stg_offre_alternance(
-   id_offre INT,
-   PRIMARY KEY(id_offre),
-   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
-);
-
-CREATE TABLE stg_offre_stage(
-   id_offre INT,
-   PRIMARY KEY(id_offre),
-   FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
 );
 
 CREATE TABLE stg_convention(
@@ -277,7 +267,7 @@ CREATE TABLE stg_offre_categorie(
    FOREIGN KEY(id_categorie) REFERENCES stg_categorie(id_categorie)
 );
 
-CREATE TABLE stg_postule(
+CREATE TABLE stg_postuler(
    login VARCHAR(256),
    id_offre INT,
    cv VARCHAR(256),

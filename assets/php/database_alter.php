@@ -21,12 +21,6 @@ ADD FOREIGN KEY (login) REFERENCES stg_etudiant(login) ON DELETE SET NULL,
 ADD FOREIGN KEY (id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification) ON DELETE SET NULL,
 ADD FOREIGN KEY (id_entreprise) REFERENCES stg_entreprise(id_entreprise) ON DELETE CASCADE;
 
-ALTER TABLE stg_offre_alternance
-ADD FOREIGN KEY (id_offre) REFERENCES stg_offre(id_offre) ON DELETE CASCADE;
-
-ALTER TABLE stg_offre_stage
-ADD FOREIGN KEY (id_offre) REFERENCES stg_offre(id_offre) ON DELETE CASCADE;
-
 ALTER TABLE stg_convention
 ADD FOREIGN KEY (id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification) ON DELETE SET NULL,
 ADD FOREIGN KEY (id_enseignant) REFERENCES stg_enseignant(id_enseignant) ON DELETE SET NULL,
@@ -51,7 +45,7 @@ ALTER TABLE stg_offre_categorie
 ADD FOREIGN KEY (id_offre) REFERENCES stg_offre(id_offre) ON DELETE CASCADE,
 ADD FOREIGN KEY (id_categorie) REFERENCES stg_categorie(id_categorie) ON DELETE CASCADE;
 
-ALTER TABLE stg_postule
+ALTER TABLE stg_postuler
 ADD FOREIGN KEY (login) REFERENCES stg_etudiant(login) ON DELETE CASCADE,
 ADD FOREIGN KEY (id_offre) REFERENCES stg_offre(id_offre) ON DELETE CASCADE;
 

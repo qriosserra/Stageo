@@ -42,6 +42,8 @@ enum Action: string
     case ADMIN_VALIDEENTREPRISE = "?c=admin&a=validerEntreprise";
     case ADMIN_SUPRIMERENTREPRISE = "?c=admin&a=suprimerEntreprise";
     case ABOUT = "?a=about";
+    case CSVFORM = "?a=csvForm";
+    case CSV = "?a=csv&XDEBUG_SESSION_START=";
     case SECRETAIRE_SIGN_UP_FORM = "?c=secretaire&a=signUpForm";
     case SECRETAIRE_SIGN_UP = "?c=secretaire&a=signUp";
     case SECRETAIRE_SIGN_IN = "?c=secretaire&a=signIn";

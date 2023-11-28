@@ -156,7 +156,9 @@ class EtudiantController
                 action: Action::ETUDIANT_POSTULER_OFFRE_FORM,
                 params: [
                     "login" => $login,
-                    "id" => $id_offre
+                    "id" => $id_offre,
+                    "lm" => $lm,
+                    "complement" => $complement
                 ]
             );
         }
@@ -166,14 +168,18 @@ class EtudiantController
                 action: Action::ETUDIANT_POSTULER_OFFRE_FORM,
                 params: [
                     "login" => $login,
-                    "id" => $id_offre
+                    "id" => $id_offre,
+                    "cv" => $cv,
+                    "complement" => $complement
                 ]
             );
         }
 
         if($cv["size"]!=0) {
-            $cvName = uniqid("", true) . pathinfo($cv["name"], PATHINFO_EXTENSION);
+            $cvName = "cv_" . pathinfo($cv["name"], PATHINFO_FILENAME) . "_" . uniqid() . "." . strtolower(pathinfo($cv["name"], PATHINFO_EXTENSION));
             move_uploaded_file($cv["tmp_name"], "assets/document/cv/$cvName");
+            //$cvName = uniqid("", true) . pathinfo($cv["name"], PATHINFO_EXTENSION);
+            //move_uploaded_file($cv["tmp_name"], "assets/document/cv/$cvName");
         }
         else{
             FlashMessage::add(
@@ -184,13 +190,16 @@ class EtudiantController
                 action: Action::ETUDIANT_POSTULER_OFFRE_FORM,
                 params: [
                     "login" => $login,
-                    "id" => $id_offre
+                    "id" => $id_offre,
+                    "lm" => $lm,
+                    "complement" => $complement
                 ]
             );
         }
 
         if($lm["size"]!=0) {
-            $lmName = uniqid("", true) . pathinfo($lm["name"], PATHINFO_EXTENSION);
+            $lmName = "lm_" . pathinfo($lm["name"], PATHINFO_FILENAME) . "_" . uniqid() . "." . strtolower(pathinfo($lm["name"], PATHINFO_EXTENSION));
+            //$lmName = uniqid("", true) . pathinfo($lm["name"], PATHINFO_EXTENSION);
             move_uploaded_file($lm["tmp_name"], "assets/document/lm/$lmName");
         }
         else{
@@ -284,4 +293,34 @@ class EtudiantController
             action: Action::HOME
         );
     }
+    public function sauvegarderEntreprise(): Response {
+
+        if (!isset($_REQUEST['Entreprise']) && (!isset($_REQUEST['Entreprise']['id']) || !isset($_REQUEST['Entreprise']['nom'])) ){
+            FlashMessage::add(
+                content: "erreur identifiant de l'entreprise non trouvée",
+                type: FlashType::ERROR
+            );
+
+            return new Response(
+                action: Action::HOME
+            );
+        }else{
+            $id = $_REQUEST['Entreprise']['id'];
+            //$i[] = ['oo' => ['a','b']];
+            $Favorie = Session::get('favorie') ?? [];
+            $Favorie[$_REQUEST['Entreprise']['nom']] = $id;
+            Session::set('favorie', $Favorie);
+
+            FlashMessage::add(
+                content: "Entreprise Sauvegarder",
+                type: FlashType::SUCCESS
+            );
+
+            return new Response(
+                action: Action::AFFICHER_OFFRE,
+                params: ["id" => urlencode($id)]
+            );
+        }
+    }
+
 }
