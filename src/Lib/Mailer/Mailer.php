@@ -21,7 +21,7 @@ class Mailer
         $mailer->Password   = $_ENV["MAILER_PASSWORD"];
         $mailer->Port       = $_ENV["MAILER_PORT"];
         $mailer->Subject = $email->getObjet();
-        $mailer->Body    = $email->getMessage();
+        $mailer->msgHTML($email->getMessage());
         try {
             $mailer->setFrom($mailer->Username, "Stageo");
             $mailer->addAddress($email->getDestinataire());
