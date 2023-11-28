@@ -304,7 +304,7 @@ class EntrepriseController
 
     public function verifier(string $data): Response
     {
-        $decodedData = Crypto::decode($data);
+        $decodedData = Crypto::decrypt($data);
         $email = $decodedData["email"];
         $nonce = $decodedData["nonce"];
         $entreprise = (new EntrepriseRepository)->getByUnverifiedEmail($email);
@@ -317,6 +317,8 @@ class EntrepriseController
 
         $entreprise->setEmail($email);
         $entreprise->setUnverifiedEmail(new NullDataType);
+        $entreprise->setNonce(new NullDataType);
+        (new EntrepriseRepository)->update($entreprise);
         return new Response(
             action: Action::ENTREPRISE_SIGN_IN_FORM,
             params: [
