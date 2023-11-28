@@ -12,8 +12,6 @@ use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
 use Stageo\Lib\HTTP\Session;
-use Stageo\Lib\Mailer\Email;
-use Stageo\Lib\Mailer\Mailer;
 use Stageo\Lib\Response;
 use Stageo\Lib\Security\Crypto;
 use Stageo\Lib\Security\EmailVerification;
