@@ -1,5 +1,5 @@
 <section class="bg-slate-50">
-    <div class="flex justify-center xl:justify-start xl:px-4 xl:py-2">
+    <div class="flex justify-center lg:justify-start lg:px-4 lg:py-2">
         <div class="flex items-center gap-4">
             <img class="h-10 w-10 rounded-full" src="/docs/images/people/profile-picture-5.jpg" alt="" />
             <div class="font-medium dark:text-white">
