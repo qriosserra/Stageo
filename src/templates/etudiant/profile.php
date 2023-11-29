@@ -1,10 +1,22 @@
+<?php
+
+/**
+ * @var string $nom
+ * @var string $prenom
+ * @var string $email
+ * @var string $annee
+ * @var string $tel
+ * @var string $fix
+ * @var string $Civiliter
+ */
+?>
 <section class="bg-slate-50">
     <div class="flex justify-center lg:justify-start lg:px-4 lg:py-2">
         <div class="flex items-center gap-4">
             <img class="h-10 w-10 rounded-full" src="/docs/images/people/profile-picture-5.jpg" alt="" />
             <div class="font-medium dark:text-white">
-                <div>Nikhil RAM</div>
-                <div class="text-sm text-gray-500 dark:text-gray-400">Etudiant en informatique</div>
+                <div><?= ucfirst($prenom) ?> <?= ucwords($nom) ?></div>
+                <div class="text-sm text-gray-500 dark:text-gray-400">Année <?= $annee ?></div>
             </div>
         </div>
     </div>
@@ -22,7 +34,7 @@
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4H1m3 4H1m3 4H1m3 4H1m6.071.286a3.429 3.429 0 1 1 6.858 0M4 1h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1Zm9 6.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z" />
                             </svg>
                         </div>
-                        <input id="email2" class="flex h-10 w-full items-center rounded border border-gray-300 pl-16 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" placeholder="Nom" />
+                        <input id="email2" class="flex h-10 w-full items-center rounded border border-gray-300 pl-16 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" placeholder="<?= $nom?>" />
                     </div>
                 </div>
                 <div class="px-4 py-2">
@@ -33,7 +45,7 @@
                                 <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
                             </svg>
                         </div>
-                        <input id="email2" class="flex h-10 w-full items-center rounded border border-gray-300 pl-16 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" placeholder="Prenom" />
+                        <input id="email2" class="flex h-10 w-full items-center rounded border border-gray-300 pl-16 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" placeholder="<?= $prenom?>" />
                     </div>
                 </div>
                 <div class="px-4 py-2">
@@ -44,7 +56,29 @@
                                 <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
                             </svg>
                         </div>
-                        <input id="Email" class="flex h-10 w-full items-center rounded border border-gray-300 bg-slate-100 pl-16 text-sm font-normal text-gray-600 focus:outline-none" placeholder="Email" readonly />
+                        <input id="Email" class="flex h-10 w-full items-center rounded border border-gray-300 bg-slate-100 pl-16 text-sm font-normal text-gray-600 focus:outline-none" placeholder="<?= $email?>" readonly />
+                    </div>
+                </div>
+                <div class="px-4 py-2">
+                    <span class="font-semibold tracking-wide">Téléphone</span>
+                    <div class="flex items-center">
+                        <div class="absolute flex items-center border-r px-4 text-gray-600">
+                            <svg class="h-6 w-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+                                <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
+                            </svg>
+                        </div>
+                        <input id="email2" class="flex h-10 w-full items-center rounded border border-gray-300 pl-16 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" placeholder="<?= $tel?>" />
+                    </div>
+                </div>
+                <div class="px-4 py-2">
+                    <span class="font-semibold tracking-wide">Téléphone Fixe</span>
+                    <div class="flex items-center">
+                        <div class="absolute flex items-center border-r px-4 text-gray-600">
+                            <svg class="h-6 w-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+                                <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
+                            </svg>
+                        </div>
+                        <input id="email2" class="flex h-10 w-full items-center rounded border border-gray-300 pl-16 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" placeholder="<?= $fix?>" />
                     </div>
                 </div>
                 <div class="px-4 py-2">

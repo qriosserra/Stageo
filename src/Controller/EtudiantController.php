@@ -5,6 +5,8 @@ namespace Stageo\Controller;
 use Stageo\Controller\Exception\ControllerException;
 use Stageo\Controller\Exception\InvalidTokenException;
 use Stageo\Controller\Exception\TokenTimeoutException;
+use Stageo\Lib\Database\ComparisonOperator;
+use Stageo\Lib\Database\QueryCondition;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
@@ -322,5 +324,49 @@ class EtudiantController
             );
         }
     }
-
+    public function afficherProfile() : Response{
+        $id = Session::get('idEtudiant');
+        if (isset($id)){
+            FlashMessage::add(
+                content: "tu n'est pas connecter ou tu n'as pas les droits",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+        $etudiant = (new EtudiantRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$id));
+        if (isset($etudiant)){
+            FlashMessage::add(
+                content: "Entreprise Sauvegarder",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+        return new Response(
+            template: "etudiant/profile.php",
+            params: [
+                "nom" => $etudiant->getNom(),
+                "prenom" => $etudiant->getPrenom(),
+                "email" =>$etudiant->getEmailEtudiant(),
+                "annee" => $etudiant->getAnnee(),
+                "tel" => $etudiant->getTelephone(),
+                "fix" => $etudiant->getTelephoneFixe(),
+                "Civiliter" => $etudiant->getCivilite()
+            ]
+        );
+    }
+    public function MettreAJourProfile() : Response{
+        FlashMessage::add(
+            content: "Profile mis à jours",
+            type: FlashType::SUCCESS
+        );
+        return new Response(
+            action: Action::Profile_Etudiant,
+        );
+    }
 }
