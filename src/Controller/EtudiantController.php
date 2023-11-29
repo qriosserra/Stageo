@@ -622,6 +622,7 @@ class EtudiantController
             );
         }
         (new ConventionRepository)->insert($convention);
+        //TODO comprendre pourquoi l'instruction suivante ne fonctionne pas
         (new SuiviRepository)->insert($suivi);
         FlashMessage::add(
             content: "Convention enregistrée en tant que brouillon avec succès",
