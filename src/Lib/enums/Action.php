@@ -19,6 +19,7 @@ enum Action: string
     case ENTREPRISE_SIGN_UP_STEP_3 = "?c=entreprise&a=signUpStep3";
     case ENTREPRISE_SIGN_UP_STEP_4_FORM = "?c=entreprise&a=signUpStep4Form";
     case ENTREPRISE_SIGN_UP_STEP_4 = "?c=entreprise&a=signUpStep4";
+    case ENTREPRISE_VERIFIER = "?c=entreprise&a=verifier";
     case ENTREPRISE_SIGN_IN_FORM = "?c=entreprise&a=signInForm";
     case ENTREPRISE_SIGN_IN = "?c=entreprise&a=signIn";
     case LISTE_OFFRE = "?a=listeOffre";
@@ -41,6 +42,8 @@ enum Action: string
     case ADMIN_VALIDEENTREPRISE = "?c=admin&a=validerEntreprise";
     case ADMIN_SUPRIMERENTREPRISE = "?c=admin&a=suprimerEntreprise";
     case ABOUT = "?a=about";
+    case CSVFORM = "?a=csvForm";
+    case CSV = "?a=csv&XDEBUG_SESSION_START=";
     case SECRETAIRE_SIGN_UP_FORM = "?c=secretaire&a=signUpForm";
     case SECRETAIRE_SIGN_UP = "?c=secretaire&a=signUp";
     case SECRETAIRE_SIGN_IN = "?c=secretaire&a=signIn";
@@ -51,4 +54,5 @@ enum Action: string
     case ETUDIANT_CONVENTION_ADD_BROUILLON = "?c=etudiant&a=conventionBrouillon";
     case SECRETAIRE_LISTE_CONVENTIONS = "?c=secretaire&a=listeConventions";
     case SECRETAIRE_CONVENTION_DETAILS = "?c=secretaire&a=conventionDetails&id_convention=";
+    case TEST_EMAIL = "?a=testEmail";
 }

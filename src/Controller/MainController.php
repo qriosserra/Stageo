@@ -5,10 +5,12 @@ namespace Stageo\Controller;
 use Stageo\Controller\Exception\ControllerException;
 use Stageo\Lib\Database\ComparisonOperator;
 use Stageo\Lib\Database\QueryCondition;
+use Stageo\Lib\Email;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
 use Stageo\Lib\HTTP\Cookie;
+use Stageo\Lib\Mailer;
 use Stageo\Lib\Response;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Offre;
@@ -17,6 +19,7 @@ use Stageo\Model\Repository\DeCategorieRepository;
 use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\OffreRepository;
+use Stageo\Model\Repository\tableTemporaireRepository;
 use Stageo\Model\Repository\UniteGratificationRepository;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -51,6 +54,7 @@ class MainController
             ? "description"
             : "secteur";
         $offres = [];
+        $idOffres =  [];
         $Togle = [
             isset($_REQUEST['toggle']["Alternances"]) ? "oui" : "non",
             isset($_REQUEST['toggle']["Stages"]) ? "oui" : "non",
@@ -62,7 +66,6 @@ class MainController
         if (isset($search)){
             if ($option == "Categories"){
                $categories =  (new CategorieRepository()) ->select(new QueryCondition("libelle",ComparisonOperator::LIKE,"%".$search."%"));
-               $idOffres =  [];
                foreach ($categories as $category) {
                   $idOffres [] =  (new DeCategorieRepository())->getByIdCategorie($category->getIdCategorie());
                }
@@ -173,6 +176,27 @@ class MainController
             template: "about.php"
         );
     }
+    public function csvForm() : Response {
+        return new Response(
+            template: "csvForm.php"
+        );
+    }
+    public function csv() : Response
+    {
+        $cheminCSV = $_FILES['CHEMINCSV'];
+        if ($cheminCSV["size"]!=0){
+            $csvContent = file_get_contents($cheminCSV['tmp_name']);
+            (new tableTemporaireRepository())->insertViaCSV($csvContent);
+        }
+        return new Response(
+            template: "home.php",
+            params: [
+                "title" => "Accueil",
+                "categories" => (new CategorieRepository)->select(),
+                "offres" => (new OffreRepository())->select()
+            ]
+        );
+    }
 
     /**
      * @throws SyntaxError
@@ -213,6 +237,23 @@ class MainController
                 "title" => "Error",
                 "message" => Cookie::get("error")
             ]
+        );
+    }
+
+    public function testEmail(): Response
+    {
+        $email = new Email(
+            destinataire: "test@test.com",
+            objet: "Test",
+            contenu: "Ceci est un test"
+        );
+        if (!Mailer::send($email))
+            throw new ControllerException("Impossible d'envoyer l'email");
+        FlashMessage::add(
+            content: "Email test envoyé",
+            type: FlashType::SUCCESS);
+        return new Response(
+            action: Action::HOME
         );
     }
 }
