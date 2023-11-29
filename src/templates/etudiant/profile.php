@@ -15,7 +15,7 @@
             </div>
             <div class="grid grid-cols-1 xl:grid xl:grid-cols-2">
                 <div class="px-4 py-2">
-                    <span class="font-semibold tracking-wide">Nom NOM</span>
+                    <span class="font-semibold tracking-wide">Nom</span>
                     <div class="flex items-center">
                         <div class="absolute flex items-center border-r px-4 text-gray-600">
                             <svg class="h-6 w-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 20">
@@ -26,7 +26,7 @@
                     </div>
                 </div>
                 <div class="px-4 py-2">
-                    <span class="font-semibold tracking-wide">Prenom PRENOM</span>
+                    <span class="font-semibold tracking-wide">Prenom</span>
                     <div class="flex items-center">
                         <div class="absolute flex items-center border-r px-4 text-gray-600">
                             <svg class="h-6 w-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
@@ -37,7 +37,7 @@
                     </div>
                 </div>
                 <div class="px-4 py-2">
-                    <span class="font-semibold tracking-wide">Email EMAIL</span>
+                    <span class="font-semibold tracking-wide">Email</span>
                     <div class="flex items-center">
                         <div class="absolute flex items-center border-r px-4 text-gray-600">
                             <svg class="h-6 w-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
@@ -48,7 +48,7 @@
                     </div>
                 </div>
                 <div class="px-4 py-2">
-                    <span class="font-semibold tracking-wide">Civiliter CIVILITER</span>
+                    <span class="font-semibold tracking-wide">Civiliter</span>
                     <div class="flex items-center">
                         <div class="absolute flex items-center border-r px-4 text-gray-600">
                             <svg class="h-6 w-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
@@ -63,7 +63,7 @@
                     </div>
                 </div>
                 <div class="px-4 py-2">
-                    <span class="font-semibold tracking-wide">Description DESCRIPTION</span>
+                    <span class="font-semibold tracking-wide">Description</span>
                     <div class="flex items-center">
                         <div class="absolute flex items-center border-r px-4 text-gray-600"></div>
                         <textarea id="bio" class="flex h-20 w-full resize-y items-center rounded border border-gray-300 p-2 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" placeholder="Écrivez votre bio ici..."></textarea>
