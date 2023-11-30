@@ -325,8 +325,8 @@ class EtudiantController
         }
     }
     public function afficherProfile() : Response{
-        $id = Session::get('idEtudiant');
-        if (isset($id)){
+
+        if (!UserConnection::isInstance(new Etudiant())){
             FlashMessage::add(
                 content: "tu n'est pas connecter ou tu n'as pas les droits",
                 type: FlashType::ERROR
@@ -336,10 +336,10 @@ class EtudiantController
                 params: []
             );
         }
-        $etudiant = (new EtudiantRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$id));
-        if (isset($etudiant)){
+        $etudiant = UserConnection::getSignedInUser();
+        if (!isset($etudiant)){
             FlashMessage::add(
-                content: "Entreprise Sauvegarder",
+                content: "vous n'etes pas enregistrer dans la base de données",
                 type: FlashType::ERROR
             );
             return new Response(
