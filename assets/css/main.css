@@ -2283,6 +2283,14 @@ footer .footer-information-container .footer-description-container .footer-descr
   --tw-shadow-color: #3b82f6;
   --tw-shadow: var(--tw-shadow-colored);
 }
+.hover\:shadow-green-500:hover{
+  --tw-shadow-color: #22c55e;
+  --tw-shadow: var(--tw-shadow-colored);
+}
+.hover\:shadow-gray-500:hover{
+  --tw-shadow-color: #6b7280;
+  --tw-shadow: var(--tw-shadow-colored);
+}
 .focus\:border:focus{
   border-width: 1px;
 }

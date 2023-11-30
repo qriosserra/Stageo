@@ -55,4 +55,5 @@ enum Action: string
     case SECRETAIRE_CONVENTION_DETAILS = "?c=secretaire&a=conventionDetails&id_convention=";
     case TEST_EMAIL = "?a=testEmail";
     case Profile_Etudiant = "?c=etudiant&a=afficherProfile";
+    case Profile_METTRE_A_JOUR_ETUDIANT = "?c=etudiant&a=MettreAJourProfile";
 }

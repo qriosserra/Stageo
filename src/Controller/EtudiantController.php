@@ -337,6 +337,7 @@ class EtudiantController
             );
         }
         $etudiant = UserConnection::getSignedInUser();
+        $communes  = (new DistributionCommuneRepository)->select();
         if (!isset($etudiant)){
             FlashMessage::add(
                 content: "vous n'etes pas enregistrer dans la base de données",
@@ -356,11 +357,56 @@ class EtudiantController
                 "annee" => $etudiant->getAnnee(),
                 "tel" => $etudiant->getTelephone(),
                 "fix" => $etudiant->getTelephoneFixe(),
-                "Civiliter" => $etudiant->getCivilite()
+                "civiliter" => $etudiant->getCivilite(),
+                "commune" => $etudiant->getIdDistributionCommune(),
+                "communes" => $communes,
+                "voie" => $etudiant->getNumeroVoie()
             ]
         );
     }
     public function MettreAJourProfile() : Response{
+        $tel = $_REQUEST['Tel'];
+        $fix = $_REQUEST['Fixe'];
+        $civiliter = $_REQUEST['Civiliter'];
+        $commune = $_REQUEST['Commune'];
+        $voie = $_REQUEST['Voie'];
+        $etudiant = UserConnection::getSignedInUser();
+        if (!isset($tel) || !isset($fix) || !isset($civiliter) || !isset($commune) || !isset($voie)){
+            FlashMessage::add(
+                content: "il manque des informations",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+        if (!UserConnection::isInstance(new Etudiant())){
+            FlashMessage::add(
+                content: "tu n'est pas connecter ou tu n'as pas les droits",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+        if (!isset($etudiant)){
+            FlashMessage::add(
+                content: "vous n'etes pas l'etudiant enregistrer dans la base de données",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+        $etudiant->setTelephone($tel);
+        $etudiant->setTelephoneFixe($fix);
+        $etudiant->setCivilite($civiliter);
+        $etudiant->setIdDistributionCommune($commune);
+        $etudiant->setNumeroVoie($voie);
+        (new EtudiantRepository())->update($etudiant);
         FlashMessage::add(
             content: "Profile mis à jours",
             type: FlashType::SUCCESS

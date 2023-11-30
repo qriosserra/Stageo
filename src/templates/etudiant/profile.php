@@ -1,5 +1,5 @@
 <?php
-
+use Stageo\Lib\enums\Action;
 /**
  * @var string $nom
  * @var string $prenom
@@ -7,7 +7,10 @@
  * @var string $annee
  * @var string $tel
  * @var string $fix
- * @var string $Civiliter
+ * @var string $civiliter
+ * @var string $voie
+ * @var \Stageo\Model\Object\DistributionCommune $commune
+ * @var \Stageo\Model\Object\DistributionCommune [] $communes
  */
 ?>
 <section class="bg-slate-50 flex-col justify-center items-center">
@@ -20,7 +23,7 @@
             </div>
         </div>
     </div>
-    <form action="votre_script_de_traitement.php" method="post">
+    <form action="<?=Action::Profile_METTRE_A_JOUR_ETUDIANT->value?>" method="post">
         <div class="grid w-full grid-cols-1 gap-2 space-y-3 px-4 py-2 lg:space-x-3 lg:space-y-0">
             <div class="auto-cols-auto rounded-lg border border-gray-300 bg-white">
                 <div class="flex justify-center border-b">
@@ -36,7 +39,7 @@
                                     <!-- ... Icone SVG ... -->
                                 </svg>
                             </div>
-                            <input id="Email" class="flex h-10 w-full items-center rounded border border-gray-300 bg-slate-100 pl-16 text-sm font-normal text-gray-600 focus:outline-none" placeholder="<?= $nom?>" readonly />
+                            <input id="Nom" class="flex h-10 w-full items-center rounded border border-gray-300 bg-slate-100 pl-16 text-sm font-normal text-gray-600 focus:outline-none" value="<?= $nom?>" readonly />
                         </div>
                     </div>
                     <div class="px-4 py-2">
@@ -47,7 +50,7 @@
                                     <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
                                 </svg>
                             </div>
-                            <input id="Email" class="flex h-10 w-full items-center rounded border border-gray-300 bg-slate-100 pl-16 text-sm font-normal text-gray-600 focus:outline-none" placeholder="<?= $prenom?>" readonly />
+                            <input id="Prenom" class="flex h-10 w-full items-center rounded border border-gray-300 bg-slate-100 pl-16 text-sm font-normal text-gray-600 focus:outline-none" value="<?= $prenom?>" readonly />
                         </div>
                     </div>
                     <div class="px-4 py-2">
@@ -58,7 +61,7 @@
                                     <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
                                 </svg>
                             </div>
-                            <input id="Email" class="flex h-10 w-full items-center rounded border border-gray-300 bg-slate-100 pl-16 text-sm font-normal text-gray-600 focus:outline-none" placeholder="<?= $email?>" readonly />
+                            <input id="Email" class="flex h-10 w-full items-center rounded border border-gray-300 bg-slate-100 pl-16 text-sm font-normal text-gray-600 focus:outline-none" value="<?= $email?>" readonly />
                         </div>
                     </div>
                     <div class="px-4 py-2">
@@ -69,7 +72,7 @@
                                     <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
                                 </svg>
                             </div>
-                            <input id="email2" class="flex h-10 w-full items-center rounded border border-gray-300 pl-16 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" placeholder="<?= $tel?>" />
+                            <input id="Tel" class="flex h-10 w-full items-center rounded border border-gray-300 pl-16 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" name="Tel" value="<?= $tel?>" />
                         </div>
                     </div>
                     <div class="px-4 py-2">
@@ -80,7 +83,7 @@
                                     <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
                                 </svg>
                             </div>
-                            <input id="email2" class="flex h-10 w-full items-center rounded border border-gray-300 pl-16 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" placeholder="<?= $fix?>" />
+                            <input id="Fixe" name="Fixe" class="flex h-10 w-full items-center rounded border border-gray-300 pl-16 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" value="<?= $fix?>" />
                         </div>
                     </div>
                     <div class="px-4 py-2">
@@ -91,11 +94,37 @@
                                     <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
                                 </svg>
                             </div>
-                            <select id="prenom" class="flex h-10 w-full items-center rounded border border-gray-300 bg-white pl-16 text-sm font-normal text-gray-600 focus:border focus:outline-none">
-                                <option value="M">HOMME</option>
-                                <option value="F">FEMME</option>
-                                <option value="A">Autre</option>
+                            <select id="Civiliter" name="Civiliter" class="flex h-10 w-full items-center rounded border border-gray-300 bg-white pl-16 text-sm font-normal text-gray-600 focus:border focus:outline-none">
+                                <option value="M" <?php if ("M" == $civiliter) echo 'selected'; ?>>HOMME</option>
+                                <option value="F"  <?php if ("F" == $civiliter) echo 'selected'; ?>>FEMME</option>
+                                <option value="A"  <?php if ("A" == $civiliter) echo 'selected'; ?>>AUTRE</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="px-4 py-2">
+                        <span class="font-semibold tracking-wide">Commune</span>
+                        <div class="flex items-center">
+                            <div class="absolute flex items-center border-r px-4 text-gray-600">
+                                <svg class="h-6 w-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+                                    <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
+                                </svg>
+                            </div>
+                            <select id="Commune" name="Commune" class="flex h-10 w-full items-center rounded border border-gray-300 bg-white pl-16 text-sm font-normal text-gray-600 focus:border focus:outline-none">
+                                <?php foreach ($communes as $commun): ?>
+                                    <option value="<?= $commun->getIdDistributionCommune() ?>"  <?php if ($commun->getIdDistributionCommune() == $commune) echo 'selected'; ?>><?= $commun->getCommune() ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="px-4 py-2">
+                        <span class="font-semibold tracking-wide">Numéro de Voie</span>
+                        <div class="flex items-center">
+                            <div class="absolute flex items-center border-r px-4 text-gray-600">
+                                <svg class="h-6 w-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
+                                    <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
+                                </svg>
+                            </div>
+                            <input id="Voie" name="Voie" class="flex h-10 w-full items-center rounded border border-gray-300 pl-16 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" value="<?= $voie?>" />
                         </div>
                     </div>
                     <div class="px-4 py-2">
@@ -109,10 +138,10 @@
                 <div class="border-t px-4 py-4">
                     <div class="mt-2 flex justify-center">
                         <button type="submit"
-                                class="focus:shadow-outline-green mr-2 rounded-lg bg-gradient-to-tr from-green-500 to-green-400 px-4 py-2 font-bold text-white hover:bg-green-600 focus:outline-none"
+                                class="focus:shadow-outline-green mr-2 rounded-lg bg-gradient-to-tr from-green-500 to-green-400 px-4 py-2 font-bold text-white hover:bg-green-600 focus:outline-none transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-green-500"
                                 id="saveButton">Sauvegarder</button>
                         <button type="button"
-                                class="focus:shadow-outline-gray rounded-lg bg-gradient-to-tr from-slate-500 to-slate-400 px-4 py-2 font-bold text-white hover:bg-gray-500 focus:outline-none"
+                                class="focus:shadow-outline-gray rounded-lg bg-gradient-to-tr from-slate-500 to-slate-400 px-4 py-2 font-bold text-white hover:bg-gray-500 focus:outline-none transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-gray-500"
                                 id="cancelButton">Annuler</button>
                     </div>
                 </div>
