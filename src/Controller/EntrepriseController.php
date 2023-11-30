@@ -666,7 +666,7 @@ class EntrepriseController
             $offre = (new OffreRepository())->getById($id);
             $user = UserConnection::getSignedInUser();
             $idEntreprise = $user->getIdEntreprise();
-            if($user and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
+            if($user and UserConnection::isInstance(new Entreprise) and $idEntreprise == $offre->getIdEntreprise()){
                 $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
                 $liste_offrePostuler = (new PostulerRepository())->select($condition);
                 return new Response(
@@ -677,6 +677,28 @@ class EntrepriseController
                     ]
                 );
             }
+            return new Response(
+                action: Action::HOME,
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
+        );
+    }
+
+    public static function accepterEtudiantOffre():Response{
+        $id = $_REQUEST["id"];
+        $etudiant = $_REQUEST["login"];
+        $offre = (new OffreRepository())->getById($id);
+        $user = UserConnection::getSignedInUser();
+        $idEntreprise = $user->getIdEntreprise();
+        if($user and UserConnection::isInstance(new Entreprise) and $idEntreprise == $offre->getIdEntreprise()){
+            $offre->setLogin($etudiant);
+            (new OffreRepository())->update($offre);
+            $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
+            (new PostulerRepository())->delete($condition);
+            FlashMessage::add("Etudiant accepter avec success", FlashType::SUCCESS);
             return new Response(
                 action: Action::HOME,
             );
@@ -708,6 +730,5 @@ class EntrepriseController
             message: "Vous n'avez pas accès à cette page.",
             action: Action::HOME
         );
-
     }
 }

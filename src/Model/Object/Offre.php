@@ -18,7 +18,7 @@ class Offre extends CoreObject
                                 private string|NullDataType|null $commentaires = null,
                                 private float|NullDataType|null  $gratification = null,
                                 private string|null              $type = null,
-                                private int|NullDataType|null    $login = null,
+                                private string|NullDataType|null    $login = null,
                                 private string|NullDataType|null $id_unite_gratification = null,
                                 private int|null                 $id_entreprise = null,
                                 private string|NullDataType|null $date_debut = null,
@@ -202,17 +202,17 @@ class Offre extends CoreObject
     }
 
     /**
-     * @return int|NullDataType|null
+     * @return string|NullDataType|null
      */
-    public function getLogin(): int|NullDataType|null
+    public function getLogin(): string|NullDataType|null
     {
         return $this->login;
     }
 
     /**
-     * @param int|NullDataType|null $login
+     * @param string|NullDataType|null $login
      */
-    public function setLogin(int|NullDataType|null $login): void
+    public function setLogin(string|NullDataType|null $login): void
     {
         $this->login = $login;
     }

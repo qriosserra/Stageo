@@ -90,7 +90,7 @@ include __DIR__ . "/../../macros/input.php";
                         <span class="lien-complet" onclick="afficherTexteComplet('<?= htmlspecialchars($p->getComplement()) ?>')"> <?= substr($p->getComplement(), 0, 50) . (strlen($p->getComplement()) > 50 ? '...' : '') ?></span>
                     </td>
                     <td class="px-6 py-4 text-right">
-                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Modifier</a>
+                        <a href="<?=Action::ENTREPRISE_ACCEPTE_ETUDIANT_OFFRE->value."&login=".$p->getLogin()."&id=".$p->getIdOffre()?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Accepter</a>
                     </td>
                 </tr>
             <?php endforeach; ?>
