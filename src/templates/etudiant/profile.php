@@ -46,9 +46,7 @@ use Stageo\Lib\enums\Action;
                         <span class="font-semibold tracking-wide">Prenom</span>
                         <div class="flex items-center">
                             <div class="absolute flex items-center border-r px-4 text-gray-600">
-                                <svg class="h-6 w-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
-                                    <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
-                                </svg>
+                                <i class="fi fi-rr-user"></i>
                             </div>
                             <input id="Prenom" class="flex h-10 w-full items-center rounded border border-gray-300 bg-slate-100 pl-16 text-sm font-normal text-gray-600 focus:outline-none" value="<?= $prenom?>" readonly />
                         </div>
