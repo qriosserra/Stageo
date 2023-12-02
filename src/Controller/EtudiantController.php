@@ -21,6 +21,7 @@ use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Etudiant;
 use Stageo\Model\Object\Postuler;
 use Stageo\Model\Object\Suivi;
+use Stageo\Model\Repository\ConfigurationRepository;
 use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\EtudiantRepository;
@@ -231,12 +232,8 @@ class EtudiantController
         );
     }
 
-    public function conventionAddForm(String $login = null): Response
+    public function conventionAddForm(): Response
     {
-        $type_conventions = array(
-            "1" => "Stage",
-            "2" => "Alternance"
-        );
         $annees_universitaires = array(
             "2020-2021" => "2020-2021",
             "2021-2022" => "2021-2022",
@@ -244,31 +241,19 @@ class EtudiantController
             "2023-2024" => "2023-2024",
             "2024-2025" => "2024-2025"
         );
-        $thematiques = array_reduce((new OffreRepository)->select(), fn($carry, $offre) => $carry + [$offre->getIdOffre() => $offre->getThematique()] , []);
-        $interruption = array(
-            "1" => "Oui",
-            "0" => "Non"
-        );
-        $entreprisesNom = array_reduce((new EntrepriseRepository)->select(), fn($carry, $entreprise) => $carry + [$entreprise->getIdEntreprise() => $entreprise->getRaisonSociale()], []);
-
 
         return new Response(
             template: "etudiant/conventionAdd.php",
             params: [
                 "title" => "Déposer une convention",
-                "nav" => true,
-                "footer" => true,
-                "login" => $login,
                 "convention" => Session::get("convention") ?? new Convention(),
                 "distributions_commune" => array_reduce((new DistributionCommuneRepository)->select(), fn($carry, $distribution) => $carry + [$distribution->getIdDistributionCommune() => "{$distribution->getCommune()} ({$distribution->getCodePostal()})"], []),
-                "gratification" => 4.35,
+                "gratification" => (new ConfigurationRepository)->getGratification(),
                 "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
-                "token" => Token::generateToken(Action::ETUDIANT_CONVENTION_ADD),
-                "type_conventions" => $type_conventions,
+                "token" => Token::generateToken(Action::ETUDIANT_CONVENTION_ADD_FORM),
+                "type_conventions" => ["1" => "Stage", "2" => "Alternance"],
                 "annees_universitaires" => $annees_universitaires,
-                "thematiques" => $thematiques,
-                "entreprisesNom" => $entreprisesNom,
-                "interruption" => $interruption
+                "nomsEntreprise" => array_reduce((new EntrepriseRepository)->select(), fn($carry, $entreprise) => $carry + [$entreprise->getIdEntreprise() => $entreprise->getRaisonSociale()], []),
             ]
         );
     }
@@ -295,6 +280,15 @@ class EtudiantController
         $interruption = $_REQUEST["interruption"];
         $date_debut_interruption = $_REQUEST["date_debut_interruption"];
         $date_fin_interruption = $_REQUEST["date_fin_interruption"];
+        $heures_total = $_REQUEST["heures_total"];
+        $jours_hebdomadaire = $_REQUEST["jours_hebdomadaire"];
+        $heures_hebdomadaire = $_REQUEST["heures_hebdomadaire"];
+        $commentaire_duree = $_REQUEST["commentaire_duree"];
+        $avantages_nature = $_REQUEST["avantages_nature"];
+        $code_elp = $_REQUEST["code_elp"];
+        $entreprise = $_REQUEST["entreprise"];
+        Session::set("convention");
+
         if ($interruption == "0"){
             $date_debut_interruption = null;
             $date_fin_interruption = null;
@@ -305,14 +299,7 @@ class EtudiantController
         if ($_REQUEST["date_debut_interruption"]==""){
             $date_debut_interruption = null;
         }
-        $heures_total = $_REQUEST["heures_total"];
-        $jours_hebdomadaire = $_REQUEST["jours_hebdomadaire"];
-        $heures_hebdomadaire = $_REQUEST["heures_hebdomadaire"];
-        $commentaire_duree = $_REQUEST["commentaire_duree"];
-        $avantages_nature = $_REQUEST["avantages_nature"];
-        $code_elp = $_REQUEST["code_elp"];
-        $entreprise = $_REQUEST["entreprise"];
-        if ($date_debut>$date_fin) {
+        if ($date_debut > $date_fin) {
             throw new ControllerException(
                 message: "La date de début doit être inférieur à la date de fin",
                 action: Action::ETUDIANT_CONVENTION_ADD_FORM,
@@ -369,23 +356,18 @@ class EtudiantController
                 ]
             );
         }
-
         $convention = new Convention(
             login: $etudiant->getLogin(),
             type_convention: $type_convention,
             origine_stage: $origine_stage,
             annee_universitaire: $annee_universitaire,
+            thematique: $thematique,
             sujet: $sujet,
             taches: $taches,
+            commentaires: $commentaires,
+            details: $details,
             date_debut: $date_debut,
             date_fin: $date_fin,
-            gratification: $gratification,
-            id_unite_gratification: $id_unite_gratification,
-            numero_voie: $numero_voie,
-            id_distribution_commune: $id_distribution_commune,
-            thematique: $thematique,
-            commentaires:$commentaires,
-            details: $details,
             interruption: $interruption,
             date_interruption_debut: $date_debut_interruption,
             date_interruption_fin: $date_fin_interruption,
@@ -393,25 +375,27 @@ class EtudiantController
             jours_hebdomadaire: $jours_hebdomadaire,
             heures_hebdomadaire: $heures_hebdomadaire,
             commentaires_duree: $commentaire_duree,
+            gratification: $gratification,
+            id_unite_gratification: $id_unite_gratification,
             avantages_nature: $avantages_nature,
             code_elp: $code_elp,
+            numero_voie: $numero_voie,
+            id_distribution_commune: $id_distribution_commune,
             id_entreprise: $entreprise
         );
         $date_creation = date("Y-m-d");
         $date_modification = date("Y-m-d");
-        $modifiable = 0;
-        $valide = 0;
+        $modifiable = false;
+        $valide = false;
         $raison_refus = null;
-        $valide_pedagogiquement = 0;
-        $avenants = 0;
+        $valide_pedagogiquement = false;
+        $avenants = false;
         $details_avenants = null;
         $date_retour = null;
 
-
-
-        if (!Token::verify(Action::ETUDIANT_CONVENTION_ADD, $_REQUEST["token"]))
+        if (!Token::verify(Action::ETUDIANT_CONVENTION_ADD_FORM, $_REQUEST["token"]))
             throw new InvalidTokenException();
-        if (Token::isTimeout(Action::ETUDIANT_CONVENTION_ADD)) {
+        if (Token::isTimeout(Action::ETUDIANT_CONVENTION_ADD_FORM)) {
             throw new TokenTimeoutException(
                 action: Action::ETUDIANT_CONVENTION_ADD,
                 params: ["convention" => $convention,
@@ -430,9 +414,8 @@ class EtudiantController
             );
         }
 
-
         (new ConventionRepository)->insert($convention);
-        $id_convention = (new ConventionRepository)->select()[count((new ConventionRepository)->select())-1]->getIdConvention();
+        $id_convention = (new ConventionRepository)->select()[count((new ConventionRepository)->select()) - 1]->getIdConvention();
         $suivi = new Suivi(
             date_creation: $date_creation,
             date_modification: $date_modification,
@@ -636,7 +619,6 @@ class EtudiantController
 
     }
 
-
     public function sauvegarderEntreprise(): Response {
 
         if (!isset($_REQUEST['Entreprise']) || !isset($_REQUEST['Entreprise']['id']) || !isset($_REQUEST['Entreprise']['nom']) ){
@@ -666,5 +648,4 @@ class EtudiantController
             );
         }
     }
-
 }

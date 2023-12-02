@@ -16,4 +16,9 @@ class ConfigurationRepository extends CoreRepository
     {
         return $this->select()[0] ?? null;
     }
+
+    public function getGratification(): ?float
+    {
+        return $this->getConfiguration()->getGratification();
+    }
 }
