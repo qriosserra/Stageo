@@ -469,6 +469,24 @@ class EntrepriseController
         $gratification = $_REQUEST["gratification"];
         $id_unite_gratification = $_REQUEST["id_unite_gratification"];
         $type = $_REQUEST["emploi"];
+        $date_debut = $_REQUEST["start"];
+        $date_fin = $_REQUEST["end"];
+        if(!$_REQUEST["checkbox"]){
+            throw new ControllerException(
+                message: "Niveau d'étude pas selectionner",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+
+        if (count($_REQUEST["checkbox"]) == 1) {
+            $niveau = $_REQUEST["checkbox"][0];
+        }
+        elseif (count($_REQUEST["checkbox"]) == 2) {
+            $niveau = implode("&", $_REQUEST["checkbox"]);
+        }
+        else {
+            $niveau = null;
+        }
 
         if(!UserConnection::isInstance(new Entreprise())){
             throw new ControllerException(
@@ -489,7 +507,11 @@ class EntrepriseController
             gratification: $gratification,
             type: $type,
             id_unite_gratification: $id_unite_gratification,
-            id_entreprise: $entreprise->getIdEntreprise()
+            id_entreprise: $entreprise->getIdEntreprise(),
+            date_debut: $date_debut,
+            date_fin: $date_fin,
+            niveau: $niveau,
+            valider: false,
         ));
 
         if (!Token::verify(Action::ENTREPRISE_CREATION_OFFRE_FORM, $_REQUEST["token"])) {
@@ -548,9 +570,32 @@ class EntrepriseController
                 action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
             );
         }
+        if(!Validate::isNiveau($niveau)){
+            throw new ControllerException(
+                message: "Le niveau scolaire n'existe pas",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if($type!='alternance'){
+            if(!Validate::isDateStage($date_debut,$date_fin,$niveau)){
+                throw new ControllerException(
+                    message: "Les dates de stages ne sont pas conforment",
+                    action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                );
+            }
+        }
+        else{
+            if(!Validate::isDate($date_debut) && !Validate::isDate($date_fin)){
+                throw new ControllerException(
+                    message: "Les dates ne sont pas au bon format",
+                    action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                );
+            }
+        }
 
-        FlashMessage::add("L'offre a été ajoutée avec succès", FlashType::SUCCESS);
+
         $id_offre = (new OffreRepository)->insert($offre);
+        FlashMessage::add("L'offre a été ajoutée avec succès", FlashType::SUCCESS);
 
         Session::delete("offre");
         return new Response(
@@ -605,6 +650,24 @@ class EntrepriseController
         $gratification = $_REQUEST["gratification"];
         $id_unite_gratification = $_REQUEST["id_unite_gratification"];
         $type = $_REQUEST["emploi"];
+        $date_debut = $_REQUEST["start"];
+        $date_fin = $_REQUEST["end"];
+        if(!$_REQUEST["checkbox"]){
+            throw new ControllerException(
+                message: "Niveau d'étude pas selectionner",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+
+        if (count($_REQUEST["checkbox"]) == 1) {
+            $niveau = $_REQUEST["checkbox"][0];
+        }
+        elseif (count($_REQUEST["checkbox"]) == 2) {
+            $niveau = implode("&", $_REQUEST["checkbox"]);
+        }
+        else {
+            $niveau = null;
+        }
         $user = UserConnection::getSignedInUser();
         if (!Token::verify(Action::ENTREPRISE_MODIFICATION_OFFRE_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
@@ -620,23 +683,86 @@ class EntrepriseController
                 action: Action::HOME
             );
         }
-        else if(!UserConnection::isInstance(new Entreprise())){
+        if(!UserConnection::isInstance(new Entreprise())){
             throw new ControllerException(
                 message: "Vous n'avez pas à acceder à cette page",
                 action: Action::HOME
             );
         }
-        else if (!($user->getIdEntreprise() == $offre->getIdEntreprise())) {
+        if (!($user->getIdEntreprise() == $offre->getIdEntreprise())) {
             throw new ControllerException(
                 message: "Vous n'êtes pas la bonne entreprise pour modifier cette offre",
                 action: Action::HOME
             );
         }
-        else {
-            $o = new Offre($idOffre, $description, $thematique,$secteur , $taches, $commentaires, $gratification,$type , null,$id_unite_gratification, $user->getIdEntreprise());
-            (new OffreRepository())->update($o);
+        if (!Validate::isName($secteur)) {
+            throw new ControllerException(
+                message: "Le secteur n'est pas valide",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
         }
-            return new Response(
+        if (!Validate::isName($thematique)) {
+            throw new ControllerException(
+                message: "La thématique n'est pas valide",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if (!Validate::isText($description)) {
+            throw new ControllerException(
+                message: "La description n'est pas valide",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if (!Validate::isText($taches)) {
+            throw new ControllerException(
+                message: "Les fonctions et tâches ne sont pas valide",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if (!Validate::isText($commentaires)) {
+            throw new ControllerException(
+                message: "Les commmentaires sur l'offre ne sont pas valide",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if (!Validate::isFloat($gratification)) {
+            throw new ControllerException(
+                message: "La gratification n'est pas valide",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if (is_null(new UniteGratificationRepository($id_unite_gratification))) {
+            throw new ControllerException(
+                message: "L'unité de gratification n'est pas valide",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if(!Validate::isNiveau($niveau)){
+            throw new ControllerException(
+                message: "Le niveau scolaire n'existe pas",
+                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+            );
+        }
+        if($type!='alternance'){
+            if(!Validate::isDateStage($date_debut,$date_fin,$niveau)){
+                throw new ControllerException(
+                    message: "Les dates de stages ne sont pas conforment",
+                    action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                );
+            }
+        }
+        else{
+            if(!Validate::isDate($date_debut) && !Validate::isDate($date_fin)){
+                throw new ControllerException(
+                    message: "Les dates ne sont pas au bon format",
+                    action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                );
+            }
+        }
+
+        $o = new Offre($idOffre, $description, $thematique,$secteur , $taches, $commentaires, $gratification,$type , null,$id_unite_gratification, $user->getIdEntreprise(),$date_debut,$date_fin,$niveau,$offre->getValider());
+        (new OffreRepository())->update($o);
+        return new Response(
             action: Action::HOME,
         );
     }

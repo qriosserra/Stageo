@@ -89,4 +89,81 @@ class Validate
             subject: $codeNaf,
             required: $required);
     }
+
+    public static function isDate(string $date, bool $required = true): bool
+    {
+        return self::match(
+            pattern: Pattern::DATE->value,
+            subject:$date,
+            required:$required);
+    }
+
+    public static function isDateStage(string $debut, string $fin, string $niveau) {
+        // Date debut correcte
+        if (!self::isDate($debut) || !self::isDate($fin)) {
+            return false;
+        }
+
+        $date_debut = date('Y-m-d', strtotime($debut));
+        $date_fin = date('Y-m-d', strtotime($fin));
+
+        // Obtenir l'année de stage
+        $anneeStage = date('Y', strtotime($debut));
+        // Année actuelle
+        $annee = date('Y');
+
+        if ($anneeStage - $annee > 1 || $anneeStage - $annee < 0) {
+            return false;
+        }
+
+        if ($date_fin > date('Y-m-d', strtotime("$anneeStage-08-15")) || $date_debut < date('Y-m-d', strtotime("$anneeStage-04-08"))) {
+            return false;
+        }
+
+        switch ($niveau) {
+            case 'BUT2':
+                $baseDate = $date_debut;
+                $minDate = date('Y-m-d', strtotime("+10 weeks", strtotime($baseDate)));
+                $maxDate = date('Y-m-d', strtotime("+10 weeks", strtotime($baseDate)));
+                $extensionDate = date('Y-m-d', strtotime("+12 weeks", strtotime($baseDate)));
+                break;
+
+            case 'BUT3':
+                $baseDate = $date_debut;
+                $minDate = date('Y-m-d', strtotime("+16 weeks", strtotime($baseDate)));
+                $maxDate = date('Y-m-d', strtotime("+16 weeks", strtotime($baseDate)));
+                $extensionDate = date('Y-m-d', strtotime("+20 weeks", strtotime($baseDate)));
+                break;
+
+            case 'BUT2&BUT3':
+                $baseDate = $date_debut;
+                $minDate = date('Y-m-d', strtotime("+10 weeks", strtotime($baseDate)));
+                $maxDate = date('Y-m-d', strtotime("+20 weeks", strtotime($baseDate)));
+                $extensionDate = date('Y-m-d', strtotime("+20 weeks", strtotime($baseDate)));
+                break;
+
+            default:
+                return false;
+        }
+
+        // Date fin dans les clous
+        if ($date_fin > $maxDate && $date_fin > $extensionDate) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+
+    public static function isNiveau(string $niveau, bool $required = true):bool
+    {
+        $niveauxtab = ["BUT2", "BUT3", "BUT2&BUT3", "BUT3&BUT2"];
+
+        if ($required && !in_array($niveau, $niveauxtab)) {
+            return false;
+        }
+
+        return true;
+    }
 }

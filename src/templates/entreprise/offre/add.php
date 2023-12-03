@@ -50,12 +50,21 @@ include __DIR__ . "/../../macros/offre.php";
 
         <div date-rangepicker class="flex items-center col-span-2">
             <div class="relative flex items-center">
-                <input name="start" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date début">
+                <input name="start" type="text" value="<?=$offre->getDateDebut()?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date début">
             </div>
-            <span class="mx-4 text-gray-500">to</span>
-            <div class="relative flex items-center">
-                <input name="end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date fin">
+            <span class="mx-4 text-gray-500" id="dateFin">à</span>
+            <div class="relative flex items-center" id="dateFinContainer">
+                <input name="end" type="text" value="<?=$offre->getDateFin()?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date fin">
             </div>
+        </div>
+
+        <div>
+            <input type="checkbox" id="but2" name="checkbox[]" value="BUT2" class="mr-1" <?php if ($offre->getNiveau()!=null && str_contains($offre->getNiveau(), 'BUT2')) echo 'checked'; ?>>
+            <label for="but2" class="mr-5">BUT2</label>
+
+
+            <input type="checkbox" id="but3" name="checkbox[]" value="BUT3" class="mr-1" <?php if ($offre->getNiveau()!=null && str_contains($offre->getNiveau(), 'BUT3')) echo 'checked'; ?>>
+            <label for="but3" class="mr-5">BUT3</label>
         </div>
 
         <div class="flex items-center col-span-2">
@@ -89,7 +98,7 @@ include __DIR__ . "/../../macros/offre.php";
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             flatpickr("[name='start']", {
-                enableTime: false, // Si vous avez besoin de sélectionner une heure également
+                enableTime: false,
                 dateFormat: "Y-m-d",
             });
 
@@ -97,6 +106,73 @@ include __DIR__ . "/../../macros/offre.php";
                 enableTime: false,
                 dateFormat: "Y-m-d",
             });
+            const startInput = document.querySelector("[name='start']");
+            const endInput = document.querySelector("[name='end']");
+            const dateFinContainer = document.getElementById('dateFinContainer');
+            const dateFin = document.getElementById('dateFin');
+            const emploiRadios = document.querySelectorAll("[name='emploi']");
+            const niveauCheckboxes = document.querySelectorAll("[name='checkbox[]']");
+
+            function calculateEndDate(startDate, durationWeeks) {
+                const startDateObj = new Date(startDate);
+                const endDateObj = new Date(startDateObj.getTime() + durationWeeks * 7 * 24 * 60 * 60 * 1000);
+                return endDateObj.toISOString().split('T')[0];
+            }
+
+            startInput.addEventListener('change', function () {
+                const selectedEmploi = document.querySelector("[name='emploi']:checked");
+                const durationWeeks = (selectedEmploi && selectedEmploi.value === 'alternance') ? 10 : 16;
+
+                // Calcul de la date de fin
+                endInput.value = calculateEndDate(this.value, durationWeeks);
+            });
+
+            // Au chargement de la page, déclencher l'événement change si la date de début a une valeur initiale
+            if (startInput.value) {
+                startInput.dispatchEvent(new Event('change'));
+            }
+
+            niveauCheckboxes.forEach(function (niveau) {
+                niveau.addEventListener('change', function () {
+                        const selectedNiveau = document.querySelectorAll("[name='checkbox[]']:checked");
+
+                        const hasBUT2 = Array.from(selectedNiveau).some(checkbox => checkbox.value === 'BUT2');
+                        const hasBUT3 = Array.from(selectedNiveau).some(checkbox => checkbox.value === 'BUT3');
+
+                        const durationWeeks = (hasBUT3 || (hasBUT2 && hasBUT3)) ? 16 : 10;
+
+                        endInput.value = calculateEndDate(startInput.value, durationWeeks);
+                });
+            });
+
+            emploiRadios.forEach(function (radio) {
+                radio.addEventListener('change', function () {
+                    const selectedEmploi = document.querySelector("[name='emploi']:checked");
+
+                    // Si Alternance est sélectionné, masquer la date de fin, sinon l'afficher
+                    dateFinContainer.style.display = (selectedEmploi && (selectedEmploi.value === 'alternance' || selectedEmploi.value==='Stage&Alternance')) ? 'none' : 'block';
+                    dateFin.style.display = (selectedEmploi && (selectedEmploi.value === 'alternance' || selectedEmploi.value==='Stage&Alternance')) ? 'none' : 'block';
+
+                    if (selectedEmploi && (selectedEmploi.value === 'alternance' || selectedEmploi.value === 'Stage&Alternance')) {
+                        endInput.value = null;
+                    } else {
+                        const selectedNiveau = document.querySelectorAll("[name='checkbox[]']:checked");
+
+                        const hasBUT2 = Array.from(selectedNiveau).some(checkbox => checkbox.value === 'BUT2');
+                        const hasBUT3 = Array.from(selectedNiveau).some(checkbox => checkbox.value === 'BUT3');
+
+                        const durationWeeks = (hasBUT3 || (hasBUT2 && hasBUT3)) ? 16 : 10;
+
+                        endInput.value = calculateEndDate(startInput.value, durationWeeks)
+                    }
+                });
+            });
+
+            // Au chargement de la page, vérifier l'état initial
+            const emploiSelectionne = document.querySelector("[name='emploi']:checked");
+            const selectedNiveau = document.querySelectorAll("[name='checkbox[]']:checked");
+            dateFinContainer.style.display = (emploiSelectionne && emploiSelectionne.value === 'alternance') ? 'none' : 'block';
+            dateFin.style.display = (emploiSelectionne && emploiSelectionne.value === 'alternance') ? 'none' : 'block';
         });
     </script>
 

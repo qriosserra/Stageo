@@ -23,8 +23,30 @@ class Offre extends CoreObject
                                 private int|null                 $id_entreprise = null,
                                 private string|NullDataType|null $date_debut = null,
                                 private string|NullDataType|null $date_fin = null,
+                                private string|NullDataType|null $niveau = null,
+                                private bool|NullDataType|null $valider = null,
     )
     {
+    }
+
+    public function getValider(): bool|NullDataType|null
+    {
+        return $this->valider;
+    }
+
+    public function setValider(bool|NullDataType|null $valider): void
+    {
+        $this->valider = $valider;
+    }
+
+    public function getNiveau(): string|NullDataType|null
+    {
+        return $this->niveau;
+    }
+
+    public function setNiveau(string|NullDataType|null $niveau): void
+    {
+        $this->niveau = $niveau;
     }
 
     public function getDateDebut(): string|NullDataType|null
