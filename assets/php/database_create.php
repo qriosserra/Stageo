@@ -231,7 +231,7 @@ CREATE TABLE stg_suivi(
    date_creation DATETIME,
    date_modification DATETIME,
    modifiable BOOL NOT NULL DEFAULT TRUE,
-   valide BOOL NOT NULL,
+   valide BOOL NOT NULL DEFAULT FALSE,
    raison_refus VARCHAR(3064),
    valide_pedagogiquement BOOL NOT NULL DEFAULT FALSE,
    avenants BOOL DEFAULT FALSE,

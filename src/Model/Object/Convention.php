@@ -161,12 +161,12 @@ class Convention extends CoreObject
         $this->date_fin = $date_fin;
     }
 
-    public function getInterruption(): string|NullDataType|null
+    public function getInterruption(): bool|NullDataType|null
     {
         return $this->interruption;
     }
 
-    public function setInterruption(string|NullDataType|null $interruption): void
+    public function setInterruption(bool|NullDataType|null $interruption): void
     {
         $this->interruption = $interruption;
     }
@@ -285,10 +285,7 @@ class Convention extends CoreObject
     {
         return $this->id_distribution_commune;
     }
-    public function getEntreprise(): string|NullDataType|null
-    {
-        return $this->id_entreprise;
-    }
+
     public function setIdDistributionCommune(int|NullDataType|null $id_distribution_commune): void
     {
         $this->id_distribution_commune = $id_distribution_commune;
@@ -323,5 +320,4 @@ class Convention extends CoreObject
     {
         $this->id_enseignant = $id_enseignant;
     }
-
 }

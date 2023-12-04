@@ -48,8 +48,8 @@ enum Action: string
     case SECRETAIRE_SIGN_UP = "?c=secretaire&a=signUp";
     case SECRETAIRE_SIGN_IN = "?c=secretaire&a=signIn";
     case SECRETAIRE_DASH = "?c=secretaire&a=dashboard";
-    case ETUDIANT_CONVENTION_ADD_FORM = "?c=etudiant&a=conventionAddForm";
-    case ETUDIANT_CONVENTION_ADD = "?c=etudiant&a=conventionAdd";
+    case ETUDIANT_CONVENTION_ADD_STEP_1_FORM = "?c=etudiant&a=conventionAddStep1Form";
+    case ETUDIANT_CONVENTION_ADD_STEP_1 = "?c=etudiant&a=conventionAddStep1";
 
     case ETUDIANT_CONVENTION_ADD_BROUILLON = "?c=etudiant&a=conventionBrouillon";
     case SECRETAIRE_LISTE_CONVENTIONS = "?c=secretaire&a=listeConventions";

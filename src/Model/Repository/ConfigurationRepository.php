@@ -17,8 +17,8 @@ class ConfigurationRepository extends CoreRepository
         return $this->select()[0] ?? null;
     }
 
-    public function getGratification(): ?float
+    public function getGratificationMinimale(): ?float
     {
-        return $this->getConfiguration()->getGratification();
+        return ($this->getConfiguration())->getGratificationMinimale();
     }
 }
