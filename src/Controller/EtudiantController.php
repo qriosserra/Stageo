@@ -257,6 +257,8 @@ class EtudiantController
         return new Response(
             template: "etudiant/convention-add-step-1.php",
             params: [
+                "nav" => false,
+                "footer" => false,
                 "title" => "Déposer une convention",
                 "convention" => Session::get("convention") ?? new Convention(),
                 "distributions_commune" => array_reduce((new DistributionCommuneRepository)->select(), fn($carry, $distribution) => $carry + [$distribution->getIdDistributionCommune() => "{$distribution->getCommune()} ({$distribution->getCodePostal()})"], []),
@@ -345,14 +347,102 @@ class EtudiantController
             id_convention: $id_convention
         ));
 
-        FlashMessage::add(
-            content: "Convention ajoutée avec succès",
-            type: FlashType::SUCCESS
-        );
+        FlashMessage::add("Convention ajoutée avec succès", FlashType::SUCCESS);
         return new Response(
             action: Action::HOME
         );
     }
+
+    public function conventionAddStep2Form(): Response
+    {
+        if (!UserConnection::isSignedIn()) {
+            throw new ControllerException(
+                message: "Vous devez être connecté pour acceder à cette page",
+                action: Action::ETUDIANT_SIGN_IN_FORM
+            );
+        }
+        if (!UserConnection::isInstance(new Etudiant)) {
+            throw new ControllerException(
+                message: "Vous ne pouvez pas acceder à cette page",
+                action: Action::HOME
+            );
+        }
+        $annees_universitaires = array(
+            "2020-2021" => "2020-2021",
+            "2021-2022" => "2021-2022",
+            "2022-2023" => "2022-2023",
+            "2023-2024" => "2023-2024",
+            "2024-2025" => "2024-2025"
+        );
+
+        return new Response(
+            template: "etudiant/convention-add-step-2.php",
+            params: [
+                "nav" => false,
+                "footer" => false,
+                "title" => "Déposer une convention",
+                "convention" => Session::get("convention") ?? new Convention(),
+                "distributions_commune" => array_reduce((new DistributionCommuneRepository)->select(), fn($carry, $distribution) => $carry + [$distribution->getIdDistributionCommune() => "{$distribution->getCommune()} ({$distribution->getCodePostal()})"], []),
+                "gratification" => (new ConfigurationRepository)->getGratificationMinimale(),
+                "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
+                "token" => Token::generateToken(Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM),
+                "type_conventions" => ["1" => "Stage", "2" => "Alternance"],
+                "annees_universitaires" => $annees_universitaires,
+                "nomsEntreprise" => array_reduce((new EntrepriseRepository)->select(), fn($carry, $entreprise) => $carry + [$entreprise->getIdEntreprise() => $entreprise->getRaisonSociale()], []),
+            ]
+        );
+    }
+
+    public function conventionAddStep2(): Response
+    {
+        return new Response();
+    }
+
+    public function conventionAddStep3Form(): Response
+    {
+        if (!UserConnection::isSignedIn()) {
+            throw new ControllerException(
+                message: "Vous devez être connecté pour acceder à cette page",
+                action: Action::ETUDIANT_SIGN_IN_FORM
+            );
+        }
+        if (!UserConnection::isInstance(new Etudiant)) {
+            throw new ControllerException(
+                message: "Vous ne pouvez pas acceder à cette page",
+                action: Action::HOME
+            );
+        }
+        $annees_universitaires = array(
+            "2020-2021" => "2020-2021",
+            "2021-2022" => "2021-2022",
+            "2022-2023" => "2022-2023",
+            "2023-2024" => "2023-2024",
+            "2024-2025" => "2024-2025"
+        );
+
+        return new Response(
+            template: "etudiant/convention-add-step-3.php",
+            params: [
+                "nav" => false,
+                "footer" => false,
+                "title" => "Déposer une convention",
+                "convention" => Session::get("convention") ?? new Convention(),
+                "distributions_commune" => array_reduce((new DistributionCommuneRepository)->select(), fn($carry, $distribution) => $carry + [$distribution->getIdDistributionCommune() => "{$distribution->getCommune()} ({$distribution->getCodePostal()})"], []),
+                "gratification" => (new ConfigurationRepository)->getGratificationMinimale(),
+                "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
+                "token" => Token::generateToken(Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM),
+                "type_conventions" => ["1" => "Stage", "2" => "Alternance"],
+                "annees_universitaires" => $annees_universitaires,
+                "nomsEntreprise" => array_reduce((new EntrepriseRepository)->select(), fn($carry, $entreprise) => $carry + [$entreprise->getIdEntreprise() => $entreprise->getRaisonSociale()], []),
+            ]
+        );
+    }
+
+    public function conventionAddStep3(): Response
+    {
+        return new Response();
+    }
+
     public function conventionBrouillon(): Response
     {
         /**

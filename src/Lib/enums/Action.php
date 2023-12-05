@@ -50,7 +50,10 @@ enum Action: string
     case SECRETAIRE_DASH = "?c=secretaire&a=dashboard";
     case ETUDIANT_CONVENTION_ADD_STEP_1_FORM = "?c=etudiant&a=conventionAddStep1Form";
     case ETUDIANT_CONVENTION_ADD_STEP_1 = "?c=etudiant&a=conventionAddStep1";
-
+    case ETUDIANT_CONVENTION_ADD_STEP_2_FORM = "?c=etudiant&a=conventionAddStep2Form";
+    case ETUDIANT_CONVENTION_ADD_STEP_2 = "?c=etudiant&a=conventionAddStep2";
+    case ETUDIANT_CONVENTION_ADD_STEP_3_FORM = "?c=etudiant&a=conventionAddStep3Form";
+    case ETUDIANT_CONVENTION_ADD_STEP_3 = "?c=etudiant&a=conventionAddStep3";
     case ETUDIANT_CONVENTION_ADD_BROUILLON = "?c=etudiant&a=conventionBrouillon";
     case SECRETAIRE_LISTE_CONVENTIONS = "?c=secretaire&a=listeConventions";
     case SECRETAIRE_CONVENTION_DETAILS = "?c=secretaire&a=conventionDetails&id_convention=";

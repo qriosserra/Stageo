@@ -31,15 +31,6 @@ include __DIR__ . "/../macros/input.php";
         <?=textarea("taches", "Tâches*", "Entrez les tâches et fonctions que vous aurez en entreprise", 4, false, $convention->getTaches())?>
         <?=textarea("commentaires" , "Commentaires", "Entrez les commentaires", 4, false, $convention->getCommentaires())?>
         <?=textarea("details" , "Détails", "Entrez les détails", 4, false, $convention->getDetails())?>
-        <?=field("date_debut", "Date de début*", "date", "Entrez la date de début", null, true, $convention->getDateDebut())?>
-        <?=field("date_fin", "Date de fin*", "date", "Entrez la date de fin", null, true, $convention->getDateFin())?>
-        <?=dropdown("interruption", "Interruption*", $convention->getInterruption(), null, false, [false => "Non", true => "Oui"])?>
-        <?=field("date_debut_interruption", "Date de début de l'interruption", "date", "Entrez la date de début de l'interruption", null ,false, $convention->getDateInterruptionDebut())?>
-        <?=field("date_fin_interruption", "Date de fin de l'interruption", "date", "Entrez la date de fin de l'interruption", null, false, $convention->getDateInterruptionFin())?>
-        <?=field("heures_total", "Heures total*", "number", "Entrez les heures total", null, true, $convention->getHeuresTotal())?>
-        <?=field("jours_hebdomadaire", "Jours de travail hebdomadaire*", "number", "Entrez les jours de travail hebdomadaire", null, true, $convention->getJoursHebdomadaire())?>
-        <?=field("heures_hebdomadaire", "Heures de travail hebdomadaire*", "number", "Entrez les heures de travail hebdomadaire", null, true, $convention->getHeuresHebdomadaire())?>
-        <?=field("commentaire_duree", "Commentaire durée", "text", "Entrez un commentaire sur la durée", null, false , $convention->getCommentairesDuree())?>
         <?=field("gratification", "Gratification*", "float", "Entrez la gratification", null, true, $gratification)?>
         <?=dropdown("id_unite_gratification", "Unité de gratification*", $convention->getIdUniteGratification(), null, 2, $unite_gratifications)?>
         <?=textarea("avantages_nature", "Avantages nature", "Entrez les avantages nature", 4, false, $convention->getAvantagesNature())?>
