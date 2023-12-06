@@ -61,5 +61,12 @@ include __DIR__ . "/../macros/input.php";
             <h3 class="text-sm text-gray-500">Heures hebdomadaire:</h3>
             <p class="text-sm text-gray-500"><?=$convention->getHeuresHebdomadaire()?></p>
         </div>
+        <div class="inline-flex">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <a href="<?=Action::SECRETAIRE_CONVENTION_VALIDATION->value?>&id_convention=<?=$convention->getIdConvention()?>">Valider</a>
+            </button>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                <a href="<?=Action::SECRETAIRE_CONVENTION_REFUS->value?>&id_convention=<?=$convention->getIdConvention()?>">Refuser</a>
+            </button>
     </div>
 </main>

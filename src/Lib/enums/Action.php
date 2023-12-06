@@ -61,4 +61,6 @@ enum Action: string
     case TEST_EMAIL = "?a=testEmail";
     case Profile_Etudiant = "?c=etudiant&a=afficherProfile";
     case Profile_METTRE_A_JOUR_ETUDIANT = "?c=etudiant&a=MettreAJourProfile";
+    case SECRETAIRE_CONVENTION_VALIDATION = "?c=secretaire&a=conventionValidation";
+    case SECRETAIRE_CONVENTION_REFUS = "?c=secretaire&a=conventionRefus";
 }

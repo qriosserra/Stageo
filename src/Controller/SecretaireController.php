@@ -21,6 +21,8 @@ use Stageo\Model\Object\Secretaire;
 use Stageo\Model\Repository\AdminRepository;
 use Stageo\Model\Repository\ConventionRepository;
 use Stageo\Model\Repository\SecretaireRepository;
+use Stageo\Model\Repository\SuiviRepository;
+
 //
 
 class SecretaireController
@@ -172,6 +174,63 @@ class SecretaireController
             params: [
                 "title" => "Détails de la convention",
                 "convention" => $convention,
+            ]
+        );
+    }
+
+    public function conventionValidation(int $id_convention): Response {
+        $conventions = (new ConventionRepository())->select();
+        $convention = (new ConventionRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0] ?? null;
+        if (!UserConnection::isInstance(new Secretaire) && !UserConnection::isInstance(new Admin)) {
+            throw new ControllerException(
+                message: "Vous n'êtes pas authorisé à accéder à cette page",
+                action: Action::HOME,
+            );
+        }
+        $suivi = (new SuiviRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0] ?? null;
+        // changer le statut de la convention en "validée"
+        $suivi->setModifiable(false);
+        if (UserConnection::isInstance(new Admin)) {
+            $suivi->setValidePedagogiquement(true);
+        }
+        else {
+            $suivi->setValide(true);
+        }
+        (new SuiviRepository())->update($suivi);
+        return new Response(
+            template: "secretaire/liste-conventions.php",
+            params: [
+                "title" => "Validation de la convention",
+                "suivi" => $suivi,
+                "convention" => $convention,
+                "conventions" => $conventions,
+            ]
+        );
+    }
+
+    public function conventionRefus(int $id_convention): Response {
+        $conventions = (new ConventionRepository())->select();
+        $convention = (new ConventionRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0] ?? null;
+        if (!UserConnection::isInstance(new Secretaire) && !UserConnection::isInstance(new Admin)) {
+            throw new ControllerException(
+                message: "Vous n'êtes pas authorisé à accéder à cette page",
+                action: Action::HOME,
+            );
+        }
+        $suivi = (new SuiviRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0] ?? null;
+        // changer le statut de la convention en "refusée"
+        $suivi->setModifiable(true);
+        $suivi->setValide(false);
+        $suivi->setValidePedagogiquement(false);
+        $suivi->setRaisonRefus($_REQUEST["raison_refus"]);
+        (new SuiviRepository())->update($suivi);
+        return new Response(
+            template: "secretaire/liste-conventions.php",
+            params: [
+                "title" => "Refus de la convention",
+                "suivi" => $suivi,
+                "convention" => $convention,
+                "conventions" => $conventions,
             ]
         );
     }
