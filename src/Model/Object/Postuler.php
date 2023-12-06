@@ -20,6 +20,11 @@ class Postuler extends CoreObject
     ) {
     }
 
+    public function getId(): string
+    {
+        return $this->id_offre . '_' . $this->login;
+    }
+
     public function getCv(): ?string
     {
         return $this->cv;
