@@ -843,23 +843,24 @@ class EntrepriseController
             $user = UserConnection::getSignedInUser();
             $idEntreprise = $user->getIdEntreprise();
             $condition = new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $idEntreprise);
+            $listeoffres = (new OffreRepository())->getOffresDetailsAvecCategories();
             $liste_offre = (new OffreRepository())->select($condition);
-
+            $idOffres =  [];
+            foreach ($liste_offre as $offre){
+                $idOffres [] = $offre->getIdOffre();
+            }
             return new Response(
                 template: "entreprise/offre/liste-offre.php",
                 params: [
                     "title" => "Liste des offres",
-                    "offres" => $liste_offre,
-                    "nbRechercheTrouver" => count($liste_offre),
-                    "selA" => null,
+                    "listeoffres" => $listeoffres,
+                    "idOffres" => $idOffres,
+                    "nbRechercheTrouver" => count($idOffres),
                     "selB" => null,
-                    "search" => null,
-                    "Categories" => null,
-                    "communeTaper" => null,
+                    "search" => null
                 ]
             );
         }
-
         throw new ControllerException(
             message: "Vous n'avez pas accès à cette page.",
             action: Action::HOME
