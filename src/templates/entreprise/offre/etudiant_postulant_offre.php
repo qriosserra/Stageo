@@ -46,50 +46,95 @@ include __DIR__ . "/../../macros/input.php";
         font-size: 20px;
         color: #333;
     }
+
+    .borders {
+        border-top: 1px solid rgb(233, 233, 233);
+        border-bottom: 1px solid rgb(233, 233, 233);
+        border-left: 1px solid rgb(233, 233, 233);
+    }
+
+
+
+    @media (max-width: 639px) {
+        .table thead {
+            display: none;
+        }
+
+        .table,
+        .table tbody,
+        .table tr,
+        .table td {
+            display: block;
+            width: 100%;
+        }
+
+        .table tr {
+            margin-bottom: 15px;
+        }
+
+        .table td {
+            padding-left: 50%;
+            text-align: left;
+            position: relative;
+            background-color: #f3f3f3;
+        }
+
+        .table td::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 0;
+            width: 50%;
+            padding-left: 15px;
+            font-size: 15px;
+            font-weight: bold;
+            text-align: left;
+            background-color: #f3f3f3;
+        }
+
+        .borders {
+            border-top: 1px solid rgb(233, 233, 233);
+            border-bottom: 1px solid rgb(233, 233, 233);
+            border-left: 1px solid rgb(233, 233, 233);
+            border-right: 1px solid rgb(233, 233, 233);
+        }
+
 </style>
+<body class="p-2 font-base ">
 <main class="h-screen flex flex-col items-center justify-center">
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">
-                    Nom de l'étudiant
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    CV
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Lettre Motivation
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Complement
-                </th>
+        <table class="table border-collapse block sm:table shadow-lg  rounded-xl">
+            <thead class="hidden sm:table-header-group">
+            <tr class="border-gray-600 ">
+                <th class="py-2 px-4 border text-left text-black bg-slate-100 font-medium rounded-tl-xl">Nom</th>
+                <th class="py-3 px-4 border text-left text-black bg-slate-100 font-medium">CV</th>
+                <th class="py-3 px-4 border text-left text-black bg-slate-100 font-medium">Lettre de Motivation</th>
+                <th class="py-3 px-4 border text-left text-black bg-slate-100 font-medium rounded-tr-xl">Complement</th>
             </tr>
             </thead>
             <tbody>
             <?php foreach ($postuler as $p): ?>
-                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                <tr class="">
+                    <th scope="row" class="py-3 px-4  borders text-center text-base" data-label="Nom">
                         <?= ((new EtudiantRepository())->getByLogin($p->getLogin()))->getNom() ?> <?= ((new EtudiantRepository())->getByLogin($p->getLogin()))->getPrenom()?>
                     </th>
-                    <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                    <td class="borders" data-label="CV">
                         <?php if (!empty($p->getCv())): ?>
-                            <a href="assets/document/cv/<?= $p->getCv() ?>" download class="text-blue-500 hover:underline">Télécharger CV</a>
+                            <a href="assets/document/cv/<?= $p->getCv() ?>" class="text-blue-600 text-blue-400 hover:text-red-400 py-3 px-4   text-center text-base">Télécharger le CV</a></td>
                         <?php else: ?>
                             <p>Aucun CV disponible</p>
                         <?php endif; ?>
                     </td>
-                    <td class="px-6 py-4">
+                    <td data-label="Lettre de Motivation" class="borders">
                         <?php if (!empty($p->getLettreMotivation())): ?>
-                            <a href="assets/document/lm/<?= $p->getLettreMotivation() ?>" download class="text-blue-500 hover:underline">Télécharger Lettre de Motivation</a>
+                            <a href="assets/document/lm/<?= $p->getLettreMotivation() ?>" id=" " class="text-blue-600 text-blue-400 hover:text-red-400  my-6 px-4   text-center text-base" >Télécharger la lettre de Motivation</a>
                         <?php else: ?>
                             <p>Aucune lettre de motivation disponible</p>
                         <?php endif; ?>
                     </td>
-                    <td class="px-6 py-4" id="complement<?= $p->getId() ?>">
-                        <span class="lien-complet" onclick="afficherTexteComplet('<?= htmlspecialchars($p->getComplement()) ?>')"> <?= substr($p->getComplement(), 0, 50) . (strlen($p->getComplement()) > 50 ? '...' : '') ?></span>
+                    <td data-label="Complement" class="borders border-r" id="complement<?= $p->getId() ?>">
+                        <span class="text-blue-600 text-blue-400 hover:text-red-400 py-3 px-4   text-center text-base" onclick="afficherTexteComplet('<?= htmlspecialchars($p->getComplement()) ?>')"> <?= substr($p->getComplement(), 0, 50) . (strlen($p->getComplement()) > 50 ? '...' : '') ?></span>
                     </td>
-                    <td class="px-6 py-4 text-right">
+                    <td class="text-green-600  items-center text-center text-base ">
                         <a href="<?=Action::ENTREPRISE_ACCEPTE_ETUDIANT_OFFRE->value."&login=".$p->getLogin()."&id=".$p->getIdOffre()?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Accepter</a>
                     </td>
                 </tr>
