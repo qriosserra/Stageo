@@ -10,6 +10,10 @@ include __DIR__ . "/../macros/button.php";
 /**
  * @var string $token
  * @var Convention $convention
+ * @var array $type_conventions
+ * @var array $annees_universitaires
+ * @var array $unite_gratifications
+ * @var float $gratification
  */
 ?>
 <main class="bg-gray-100 w-full">
@@ -25,30 +29,23 @@ include __DIR__ . "/../macros/button.php";
         <span class="text-center" style="font-size: clamp(1rem, 5vw, 2rem)">Créer une convention</span>
     </div>
     <div class="max-w-lg mx-auto p-8 space-y-4">
-        <h4 class="text-center">Information générale</h4>
-        <form action="<?=Action::ENTREPRISE_SIGN_UP_STEP_1->value?>" method="post" class="bg-white p-6 rounded shadow-md border-t-4 border-blue-500 space-y-4">
-            <form class="bg-white p-12 text-gray-600 rounded-lg shadow-lg grid gap-8" action="<?=Action::ETUDIANT_CONVENTION_ADD_STEP_2->value?>" method="post">
-                <?=field("date_debut", "Date de début*", "date", "Entrez la date de début", null, true, $convention->getDateDebut())?>
-                <?=field("date_fin", "Date de fin*", "date", "Entrez la date de fin", null, true, $convention->getDateFin())?>
-<!--                --><?php //=dropdown("interruption", "Interruption*", $convention->getInterruption(), null, false, [false => "Non", true => "Oui"])?>
-<!--                --><?php //=field("date_debut_interruption", "Date de début de l'interruption", "date", "Entrez la date de début de l'interruption", null ,false, $convention->getDateInterruptionDebut())?>
-<!--                --><?php //=field("date_fin_interruption", "Date de fin de l'interruption", "date", "Entrez la date de fin de l'interruption", null, false, $convention->getDateInterruptionFin())?>
-                <?=field("heures_total", "Heures total*", "number", "Entrez les heures total", null, true, $convention->getHeuresTotal())?>
-                <?=field("jours_hebdomadaire", "Jours de travail hebdomadaire*", "number", "Entrez les jours de travail hebdomadaire", null, true, $convention->getJoursHebdomadaire())?>
-                <?=field("heures_hebdomadaire", "Heures de travail hebdomadaire*", "number", "Entrez les heures de travail hebdomadaire", null, true, $convention->getHeuresHebdomadaire())?>
-                <?=field("commentaire_duree", "Commentaire durée", "text", "Entrez un commentaire sur la durée", null, false , $convention->getCommentairesDuree())?>
-            </form>
+        <h4 class="text-center">Périodes et rémunération</h4>
+        <form action="<?=Action::ETUDIANT_CONVENTION_ADD_STEP_2->value?>" method="post" class="bg-white p-6 grid grid-cols-2 gap-4 rounded shadow-md border-t-4 border-blue-500">
+            <?=field("date_debut", "Date de début*", "date", "Entrez la date de début", null, true, $convention->getDateDebut())?>
+            <?=field("date_fin", "Date de fin*", "date", "Entrez la date de fin", null, true, $convention->getDateFin())?>
+<!--               --><?php //=dropdown("interruption", "Interruption*", $convention->getInterruption(), null, false, [false => "Non", true => "Oui"])?>
+<!--               --><?php //=field("date_debut_interruption", "Date de début de l'interruption", "date", "Entrez la date de début de l'interruption", null ,false, $convention->getDateInterruptionDebut())?>
+<!--               --><?php //=field("date_fin_interruption", "Date de fin de l'interruption", "date", "Entrez la date de fin de l'interruption", null, false, $convention->getDateInterruptionFin())?>
+            <?=dropdown("annee_universitaire", "Année universitaire*", $convention->getAnneeUniversitaire(), null ,"2023-2024", $annees_universitaires)?>
+            <?=field("heures_total", "Heures total*", "number", "Entrez les heures total", null, true, $convention->getHeuresTotal())?>
+            <?=field("jours_hebdomadaire", "Jours hebdomadaire*", "number", "Entrez les jours de travail hebdomadaire", null, true, $convention->getJoursHebdomadaire())?>
+            <?=field("heures_hebdomadaire", "Heures hebdomadaire*", "number", "Entrez les heures de travail hebdomadaire", null, true, $convention->getHeuresHebdomadaire())?>
+            <?=textarea("commentaire_duree", "Commentaire durée", "Entrez un commentaire sur la durée", 4, false , $convention->getCommentairesDuree(), "col-span-2")?>
+            <?=field("gratification", "Gratification*", "float", "Entrez la gratification", null, true, $gratification)?>
+            <?=dropdown("id_unite_gratification", "Unité de gratification*", $convention->getIdUniteGratification(), null, 2, $unite_gratifications)?>
+            <?=textarea("avantages_nature", "Avantages nature", "Entrez les avantages nature", 4, false, $convention->getAvantagesNature(), "col-span-2")?>
+            <?=submit("Suivant", "col-span-2")?>
+            <?=token($token)?>
         </form>
     </div>
 </main>
-<footer class="bg-gray-100 mt-10">
-    <div class="mt-4 border-t border-gray-300 pt-3">
-        <p class="text-gray-600 text-center">
-            Se connecter en tant que : Etudiant, Entreprise
-        </p>
-        <p class="text-gray-500 text-xs text-center mt-4">
-            Copyright © 2023, Stageo « Stageo » et son logo sont des branches officiel de l'IUT Montpellier-Sète.
-        </p>
-    </div>
-    </div>
-</footer>
