@@ -471,6 +471,9 @@ class EntrepriseController
         $type = $_REQUEST["emploi"];
         $date_debut = $_REQUEST["start"];
         $date_fin = $_REQUEST["end"];
+        if(!$date_fin){
+            $date_fin =null;
+        }
         if(!$_REQUEST["checkbox"]){
             throw new ControllerException(
                 message: "Niveau d'étude pas selectionner",
@@ -658,7 +661,6 @@ class EntrepriseController
                 action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
             );
         }
-
         if (count($_REQUEST["checkbox"]) == 1) {
             $niveau = $_REQUEST["checkbox"][0];
         }
@@ -835,23 +837,29 @@ class EntrepriseController
         );
     }
 
-    public static function afficherOffreEntreprise():Response{
+    public static function afficherOffreEntreprise(): Response
+    {
         if (UserConnection::isInstance(new Entreprise())) {
             $user = UserConnection::getSignedInUser();
             $idEntreprise = $user->getIdEntreprise();
             $condition = new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $idEntreprise);
             $liste_offre = (new OffreRepository())->select($condition);
+
             return new Response(
                 template: "entreprise/offre/liste-offre.php",
                 params: [
                     "title" => "Liste des offres",
                     "offres" => $liste_offre,
+                    "nbRechercheTrouver" => count($liste_offre),
                     "selA" => null,
                     "selB" => null,
-                    "search" => null
+                    "search" => null,
+                    "Categories" => null,
+                    "communeTaper" => null,
                 ]
             );
         }
+
         throw new ControllerException(
             message: "Vous n'avez pas accès à cette page.",
             action: Action::HOME
