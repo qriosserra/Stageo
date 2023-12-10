@@ -422,4 +422,76 @@ class EtudiantController
             action: Action::Profile_Etudiant,
         );
     }
+    public function validerDefinitivement() : Response{
+        $login = $_REQUEST['login'];
+        $idOffre = $_REQUEST['idOffre'];
+
+        if (!isset($idOffre) || !isset($login)){
+            FlashMessage::add(
+                content: "il manque des valeurs",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::Profile_Etudiant,
+                params: []
+            );
+        }
+        if (!UserConnection::isInstance(new Etudiant())){
+            FlashMessage::add(
+                content: "tu n'est pas connecter ou tu n'as pas les droits",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+        $etudiant = UserConnection::getSignedInUser();
+        if (!isset($etudiant) || $etudiant->getLogin() != $login){
+            FlashMessage::add(
+                content: "vous n'etes pas enregistrer dans la base de données",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+        $offre = (new OffreRepository())->getById($idOffre);
+
+        if ($offre->getLogin() != $login){
+            FlashMessage::add(
+                content: "vous n'êtes pas valider dans l'offre",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::Profile_Etudiant,
+                params: []
+            );
+        }
+        $offre->setValiderParEtudiant(true);
+        (new OffreRepository)->update($offre);
+        $postuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+        $offres =  (new OffreRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+        foreach($offres as $o){
+            if ($o->getIdOffre != $idOffre){
+                $o->setLogin(Null);
+                (new OffreRepository())->update($o);
+            }
+        }
+        foreach($postuler as $post){
+            if ($post->getIdOffre() == $idOffre){
+                $postu = $post;
+            }
+        }
+        (new PostulerRepository())->delete(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+        (new PostulerRepository())->insert($postu);
+        FlashMessage::add(
+            content: "Profile mis à jours",
+            type: FlashType::SUCCESS
+        );
+        return new Response(
+            action: Action::Profile_Etudiant,
+        );
+    }
 }

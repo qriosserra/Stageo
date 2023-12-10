@@ -166,7 +166,7 @@ use Stageo\Lib\enums\Action;
                         </button>
                     </div>
                 <?php endforeach;?>
-                <div class="flex flex-col items-center rounded-xl border border-slate-200 py-4 shadow-2xl">
+              <!--  <div class="flex flex-col items-center rounded-xl border border-slate-200 py-4 shadow-2xl">
                     <span class="font-bold"> Nom Offre </span>
                     <p>description de l'offre</p>
                     <p>Valider</p>
@@ -181,7 +181,7 @@ use Stageo\Lib\enums\Action;
                     <button class="rounded-xl bg-gradient-to-tr from-blue-600 to-blue-400 bg-clip-border px-4 py-2 text-white shadow-md shadow-blue-500/40 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500">
                         <span class="font-bold">En savoir plus</span>
                     </button>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>

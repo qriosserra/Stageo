@@ -184,6 +184,7 @@ CREATE TABLE stg_offre(
    id_entreprise INT NOT NULL,
    niveau VARCHAR(12),
    valider BOOL NOT NULL DEFAULT FALSE,
+   valider_par_etudiant BOOL NOT NULL DEFAULT FALSE,
    PRIMARY KEY(id_offre),
    FOREIGN KEY(login) REFERENCES stg_etudiant(login),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
