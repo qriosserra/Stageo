@@ -13,6 +13,8 @@ use Stageo\Lib\enums\Action;
  * @var \Stageo\Model\Object\DistributionCommune $commune
  * @var \Stageo\Model\Object\DistributionCommune [] $communes
  * @var \Stageo\Model\Object\Offre [] $offres
+ * @var \Stageo\Model\Object\Offre $offre
+ * @var \Stageo\Model\Object\Entreprise $entreprise
  */
 ?>
 <section class="bg-slate-50 flex-col justify-center items-center">
@@ -25,7 +27,7 @@ use Stageo\Lib\enums\Action;
             </div>
         </div>
     </div>
-    <form action="<?=Action::Profile_METTRE_A_JOUR_ETUDIANT->value?>" method="post">
+    <form action="<?=Action::PROFILE_METTRE_A_JOUR_ETUDIANT->value?>" method="post">
         <div class="grid w-full grid-cols-1 gap-2 space-y-3 px-4 py-2 lg:space-x-3 lg:space-y-0">
             <div class="auto-cols-auto rounded-lg border border-gray-300 bg-white">
                 <div class="flex justify-center border-b">
@@ -131,7 +133,7 @@ use Stageo\Lib\enums\Action;
                         <span class="font-semibold tracking-wide">Description</span>
                         <div class="flex items-center">
                             <div class="absolute flex items-center border-r px-4 text-gray-600"></div>
-                            <textarea id="bio" class="flex h-20 w-full resize-y items-center rounded border border-gray-300 p-2 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" placeholder="Écrivez votre bio ici..."></textarea>
+                            <textarea id="bio" class="flex h-20 w-full resize-y items-center rounded border border-gray-300 p-2 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none min-h-[50px]" placeholder="Écrivez votre bio ici..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -156,10 +158,15 @@ use Stageo\Lib\enums\Action;
                 <span class="tracking-wide">offres postuler</span>
             </div>
             <div class="grid grid-cols-1 gap-2 px-4 py-4 lg:grid lg:grid-cols-4 lg:space-x-3 lg:space-y-0">
-                <?php foreach ($offres as $offre): ?>
+                <?php foreach ($offres as $offrecouple): ?>
+                <?php
+                    $offre = $offrecouple["offre"];
+                    $entreprise = $offrecouple["entreprise"];
+                    ?>
                     <div class=" flex flex-col items-center rounded-xl border border-slate-200 p-4 shadow-2xl">
+                        <span class="font-bold"> <?= $entreprise->getRaisonSociale() ?> </span>
                         <span class="font-bold"> <?= $offre->getThematique() ?> </span>
-                        <p class="text-justify"><?= $offre->getDescription()?></p>
+                        <p class="text-justify m-3"><?= $offre->getDescription()?></p>
                         <p> <?php echo ($offre->getLogin() == null) ? "En cours de validation" : (($offre->getLogin() == $login) ? "Valider" : "Refuser"); ?> </p>
                        <button onclick="<?php echo ("window.location.href='".Action::AFFICHER_OFFRE->value."&id=".$offre->getIdOffre()) ?>'" class="rounded-xl bg-gradient-to-tr from-blue-600 to-blue-400 bg-clip-border px-4 py-2 text-white shadow-md shadow-blue-500/40 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500">
                             <span class="font-bold">En savoir plus</span>

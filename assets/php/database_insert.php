@@ -68,7 +68,7 @@ INSERT INTO `stg_etudiant` (`login`, `nom`, `prenom`, `telephone`, `telephone_fi
 VALUES ('levys', 'Levy', 'Sascha', '0612345678', NULL, 'sascha.levy@etu.umontpellier.fr', 'Ann2', 'M', '99 Av. Occitanie', NULL, NULL, NULL, '1');
 
 INSERT INTO `stg_entreprise` (`id_entreprise`, `email`,`hashed_password`, `raison_sociale`, `siret`, `numero_voie`, `code_naf`, `telephone`, `fax`, `site`, `id_taille_entreprise`, `id_type_structure`, `id_statut_juridique`, `id_distribution_commune`)
-VALUES (NULL,'entreprise@gmail.com',NULL, 'L\'entreprise', '12345678901234', '99 av. du champs de Mars', '1234F', '0412345678', NULL, 'entreprise.com', 'ETI', '2', 'EI', '1');
+VALUES (NULL,'entreprise@gmail.com','\$argon2id\$v=19\$m=65536,t=4,p=1\$VEJ2VUlvRHZLUTdsemc1QQ\$MRn17cUbNTGBKeyMdY2fB8bW22IhptVUESASM4t7jew', 'L\'entreprise', '12345678901234', '99 av. du champs de Mars', '1234F', '0412345678', NULL, 'entreprise.com', 'ETI', '2', 'EI', '1');
 
 INSERT INTO `stg_offre` (`id_offre`, `description`, `thematique`, `secteur`, `taches`, `commentaires`, `gratification`, `id_unite_gratification`, `id_entreprise`, `login`,`type`) VALUES
 (NULL, 'Recherche d\'un stagiaire en informatique pour participer au développement de l\'interface utilisateur d\'un site web e-commerce.', 'Développement Web Front-End', 'Informatique / E-commerce', 'Développement de fonctionnalités front-end, intégration HTML/CSS, création de composants React.', 'Le stagiaire aura l\'opportunité de travailler sur des technologies modernes et de participer à des réunions de conception.', '4.05', '2', '1', NULL, 'Stage'),

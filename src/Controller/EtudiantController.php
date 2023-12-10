@@ -17,9 +17,12 @@ use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Convention;
+use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Etudiant;
+use Stageo\Model\Object\Offre;
 use Stageo\Model\Object\Postuler;
 use Stageo\Model\Repository\DistributionCommuneRepository;
+use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\EtudiantRepository;
 use Stageo\Model\Repository\ConventionRepository;
 use Stageo\Model\Repository\OffreRepository;
@@ -348,10 +351,19 @@ class EtudiantController
                 params: []
             );
         }
-        $offrePostuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+        $offrePostuler = (new PostulerRepository())->select(new QueryCondition("login", ComparisonOperator::EQUAL, $etudiant->getLogin()));
         $offres = [];
-        foreach ($offrePostuler as $idOffre){
-            $offres [] = (new OffreRepository)->getById($idOffre->getIdOffre());
+        foreach ($offrePostuler as $idOffre) {
+            $offre = (new OffreRepository())->getById($idOffre->getIdOffre());
+
+            if ($offre instanceof Offre) {
+                $entreprise = (new EntrepriseRepository())->getById($offre->getIdEntreprise());
+
+                if ($entreprise instanceof Entreprise) {
+                    // Ajouter le couple (Offre, Entreprise) à la liste $offres
+                    $offres[] = ['offre' => $offre, 'entreprise' => $entreprise];
+                }
+            }
         }
         return new Response(
             template: "etudiant/profile.php",
@@ -419,7 +431,7 @@ class EtudiantController
             type: FlashType::SUCCESS
         );
         return new Response(
-            action: Action::Profile_Etudiant,
+            action: Action::PROFILE_ETUDIANT,
         );
     }
     public function validerDefinitivement() : Response{
@@ -432,7 +444,7 @@ class EtudiantController
                 type: FlashType::ERROR
             );
             return new Response(
-                action: Action::Profile_Etudiant,
+                action: Action::PROFILE_ETUDIANT,
                 params: []
             );
         }
@@ -465,7 +477,7 @@ class EtudiantController
                 type: FlashType::ERROR
             );
             return new Response(
-                action: Action::Profile_Etudiant,
+                action: Action::PROFILE_ETUDIANT,
                 params: []
             );
         }
@@ -491,7 +503,7 @@ class EtudiantController
             type: FlashType::SUCCESS
         );
         return new Response(
-            action: Action::Profile_Etudiant,
+            action: Action::PROFILE_ETUDIANT,
         );
     }
 }

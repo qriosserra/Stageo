@@ -126,10 +126,12 @@ use Stageo\Model\Object\Secretaire;
                                     <span class="block text-sm  text-gray-500 truncate dark:text-gray-400"><?=$user->getEmail()?></span>
                                     <!-- //TODO : email du mec et tout -->
                                 </div>
+                                <!-- Menu étudiant -->
+                                <?php if (UserConnection::isInstance(new Etudiant())) :?>
                                 <ul class="py-2" aria-labelledby="user-menu-button">
                                     <li>
-                                        <a href="#"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Tableau de bord</a>
+                                        <a href="<?=Action::PROFILE_ETUDIANT->value?>"
+                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profil</a>
                                     </li>
                                     <li>
                                         <a href="#"
@@ -139,16 +141,92 @@ use Stageo\Model\Object\Secretaire;
                                         <a href="#"
                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
                                     </li>
-                                    <?php if (UserConnection::isInstance(new Etudiant())) {
-                                        echo "<li>
-                                        <a href=\"".Action::ETUDIANT_CONVENTION_ADD_FORM->value."\"
-                                           class=\"block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white\">Deposer une convention</a>";
-                                    } ?>
+                                    <li>
+                                        <a href="<?=Action::ETUDIANT_CONVENTION_ADD_FORM->value?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Deposer une convention</a>
                                     <li>
                                         <a href="<?=Action::SIGN_OUT->value?>"
                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
                                     </li>
                                 </ul>
+                                <?php endif ?>
+                                <!-- Menue entreprise -->
+                                <?php if (UserConnection::isInstance(new Entreprise())) :?>
+                                    <ul class="py-2" aria-labelledby="user-menu-button">
+                                        <li>
+                                            <a href="<?=Action::ENTREPRISE_POSTULE_OFFRE_ETUDIANT->value?>"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Candidats Offres</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
+                                        </li>
+                                        <?php if (UserConnection::isInstance(new Etudiant())) {
+                                            echo "<li>
+                                        <a href=\"".Action::ETUDIANT_CONVENTION_ADD_FORM->value."\"
+                                           class=\"block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white\">Deposer une convention</a>";
+                                        } ?>
+                                        <li>
+                                            <a href="<?=Action::SIGN_OUT->value?>"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
+                                        </li>
+                                    </ul>
+                                <?php endif ?>
+                                <!-- Menu Admin -->
+                                <?php if (UserConnection::isInstance(new Admin())) :?>
+                                    <ul class="py-2" aria-labelledby="user-menu-button">
+                                        <li>
+                                            <a href="#"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Tableau de bord</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
+                                        </li>
+                                        <?php if (UserConnection::isInstance(new Etudiant())) {
+                                            echo "<li>
+                                        <a href=\"".Action::ETUDIANT_CONVENTION_ADD_FORM->value."\"
+                                           class=\"block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white\">Deposer une convention</a>";
+                                        } ?>
+                                        <li>
+                                            <a href="<?=Action::SIGN_OUT->value?>"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
+                                        </li>
+                                    </ul>
+                                <?php endif ?>
+                                <!-- Menu Secretaries -->
+                                <?php if (UserConnection::isInstance(new Secretaire())) :?>
+                                    <ul class="py-2" aria-labelledby="user-menu-button">
+                                        <li>
+                                            <a href="#"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Tableau de bord</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
+                                        </li>
+                                        <?php if (UserConnection::isInstance(new Etudiant())) {
+                                            echo "<li>
+                                        <a href=\"".Action::ETUDIANT_CONVENTION_ADD_FORM->value."\"
+                                           class=\"block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white\">Deposer une convention</a>";
+                                        } ?>
+                                        <li>
+                                            <a href="<?=Action::SIGN_OUT->value?>"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
+                                        </li>
+                                    </ul>
+                                <?php endif ?>
                             </div>
                         </div>
                     <?php endif ?>
@@ -569,93 +647,6 @@ use Stageo\Model\Object\Secretaire;
                         <?php endif ?>
                     </ul>
                 </div>
-
-        </nav>
-        <!--                <nav id="sidenav" class="hidden transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidenav">-->
-        <!--                    <div>-->
-        <!--                        <ul>-->
-        <!--                            <li>-->
-        <!--                                <a href="--><?php //=Action::HOME->value?><!--">-->
-        <!--                                    <i aria-hidden="true" class="fi fi-sr-home"></i>-->
-        <!--                                    <span>Accueil</span>-->
-        <!--                                </a>-->
-        <!--                            </li>-->
-        <!--                            --><?php //if (is_null($user)): ?>
-        <!--                            <li>-->
-        <!--                                <a href="--><?php //=Action::ETUDIANT_SIGN_IN_FORM->value?><!--">-->
-        <!--                                    <i aria-hidden="true" class="fi fi-sr-graduation-cap"></i>-->
-        <!--                                    <span>Connexion étudiant</span>-->
-        <!--                                </a>-->
-        <!--                            </li>-->
-        <!--                            <li>-->
-        <!--                                <a href="--><?php //=Action::ENTREPRISE_SIGN_IN_FORM->value?><!--">-->
-        <!--                                    <i aria-hidden="true" class="fi fi-ss-building"></i>-->
-        <!--                                    <span>Connexion entreprise</span>-->
-        <!--                                </a>-->
-        <!--                            </li>-->
-        <!--                            --><?php //elseif ($user instanceof Etudiant): ?>
-        <!--                            <li>-->
-        <!--                                <a href="--><?php //=Action::LISTE_OFFRE->value?><!--">-->
-        <!--                                    <i aria-hidden="true" class="fi fi-sr-document"></i>-->
-        <!--                                    <span>Rechercher une offre</span>-->
-        <!--                                </a>-->
-        <!--                            </li>-->
-        <!--                            --><?php //elseif ($user instanceof Entreprise): ?>
-        <!--                            <li>-->
-        <!--                                <button type="button" aria-controls="dropdown-pages" data-collapse-toggle="dropdown-pages">-->
-        <!--                                    <i aria-hidden="true" class="fi fi-sr-document"></i>-->
-        <!--                                    <span>Offres</span>-->
-        <!--                                    <i aria-hidden="true" class="fi fi-rr-angle-small-down"></i>-->
-        <!--                                </button>-->
-        <!--                                <ul id="dropdown-pages" class="hidden py-2 space-y-2">-->
-        <!--                                    <li>-->
-        <!--                                        <a href="--><?php //=Action::ENTREPRISE_CREATION_OFFRE_FORM->value?><!--">Ajouter une nouvelle offre</a>-->
-        <!--                                    </li>-->
-        <!--                                    <li>-->
-        <!--                                        <a href="--><?php //=Action::ENTREPRISE_AFFICHER_OFFRE->value?><!--">Voir mes offres</a>-->
-        <!--                                    </li>-->
-        <!--                                </ul>-->
-        <!--                            </li>-->
-        <!--                            --><?php //elseif ($user instanceof Admin): ?>
-        <!--                            <li>-->
-        <!--                                <a href="#">-->
-        <!--                                    <i aria-hidden="true" class="fi fi-ss-check-circle"></i>-->
-        <!--                                    <span>Entreprises à valider</span>-->
-        <!--                                    <span class="!flex-none inline-flex justify-center items-center w-6 h-6 text-xs font-semibold rounded-full text-primary-800 bg-primary-100 dark:bg-primary-200 dark:text-primary-800">-->
-        <!--                                        6-->
-        <!--                                    </span>-->
-        <!--                                </a>-->
-        <!--                            </li>-->
-        <!--                            --><?php //endif; ?>
-        <!--                        </ul>-->
-        <!--                        <ul>-->
-        <!--                            <li>-->
-        <!--                                <a href="--><?php //=Action::ABOUT->value?><!--">-->
-        <!--                                    <i aria-hidden="true" class="fi fi-sr-info"></i>-->
-        <!--                                    <span>A propos</span>-->
-        <!--                                </a>-->
-        <!--                            </li>-->
-        <!--                        </ul>-->
-        <!--                    </div>-->
-        <!--                    <div class="hidden absolute bottom-0 left-0 p-4 space-x-4 w-full lg:flex bg-white dark:bg-gray-800 z-20 border-r border-gray-200 dark:border-gray-700">-->
-        <!--                        --><?php //if (!is_null($user)): ?>
-        <!--                        <button type="button" data-dropdown-toggle="language-dropdown" class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:hover:text-white dark:text-gray-400 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600">-->
-        <!--                            <img src="" class="h-6 w-6 rounded-full mt-0.5" alt="">-->
-        <!--                        </button>-->
-        <!--                        Dropdown -->
-        <!--                        <div class="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700" id="language-dropdown">-->
-        <!--                            <ul class="py-1" role="none">-->
-        <!--                                <li>-->
-        <!--                                    <a href="--><?php //=Action::SIGN_OUT->value?><!--" class="block py-2 px-4 text-sm text-red-700 hover:bg-gray-100 dark:hover:text-white dark:text-gray-300 dark:hover:bg-gray-600" role="menuitem">-->
-        <!--                                        <i class="fi fi-rr-exit"></i>-->
-        <!--                                        <span>Déconnexion</span>-->
-        <!--                                    </a>-->
-        <!--                                </li>-->
-        <!--                            </ul>-->
-        <!--                        </div>-->
-        <!--                        --><?php //endif ?>
-        <!--                    </div>-->
-        <!--                </nav>-->
     <?php endif ?>
     <?php if (!empty($flashMessages)): ?>
         <ul class="flash-messages-container">
