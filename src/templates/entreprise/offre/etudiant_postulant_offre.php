@@ -36,6 +36,9 @@ include __DIR__ . "/../../macros/input.php";
         max-width: 80%;
         max-height: 80%;
         overflow: auto;
+        /* Ajout des styles pour .modal-contenu */
+        position: relative;
+        text-align: center;
     }
 
     .fermer {
@@ -52,8 +55,6 @@ include __DIR__ . "/../../macros/input.php";
         border-bottom: 1px solid rgb(233, 233, 233);
         border-left: 1px solid rgb(233, 233, 233);
     }
-
-
 
     @media (max-width: 639px) {
         .table thead {
@@ -97,7 +98,7 @@ include __DIR__ . "/../../macros/input.php";
             border-left: 1px solid rgb(233, 233, 233);
             border-right: 1px solid rgb(233, 233, 233);
         }
-
+    }
 </style>
 <body class="p-2 font-base ">
 <main class="h-screen flex flex-col items-center justify-center">
@@ -132,43 +133,60 @@ include __DIR__ . "/../../macros/input.php";
                         <?php endif; ?>
                     </td>
                     <td data-label="Complement" class="borders border-r" id="complement<?= $p->getId() ?>">
-                        <span class="text-blue-600 text-blue-400 hover:text-red-400 py-3 px-4   text-center text-base" onclick="afficherTexteComplet('<?= htmlspecialchars($p->getComplement()) ?>')"> <?= substr($p->getComplement(), 0, 50) . (strlen($p->getComplement()) > 50 ? '...' : '') ?></span>
+                        <a class="text-blue-600 text-blue-400 hover:text-red-400 py-3 px-4 text-center text-base complement-link" texte="<?= htmlspecialchars($p->getComplement()) ?>">
+                            <?= substr($p->getComplement(), 0, 50) . (strlen($p->getComplement()) > 50 ? '...' : '') ?>
+                        </a>
                     </td>
                     <td class="text-green-600  items-center text-center text-base ">
                         <a href="<?=Action::ENTREPRISE_ACCEPTE_ETUDIANT_OFFRE->value."&login=".$p->getLogin()."&id=".$p->getIdOffre()?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Accepter</a>
                     </td>
                 </tr>
+                <!-- Pop Up -->
+                <div class="modal" id="modal<?= $p->getId() ?>">
+                    <div class="modal-contenu">
+                        <span class="fermer" onclick="fermerModal('modal<?= $p->getId() ?>')">&times;</span>
+                        <p class="contenu-modal" id="modalTexte<?= $p->getId() ?>"></p>
+                    </div>
+                </div>
             <?php endforeach; ?>
             </tbody>
         </table>
-    </div>
 
-    <!-- Pop Up -->
-    <div class="modal" id="modal">
-        <div class="modal-contenu">
-            <span class="fermer" onclick="fermerModal()">&times;</span>
-            <p id="modalTexte"></p>
-        </div>
     </div>
 </main>
 
 <script>
-    function afficherTexteComplet(texte) {
-        var modalTexte = document.getElementById("modalTexte");
-        modalTexte.innerHTML = texte;
+    var modals = document.querySelectorAll('.modal');
+    var textLinks = document.querySelectorAll('.complement-link');
+    var closeButtons = document.querySelectorAll('.fermer');
+    var contenu_modal = document.querySelectorAll('.contenu-modal');
 
-        var modal = document.getElementById("modal");
-        modal.style.display = "flex";
+    textLinks.forEach(function(link, i) {
+        link.onclick = function() {
+            var fullText = link.getAttribute('texte');
+            contenu_modal[i].innerText = fullText;
+            modals[i].style.display = "flex";
+        };
+    });
 
-        modal.addEventListener('click', function (event) {
+    closeButtons.forEach(function(button, i) {
+        button.onclick = function() {
+            modals[i].style.display = "none";
+        };
+    });
+
+    window.onclick = function(event) {
+        modals.forEach(function(modal, i) {
             if (event.target === modal) {
-                fermerModal();
+                modal.style.display = "none";
             }
         });
-    }
+    };
 
-    function fermerModal() {
-        var modal = document.getElementById("modal");
-        modal.style.display = "none";
+    function fermerModal(modalId) {
+        var modal = document.getElementById(modalId);
+        if (modal) {
+            modal.style.display = "none";
+        }
     }
 </script>
