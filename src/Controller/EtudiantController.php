@@ -348,9 +348,15 @@ class EtudiantController
                 params: []
             );
         }
+        $offrePostuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+        $offres = [];
+        foreach ($offrePostuler as $idOffre){
+            $offres [] = (new OffreRepository)->getById($idOffre->getIdOffre());
+        }
         return new Response(
             template: "etudiant/profile.php",
             params: [
+                "login" =>$etudiant->getLogin(),
                 "nom" => $etudiant->getNom(),
                 "prenom" => $etudiant->getPrenom(),
                 "email" =>$etudiant->getEmailEtudiant(),
@@ -360,7 +366,8 @@ class EtudiantController
                 "civiliter" => $etudiant->getCivilite(),
                 "commune" => $etudiant->getIdDistributionCommune(),
                 "communes" => $communes,
-                "voie" => $etudiant->getNumeroVoie()
+                "voie" => $etudiant->getNumeroVoie(),
+                "offres" => $offres,
             ]
         );
     }
