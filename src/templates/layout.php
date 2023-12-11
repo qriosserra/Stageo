@@ -18,6 +18,7 @@ use Stageo\Model\Object\Secretaire;
 
 <!DOCTYPE html>
 <html lang="en">
+<!----------------------------parameter, JS, css----------------------------------------->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -87,7 +88,9 @@ use Stageo\Model\Object\Secretaire;
     </style>
 </head>
 <body class="overflow-x-hidden">
+<!----------------------------bar du haut----------------------------------------->
 <header class="fixed w-full z-20 top-0 left-0">
+    <!----------------------------Bar nav----------------------------------------->
     <?php if ($nav):?>
         <nav class="bg-white w-full z-20 border-b border-gray-200 dark:border-gray-200" >
             <div class="max-w-screen-xl flex flex-wrap md:pl-4 md:pr-4 items-center justify-between mx-auto md:p-0 p-4">
@@ -95,6 +98,7 @@ use Stageo\Model\Object\Secretaire;
                     <img src="assets/img/logo.png" alt="logo" class="h-[1.8rem] w-[7rem] mr-3">
                 </a>
 
+                <!----------------------------Bouton à droite----------------------------------------->
                 <div class="flex md:order-2">
                     <!----------------------------Drop down User !!! ----------------------------------------->
                     <?php if (is_null($user)) : ?>
@@ -153,16 +157,16 @@ use Stageo\Model\Object\Secretaire;
                                 <?php if (UserConnection::isInstance(new Entreprise())) :?>
                                     <ul class="py-2" aria-labelledby="user-menu-button">
                                         <li>
+                                            <a href="#"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profil</a>
+                                        </li>
+                                        <li>
                                             <a href="<?=Action::ENTREPRISE_POSTULE_OFFRE_ETUDIANT->value?>"
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Candidats Offres</a>
                                         </li>
                                         <li>
                                             <a href="#"
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
-                                        </li>
-                                        <li>
-                                            <a href="#"
-                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
                                         </li>
                                         <?php if (UserConnection::isInstance(new Etudiant())) {
                                             echo "<li>
@@ -179,22 +183,13 @@ use Stageo\Model\Object\Secretaire;
                                 <?php if (UserConnection::isInstance(new Admin())) :?>
                                     <ul class="py-2" aria-labelledby="user-menu-button">
                                         <li>
-                                            <a href="#"
+                                            <a href="<?= Action::ADMIN_DASH->value?>"
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Tableau de bord</a>
                                         </li>
                                         <li>
                                             <a href="#"
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
                                         </li>
-                                        <li>
-                                            <a href="#"
-                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
-                                        </li>
-                                        <?php if (UserConnection::isInstance(new Etudiant())) {
-                                            echo "<li>
-                                        <a href=\"".Action::ETUDIANT_CONVENTION_ADD_FORM->value."\"
-                                           class=\"block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white\">Deposer une convention</a>";
-                                        } ?>
                                         <li>
                                             <a href="<?=Action::SIGN_OUT->value?>"
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
@@ -205,7 +200,7 @@ use Stageo\Model\Object\Secretaire;
                                 <?php if (UserConnection::isInstance(new Secretaire())) :?>
                                     <ul class="py-2" aria-labelledby="user-menu-button">
                                         <li>
-                                            <a href="#"
+                                            <a href="<?= Action::SECRETAIRE_DASH->value?>"
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Tableau de bord</a>
                                         </li>
                                         <li>
@@ -213,18 +208,10 @@ use Stageo\Model\Object\Secretaire;
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
                                         </li>
                                         <li>
-                                            <a href="#"
-                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
-                                        </li>
-                                        <?php if (UserConnection::isInstance(new Etudiant())) {
-                                            echo "<li>
-                                        <a href=\"".Action::ETUDIANT_CONVENTION_ADD_FORM->value."\"
-                                           class=\"block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white\">Deposer une convention</a>";
-                                        } ?>
-                                        <li>
                                             <a href="<?=Action::SIGN_OUT->value?>"
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
                                         </li>
+                                    </ul>
                                     </ul>
                                 <?php endif ?>
                             </div>
@@ -241,6 +228,7 @@ use Stageo\Model\Object\Secretaire;
                         </svg>
                     </button>
                 </div>
+                <!----------------------------Bouton central----------------------------------------->
                 <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 lg:mr-32" id="navbar-user">
                     <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white  dark:border-gray-700">
                         <li class="relative">
@@ -648,6 +636,7 @@ use Stageo\Model\Object\Secretaire;
                     </ul>
                 </div>
     <?php endif ?>
+    <!----------------------------Message Flash----------------------------------------->
     <?php if (!empty($flashMessages)): ?>
         <ul class="flash-messages-container">
             <?php foreach ($flashMessages as $flashMessage): ?>
@@ -669,6 +658,7 @@ use Stageo\Model\Object\Secretaire;
     <p id="cssgenerator" class="!hidden"></p>
 </header>
 <?php require_once $template?>
+<!----------------------------bar du bas----------------------------------------->
 <?php if ($footer):?>
     <footer class="bg-slate-50">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
@@ -735,6 +725,7 @@ use Stageo\Model\Object\Secretaire;
                 <p class="text-gray-500 text-xs text-center mt-4">
                     Copyright © 2023, Stageo « Stageo » et son logo sont des branches officiel de l'IUT Montpellier/Sète.
                 </p>
+                <!----------------------------bouton pour connexion Admin----------------------------------------->
                 <p class="text-gray-500 text-xs text-center mt-4"><a href="<?=Action::ADMIN_SIGN_IN_FORM->value ?>">Espace Admin</a></p>
             </div>
         </div>
