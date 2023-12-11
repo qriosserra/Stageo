@@ -17,12 +17,12 @@ include __DIR__ . "/../../macros/offre.php";
 ?>
 
 <main class="h-screen flex flex-col items-center justify-center">
-    <h5 class="font-bold py-6"><?=$offre->getThematique()?></h5>
-        <div class="flex flex-row !space-x-9">
-            <dl class="max-w-md text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
-                <div class="flex flex-col pb-3">
-                    <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400 underline-offset-1">Secteur</dt>
-                    <dd class="text-lg text-black font-semibold"> <?=$offre->getSecteur()?></dd>
+    <h5 class="font-bold py-6"><?= $offre->getThematique() ?></h5>
+    <div class="flex flex-row !space-x-9">
+        <dl class="max-w-xl text-gray-900 divide-y divide-gray-200 dark:text-white dark:divide-gray-700">
+                <div class="flex flex-row pb-3">
+                    <dt class="mr-10 mb-1 text-gray-500 md:text-lg dark:text-gray-400 underline-offset-1">Secteur</dt>
+                    <dd class="text-lg text-black font-semibold"><?= $offre->getSecteur() ?></dd>
                 </div>
                 <div class="flex flex-col py-3">
                     <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400 underline-offset-1">Fonctions & tâches</dt>
@@ -30,7 +30,7 @@ include __DIR__ . "/../../macros/offre.php";
                 </div>
                 <div class="flex flex-col pt-3">
                     <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400 underline-offset-1">Description</dt>
-                    <dd class="block p-2.5 w-full text-sm text-gray-900 dark:text-white"><?=$offre->getDescription()?></dd>
+                    <dd class="text-lg text-black font-semibold"><?=$offre->getDescription()?></dd>
                 </div>
                 <div class="flex flex-col pt-3">
                     <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400 underline-offset-1">Commentaire</dt>
@@ -39,6 +39,20 @@ include __DIR__ . "/../../macros/offre.php";
                 <div class="flex flex-col pt-3">
                     <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400 underline-offset-1">Gratification</dt>
                     <dd class="text-lg text-black font-semibold"><?=$offre->getGratification()?>€ <?=$unite_gratification?>/heure</dd>
+                </div>
+                <div class="flex flex-col pt-3">
+                    <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400 underline-offset-1">Date Debut</dt>
+                    <dd class="text-lg text-black font-semibold"><?=$offre->getDateDebut()?></dd>
+                </div>
+                <?php if($offre->getDateFin()):?>
+                <div class="flex flex-col pt-3">
+                    <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400 underline-offset-1">Date Fin</dt>
+                    <dd class="text-lg text-black font-semibold"><?=$offre->getDateFin()?></dd>
+                </div>
+                <?php endif?>
+                <div class="flex flex-col pt-3">
+                    <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400 underline-offset-1">Niveau</dt>
+                    <dd class="text-lg text-black font-semibold"><?=$offre->getNiveau()?></dd>
                 </div>
                 <div class="flex pt-5 gap-10">
                     <?php if(UserConnection::isSignedIn() and UserConnection::isInstance(new Entreprise) and UserConnection::getSignedInUser()->getIdEntreprise()==$offre->getIdEntreprise()):?>
