@@ -822,7 +822,7 @@ class EntrepriseController
         if($user and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
             $offre->setLogin($etudiant);
             (new OffreRepository())->update($offre);
-            $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
+            $condition = new QueryCondition("login", ComparisonOperator::EQUAL,$etudiant);
             (new PostulerRepository())->delete($condition);
             FlashMessage::add("Etudiant accepter avec success", FlashType::SUCCESS);
             return new Response(
