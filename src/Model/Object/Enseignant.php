@@ -10,12 +10,9 @@ class Enseignant extends User
 {
     public function __construct(private ?int                     $id_enseignant = null,
                                 private string|NullDataType|null $email = null,
-                                private string|NullDataType|null $unverified_email = null,
-                                private string|NullDataType|null $nonce = null,
-                                private int|NullDataType|null    $nonce_timestamp = null,
-                                private string|NullDataType|null $hashed_password = null,
                                 private string|NullDataType|null $nom = null,
-                                private string|NullDataType|null $prenom = null)
+                                private string|NullDataType|null $prenom = null,
+                                private bool|NullDataType|null $estAdmin = null)
     {
     }
 
@@ -54,70 +51,6 @@ class Enseignant extends User
     /**
      * @return NullDataType|string|null
      */
-    public function getUnverifiedEmail(): string|NullDataType|null
-    {
-        return $this->unverified_email;
-    }
-
-    /**
-     * @param NullDataType|string|null $unverified_email
-     */
-    public function setUnverifiedEmail(string|NullDataType|null $unverified_email): void
-    {
-        $this->unverified_email = $unverified_email;
-    }
-
-    /**
-     * @return NullDataType|string|null
-     */
-    public function getNonce(): string|NullDataType|null
-    {
-        return $this->nonce;
-    }
-
-    /**
-     * @param NullDataType|string|null $nonce
-     */
-    public function setNonce(string|NullDataType|null $nonce): void
-    {
-        $this->nonce = $nonce;
-    }
-
-    /**
-     * @return int|NullDataType|null
-     */
-    public function getNonceTimestamp(): int|NullDataType|null
-    {
-        return $this->nonce_timestamp;
-    }
-
-    /**
-     * @param int|NullDataType|null $nonce_timestamp
-     */
-    public function setNonceTimestamp(int|NullDataType|null $nonce_timestamp): void
-    {
-        $this->nonce_timestamp = $nonce_timestamp;
-    }
-
-    /**
-     * @return NullDataType|string|null
-     */
-    public function getHashedPassword(): string|NullDataType|null
-    {
-        return $this->hashed_password;
-    }
-
-    /**
-     * @param NullDataType|string|null $hashed_password
-     */
-    public function setHashedPassword(string|NullDataType|null $hashed_password): void
-    {
-        $this->hashed_password = $hashed_password;
-    }
-
-    /**
-     * @return NullDataType|string|null
-     */
     public function getNom(): string|NullDataType|null
     {
         return $this->nom;
@@ -145,6 +78,22 @@ class Enseignant extends User
     public function setPrenom(string|NullDataType|null $prenom): void
     {
         $this->prenom = $prenom;
+    }
+
+    /**
+     * @return bool|NullDataType|null
+     */
+    public function getEstAdmin(): bool|NullDataType|null
+    {
+        return $this->estAdmin;
+    }
+
+    /**
+     * @param bool|NullDataType|null $estAdmin
+     */
+    public function setEstAdmin(bool|NullDataType|null $estAdmin): void
+    {
+        $this->estAdmin = $estAdmin;
     }
 
 
