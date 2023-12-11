@@ -168,7 +168,7 @@ use Stageo\Lib\enums\Action;
                         <span class="font-bold"> <?= $entreprise->getRaisonSociale() ?> </span>
                         <span class="font-bold"> <?= $offre->getThematique() ?> </span>
                         <p class="text-justify m-3"><?= $offre->getDescription()?></p>
-                        <p> <?php echo ($offre->getLogin() == null) ? "En cours de validation" : (($offre->getLogin() == $login) ? "Valider" : "Refuser"); ?> </p>
+                        <p> <?php echo ($offre->getLogin() == null) ? "En cours de validation" : (($offre->getLogin() == $login) ? (!$offre->getValiderParEtudiant() ? "En Attente de Validation" : "Accepter" ) : (!$offre->getValiderParEtudiant() ? "En Liste d'attente" : "Refuser" )); ?> </p>
                        <button onclick="<?php echo ("window.location.href='".Action::AFFICHER_OFFRE->value."&id=".$offre->getIdOffre()) ?>'" class="rounded-xl bg-gradient-to-tr from-blue-600 to-blue-400 bg-clip-border px-4 py-2 text-white shadow-md shadow-blue-500/40 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500">
                             <span class="font-bold">En savoir plus</span>
                         </button>

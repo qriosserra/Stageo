@@ -6,6 +6,8 @@ use Stageo\Controller\Exception\ControllerException;
 use Stageo\Controller\Exception\InvalidTokenException;
 use Stageo\Controller\Exception\TokenTimeoutException;
 use Stageo\Lib\Database\ComparisonOperator;
+use Stageo\Lib\Database\LogicalOperator;
+use Stageo\Lib\Database\NullDataType;
 use Stageo\Lib\Database\QueryCondition;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
@@ -485,17 +487,25 @@ class EtudiantController
         }
         $offre->setValiderParEtudiant(true);
         (new OffreRepository)->update($offre);
-        $postuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+        //$postuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
         $offres =  (new OffreRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+        $autrePostulant = (new PostulerRepository())->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre));
         foreach($offres as $o){
             if ($o->getIdOffre != $idOffre){
                 $o->setLogin(Null);
                 (new OffreRepository())->update($o);
             }
         }
-        foreach($postuler as $post){
-            if ($post->getIdOffre() == $idOffre){
+        foreach($autrePostulant as $post){
+            if ($post->getLogin() == $login){
                 $postu = $post;
+            }else{
+                if(file_exists("assets/document/cv/".$post->getCv())){
+                    unlink("assets/document/cv/".$post->getCv());
+                }
+                if(file_exists("assets/document/lm/".$post->getLettreMotivation())){
+                    unlink("assets/document/lm/".$post->getLettreMotivation());
+                }
             }
         }
         (new PostulerRepository())->delete(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
@@ -555,14 +565,26 @@ class EtudiantController
                 params: []
             );
         }
-        $offre->setLogin(Null);
+        $offre->setLogin(new NullDataType());
+        $condition = [
+            new QueryCondition("login",ComparisonOperator::EQUAL,$login,LogicalOperator::AND),
+            new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre)
+        ];
+        $offrePotuler = (new PostulerRepository())->select($condition);
+        if(file_exists("assets/document/cv/".$offrePotuler[0]->getCv())){
+            unlink("assets/document/cv/".$offrePotuler[0]->getCv());
+        }
+        if(file_exists("assets/document/lm/".$offrePotuler[0]->getLettreMotivation())){
+            unlink("assets/document/lm/".$offrePotuler[0]->getLettreMotivation());
+        }
         (new OffreRepository)->update($offre);
         $postuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
-        foreach($postuler as $post){
-            if ($post->getIdOffre() == $idOffre){
-                (new PostulerRepository())->delete($post);
-            }
-        }
+
+        $cond = [
+            new QueryCondition("login",ComparisonOperator::EQUAL,$login,LogicalOperator::AND),
+            new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre)
+        ];
+        (new PostulerRepository())->delete($cond);
         FlashMessage::add(
             content: "Profile mis à jours",
             type: FlashType::SUCCESS
