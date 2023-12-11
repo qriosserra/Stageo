@@ -793,8 +793,7 @@ class EntrepriseController
             $id = $_REQUEST["id"];
             $offre = (new OffreRepository())->getById($id);
             $user = UserConnection::getSignedInUser();
-            $idEntreprise = $user->getIdEntreprise();
-            if($user and UserConnection::isInstance(new Entreprise) and $idEntreprise == $offre->getIdEntreprise()){
+            if($user and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
                 $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
                 $liste_offrePostuler = (new PostulerRepository())->select($condition);
                 return new Response(
@@ -820,8 +819,7 @@ class EntrepriseController
         $etudiant = $_REQUEST["login"];
         $offre = (new OffreRepository())->getById($id);
         $user = UserConnection::getSignedInUser();
-        $idEntreprise = $user->getIdEntreprise();
-        if($user and UserConnection::isInstance(new Entreprise) and $idEntreprise == $offre->getIdEntreprise()){
+        if($user and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
             $offre->setLogin($etudiant);
             (new OffreRepository())->update($offre);
             $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
