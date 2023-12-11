@@ -56,5 +56,6 @@ enum Action: string
     case TEST_EMAIL = "?a=testEmail";
     case PROFILE_ETUDIANT = "?c=etudiant&a=afficherProfile";
     case PROFILE_METTRE_A_JOUR_ETUDIANT = "?c=etudiant&a=MettreAJourProfile";
-    case VALIDER_DEFINITIVEMENT_OFFRE = "?c=etudiant&a=validerDefinitivement&XDEBUG_SESSION_START=";
+    case VALIDER_DEFINITIVEMENT_OFFRE = "?c=etudiant&a=validerDefinitivement";
+    case REFUSER_DEFINITIVEMENT_OFFRE = "?c=etudiant&a=refuserDefinitivement";
 }

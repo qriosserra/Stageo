@@ -17,8 +17,9 @@ use Stageo\Lib\enums\Action;
  * @var \Stageo\Model\Object\Entreprise $entreprise
  */
 ?>
+<body>
 <section class="bg-slate-50 flex-col justify-center items-center">
-    <div class="flex justify-center lg:justify-start lg:px-4 lg:py-2">
+   <!-- <div class="flex justify-center lg:justify-start lg:px-4 lg:py-2">
         <div class="flex items-center gap-4">
             <img class="h-10 w-10 rounded-full" src="/docs/images/people/profile-picture-5.jpg" alt="" />
             <div class="font-medium dark:text-white">
@@ -26,7 +27,7 @@ use Stageo\Lib\enums\Action;
                 <div class="text-sm text-gray-500 dark:text-gray-400">Année <?= $annee ?></div>
             </div>
         </div>
-    </div>
+    </div> -->
     <form action="<?=Action::PROFILE_METTRE_A_JOUR_ETUDIANT->value?>" method="post">
         <div class="grid w-full grid-cols-1 gap-2 space-y-3 px-4 py-2 lg:space-x-3 lg:space-y-0">
             <div class="auto-cols-auto rounded-lg border border-gray-300 bg-white">
@@ -144,7 +145,7 @@ use Stageo\Lib\enums\Action;
                                 id="saveButton">Sauvegarder</button>
                         <button type="button"
                                 class="focus:shadow-outline-gray rounded-lg bg-gradient-to-tr from-slate-500 to-slate-400 px-4 py-2 font-bold text-white hover:bg-gray-500 focus:outline-none transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-gray-500"
-                                id="cancelButton">Annuler</button>
+                                id="cancelButton" onclick="window.location.href='?c=etudiant&a=afficherProfile'">Annuler</button>
                     </div>
                 </div>
             </div>
@@ -193,3 +194,4 @@ use Stageo\Lib\enums\Action;
         </div>
     </div>
 </section>
+</body>

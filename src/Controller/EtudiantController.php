@@ -380,6 +380,8 @@ class EtudiantController
                 "communes" => $communes,
                 "voie" => $etudiant->getNumeroVoie(),
                 "offres" => $offres,
+                "nav" => false,
+                "sidebar" => true
             ]
         );
     }
@@ -498,6 +500,69 @@ class EtudiantController
         }
         (new PostulerRepository())->delete(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
         (new PostulerRepository())->insert($postu);
+        FlashMessage::add(
+            content: "Profile mis à jours",
+            type: FlashType::SUCCESS
+        );
+        return new Response(
+            action: Action::PROFILE_ETUDIANT,
+        );
+    }
+    public function refuserDefinitivement() : Response{
+        $login = $_REQUEST['login'];
+        $idOffre = $_REQUEST['idOffre'];
+
+        if (!isset($idOffre) || !isset($login)){
+            FlashMessage::add(
+                content: "il manque des valeurs",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::PROFILE_ETUDIANT,
+                params: []
+            );
+        }
+        if (!UserConnection::isInstance(new Etudiant())){
+            FlashMessage::add(
+                content: "tu n'est pas connecter ou tu n'as pas les droits",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+        $etudiant = UserConnection::getSignedInUser();
+        if (!isset($etudiant) || $etudiant->getLogin() != $login){
+            FlashMessage::add(
+                content: "vous n'etes pas enregistrer dans la base de données",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+        $offre = (new OffreRepository())->getById($idOffre);
+
+        if ($offre->getLogin() != $login){
+            FlashMessage::add(
+                content: "vous n'êtes pas valider dans l'offre",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::PROFILE_ETUDIANT,
+                params: []
+            );
+        }
+        $offre->setLogin(Null);
+        (new OffreRepository)->update($offre);
+        $postuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+        foreach($postuler as $post){
+            if ($post->getIdOffre() == $idOffre){
+                (new PostulerRepository())->delete($post);
+            }
+        }
         FlashMessage::add(
             content: "Profile mis à jours",
             type: FlashType::SUCCESS
