@@ -940,6 +940,26 @@ class EtudiantController
             );
         }
         $offre = (new OffreRepository())->getById($idOffre);
+        $entreprise = (new EntrepriseRepository())->getById($offre->getIdEntreprise());
+        $convention = new Convention(
+            login: $offre->getLogin(),
+            type_convention: $offre->getType(),
+            thematique: $offre->getThematique(),
+            sujet: $offre->getSecteur(),
+            taches: $offre->getTaches(),
+            commentaires: $offre->getCommentaires(),
+            date_debut: $offre->getDateDebut(),
+            date_fin: $offre->getDateFin(),
+            gratification: $offre->getGratification(),
+            id_unite_gratification: $offre->getIdUniteGratification(),
+            id_distribution_commune: $entreprise->getIdDistributionCommune(),
+            numero_voie: $entreprise->getNumeroVoie(),
+            id_entreprise: $offre->getIdEntreprise(),
+        );
+
+        if ($offre->getType() === "Stage&Alternance") {
+            $convention->setTypeConvention(null);
+        }
 
         if ($offre->getLogin() != $login){
             FlashMessage::add(
@@ -947,8 +967,10 @@ class EtudiantController
                 type: FlashType::ERROR
             );
             return new Response(
-                action: Action::PROFILE_ETUDIANT,
-                params: []
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM ,
+                params: [
+                    "convention"=>$convention
+                ]
             );
         }
         $offre->setValiderParEtudiant(true);
@@ -957,31 +979,28 @@ class EtudiantController
         $offres =  (new OffreRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
         $autrePostulant = (new PostulerRepository())->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre));
         foreach($offres as $o){
-            if ($o->getIdOffre != $idOffre){
+            if ($o->getIdOffre() != $idOffre){
                 $o->setLogin(Null);
                 (new OffreRepository())->update($o);
             }
         }
         foreach($autrePostulant as $post){
-            if ($post->getLogin() == $login){
-                $postu = $post;
-            }else{
                 if(file_exists("assets/document/cv/".$post->getCv())){
                     unlink("assets/document/cv/".$post->getCv());
                 }
                 if(file_exists("assets/document/lm/".$post->getLettreMotivation())){
                     unlink("assets/document/lm/".$post->getLettreMotivation());
-                }
             }
         }
         (new PostulerRepository())->delete(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
-        (new PostulerRepository())->insert($postu);
         FlashMessage::add(
             content: "Profile mis à jours",
             type: FlashType::SUCCESS
         );
+        Session::set("convention",$convention);
         return new Response(
-            action: Action::PROFILE_ETUDIANT,
+            action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM ,
+            params: []
         );
     }
     public function refuserDefinitivement() : Response{
