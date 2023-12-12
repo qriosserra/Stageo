@@ -6,6 +6,8 @@ use Stageo\Controller\Exception\ControllerException;
 use Stageo\Controller\Exception\InvalidTokenException;
 use Stageo\Controller\Exception\TokenTimeoutException;
 use Stageo\Lib\Database\ComparisonOperator;
+use Stageo\Lib\Database\LogicalOperator;
+use Stageo\Lib\Database\NullDataType;
 use Stageo\Lib\Database\QueryCondition;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
@@ -19,6 +21,7 @@ use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Convention;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Etudiant;
+use Stageo\Model\Object\Offre;
 use Stageo\Model\Object\Postuler;
 use Stageo\Model\Object\Suivi;
 use Stageo\Model\Repository\ConfigurationRepository;
@@ -56,7 +59,7 @@ class EtudiantController
     {
         $login = $_REQUEST["login"];
         $password = $_REQUEST["password"];
-        if (!Token::verify(Action::ETUDIANT_SIGN_IN_FORM, $_REQUEST["token"]))
+        if (!Token::verify(Action::ETUDIANT_SIGN_IN_FORM, $_REQUEST["token"]) && !Token::verify(Action::ADMIN_SIGN_IN_FORM, $_REQUEST["token"]) )
             throw new InvalidTokenException();
         if (Token::isTimeout(Action::ETUDIANT_SIGN_IN_FORM)) {
             throw new TokenTimeoutException(
@@ -75,6 +78,9 @@ class EtudiantController
             action: Action::ETUDIANT_SIGN_IN_FORM,
             params: ["login" => $login]
         );
+        if ($response["annee"]==null){
+            return (new AdminController())->signIn($response);
+        }
         $etudiant = (new EtudiantRepository)->getByLogin($login);
         if (is_null($etudiant)) {
             $etudiant = new Etudiant(
@@ -812,9 +818,24 @@ class EtudiantController
                 params: []
             );
         }
+        $offrePostuler = (new PostulerRepository())->select(new QueryCondition("login", ComparisonOperator::EQUAL, $etudiant->getLogin()));
+        $offres = [];
+        foreach ($offrePostuler as $idOffre) {
+            $offre = (new OffreRepository())->getById($idOffre->getIdOffre());
+
+            if ($offre instanceof Offre) {
+                $entreprise = (new EntrepriseRepository())->getById($offre->getIdEntreprise());
+
+                if ($entreprise instanceof Entreprise) {
+                    // Ajouter le couple (Offre, Entreprise) à la liste $offres
+                    $offres[] = ['offre' => $offre, 'entreprise' => $entreprise];
+                }
+            }
+        }
         return new Response(
             template: "etudiant/profile.php",
             params: [
+                "login" =>$etudiant->getLogin(),
                 "nom" => $etudiant->getNom(),
                 "prenom" => $etudiant->getPrenom(),
                 "email" =>$etudiant->getEmailEtudiant(),
@@ -824,7 +845,10 @@ class EtudiantController
                 "civiliter" => $etudiant->getCivilite(),
                 "commune" => $etudiant->getIdDistributionCommune(),
                 "communes" => $communes,
-                "voie" => $etudiant->getNumeroVoie()
+                "voie" => $etudiant->getNumeroVoie(),
+                "offres" => $offres,
+                "nav" => false,
+                "sidebar" => true
             ]
         );
     }
@@ -876,7 +900,162 @@ class EtudiantController
             type: FlashType::SUCCESS
         );
         return new Response(
-            action: Action::Profile_Etudiant,
+            action: Action::PROFILE_ETUDIANT,
+        );
+    }
+    public function validerDefinitivement() : Response{
+        $login = $_REQUEST['login'];
+        $idOffre = $_REQUEST['idOffre'];
+
+        if (!isset($idOffre) || !isset($login)){
+            FlashMessage::add(
+                content: "il manque des valeurs",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::PROFILE_ETUDIANT,
+                params: []
+            );
+        }
+        if (!UserConnection::isInstance(new Etudiant())){
+            FlashMessage::add(
+                content: "tu n'est pas connecter ou tu n'as pas les droits",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+        $etudiant = UserConnection::getSignedInUser();
+        if (!isset($etudiant) || $etudiant->getLogin() != $login){
+            FlashMessage::add(
+                content: "vous n'etes pas enregistrer dans la base de données",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+        $offre = (new OffreRepository())->getById($idOffre);
+
+        if ($offre->getLogin() != $login){
+            FlashMessage::add(
+                content: "vous n'êtes pas valider dans l'offre",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::PROFILE_ETUDIANT,
+                params: []
+            );
+        }
+        $offre->setValiderParEtudiant(true);
+        (new OffreRepository)->update($offre);
+        //$postuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+        $offres =  (new OffreRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+        $autrePostulant = (new PostulerRepository())->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre));
+        foreach($offres as $o){
+            if ($o->getIdOffre != $idOffre){
+                $o->setLogin(Null);
+                (new OffreRepository())->update($o);
+            }
+        }
+        foreach($autrePostulant as $post){
+            if ($post->getLogin() == $login){
+                $postu = $post;
+            }else{
+                if(file_exists("assets/document/cv/".$post->getCv())){
+                    unlink("assets/document/cv/".$post->getCv());
+                }
+                if(file_exists("assets/document/lm/".$post->getLettreMotivation())){
+                    unlink("assets/document/lm/".$post->getLettreMotivation());
+                }
+            }
+        }
+        (new PostulerRepository())->delete(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+        (new PostulerRepository())->insert($postu);
+        FlashMessage::add(
+            content: "Profile mis à jours",
+            type: FlashType::SUCCESS
+        );
+        return new Response(
+            action: Action::PROFILE_ETUDIANT,
+        );
+    }
+    public function refuserDefinitivement() : Response{
+        $login = $_REQUEST['login'];
+        $idOffre = $_REQUEST['idOffre'];
+
+        if (!isset($idOffre) || !isset($login)){
+            FlashMessage::add(
+                content: "il manque des valeurs",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::PROFILE_ETUDIANT,
+                params: []
+            );
+        }
+        if (!UserConnection::isInstance(new Etudiant())){
+            FlashMessage::add(
+                content: "tu n'est pas connecter ou tu n'as pas les droits",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+        $etudiant = UserConnection::getSignedInUser();
+        if (!isset($etudiant) || $etudiant->getLogin() != $login){
+            FlashMessage::add(
+                content: "vous n'etes pas enregistrer dans la base de données",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+        $offre = (new OffreRepository())->getById($idOffre);
+
+        if ($offre->getLogin() != $login){
+            FlashMessage::add(
+                content: "vous n'êtes pas valider dans l'offre",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::PROFILE_ETUDIANT,
+                params: []
+            );
+        }
+        $offre->setLogin(new NullDataType());
+        $condition = [
+            new QueryCondition("login",ComparisonOperator::EQUAL,$login,LogicalOperator::AND),
+            new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre)
+        ];
+        $offrePotuler = (new PostulerRepository())->select($condition);
+        if(file_exists("assets/document/cv/".$offrePotuler[0]->getCv())){
+            unlink("assets/document/cv/".$offrePotuler[0]->getCv());
+        }
+        if(file_exists("assets/document/lm/".$offrePotuler[0]->getLettreMotivation())){
+            unlink("assets/document/lm/".$offrePotuler[0]->getLettreMotivation());
+        }
+        (new OffreRepository)->update($offre);
+        $postuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+
+        $cond = [
+            new QueryCondition("login",ComparisonOperator::EQUAL,$login,LogicalOperator::AND),
+            new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre)
+        ];
+        (new PostulerRepository())->delete($cond);
+        FlashMessage::add(
+            content: "Profile mis à jours",
+            type: FlashType::SUCCESS
+        );
+        return new Response(
+            action: Action::PROFILE_ETUDIANT,
         );
     }
 }

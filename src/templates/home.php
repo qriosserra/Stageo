@@ -15,6 +15,7 @@ include "macros/offre.php";
 ?>
 
 <main class="mt-[8rem]">
+    <!----------------------------Presentation site----------------------------------------->
     <section class="w-full h-[35rem] sm:h-[29rem] border-b">
         <h1 class="mt-16 text-center font-bold leading-[3rem] font-custom text-gray-700 text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-6xl">
             Tout ce dont vous avez besoin pour tracer<span class="block font-custom text-gray-700">Votre Parcours Professionnel</span>
@@ -31,6 +32,7 @@ include "macros/offre.php";
             Avec la participation du CFA Sud Montpellier, Univerisité de Montpellier et l'IUT Montpellier/Sète
         </span>
     </section>
+    <!----------------------------Presentation Préparer votre Stage/Alternance----------------------------------------->
     <section class="section-2 w-full md:h-[38rem] mt-[5rem] md:mt-auto h-[64rem] border-b flex flex-col justify-center items-center">
         <div>
             <h4 class="second-titre mt-4 text-center font-bold leading-[3rem]  font-custom text-gray-700
@@ -73,6 +75,7 @@ include "macros/offre.php";
             </div>
         </div>
     </section>
+    <!----------------------------FAQ----------------------------------------->
     <section class="mt-[8rem] sm:mt-auto">
         <div class="container px-6 py-12 mx-auto">
             <h1 class="text-2xl font-semibold text-center text-gray-800 lg:text-3xl md ">Les questions récurrentes</h1>
@@ -192,6 +195,7 @@ include "macros/offre.php";
             </div>
         </div>
     </section>
+    <!----------------------------Style css sup----------------------------------------->
     <style>
         @media screen and (min-width: 768px) and (max-width: 784px) {
             .section-2 {
