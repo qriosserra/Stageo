@@ -222,7 +222,7 @@ use Stageo\Lib\enums\Action;
                                     <p class="text-black">Importer ou exporter les suivis en csv</p>
                                     <p id="upload-message"></p>
                                 </div>
-                                <footer class="flex justify-between items-center w-full px-4">
+                                <footer class="flex justify-between items-center w-full px-4 bg-transparent">
                                     <!-- Bouton pour l'importation à gauche -->
                                     <button class="text-blue-400 hover:text-red-400">
                                         <i class="fa-solid fa-upload"></i> Importer
