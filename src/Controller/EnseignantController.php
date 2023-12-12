@@ -2,32 +2,32 @@
 
 namespace Stageo\Controller;
 
-    use Stageo\Controller\Exception\ControllerException;
-    use Stageo\Controller\Exception\InvalidTokenException;
-    use Stageo\Controller\Exception\TokenTimeoutException;
-    use Stageo\Lib\Database\ComparisonOperator;
-    use Stageo\Lib\Database\QueryCondition;
-    use Stageo\Lib\enums\Action;
-    use Stageo\Lib\enums\FlashType;
-    use Stageo\Lib\FlashMessage;
-    use Stageo\Lib\HTTP\Session;
-    use Stageo\Lib\Response;
-    use Stageo\Lib\Security\Password;
-    use Stageo\Lib\Security\Token;
-    use Stageo\Lib\Security\Validate;
-    use Stageo\Lib\UserConnection;
-    use Stageo\Model\Object\Convention;
-    use Stageo\Model\Object\Entreprise;
-    use Stageo\Model\Object\Etudiant;
-    use Stageo\Model\Object\Offre;
-    use Stageo\Model\Object\Postuler;
-    use Stageo\Model\Repository\DistributionCommuneRepository;
-    use Stageo\Model\Repository\EntrepriseRepository;
-    use Stageo\Model\Repository\EtudiantRepository;
-    use Stageo\Model\Repository\ConventionRepository;
-    use Stageo\Model\Repository\OffreRepository;
-    use Stageo\Model\Repository\PostulerRepository;
-    use Stageo\Model\Repository\UniteGratificationRepository;
+use Stageo\Controller\Exception\ControllerException;
+use Stageo\Controller\Exception\InvalidTokenException;
+use Stageo\Controller\Exception\TokenTimeoutException;
+use Stageo\Lib\Database\ComparisonOperator;
+use Stageo\Lib\Database\QueryCondition;
+use Stageo\Lib\enums\Action;
+use Stageo\Lib\enums\FlashType;
+use Stageo\Lib\FlashMessage;
+use Stageo\Lib\HTTP\Session;
+use Stageo\Lib\Response;
+use Stageo\Lib\Security\Password;
+use Stageo\Lib\Security\Token;
+use Stageo\Lib\Security\Validate;
+use Stageo\Lib\UserConnection;
+use Stageo\Model\Object\Convention;
+use Stageo\Model\Object\Entreprise;
+use Stageo\Model\Object\Etudiant;
+use Stageo\Model\Object\Offre;
+use Stageo\Model\Object\Postuler;
+use Stageo\Model\Repository\DistributionCommuneRepository;
+use Stageo\Model\Repository\EntrepriseRepository;
+use Stageo\Model\Repository\EtudiantRepository;
+use Stageo\Model\Repository\ConventionRepository;
+use Stageo\Model\Repository\OffreRepository;
+use Stageo\Model\Repository\PostulerRepository;
+use Stageo\Model\Repository\UniteGratificationRepository;
 
 class EnseignantController
 {

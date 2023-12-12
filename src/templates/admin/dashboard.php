@@ -55,7 +55,7 @@ use Stageo\Lib\enums\Action;
 </head>
 
 <body
-    :class="{'dark text-bodydark bg-boxdark-2': darkMode === true}">
+        :class="{'dark text-bodydark bg-boxdark-2': darkMode === true}">
 
 <div class="flex h-screen overflow-hidden">
 
@@ -65,14 +65,14 @@ use Stageo\Lib\enums\Action;
             <div class="md:hidden flex items-center">
                 <button class="mobile-menu-button">
                     <svg
-                        class="w-6 h-6 text-gray-500"
-                        x-show="!showMenu"
-                        fill="none"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
+                            class="w-6 h-6 text-gray-500"
+                            x-show="!showMenu"
+                            fill="none"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                     >
                         <path d="M4 6h16M4 12h16m-7 6h7"></path>
                     </svg>
@@ -212,7 +212,7 @@ use Stageo\Lib\enums\Action;
 
                                 <!-- Réduction de la hauteur du figure -->
                                 <figure
-                                    class="mb-[-1.5rem] justify-center items-center h-56 aspect-square overflow-hidden ">
+                                        class="mb-[-1.5rem] justify-center items-center h-56 aspect-square overflow-hidden ">
                                     <img class="w-3/4 h-3/4 object-cover transition group-hover:scale-110 mx-auto my-auto"
                                          src="./images/cards/csv.png" />
                                 </figure>
@@ -240,7 +240,7 @@ use Stageo\Lib\enums\Action;
 
                                 <!-- Réduction de la hauteur du figure -->
                                 <figure
-                                    class="mb-[-1.5rem] justify-center items-center h-56 aspect-square overflow-hidden ">
+                                        class="mb-[-1.5rem] justify-center items-center h-56 aspect-square overflow-hidden ">
                                     <img class="w-3/4 h-3/4 object-cover transition group-hover:scale-110 mx-auto my-auto"
                                          src="./images/cards/csv.png" />
                                 </figure>

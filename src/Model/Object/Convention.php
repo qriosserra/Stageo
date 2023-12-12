@@ -37,7 +37,7 @@ class Convention extends CoreObject
                                 private int|NullDataType|null    $id_distribution_commune = null,
                                 private string|NullDataType|null $id_entreprise = null,
                                 private string|NullDataType|null $id_tuteur = null,
-                                private string|NullDataType|null $id_enseignant = null)
+                                private string|NullDataType|null $login_enseignant = null)
     {
     }
 
@@ -161,12 +161,12 @@ class Convention extends CoreObject
         $this->date_fin = $date_fin;
     }
 
-    public function getInterruption(): string|NullDataType|null
+    public function getInterruption(): bool|NullDataType|null
     {
         return $this->interruption;
     }
 
-    public function setInterruption(string|NullDataType|null $interruption): void
+    public function setInterruption(bool|NullDataType|null $interruption): void
     {
         $this->interruption = $interruption;
     }
@@ -311,13 +311,13 @@ class Convention extends CoreObject
         $this->id_tuteur = $id_tuteur;
     }
 
-    public function getIdEnseignant(): string|NullDataType|null
+    public function getLoginEnseignant(): string|NullDataType|null
     {
-        return $this->id_enseignant;
+        return $this->login_enseignant;
     }
 
-    public function setIdEnseignant(string|NullDataType|null $id_enseignant): void
+    public function setLoginEnseignant(string|NullDataType|null $login_enseignant): void
     {
-        $this->id_enseignant = $id_enseignant;
+        $this->login_enseignant = $login_enseignant;
     }
 }
