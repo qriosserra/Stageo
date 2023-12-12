@@ -22,7 +22,7 @@ class Convention extends CoreObject
                                 private string|NullDataType|null $details = null,
                                 private string|NullDataType|null $date_debut = null,
                                 private string|NullDataType|null $date_fin = null,
-                                private string|NullDataType|null $interruption = null,
+                                private bool|NullDataType|null   $interruption = null,
                                 private string|NullDataType|null $date_interruption_debut = null,
                                 private string|NullDataType|null $date_interruption_fin = null,
                                 private string|NullDataType|null $heures_total = null,
@@ -37,7 +37,7 @@ class Convention extends CoreObject
                                 private int|NullDataType|null    $id_distribution_commune = null,
                                 private string|NullDataType|null $id_entreprise = null,
                                 private string|NullDataType|null $id_tuteur = null,
-                                private string|NullDataType|null $id_enseignant = null)
+                                private string|NullDataType|null $login_enseignant = null)
     {
     }
 
@@ -161,12 +161,12 @@ class Convention extends CoreObject
         $this->date_fin = $date_fin;
     }
 
-    public function getInterruption(): string|NullDataType|null
+    public function getInterruption(): bool|NullDataType|null
     {
         return $this->interruption;
     }
 
-    public function setInterruption(string|NullDataType|null $interruption): void
+    public function setInterruption(bool|NullDataType|null $interruption): void
     {
         $this->interruption = $interruption;
     }
@@ -311,24 +311,13 @@ class Convention extends CoreObject
         $this->id_tuteur = $id_tuteur;
     }
 
-    public function getIdEnseignant(): string|NullDataType|null
+    public function getLoginEnseignant(): string|NullDataType|null
     {
-        return $this->id_enseignant;
+        return $this->login_enseignant;
     }
 
-    public function setIdEnseignant(string|NullDataType|null $id_enseignant): void
+    public function setLoginEnseignant(string|NullDataType|null $login_enseignant): void
     {
-        $this->id_enseignant = $id_enseignant;
-    }
-
-    public static function getConventionById(string $id_convention): Convention
-    { //faire une requête sql pour récupérer la convention avec l'id $id_convention en faisant attention aux valeurs nulles :
-        $sql = "SELECT * FROM stg_convention WHERE id_convention = :id_convention";
-        $pdo = DatabaseConnection::getPdo()->prepare($sql);
-        $pdo->execute([
-            "id_convention" => $id_convention
-        ]);
-        $convention = $pdo->fetch();
-        return new Convention($convention['id_convention'], $convention['login'], $convention['type_convention'], $convention['origine_stage'], $convention['annee_universitaire'], $convention['thematique'], $convention['sujet'], $convention['taches'], $convention['commentaires'], $convention['details'], $convention['date_debut'], $convention['date_fin'], $convention['interruption'], $convention['date_interruption_debut'], $convention['date_interruption_fin'], $convention['heures_total'], $convention['jours_hebdomadaire'], $convention['heures_hebdomadaire'], $convention['commentaires_duree'], $convention['gratification'], $convention['id_unite_gratification'], $convention['avantages_nature'], $convention['code_elp'], $convention['numero_voie'], $convention['id_distribution_commune'], $convention['id_entreprise'], $convention['id_tuteur'], $convention['id_enseignant']);
+        $this->login_enseignant = $login_enseignant;
     }
 }
