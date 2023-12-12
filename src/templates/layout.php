@@ -147,7 +147,7 @@ use Stageo\Model\Object\Secretaire;
                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
                                     </li>
                                     <li>
-                                        <a href="<?=Action::ETUDIANT_CONVENTION_ADD_FORM->value?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Deposer une convention</a>
+                                        <a href="<?=Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM->value?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Deposer une convention</a>
                                     <li>
                                         <a href="<?=Action::SIGN_OUT->value?>"
                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>

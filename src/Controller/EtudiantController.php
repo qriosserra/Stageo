@@ -257,7 +257,8 @@ class EtudiantController
          */
         $etudiant = UserConnection::getSignedInUser();
         $convention = (new ConventionRepository)->getByLogin($etudiant->getLogin());
-        Session::set("convention", is_null($convention) ? new Convention() : $convention);
+        $convention = is_null($convention) ? new Convention() : $convention;
+        Session::set("convention", $convention);
 
         return new Response(
             template: "etudiant/convention-add-step-1.php",
