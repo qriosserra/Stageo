@@ -1,6 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wdth,wght,YTLC@6..12,75..125,200..1000,440..540&display=swap");
-/*@import url(https://db.onlinewebfonts.com/c/98023254fbc516186b4aa88d1e4415fc?family=Aspira+Wide+W01+Heavy);*/
-/*! tailwindcss v3.3.5 | MIT License | https://tailwindcss.com*/
+@import url(https://db.onlinewebfonts.com/c/98023254fbc516186b4aa88d1e4415fc?family=Aspira+Wide+W01+Heavy);
+/*
+! tailwindcss v3.3.3 | MIT License | https://tailwindcss.com
+*/
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
 2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
@@ -1219,6 +1221,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(31 41 55 / var(--tw-bg-opacity));
 }
+.bg-green-300{
+  --tw-bg-opacity: 1;
+  background-color: rgb(134 239 172 / var(--tw-bg-opacity));
+}
 .bg-green-700{
   --tw-bg-opacity: 1;
   background-color: rgb(21 128 61 / var(--tw-bg-opacity));
@@ -2299,10 +2305,6 @@ footer .footer-information-container .footer-description-container .footer-descr
 .hover\:bg-blue-500:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(59 130 246 / var(--tw-bg-opacity));
-}
-.hover\:bg-blue-700:hover{
-  --tw-bg-opacity: 1;
-  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
 }
 .hover\:bg-blue-800:hover{
   --tw-bg-opacity: 1;
