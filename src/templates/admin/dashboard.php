@@ -103,6 +103,9 @@ use Stageo\Lib\enums\Action;
                     <a href="<?=Action::ADMIN_SIGN_UP_FORM->value?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
                         <span>Ajouter des Admin</span>
                     </a>
+                    <a href="<?=Action::ADMIN_SUPRIMERADMIN_FROM->value?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
+                        <span>Supprimer des Admin</span>
+                    </a>
                 </nav>
             </div>
         </div>

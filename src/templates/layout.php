@@ -123,7 +123,7 @@ use Stageo\Model\Object\Secretaire;
                                     id="user-dropdown">
                                 <div class="px-4 py-3">
                                     <span class="block text-sm text-gray-900 dark:text-white">
-                                        <?php if (($user instanceof Enseignant && $user->getEstAdmin()) || UserConnection::isInstance(new Etudiant())) :?><?=/** @var Admin|Etudiant $user */ $user->getNom()." ".$user->getPrenom()?>
+                                        <?php if ($user instanceof Enseignant || UserConnection::isInstance(new Etudiant())) :?><?=/** @var Admin|Etudiant $user */ $user->getNom()." ".$user->getPrenom()?>
                                         <?php elseif (UserConnection::isInstance(new Entreprise())) : ?><?=/** @var Entreprise $user */ $user->getRaisonSociale()?>
                                         <?php else : ?>secrétariat
                                         <?php endif ?>
@@ -185,6 +185,23 @@ use Stageo\Model\Object\Secretaire;
                                     <ul class="py-2" aria-labelledby="user-menu-button">
                                         <li>
                                             <a href="<?= Action::ADMIN_DASH->value?>"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Tableau de bord</a>
+                                        </li>
+                                        <li>
+                                            <a href="#"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
+                                        </li>
+                                        <li>
+                                            <a href="<?=Action::SIGN_OUT->value?>"
+                                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
+                                        </li>
+                                    </ul>
+                                <?php endif ?>
+                                <!-- Menu Prof -->
+                                <?php if (($user instanceof Enseignant && !$user->getEstAdmin())) :?>
+                                    <ul class="py-2" aria-labelledby="user-menu-button">
+                                        <li>
+                                            <a href="#"
                                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Tableau de bord</a>
                                         </li>
                                         <li>

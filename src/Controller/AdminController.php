@@ -190,4 +190,53 @@ class AdminController
             action: Action::HOME,
         );
     }
+
+    public function supprimerAdminForm(){
+        $admis = (new AdminRepository())->select();
+        $user = UserConnection::getSignedInUser();
+        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+            return new Response(
+                template: "admin/supprimerAdmin.php",
+                params: [
+                    "title" => "Delete Admin",
+                    "admins" => $admis
+                ]
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
+        );
+    }
+
+    public function supprimerAdmin(){
+        $user = UserConnection::getSignedInUser();
+        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+            if ((new AdminRepository())->getByLogin($_REQUEST["login"])){
+                (new AdminRepository())->delete([new QueryCondition("login", ComparisonOperator::EQUAL, $_REQUEST["login"])]);
+                $user = (new EnseignantRepository())->getByLogin($user->getLogin());
+                UserConnection::signOut();
+                UserConnection::signIn($user);
+                FlashMessage::add(
+                    content: "Admin supprimer !",
+                    type: FlashType::SUCCESS
+                );
+                return new Response(
+                    action: Action::ADMIN_DASH
+                );
+            }else {
+                FlashMessage::add(
+                    content: "Aucun Admin connue avec ce Login!",
+                    type: FlashType::ERROR
+                );
+                return new Response(
+                    action: Action::ADMIN_DASH
+                );
+            }
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
+        );
+    }
 }
