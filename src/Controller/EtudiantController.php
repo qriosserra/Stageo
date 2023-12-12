@@ -56,7 +56,7 @@ class EtudiantController
     {
         $login = $_REQUEST["login"];
         $password = $_REQUEST["password"];
-        if (!Token::verify(Action::ETUDIANT_SIGN_IN_FORM, $_REQUEST["token"]))
+        if (!Token::verify(Action::ETUDIANT_SIGN_IN_FORM, $_REQUEST["token"]) && !Token::verify(Action::ADMIN_SIGN_IN_FORM, $_REQUEST["token"]) )
             throw new InvalidTokenException();
         if (Token::isTimeout(Action::ETUDIANT_SIGN_IN_FORM)) {
             throw new TokenTimeoutException(

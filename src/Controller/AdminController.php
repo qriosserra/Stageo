@@ -110,7 +110,7 @@ class AdminController
         );
         UserConnection::signIn($prof);
         return new Response(
-            action: Action::LISTE_OFFRE
+            action: Action::ADMIN_DASH
         );
     }
 
