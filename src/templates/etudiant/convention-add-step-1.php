@@ -27,12 +27,12 @@ include __DIR__ . "/../macros/button.php";
     </div>
     <div class="max-w-lg mx-auto p-8 space-y-4">
         <h4 class="text-center">Informations générales</h4>
-        <form action="<?=Action::ETUDIANT_CONVENTION_ADD_STEP_2->value?>" method="post" class="bg-white grid grid-cols-2 gap-4 p-6 rounded shadow-md border-t-4 border-blue-500">
-            <?=field("thematique", "Thématique*", "text", "Entrez la thématique de la convention", Pattern::NAME, false, $convention->getThematique(), "col-span-2")?>
-            <?=field("sujet", "Sujet*", "text", "Entrez le sujet", Pattern::NAME, true, $convention->getSujet(), "col-span-2")?>
-            <?=field("origine_stage", "Origine du stage*", "text", "Entrez l'origine de la mission", PATTERN::NAME, true, $convention->getOrigineStage())?>
-            <?=dropdown("type_convention", "Type de convention*", $convention->getTypeConvention(), null, 1 , $type_conventions)?>
-            <?=textarea("taches", "Tâches*", "Entrez les tâches et fonctions que vous aurez en entreprise", 4, false, $convention->getTaches(), "col-span-2")?>
+        <form action="<?=Action::ETUDIANT_CONVENTION_ADD_STEP_1->value?>" method="post" class="bg-white grid grid-cols-2 gap-4 p-6 rounded shadow-md border-t-4 border-blue-500">
+            <?=field("thematique", "Thématique", "text", "Entrez la thématique de la convention", Pattern::NAME, false, $convention->getThematique(), "col-span-2")?>
+            <?=field("sujet", "Sujet", "text", "Entrez le sujet", Pattern::NAME, false, $convention->getSujet(), "col-span-2")?>
+            <?=field("origine_stage", "Origine du stage", "text", "Entrez l'origine de la mission", PATTERN::NAME, false, $convention->getOrigineStage())?>
+            <?=dropdown("type_convention", "Type de convention", "Choisissez un type de convention", null, $convention->getTypeConvention(), $type_conventions)?>
+            <?=textarea("taches", "Tâches", "Entrez les tâches et fonctions que vous aurez en entreprise", 4, false, $convention->getTaches(), "col-span-2")?>
             <?=textarea("commentaires" , "Commentaires", "Entrez les commentaires", 4, false, $convention->getCommentaires(), "col-span-2")?>
             <?=textarea("details" , "Détails", "Entrez les détails", 4, false, $convention->getDetails(), "col-span-2")?>
             <?=submit("Suivant", "col-span-2")?>

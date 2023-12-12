@@ -55,10 +55,9 @@ enum Action: string
     case ETUDIANT_CONVENTION_ADD_STEP_2 = "?c=etudiant&a=conventionAddStep2";
     case ETUDIANT_CONVENTION_ADD_STEP_3_FORM = "?c=etudiant&a=conventionAddStep3Form";
     case ETUDIANT_CONVENTION_ADD_STEP_3 = "?c=etudiant&a=conventionAddStep3";
-    case ETUDIANT_CONVENTION_ADD_BROUILLON = "?c=etudiant&a=conventionBrouillon";
+    case ETUDIANT_SOUMETTRE_CONVENTION = "?c=etudiant&a=soumettreConvention";
     case SECRETAIRE_LISTE_CONVENTIONS = "?c=secretaire&a=listeConventions";
     case SECRETAIRE_CONVENTION_DETAILS = "?c=secretaire&a=conventionDetails&id_convention=";
-    case TEST_EMAIL = "?a=testEmail";
     case Profile_Etudiant = "?c=etudiant&a=afficherProfile";
     case Profile_METTRE_A_JOUR_ETUDIANT = "?c=etudiant&a=MettreAJourProfile";
     case SECRETAIRE_CONVENTION_VALIDATION = "?c=secretaire&a=conventionValidation";

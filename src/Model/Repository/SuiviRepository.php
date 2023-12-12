@@ -17,11 +17,16 @@ class SuiviRepository extends CoreRepository
 
     public function getValide(): ?CoreObject
     {
-        return $this->select([new QueryCondition("valide", ComparisonOperator::EQUAL, true)])[0] ?? null;
+        return $this->select(new QueryCondition("valide", ComparisonOperator::EQUAL, true))[0] ?? null;
     }
 
     public function getModifiable(): ?CoreObject
     {
-        return $this->select([new QueryCondition("modifiable", ComparisonOperator::EQUAL, true)])[0] ?? null;
+        return $this->select(new QueryCondition("modifiable", ComparisonOperator::EQUAL, true))[0] ?? null;
+    }
+
+    public function getByIdConvention(?int $id): ?CoreObject
+    {
+        return $this->select(new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id))[0] ?? null;
     }
 }

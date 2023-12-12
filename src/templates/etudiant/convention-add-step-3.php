@@ -10,7 +10,8 @@ include __DIR__ . "/../macros/button.php";
 /**
  * @var string $token
  * @var Convention $convention
- * @var array $type_conventions
+ * @var array $distributions_commune
+ * @var array $nomsEntreprise
  */
 ?>
 <main class="bg-gray-100 w-full">
@@ -27,11 +28,11 @@ include __DIR__ . "/../macros/button.php";
     </div>
     <div class="max-w-lg mx-auto p-8 space-y-4">
         <h4 class="text-center">Entreprise et adresse</h4>
-        <form action="<?=Action::ETUDIANT_CONVENTION_ADD_STEP_2->value?>" method="post" class="bg-white grid grid-cols-2 gap-4 p-6 rounded shadow-md border-t-4 border-blue-500">
+        <form action="<?=Action::ETUDIANT_CONVENTION_ADD_STEP_3->value?>" method="post" class="bg-white grid grid-cols-2 gap-4 p-6 rounded shadow-md border-t-4 border-blue-500">
             <?=dropdown("entreprise", "Entreprise*", $convention->getIdEntreprise(), null, 1, $nomsEntreprise )?>
             <?=dropdown("id_distribution_commune", "Commune*", $convention->getIdDistributionCommune(), null, 1 , $distributions_commune)?>
             <?=field("numero_voie", "Adresse de l'établissement d'accueil", "text", null, Pattern::NAME, false, $convention->getNumeroVoie(), "col-span-2")?>
-            <?=submit("Suivant", "col-span-2")?>
+            <?=submit("Enregistrer comme brouillon", "col-span-2")?>
             <?=token($token)?>
         </form>
     </div>
