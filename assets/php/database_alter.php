@@ -23,7 +23,7 @@ ADD FOREIGN KEY (id_entreprise) REFERENCES stg_entreprise(id_entreprise) ON DELE
 
 ALTER TABLE stg_convention
 ADD FOREIGN KEY (id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification) ON DELETE SET NULL,
-ADD FOREIGN KEY (id_enseignant) REFERENCES stg_enseignant(id_enseignant) ON DELETE SET NULL,
+ADD FOREIGN KEY (login_enseignant) REFERENCES stg_enseignant(login) ON DELETE SET NULL,
 ADD FOREIGN KEY (id_tuteur) REFERENCES stg_tuteur(id_tuteur) ON DELETE SET NULL,
 ADD FOREIGN KEY (id_entreprise) REFERENCES stg_entreprise(id_entreprise) ON DELETE SET NULL,
 ADD FOREIGN KEY (id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune) ON DELETE SET NULL,
