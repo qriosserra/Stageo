@@ -23,11 +23,12 @@ CREATE TABLE stg_etape(
 );
 
 CREATE TABLE stg_enseignant(
-   id_enseignant INT AUTO_INCREMENT,
+   login VARCHAR(256),
    prenom VARCHAR(256),
+   estAdmin BOOLEAN DEFAULT FALSE,
    nom VARCHAR(256),
    email VARCHAR(320),
-   PRIMARY KEY(id_enseignant)
+   PRIMARY KEY(login)
 );
 
 CREATE TABLE stg_commune(
@@ -55,12 +56,8 @@ CREATE TABLE stg_categorie(
 );
 
 CREATE TABLE stg_admin(
-   id_admin INT AUTO_INCREMENT,
-   email VARCHAR(320),
-   hashed_password VARCHAR(256),
-   nom VARCHAR(256),
-   prenom VARCHAR(256),
-   PRIMARY KEY(id_admin)
+   login VARCHAR(256),
+   PRIMARY KEY(login)
 );
 
 CREATE TABLE stg_taille_entreprise(
@@ -144,7 +141,7 @@ CREATE TABLE stg_entreprise(
    telephone VARCHAR(20),
    fax VARCHAR(20),
    site VARCHAR(256),
-   valide BOOL NOT NULL DEFAULT FALSE,
+   valide BOOLEAN NOT NULL DEFAULT FALSE,
    id_taille_entreprise VARCHAR(3),
    id_type_structure INT,
    id_statut_juridique VARCHAR(4),
@@ -183,8 +180,8 @@ CREATE TABLE stg_offre(
    id_unite_gratification INT,
    id_entreprise INT NOT NULL,
    niveau VARCHAR(12),
-   valider BOOL NOT NULL DEFAULT FALSE,
-   valider_par_etudiant BOOL NOT NULL DEFAULT FALSE,
+   valider BOOLEAN NOT NULL DEFAULT FALSE,
+   valider_par_etudiant BOOLEAN NOT NULL DEFAULT FALSE,
    PRIMARY KEY(id_offre),
    FOREIGN KEY(login) REFERENCES stg_etudiant(login),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
@@ -203,7 +200,7 @@ CREATE TABLE stg_convention(
    details VARCHAR(3064),
    date_debut DATE,
    date_fin DATE,
-   interruption BOOL,
+   interruption BOOLEAN,
    date_interruption_debut DATE,
    date_interruption_fin DATE,
    heures_total INT,
@@ -233,11 +230,11 @@ CREATE TABLE stg_suivi(
    id_suivi INT AUTO_INCREMENT,
    date_creation DATETIME,
    date_modification DATETIME,
-   modifiable BOOL NOT NULL DEFAULT TRUE,
-   valide BOOL NOT NULL,
+   modifiable BOOLEAN NOT NULL DEFAULT TRUE,
+   valide BOOLEAN NOT NULL,
    raison_refus VARCHAR(3064),
-   valide_pedagogiquement BOOL NOT NULL DEFAULT FALSE,
-   avenants BOOL DEFAULT FALSE,
+   valide_pedagogiquement BOOLEAN NOT NULL DEFAULT FALSE,
+   avenants BOOLEAN DEFAULT FALSE,
    details_avenants VARCHAR(256),
    date_retour DATE,
    id_convention INT NOT NULL,

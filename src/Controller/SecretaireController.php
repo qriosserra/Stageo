@@ -98,7 +98,8 @@ class SecretaireController
     }
     public function signUpForm(): Response
     {
-        if (UserConnection::isInstance(new Admin()) || UserConnection::isInstance(new Secretaire())){
+        $user = UserConnection::getSignedInUser();
+        if ($user instanceof  Enseignant && $user->getEstAdmin() || UserConnection::isInstance(new Secretaire())){
             return new Response(
                 template: "secretaire/sign-up.php",
                 params: [

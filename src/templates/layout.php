@@ -10,6 +10,7 @@
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Admin;
+use Stageo\Model\Object\Enseignant;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Etudiant;
 use Stageo\Model\Object\Secretaire;
@@ -122,7 +123,7 @@ use Stageo\Model\Object\Secretaire;
                                     id="user-dropdown">
                                 <div class="px-4 py-3">
                                     <span class="block text-sm text-gray-900 dark:text-white">
-                                        <?php if (UserConnection::isInstance(new Admin()) || UserConnection::isInstance(new Etudiant())) :?><?=/** @var Admin|Etudiant $user */ $user->getNom()." ".$user->getPrenom()?>
+                                        <?php if (($user instanceof Enseignant && $user->getEstAdmin()) || UserConnection::isInstance(new Etudiant())) :?><?=/** @var Admin|Etudiant $user */ $user->getNom()." ".$user->getPrenom()?>
                                         <?php elseif (UserConnection::isInstance(new Entreprise())) : ?><?=/** @var Entreprise $user */ $user->getRaisonSociale()?>
                                         <?php else : ?>secrétariat
                                         <?php endif ?>
@@ -180,7 +181,7 @@ use Stageo\Model\Object\Secretaire;
                                     </ul>
                                 <?php endif ?>
                                 <!-- Menu Admin -->
-                                <?php if (UserConnection::isInstance(new Admin())) :?>
+                                <?php if (($user instanceof Enseignant && $user->getEstAdmin())) :?>
                                     <ul class="py-2" aria-labelledby="user-menu-button">
                                         <li>
                                             <a href="<?= Action::ADMIN_DASH->value?>"
@@ -623,12 +624,12 @@ use Stageo\Model\Object\Secretaire;
                             </div>
                         </li>
                         <?php endif?>
-                        <?php if($user instanceof Admin || $user instanceof Secretaire) :?>
+                        <?php if(($user instanceof Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire) :?>
                             <li class="relative ">
                                 <button
                                         class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500"
                                         id="dropdownButtonEntreprise">
-                                    <a href="<?php if($user instanceof Admin) :?><?=Action::ADMIN_DASH->value?>
+                                    <a href="<?php if($user instanceof Enseignant && $user->getEstAdmin()) :?><?=Action::ADMIN_DASH->value?>
                                     <?php else: ?><?=Action::SECRETAIRE_DASH->value?><?php endif ?>">Dashboard</a>
                                 </button>
                             </li>
@@ -636,26 +637,26 @@ use Stageo\Model\Object\Secretaire;
                     </ul>
                 </div>
     <?php endif ?>
-    <!----------------------------Message Flash----------------------------------------->
-    <?php if (!empty($flashMessages)): ?>
-        <ul class="flash-messages-container">
-            <?php foreach ($flashMessages as $flashMessage): ?>
-                <li class="flash-message <?=$flashMessage->getType()?>">
-                    <?php if ($flashMessage->getType() === "success"): ?>
-                        <i class="success fi fi-rr-check-circle text-red-500"></i>
-                    <?php elseif ($flashMessage->getType() === "info"): ?>
-                        <i class="info fi fi-rr-info"></i>
-                    <?php elseif ($flashMessage->getType() === "warning"): ?>
-                        <i class="warning fi fi-rr-exclamation"></i>
-                    <?php elseif ($flashMessage->getType() === "error"): ?>
-                        <i class="error fi fi-rr-cross-circle"></i>
-                    <?php endif ?>
-                    <p><?=$flashMessage->getContent()?></p>
-                </li>
-            <?php endforeach ?>
-        </ul>
-    <?php endif ?>
-    <p id="cssgenerator" class="!hidden"></p>
+                <!----------------------------Message Flash----------------------------------------->
+                <?php if (!empty($flashMessages)): ?>
+                    <ul class="flash-messages-container">
+                        <?php foreach ($flashMessages as $flashMessage): ?>
+                            <li class="flash-message <?=$flashMessage->getType()?>">
+                                <?php if ($flashMessage->getType() === "success"): ?>
+                                    <i class="success fi fi-rr-check-circle text-red-500"></i>
+                                <?php elseif ($flashMessage->getType() === "info"): ?>
+                                    <i class="info fi fi-rr-info"></i>
+                                <?php elseif ($flashMessage->getType() === "warning"): ?>
+                                    <i class="warning fi fi-rr-exclamation"></i>
+                                <?php elseif ($flashMessage->getType() === "error"): ?>
+                                    <i class="error fi fi-rr-cross-circle"></i>
+                                <?php endif ?>
+                                <p><?=$flashMessage->getContent()?></p>
+                            </li>
+                        <?php endforeach ?>
+                    </ul>
+                <?php endif ?>
+                <p id="cssgenerator" class="!hidden"></p>
 </header>
 <?php require_once $template?>
 <!----------------------------bar du bas----------------------------------------->

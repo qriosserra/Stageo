@@ -13,9 +13,6 @@ INSERT INTO stg_categorie (libelle) VALUES
 INSERT INTO stg_etape (id_etape, libelle) VALUES
 ('TAIB21', 'BUT 2 Informatique - Réalisation d''application, conception, développement et validation');
 
-INSERT INTO stg_admin (email, hashed_password, nom, prenom) VALUES
-('stageo@gmail.com', '\$argon2id\$v=19\$m=65536,t=4,p=1\$VEJ2VUlvRHZLUTdsemc1QQ\$MRn17cUbNTGBKeyMdY2fB8bW22IhptVUESASM4t7jew','stageo','stageo');
-
 INSERT INTO stg_statut_juridique (id_statut_juridique, libelle) VALUES
 ('EI', 'EI - Entreprise individuelle'),
 ('EURL', 'EURL - Entreprise unipersonnelle à responsabilité limitée'),

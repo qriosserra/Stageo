@@ -75,6 +75,9 @@ class EtudiantController
             action: Action::ETUDIANT_SIGN_IN_FORM,
             params: ["login" => $login]
         );
+        if ($response["annee"]==null){
+            return (new AdminController())->signIn($response);
+        }
         $etudiant = (new EtudiantRepository)->getByLogin($login);
         if (is_null($etudiant)) {
             $etudiant = new Etudiant(
