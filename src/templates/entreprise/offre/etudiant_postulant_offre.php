@@ -7,6 +7,7 @@ use \Stageo\Model\Object\Offre;
 use Stageo\Lib\enums\Action;
 use \Stageo\Model\Object\Postuler;
 use \Stageo\Model\Repository\EtudiantRepository;
+use \Stageo\Model\Repository\OffreRepository;
 
 include __DIR__ . "/../../macros/button.php";
 include __DIR__ . "/../../macros/input.php";
@@ -137,9 +138,11 @@ include __DIR__ . "/../../macros/input.php";
                             <?= substr($p->getComplement(), 0, 50) . (strlen($p->getComplement()) > 50 ? '...' : '') ?>
                         </a>
                     </td>
+                    <?php if (!(((new OffreRepository())->getById($p->getIdOffre()))->getLogin())): ?>
                     <td class="text-green-600  items-center text-center text-base ">
                         <a href="<?=Action::ENTREPRISE_ACCEPTE_ETUDIANT_OFFRE->value."&login=".$p->getLogin()."&id=".$p->getIdOffre()?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Accepter</a>
                     </td>
+                    <?php endif; ?>
                 </tr>
                 <!-- Pop Up -->
                 <div class="modal" id="modal<?= $p->getId() ?>">
