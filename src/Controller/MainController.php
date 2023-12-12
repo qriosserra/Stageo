@@ -34,6 +34,11 @@ class MainController
      */
     public function home(): Response
     {
+        FlashMessage::add(
+            content: "Bienvenue sur Stageo",
+            type: FlashType::SUCCESS
+        );
+
         return new Response(
             template: "home.php",
             params: [

@@ -653,6 +653,8 @@ use Stageo\Model\Object\Secretaire;
                     <?php endif ?>
                 </ul>
             </div>
+            </div>
+            </nav>
             <?php endif ?>
             <!----------------------------Message Flash----------------------------------------->
             <?php if (!empty($flashMessages)): ?>
