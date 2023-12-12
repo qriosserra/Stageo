@@ -44,13 +44,24 @@ class AdminController
 
     public function signUp(): Response
     {
-        FlashMessage::add(
-            content: "Inscription en cours de réalisation",
-            type: FlashType::SUCCESS
-        );
-        return new Response(
-            action: Action::HOME
-        );
+        if((new AdminRepository())->getByLogin($_REQUEST["login"]) == null) {
+            (new AdminRepository())->insert(new Admin($_REQUEST["login"]));
+            FlashMessage::add(
+                content: "Ajout de ce login dans la base d'admins",
+                type: FlashType::SUCCESS
+            );
+            return new Response(
+                action: Action::ADMIN_DASH
+            );
+        }else{
+            FlashMessage::add(
+                content: "Ce login est déjà Admin !",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::ADMIN_DASH
+            );
+        }
     }
     public function signUpForm(): Response
     {
@@ -109,9 +120,16 @@ class AdminController
             type: FlashType::SUCCESS
         );
         UserConnection::signIn($prof);
-        return new Response(
-            action: Action::ADMIN_DASH
-        );
+        if ($prof instanceof Enseignant && $prof ->getEstAdmin()) {
+            return new Response(
+                action: Action::ADMIN_DASH
+            );
+        }else{
+            return new Response(
+                action: Action::HOME
+            );
+
+        }
     }
 
     public function listeEntreprises(){

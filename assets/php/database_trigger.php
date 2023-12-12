@@ -17,6 +17,25 @@ END //
 
 DELIMITER ;
 
+    DELIMITER //
+
+
+CREATE TRIGGER update_estAdmin_insert_trigger AFTER INSERT ON stg_admin FOR EACH ROW
+BEGIN
+    UPDATE stg_enseignant
+    SET estAdmin = TRUE
+    WHERE login = NEW.login;
+END //
+
+
+CREATE TRIGGER update_estAdmin_delete_trigger AFTER DELETE ON stg_admin FOR EACH ROW
+BEGIN
+    UPDATE stg_enseignant
+    SET estAdmin = FALSE
+    WHERE login = OLD.login;
+END //
+
+DELIMITER ;
 
 
 
