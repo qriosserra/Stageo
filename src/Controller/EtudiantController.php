@@ -848,8 +848,6 @@ class EtudiantController
                 "communes" => $communes,
                 "voie" => $etudiant->getNumeroVoie(),
                 "offres" => $offres,
-                "nav" => false,
-                "sidebar" => true
             ]
         );
     }
