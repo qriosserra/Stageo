@@ -4,9 +4,7 @@ namespace Stageo\Model\Object;
 
 use Stageo\Lib\Database\NullDataType;
 use Stageo\Lib\Database\PrimaryKey;
-use Stageo\Lib\Database\Table;
 
-#[Table("suivi")]
 class Suivi extends CoreObject
 {
     public function __construct(#[PrimaryKey] private ?string    $id_suivi = null,

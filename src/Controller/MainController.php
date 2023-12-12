@@ -239,4 +239,21 @@ class MainController
             ]
         );
     }
+
+    public function testEmail(): Response
+    {
+        $email = new Email(
+            destinataire: "test@test.com",
+            objet: "Test",
+            contenu: "Ceci est un test"
+        );
+        if (!Mailer::send($email))
+            throw new ControllerException("Impossible d'envoyer l'email");
+        FlashMessage::add(
+            content: "Email test envoyé",
+            type: FlashType::SUCCESS);
+        return new Response(
+            action: Action::HOME
+        );
+    }
 }

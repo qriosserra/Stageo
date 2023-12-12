@@ -8,7 +8,7 @@ use Stageo\Lib\Database\Table;
 #[Table("enseignant")]
 class Enseignant extends User
 {
-    public function __construct(private ?string                     $login = null,
+    public function __construct(private ?int                     $id_enseignant = null,
                                 private string|NullDataType|null $email = null,
                                 private string|NullDataType|null $nom = null,
                                 private string|NullDataType|null $prenom = null,
@@ -17,22 +17,20 @@ class Enseignant extends User
     }
 
     /**
-     * @return string|null
+     * @return int|null
      */
-    public function getLogin(): ?string
+    public function getIdEnseignant(): ?int
     {
-        return $this->login;
+        return $this->id_enseignant;
     }
 
     /**
-     * @param string|null $login
+     * @param int|null $id_enseignant
      */
-    public function setLogin(?string $login): void
+    public function setIdEnseignant(?int $id_enseignant): void
     {
-        $this->login = $login;
+        $this->id_enseignant = $id_enseignant;
     }
-
-
 
     /**
      * @return NullDataType|string|null

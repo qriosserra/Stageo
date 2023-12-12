@@ -24,14 +24,14 @@ include __DIR__ . "/../macros/button.php";
     <div class="bg-gray-100 flex items-center justify-center h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
         <h2 class="text-2xl font-bold mb-6 text-center">Connectez-vous au Centre administrateurs</h2>
-        <form class="space-y-4" action="<?=Action::ETUDIANT_SIGN_IN->value?>" method="post">
+        <form class="space-y-4" action="<?=Action::ADMIN_SIGN_IN->value?>" method="post">
             <div>
-            <?=field("login", "Login*", "text", "Entrez votre login", null, true, $email ?? null)?>
+            <?=field("email", "Email*", "email", "Entrez l'email utilisé par l'entreprise", null, true, $email ?? null)?>
 
             </div>
 
             <div>
-            <?=field("password", "Mot de passe", "password", "Entrez le mot de passe", Pattern::PASSWORD, true)?>
+            <?=field("password", "Mot de passe", "password", "Entrez le mot de passe d'entreprise", Pattern::PASSWORD, true)?>
             <?=token($token)?>
 
             </div>

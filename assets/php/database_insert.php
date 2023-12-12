@@ -13,6 +13,9 @@ INSERT INTO stg_categorie (libelle) VALUES
 INSERT INTO stg_etape (id_etape, libelle) VALUES
 ('TAIB21', 'BUT 2 Informatique - Réalisation d''application, conception, développement et validation');
 
+INSERT INTO stg_admin (email, hashed_password, nom, prenom) VALUES
+('stageo@gmail.com', '\$argon2id\$v=19\$m=65536,t=4,p=1\$VEJ2VUlvRHZLUTdsemc1QQ\$MRn17cUbNTGBKeyMdY2fB8bW22IhptVUESASM4t7jew','stageo','stageo');
+
 INSERT INTO stg_statut_juridique (id_statut_juridique, libelle) VALUES
 ('EI', 'EI - Entreprise individuelle'),
 ('EURL', 'EURL - Entreprise unipersonnelle à responsabilité limitée'),
@@ -74,7 +77,6 @@ INSERT INTO `stg_offre` (`id_offre`, `description`, `thematique`, `secteur`, `ta
 (NULL, 'Stage en développement mobile pour créer une application Android innovante.', 'Développement d\'applications mobiles', 'Informatique / Applications mobiles', 'Développement d\'applications Android, tests d\'applications, documentation technique.', 'Le stagiaire pourra exprimer sa créativité tout en apprenant à utiliser des outils de développement mobile de pointe.', '7.77', '1', '1', NULL, 'Alternance'),
 (NULL, 'Recherche d\'un stagiaire pour assister le chef de projet dans la gestion de projets informatiques.', 'Gestion de projets informatiques', 'Informatique / Gestion de projets', 'Suivi de l\'avancement des projets, préparation des documents de projet, communication avec les membres de l\'équipe.', 'Le stagiaire apprendra les compétences essentielles en gestion de projet et travaillera sur des projets stimulants.', '4.05', '2', '1', NULL, 'Stage&Alternance');
 
-INSERT INTO `stg_admin` (`login`) VALUES ('coletta');
 SQL;
 
 echo $query;

@@ -32,6 +32,8 @@ enum Action: string
     case ENTREPRISE_MODIFICATION_OFFRE_FORM = "?c=entreprise&a=afficherFormulaireMiseAJourOffre";
     case ENTREPRISE_MODIFICATION_OFFRE = "?c=entreprise&a=mettreAJourOffre";
     case ENTREPRISE_DELETE_OFFRE = "?c=entreprise&a=deleteOffre";
+    case ADMIN_MODIFICATION_INFO_FORM = "?c=admin&a=afficherFormulaireMiseAJour";
+    case ADMIN_MODIFICATION_INFO = "?c=admin&a=mettreAJourAdmin";
     case ADMIN_SIGN_UP_FORM = "?c=admin&a=signUpForm";
     case ADMIN_SIGN_UP = "?c=admin&a=signUp";
     case ADMIN_SIGN_IN_FORM = "?c=admin&a=signInForm";
@@ -40,8 +42,6 @@ enum Action: string
     case ADMIN_LISTEENTREPRISE = "?c=admin&a=listeEntreprises";
     case ADMIN_VALIDEENTREPRISE = "?c=admin&a=validerEntreprise";
     case ADMIN_SUPRIMERENTREPRISE = "?c=admin&a=suprimerEntreprise";
-    case ADMIN_SUPRIMERADMIN_FROM = "?c=admin&a=supprimerAdminForm";
-    case ADMIN_SUPRIMERADMIN = "?c=admin&a=supprimerAdmin";
     case ABOUT = "?a=about";
     case CSVFORM = "?a=csvForm";
     case CSV = "?a=csv&XDEBUG_SESSION_START=";
@@ -49,17 +49,11 @@ enum Action: string
     case SECRETAIRE_SIGN_UP = "?c=secretaire&a=signUp";
     case SECRETAIRE_SIGN_IN = "?c=secretaire&a=signIn";
     case SECRETAIRE_DASH = "?c=secretaire&a=dashboard";
-    case ETUDIANT_CONVENTION_ADD_STEP_1_FORM = "?c=etudiant&a=conventionAddStep1Form";
-    case ETUDIANT_CONVENTION_ADD_STEP_1 = "?c=etudiant&a=conventionAddStep1";
-    case ETUDIANT_CONVENTION_ADD_STEP_2_FORM = "?c=etudiant&a=conventionAddStep2Form";
-    case ETUDIANT_CONVENTION_ADD_STEP_2 = "?c=etudiant&a=conventionAddStep2";
-    case ETUDIANT_CONVENTION_ADD_STEP_3_FORM = "?c=etudiant&a=conventionAddStep3Form";
-    case ETUDIANT_CONVENTION_ADD_STEP_3 = "?c=etudiant&a=conventionAddStep3";
-    case ETUDIANT_SOUMETTRE_CONVENTION = "?c=etudiant&a=soumettreConvention";
+    case ETUDIANT_CONVENTION_ADD_FORM = "?c=etudiant&a=conventionAddForm";
+    case ETUDIANT_CONVENTION_ADD = "?c=etudiant&a=conventionAdd";
     case SECRETAIRE_LISTE_CONVENTIONS = "?c=secretaire&a=listeConventions";
     case SECRETAIRE_CONVENTION_DETAILS = "?c=secretaire&a=conventionDetails&id_convention=";
-    case SECRETAIRE_CONVENTION_VALIDATION = "?c=secretaire&a=conventionValidation";
-    case SECRETAIRE_CONVENTION_REFUS = "?c=secretaire&a=conventionRefus";
+    case TEST_EMAIL = "?a=testEmail";
     case PROFILE_ETUDIANT = "?c=etudiant&a=afficherProfile";
     case PROFILE_METTRE_A_JOUR_ETUDIANT = "?c=etudiant&a=MettreAJourProfile";
     case VALIDER_DEFINITIVEMENT_OFFRE = "?c=etudiant&a=validerDefinitivement";

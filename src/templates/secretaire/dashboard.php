@@ -30,5 +30,4 @@ include __DIR__."/../macros/button.php";
         <i class="fi fi-rr-document"></i>
         <span>Accéder la liste des conventions [work in progress]</span>
     </a>
-</div>
 </main>

@@ -23,12 +23,11 @@ CREATE TABLE stg_etape(
 );
 
 CREATE TABLE stg_enseignant(
-   login VARCHAR(256),
+   id_enseignant INT AUTO_INCREMENT,
    prenom VARCHAR(256),
-   estAdmin BOOLEAN DEFAULT FALSE,
    nom VARCHAR(256),
    email VARCHAR(320),
-   PRIMARY KEY(login)
+   PRIMARY KEY(id_enseignant)
 );
 
 CREATE TABLE stg_commune(
@@ -56,8 +55,12 @@ CREATE TABLE stg_categorie(
 );
 
 CREATE TABLE stg_admin(
-   login VARCHAR(256),
-   PRIMARY KEY(login)
+   id_admin INT AUTO_INCREMENT,
+   email VARCHAR(320),
+   hashed_password VARCHAR(256),
+   nom VARCHAR(256),
+   prenom VARCHAR(256),
+   PRIMARY KEY(id_admin)
 );
 
 CREATE TABLE stg_taille_entreprise(
@@ -141,7 +144,7 @@ CREATE TABLE stg_entreprise(
    telephone VARCHAR(20),
    fax VARCHAR(20),
    site VARCHAR(256),
-   valide BOOLEAN NOT NULL DEFAULT FALSE,
+   valide BOOL NOT NULL DEFAULT FALSE,
    id_taille_entreprise VARCHAR(3),
    id_type_structure INT,
    id_statut_juridique VARCHAR(4),
@@ -180,8 +183,8 @@ CREATE TABLE stg_offre(
    id_unite_gratification INT,
    id_entreprise INT NOT NULL,
    niveau VARCHAR(12),
-   valider BOOLEAN NOT NULL DEFAULT FALSE,
-   valider_par_etudiant BOOLEAN NOT NULL DEFAULT FALSE,
+   valider BOOL NOT NULL DEFAULT FALSE,
+   valider_par_etudiant BOOL NOT NULL DEFAULT FALSE,
    PRIMARY KEY(id_offre),
    FOREIGN KEY(login) REFERENCES stg_etudiant(login),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
@@ -200,7 +203,7 @@ CREATE TABLE stg_convention(
    details VARCHAR(3064),
    date_debut DATE,
    date_fin DATE,
-   interruption BOOLEAN,
+   interruption BOOL,
    date_interruption_debut DATE,
    date_interruption_fin DATE,
    heures_total INT,
@@ -212,14 +215,14 @@ CREATE TABLE stg_convention(
    code_elp VARCHAR(256),
    numero_voie VARCHAR(256),
    id_unite_gratification INT,
-   login_enseignant VARCHAR(256),
+   id_enseignant INT,
    id_tuteur INT,
    id_entreprise INT,
    id_distribution_commune INT,
    login VARCHAR(256),
    PRIMARY KEY(id_convention),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
-   FOREIGN KEY(login_enseignant) REFERENCES stg_enseignant(login),
+   FOREIGN KEY(id_enseignant) REFERENCES stg_enseignant(id_enseignant),
    FOREIGN KEY(id_tuteur) REFERENCES stg_tuteur(id_tuteur),
    FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise),
    FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune),
@@ -230,11 +233,11 @@ CREATE TABLE stg_suivi(
    id_suivi INT AUTO_INCREMENT,
    date_creation DATETIME,
    date_modification DATETIME,
-   modifiable BOOLEAN NOT NULL DEFAULT TRUE,
-   valide BOOLEAN NOT NULL,
+   modifiable BOOL NOT NULL DEFAULT TRUE,
+   valide BOOL NOT NULL,
    raison_refus VARCHAR(3064),
-   valide_pedagogiquement BOOLEAN NOT NULL DEFAULT FALSE,
-   avenants BOOLEAN DEFAULT FALSE,
+   valide_pedagogiquement BOOL NOT NULL DEFAULT FALSE,
+   avenants BOOL DEFAULT FALSE,
    details_avenants VARCHAR(256),
    date_retour DATE,
    id_convention INT NOT NULL,
