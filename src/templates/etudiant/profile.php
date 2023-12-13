@@ -28,7 +28,8 @@ use Stageo\Lib\enums\Action;
             </div>
         </div>
     </div> -->
-    <form action="<?=Action::PROFILE_METTRE_A_JOUR_ETUDIANT->value?>" method="post">
+    
+    <form action="<?=Action::PROFILE_METTRE_A_JOUR_ETUDIANT->value?> " method="post" class="m-32">
         <div class="grid w-full grid-cols-1 gap-2 space-y-3 px-4 py-2 lg:space-x-3 lg:space-y-0">
             <div class="auto-cols-auto rounded-lg border border-gray-300 bg-white">
                 <div class="flex justify-center border-b">
@@ -48,7 +49,7 @@ use Stageo\Lib\enums\Action;
                         </div>
                     </div>
                     <div class="px-4 py-2">
-                        <span class="font-semibold tracking-wide">Prenom</span>
+                        <span class="font-semibold tracking-wide">Prénom</span>
                         <div class="flex items-center">
                             <div class="absolute flex items-center border-r px-4 text-gray-600">
                                 <i class="fi fi-rr-user"></i>
@@ -60,9 +61,9 @@ use Stageo\Lib\enums\Action;
                         <span class="font-semibold tracking-wide">Email</span>
                         <div class="flex items-center">
                             <div class="absolute flex items-center border-r px-4 text-gray-600">
-                                <svg class="h-6 w-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
-                                    <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
-                                </svg>
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 4a4 4 0 0 1 4 4v6M5 4a4 4 0 0 0-4 4v6h8M5 4h9M9 14h10V8a3.999 3.999 0 0 0-2.066-3.5M9 14v5m0-5h4v5m-9-8h2m8-4V1h2"/>
+  </svg>
                             </div>
                             <input id="Email" class="flex h-10 w-full items-center rounded border border-gray-300 bg-slate-100 pl-16 text-sm font-normal text-gray-600 focus:outline-none" value="<?= $email?>" readonly />
                         </div>
@@ -71,9 +72,9 @@ use Stageo\Lib\enums\Action;
                         <span class="font-semibold tracking-wide">Téléphone</span>
                         <div class="flex items-center">
                             <div class="absolute flex items-center border-r px-4 text-gray-600">
-                                <svg class="h-6 w-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
-                                    <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
-                                </svg>
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 18 18">
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="m16.344 12.168-1.4-1.4a1.98 1.98 0 0 0-2.8 0l-.7.7a1.98 1.98 0 0 1-2.8 0l-2.1-2.1a1.98 1.98 0 0 1 0-2.8l.7-.7a1.981 1.981 0 0 0 0-2.8l-1.4-1.4a1.828 1.828 0 0 0-2.8 0C-.638 5.323 1.1 9.542 4.78 13.22c3.68 3.678 7.9 5.418 11.564 1.752a1.828 1.828 0 0 0 0-2.804Z"/>
+  </svg>
                             </div>
                             <input id="Tel" class="flex h-10 w-full items-center rounded border border-gray-300 pl-16 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" name="Tel" value="<?= $tel?>" />
                         </div>
@@ -93,9 +94,9 @@ use Stageo\Lib\enums\Action;
                         <span class="font-semibold tracking-wide">Civiliter</span>
                         <div class="flex items-center">
                             <div class="absolute flex items-center border-r px-4 text-gray-600">
-                                <svg class="h-6 w-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
-                                    <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
-                                </svg>
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 18">
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M7 8a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm-2 3h4a4 4 0 0 1 4 4v2H1v-2a4 4 0 0 1 4-4Z"/>
+  </svg>
                             </div>
                             <select id="Civiliter" name="Civiliter" class="flex h-10 w-full items-center rounded border border-gray-300 bg-white pl-16 text-sm font-normal text-gray-600 focus:border focus:outline-none">
                                 <option value="M" <?php if ("M" == $civiliter) echo 'selected'; ?>>HOMME</option>
@@ -108,9 +109,9 @@ use Stageo\Lib\enums\Action;
                         <span class="font-semibold tracking-wide">Commune</span>
                         <div class="flex items-center">
                             <div class="absolute flex items-center border-r px-4 text-gray-600">
-                                <svg class="h-6 w-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
-                                    <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
-                                </svg>
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 5h9M5 9h5m8-8H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4l3.5 4 3.5-4h5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"/>
+  </svg>
                             </div>
                             <select id="Commune" name="Commune" class="flex h-10 w-full items-center rounded border border-gray-300 bg-white pl-16 text-sm font-normal text-gray-600 focus:border focus:outline-none">
                                 <?php foreach ($communes as $commun): ?>
@@ -123,9 +124,9 @@ use Stageo\Lib\enums\Action;
                         <span class="font-semibold tracking-wide">Numéro de Voie</span>
                         <div class="flex items-center">
                             <div class="absolute flex items-center border-r px-4 text-gray-600">
-                                <svg class="h-6 w-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 16">
-                                    <path d="M19 0H1a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V1a1 1 0 0 0-1-1ZM2 6v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6H2Zm11 3a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V8a1 1 0 0 1 2 0h2a1 1 0 0 1 2 0v1Z" />
-                                </svg>
+                            <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.2" d="M5 5h9M5 9h5m8-8H2a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h4l3.5 4 3.5-4h5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z"/>
+  </svg>
                             </div>
                             <input id="Voie" name="Voie" class="flex h-10 w-full items-center rounded border border-gray-300 pl-16 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" value="<?= $voie?>" />
                         </div>
@@ -154,9 +155,9 @@ use Stageo\Lib\enums\Action;
         </div>
     </form>
     </div>
-    <div class="auto-cols-auto rounded-lg border border-gray-300 bg-white">
+    <div class="auto-cols-auto rounded-lg border border-gray-300 bg-white m-32">
         <div class="flex justify-center border-b">
-            <span class="tracking-wide">offres postuler</span>
+            <span class="tracking-wide">Offres postulées</span>
         </div>
         <div class="grid grid-cols-1 gap-2 px-4 py-4 lg:grid lg:grid-cols-4 lg:space-x-3 lg:space-y-0">
             <?php foreach ($offres as $offrecouple): ?>
