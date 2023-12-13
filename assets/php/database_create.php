@@ -23,11 +23,12 @@ CREATE TABLE stg_etape(
 );
 
 CREATE TABLE stg_enseignant(
-   id_enseignant INT AUTO_INCREMENT,
+   login VARCHAR(256),
    prenom VARCHAR(256),
    nom VARCHAR(256),
+   estAdmin BOOL,
    email VARCHAR(320),
-   PRIMARY KEY(id_enseignant)
+   PRIMARY KEY(login)
 );
 
 CREATE TABLE stg_commune(
@@ -55,12 +56,8 @@ CREATE TABLE stg_categorie(
 );
 
 CREATE TABLE stg_admin(
-   id_admin INT AUTO_INCREMENT,
-   email VARCHAR(320),
-   hashed_password VARCHAR(256),
-   nom VARCHAR(256),
-   prenom VARCHAR(256),
-   PRIMARY KEY(id_admin)
+   login VARCHAR(256),
+   PRIMARY KEY(login)
 );
 
 CREATE TABLE stg_taille_entreprise(
@@ -179,12 +176,12 @@ CREATE TABLE stg_offre(
    type VARCHAR(256) NOT NULL DEFAULT 'Stage&Alternance',
    date_debut DATE,
    date_fin DATE,
+   niveau VARCHAR(10),
+   valider BOOL,
+   valider_par_etudiant BOOL,
    login VARCHAR(256),
    id_unite_gratification INT,
    id_entreprise INT NOT NULL,
-   niveau VARCHAR(12),
-   valider BOOL NOT NULL DEFAULT FALSE,
-   valider_par_etudiant BOOL NOT NULL DEFAULT FALSE,
    PRIMARY KEY(id_offre),
    FOREIGN KEY(login) REFERENCES stg_etudiant(login),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
@@ -215,14 +212,14 @@ CREATE TABLE stg_convention(
    code_elp VARCHAR(256),
    numero_voie VARCHAR(256),
    id_unite_gratification INT,
-   id_enseignant INT,
+   login_enseignant VARCHAR(256),
    id_tuteur INT,
    id_entreprise INT,
    id_distribution_commune INT,
    login VARCHAR(256),
    PRIMARY KEY(id_convention),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
-   FOREIGN KEY(id_enseignant) REFERENCES stg_enseignant(id_enseignant),
+   FOREIGN KEY(login_enseignant) REFERENCES stg_enseignant(login),
    FOREIGN KEY(id_tuteur) REFERENCES stg_tuteur(id_tuteur),
    FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise),
    FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune),
@@ -280,6 +277,7 @@ CREATE TABLE stg_postuler(
    FOREIGN KEY(login) REFERENCES stg_etudiant(login),
    FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
 );
+
 
 SQL;
 

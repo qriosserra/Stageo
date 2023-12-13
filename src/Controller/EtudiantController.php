@@ -265,7 +265,7 @@ class EtudiantController
             $convention = (new ConventionRepository)->getByLogin($etudiant->getLogin());
             $convention = is_null($convention) ? new Convention() : $convention;
             $suivi = (new SuiviRepository)->getByIdConvention($convention->getIdConvention());
-            if (!$suivi->getModifiable()) {
+            if ($suivi != null && !$suivi->getModifiable()) {
                 throw new ControllerException(
                     "Vous ne pouvez plus modifier la convention",
                     Action::HOME
