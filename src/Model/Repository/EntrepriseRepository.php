@@ -30,6 +30,30 @@ class EntrepriseRepository extends CoreRepository
         return $this->select([new QueryCondition("unverified_email", ComparisonOperator::EQUAL, $email)])[0] ?? null;
     }
 
+    function getOffreEntreprise($id_entreprise){
+        $query = "Select o.id_offre,count(p.login)
+        from stg_entreprise e
+        join stg_offre o on o.id_entreprise = e.id_entreprise
+        join stg_postuler p on p.id_offre=o.id_offre
+        WHERE e.id_entreprise = :id_entreprise
+        GROUP BY o.id_offre";
+
+        $pdo = DatabaseConnection::getPdo();
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':id_entreprise', $id_entreprise, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $offre = [];
+
+        foreach ($result as $row) {
+            $offre[] = $row['id_offre'];
+        }
+
+        return ['offre' => $offre];
+    }
+
     function getEntreprisesNonValidees() {
         try {
             $query = "SELECT e.id_entreprise, e.email, e.raison_sociale, e.siret, e.numero_voie, e.code_naf, e.telephone, e.fax, e.site, e.confirmer,

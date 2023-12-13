@@ -7,6 +7,7 @@ use Stageo\Controller\Exception\ControllerException;
 use Stageo\Controller\Exception\InvalidTokenException;
 use Stageo\Controller\Exception\TokenTimeoutException;
 use Stageo\Lib\Database\ComparisonOperator;
+use Stageo\Lib\Database\LogicalOperator;
 use Stageo\Lib\Database\NullDataType;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
@@ -31,6 +32,7 @@ use Stageo\Model\Repository\StatutJuridiqueRepository;
 use Stageo\Model\Repository\TailleEntrepriseRepository;
 use Stageo\Model\Repository\TypeStructureRepository;
 use Stageo\Model\Repository\UniteGratificationRepository;
+use function Sodium\add;
 
 class EntrepriseController
 {
@@ -788,32 +790,6 @@ class EntrepriseController
         }
     }
 
-    public static function voirAPostuler():Response{
-        if(UserConnection::isSignedIn()){
-            $id = $_REQUEST["id"];
-            $offre = (new OffreRepository())->getById($id);
-            $user = UserConnection::getSignedInUser();
-            if($user and $offre and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
-                $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
-                $liste_offrePostuler = (new PostulerRepository())->select($condition);
-                return new Response(
-                    template: "entreprise/offre/etudiant_postulant_offre.php",
-                    params: [
-                        "title" => "Liste des etudiant ayant postuler",
-                        "postuler" => $liste_offrePostuler,
-                    ]
-                );
-            }
-            return new Response(
-                action: Action::HOME,
-            );
-        }
-        throw new ControllerException(
-            message: "Vous n'avez pas accès à cette page.",
-            action: Action::HOME
-        );
-    }
-
     public static function accepterEtudiantOffre():Response{
         $id = $_REQUEST["id"];
         $etudiant = $_REQUEST["login"];
@@ -822,7 +798,10 @@ class EntrepriseController
         if($user and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
             $offre->setLogin($etudiant);
             (new OffreRepository())->update($offre);
-            $condition = new QueryCondition("login", ComparisonOperator::EQUAL,$etudiant);
+            $condition = [
+                new QueryCondition("login", ComparisonOperator::EQUAL,$etudiant,LogicalOperator::AND),
+                new QueryCondition("id_offre", ComparisonOperator::EQUAL,$id)
+            ];
             (new PostulerRepository())->delete($condition);
             FlashMessage::add("Etudiant accepter avec success", FlashType::SUCCESS);
             return new Response(
@@ -864,4 +843,57 @@ class EntrepriseController
             action: Action::HOME
         );
     }
+
+    public static function afficherPostuleEtudiantAll():Response{
+        if (UserConnection::isInstance(new Entreprise())) {
+            $result = (new EntrepriseRepository())->getOffreEntreprise(UserConnection::getSignedInUser()->getIdEntreprise());
+            $offre = $result['offre'];
+            $personne = [];
+
+            foreach ($offre as $id) {
+                $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
+                $liste_offrePostuler = (new PostulerRepository())->select($condition);
+                $personne[] = $liste_offrePostuler;
+            }
+
+            return new Response(
+                template: "entreprise/offre/etudiant_postulant_offre.php",
+                params: [
+                    "title" => "Voir les candidats ayant postulé à nos offre",
+                    "postuler"=>$personne
+                ]
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
+        );
+    }
+
+    public static function voirAPostuler():Response{
+        if(UserConnection::isSignedIn()){
+            $id = $_REQUEST["id"];
+            $offre = (new OffreRepository())->getById($id);
+            $user = UserConnection::getSignedInUser();
+            if($user and $offre and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
+                $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
+                $liste_offrePostuler = (new PostulerRepository())->select($condition);
+                return new Response(
+                    template: "entreprise/offre/etudiant_postulant_offre.php",
+                    params: [
+                        "title" => "Liste des etudiant ayant postuler",
+                        "postuler" => $liste_offrePostuler,
+                    ]
+                );
+            }
+            return new Response(
+                action: Action::HOME,
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
+        );
+    }
+
 }
