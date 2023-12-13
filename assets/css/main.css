@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wdth,wght,YTLC@6..12,75..125,200..1000,440..540&display=swap");
 @import url(https://db.onlinewebfonts.com/c/98023254fbc516186b4aa88d1e4415fc?family=Aspira+Wide+W01+Heavy);
 /*
-! tailwindcss v3.3.3 | MIT License | https://tailwindcss.com
+! tailwindcss v3.3.6 | MIT License | https://tailwindcss.com
 */
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -89,15 +89,19 @@ strong {
   font-weight: bolder;
 }
 /*
-1. Use the user's configured `mono` font family by default.
-2. Correct the odd `em` font sizing in all browsers.
+1. Use the user's configured `mono` font-family by default.
+2. Use the user's configured `mono` font-feature-settings by default.
+3. Use the user's configured `mono` font-variation-settings by default.
+4. Correct the odd `em` font sizing in all browsers.
 */
 code,
 kbd,
 samp,
 pre {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* 1 */
-  font-size: 1em; /* 2 */
+  font-feature-settings: normal; /* 2 */
+  font-variation-settings: normal; /* 3 */
+  font-size: 1em; /* 4 */
 }
 /*
 Add the correct font size in all browsers.
@@ -905,6 +909,9 @@ video {
 .max-w-3xl{
   max-width: 48rem;
 }
+.max-w-4xl{
+  max-width: 56rem;
+}
 .max-w-6xl{
   max-width: 72rem;
 }
@@ -937,6 +944,9 @@ video {
 }
 .flex-grow{
   flex-grow: 1;
+}
+.table-auto{
+  table-layout: auto;
 }
 .border-collapse{
   border-collapse: collapse;
@@ -1274,6 +1284,10 @@ video {
 .bg-indigo-600{
   --tw-bg-opacity: 1;
   background-color: rgb(79 70 229 / var(--tw-bg-opacity));
+}
+.bg-red-500{
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity));
 }
 .bg-slate-100{
   --tw-bg-opacity: 1;
@@ -2366,6 +2380,10 @@ footer .footer-information-container .footer-description-container .footer-descr
 .hover\:bg-indigo-700:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(67 56 202 / var(--tw-bg-opacity));
+}
+.hover\:bg-red-700:hover{
+  --tw-bg-opacity: 1;
+  background-color: rgb(185 28 28 / var(--tw-bg-opacity));
 }
 .hover\:text-blue-100:hover{
   --tw-text-opacity: 1;
