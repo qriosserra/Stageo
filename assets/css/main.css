@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wdth,wght,YTLC@6..12,75..125,200..1000,440..540&display=swap");
 @import url(https://db.onlinewebfonts.com/c/98023254fbc516186b4aa88d1e4415fc?family=Aspira+Wide+W01+Heavy);
 /*
-! tailwindcss v3.3.6 | MIT License | https://tailwindcss.com
+! tailwindcss v3.3.3 | MIT License | https://tailwindcss.com
 */
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -89,19 +89,15 @@ strong {
   font-weight: bolder;
 }
 /*
-1. Use the user's configured `mono` font-family by default.
-2. Use the user's configured `mono` font-feature-settings by default.
-3. Use the user's configured `mono` font-variation-settings by default.
-4. Correct the odd `em` font sizing in all browsers.
+1. Use the user's configured `mono` font family by default.
+2. Correct the odd `em` font sizing in all browsers.
 */
 code,
 kbd,
 samp,
 pre {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; /* 1 */
-  font-feature-settings: normal; /* 2 */
-  font-variation-settings: normal; /* 3 */
-  font-size: 1em; /* 4 */
+  font-size: 1em; /* 2 */
 }
 /*
 Add the correct font size in all browsers.
@@ -525,17 +521,11 @@ video {
 .m-3{
   margin: 0.75rem;
 }
-.m-5{
-  margin: 1.25rem;
-}
-.m-8{
-  margin: 2rem;
-}
-.m-20{
-  margin: 5rem;
-}
 .m-32{
   margin: 8rem;
+}
+.m-5{
+  margin: 1.25rem;
 }
 .-mx-2{
   margin-left: -0.5rem;
@@ -697,6 +687,12 @@ video {
 }
 .mt-\[8rem\]{
   margin-top: 8rem;
+}
+.ml-5{
+  margin-left: 1.25rem;
+}
+.mt-6{
+  margin-top: 1.5rem;
 }
 .block{
   display: block;

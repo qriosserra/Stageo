@@ -123,23 +123,14 @@ class SecretaireController
      * @throws ControllerException
      * @throws InvalidTokenException
      */
-    public function signIn(Secretaire $secretaire, string $password): Response
+    public function signIn($reponse): Response
     {
-        if (!Password::verify($password, $secretaire->getHashedPassword())) {
-            throw new ControllerException(
-                message: "Le mot de passe est incorrect",
-                action: Action::ADMIN_SIGN_IN_FORM,
-                params: [
-                    "email" => $secretaire->getEmail(),
-                ]
-            );
-        }
 
         FlashMessage::add(
             content: "Connexion réalisée avec succès",
             type: FlashType::SUCCESS
         );
-        UserConnection::signIn($secretaire);
+        UserConnection::signIn(new Secretaire());
 
         return new Response(
             action: Action::HOME
