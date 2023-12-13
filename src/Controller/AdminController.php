@@ -256,7 +256,7 @@ class AdminController
             /**
              * @var Entreprise $ent
              */
-            if (!$_ENV["HOSTNAME"] == "webinfo.iutmontp.univ-montp2.fr") {
+            if ($_ENV["HOSTNAME"] != "webinfo.iutmontp.univ-montp2.fr") {
                 $email = $_REQUEST["email"];
                 $raison = $_REQUEST["raisonRefus"];
                 $email = new Email($email,"Refus d'une Offre","Bonjour, nous vous informons que votre inscription a était refusé pour les raison suivante : <br> <br>".$raison);
@@ -375,7 +375,7 @@ class AdminController
             /**
              * @var Offre $offre
              */
-            if (!$_ENV["HOSTNAME"] == "webinfo.iutmontp.univ-montp2.fr") {
+            if (!$_ENV["HOSTNAME"] != "webinfo.iutmontp.univ-montp2.fr") {
                 $email = $_REQUEST["email"];
                 $raison = $_REQUEST["raisonRefus"];
                 $email = new Email($email, "Refus d'une Offre", "Bonjour, nous vous informons que l'offre suivante a était refusé : " . $offre[0]->getDescription() . " pour les raison suivante :  <br> <br>" . $raison);
