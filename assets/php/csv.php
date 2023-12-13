@@ -12,7 +12,7 @@ CREATE PROCEDURE importationCSV () NOT DETERMINISTIC
  DECLARE  v_idEntreprise INT;
   DECLARE v_idTuteur INT;
  DECLARE  v_IdGrat INT;
-  DECLARE v_IdEnseignant INT;
+  DECLARE v_loginEnseignant VARCHAR(256);
  DECLARE  v_idCommune INT;
  DECLARE v_idConvention INT;
 
@@ -108,18 +108,18 @@ SELECT id_unite_gratification INTO v_IdGrat FROM stg_unite_gratification WHERE l
 
 END IF;
 
-SELECT COUNT(id_enseignant) INTO v_EnseignantExiste
+SELECT COUNT(login) INTO v_EnseignantExiste
 FROM stg_enseignant
 WHERE prenom = (SELECT Prenom_Enseignant_referent FROM table_temporaire WHERE id_table = 1 LIMIT 1)
     AND nom = (SELECT Nom_Enseignant_referent FROM table_temporaire WHERE id_table = 1 LIMIT 1)
     AND email = (SELECT Mail_Enseignant_referent FROM table_temporaire WHERE id_table = 1 LIMIT 1);
 
 IF v_EnseignantExiste < 1 THEN 
-INSERT INTO stg_enseignant (prenom, nom, email)
-SELECT Prenom_Enseignant_referent, Nom_Enseignant_referent, Mail_Enseignant_referent FROM table_temporaire WHERE id_table = 1;
+INSERT INTO stg_enseignant (login, prenom, nom, email)
+SELECT LOWER(Nom_Enseignant_referent), Prenom_Enseignant_referent, Nom_Enseignant_referent, Mail_Enseignant_referent FROM table_temporaire WHERE id_table = 1;
 END IF;
 
-SELECT id_enseignant INTO v_IdEnseignant
+SELECT login INTO v_loginEnseignant
 FROM stg_enseignant
 WHERE prenom = (SELECT Prenom_Enseignant_referent FROM table_temporaire WHERE id_table = 1 LIMIT 1)
     AND nom = (SELECT Nom_Enseignant_referent FROM table_temporaire WHERE id_table = 1 LIMIT 1)
@@ -306,7 +306,7 @@ SELECT Numero_Convention,
        Code_ELP,
        Adresse_Voie,
        v_IdGrat,
-       v_IdEnseignant,
+       v_loginEnseignant,
        v_idTuteur,
        v_idEntreprise,
        v_idCommune,
@@ -340,7 +340,7 @@ SET
    code_elp = (SELECT Code_ELP FROM table_temporaire WHERE id_table = 1),
    numero_voie = (SELECT Adresse_Voie FROM table_temporaire WHERE id_table = 1),
    id_unite_gratification =  v_IdGrat,
-   id_enseignant =  v_IdEnseignant ,
+   id_enseignant =  v_loginEnseignant ,
    id_tuteur =  v_idTuteur,
    id_entreprise =  v_idEntreprise ,
    id_distribution_commune = v_idCommune

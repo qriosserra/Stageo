@@ -15,6 +15,7 @@ use Stageo\Lib\Response;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\CategorieRepository;
+use Stageo\Model\Repository\ConventionRepository;
 use Stageo\Model\Repository\DeCategorieRepository;
 use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
@@ -180,18 +181,52 @@ class MainController
             template: "about.php"
         );
     }
-    public function csvForm() : Response {
+
+    public function importCsvForm() : Response
+    {
         return new Response(
-            template: "csvForm.php"
+            template: "csvForm.php",
+            params: [
+                "title" => "Importation depuis CSV"
+            ]
         );
     }
-    public function csv() : Response
+
+    public function importCsv() : Response
     {
         $cheminCSV = $_FILES['CHEMINCSV'];
         if ($cheminCSV["size"]!=0){
             $csvContent = file_get_contents($cheminCSV['tmp_name']);
             (new tableTemporaireRepository())->insertViaCSV($csvContent);
         }
+        return new Response(
+            template: "home.php",
+            params: [
+                "title" => "Accueil",
+                "categories" => (new CategorieRepository)->select(),
+                "offres" => (new OffreRepository())->select()
+            ]
+        );
+    }
+
+    public function exportCsv() : Response
+    {
+        foreach ((new ConventionRepository)->select() as $convention) {
+            $entreprise = (new EntrepriseRepository)->getById($convention->getIdEntreprise());
+            $etudiant = (new EtudiantRepository)->getById($convention->getIdEtudiant());
+            $export[] = [
+                "id_convention" => $convention->getIdConvention(),
+                "id_etudiant" => $convention->getIdEtudiant(),
+                "id_entreprise" => $convention->getIdEntreprise(),
+                "id_offre" => $convention->getIdOffre(),
+                "date_debut" => $convention->getDateDebut(),
+                "date_fin" => $convention->getDateFin(),
+                "date_signature" => $convention->getDateSignature(),
+                "date_debut_stage" => $convention->getDateDebutStage(),
+            ];
+        }
+        $offres = (new OffreRepository())->select();
+        $csv = (new OffreRepository())->exportToCsv($offres);
         return new Response(
             template: "home.php",
             params: [

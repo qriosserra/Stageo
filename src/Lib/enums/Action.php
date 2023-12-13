@@ -43,8 +43,10 @@ enum Action: string
     case ADMIN_SUPRIMERADMIN_FROM = "?c=admin&a=supprimerAdminForm";
     case ADMIN_SUPRIMERADMIN = "?c=admin&a=supprimerAdmin";
     case ABOUT = "?a=about";
-    case CSVFORM = "?a=csvForm";
-    case CSV = "?a=csv&XDEBUG_SESSION_START=";
+    case IMPORT_CSV_FORM = "?c=main&a=importCsvForm";
+    case IMPORT_CSV = "?c=main&a=importCsv";
+    case EXPORT_CSV_FORM = "?c=main&a=exportCsvForm";
+    case EXPORT_CSV = "?c=main&a=exportCsv";
     case SECRETAIRE_SIGN_UP_FORM = "?c=secretaire&a=signUpForm";
     case SECRETAIRE_SIGN_UP = "?c=secretaire&a=signUp";
     case SECRETAIRE_SIGN_IN = "?c=secretaire&a=signIn";
