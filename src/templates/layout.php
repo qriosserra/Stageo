@@ -148,6 +148,10 @@ use Stageo\Model\Object\Secretaire;
                                     </li>
                                     <li>
                                         <a href="<?=Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM->value?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déposer ou modifier une convention</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?=Action::ETUDIANT_SOUMETTRE_CONVENTION->value?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Soumettre ma convention</a>
+                                    </li>
                                     <li>
                                         <a href="<?=Action::SIGN_OUT->value?>"
                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>

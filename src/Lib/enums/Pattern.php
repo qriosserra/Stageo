@@ -16,7 +16,7 @@ enum Pattern: string
     case PHONE_NUMBER = "^\s*(?:\+?(\d{1,3}))?([-. (]*(\d{3})[-. )]*)?((\d{3})[-. ]*(\d{2,4})(?:[-.x ]*(\d+))?)\s*$";
     case CODE_POSTAL = "[0-9]{5}";
     case NAF = "[0-9]{4}[A-Z]{1}";
-    case DATE = "^\d{4}-\d{2}-\d{2}";
+    case DATE = "^([1-2][0-9]{3})-([0-1][0-9])-([0-3][0-9])(?:( [0-2][0-9]):([0-5][0-9]):([0-5][0-9]))?$";
 
     public static function toArray(): array
     {
