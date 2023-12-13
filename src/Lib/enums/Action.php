@@ -38,6 +38,8 @@ enum Action: string
     case ADMIN_SIGN_IN = "?c=admin&a=signIn";
     case ADMIN_DASH = "?c=admin&a=dashboard";
     case ADMIN_LISTEENTREPRISE = "?c=admin&a=listeEntreprises";
+    case ADMIN_GESTION_ETUDIANT = "?c=admin&a=gestionEtudiant";
+    case ADMIN_VALIDECONV_FROM = "?c=admin&a=validerConventionForm";
     case ADMIN_VALIDEENTREPRISE = "?c=admin&a=validerEntreprise";
     case ADMIN_SUPRIMERENTREPRISE = "?c=admin&a=suprimerEntreprise";
     case ADMIN_SUPRIMERADMIN_FROM = "?c=admin&a=supprimerAdminForm";

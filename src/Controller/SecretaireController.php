@@ -32,6 +32,10 @@ use Stageo\Model\Repository\SuiviRepository;
 
 class SecretaireController
 {
+    /**
+     * @throws ControllerException
+     * @throws \Exception
+     */
     public function dashboard(): Response
     {
         $user =UserConnection::getSignedInUser();
@@ -79,7 +83,7 @@ class SecretaireController
                 }
                 $param["nbcandidature"] = $nbcandidature;
                 return new Response(
-                    template: "secretaire/dashboard.php",
+                    template: "admin/dashboard.php",
                     params: $param
                 );
             }}

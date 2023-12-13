@@ -3,8 +3,16 @@
 use Stageo\Lib\enums\Action;
 use Stageo\Model\Object\Entreprise;
 include __DIR__."/../macros/button.php";
-/** @var ArrayObject $listeEntreprise */
+/** @var ArrayObject $listeEntreprise
+ * @var string $title
+ */
 ?>
+<div class="h-40 flex justify-center items-center mt-[4rem]"
+       style="background: linear-gradient(120deg, rgba(21, 129, 230, 0.75) 0%, rgba(0, 45, 141, 0.75) 50%, rgba(1, 7, 68, 0.75) 100%)">
+    <h1 class="text-center font-medium text-white text-3xl text-shadow">
+        <?= $title?>
+    </h1>
+</div>
     <div class="h-min mt-[8rem] p-12">
 <?php foreach ($listeEntreprise as $entreprise) :?>
     <div class="flex border rounded-lg">

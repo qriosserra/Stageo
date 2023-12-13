@@ -21,16 +21,23 @@ use Stageo\Lib\Security\Token;
 use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Admin;
+use Stageo\Model\Object\Convention;
 use Stageo\Model\Object\Enseignant;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Etudiant;
 use Stageo\Model\Object\Offre;
+use Stageo\Model\Object\Secretaire;
+use Stageo\Model\Object\Suivi;
+use Stageo\Model\Object\UniteGratification;
 use Stageo\Model\Repository\AdminRepository;
+use Stageo\Model\Repository\ConventionRepository;
 use Stageo\Model\Repository\EnseignantRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\EtudiantRepository;
 use Stageo\Model\Repository\OffreRepository;
 use Stageo\Model\Repository\SecretaireRepository;
+use Stageo\Model\Repository\SuiviRepository;
+use Stageo\Model\Repository\UniteGratificationRepository;
 
 class AdminController
 {
@@ -401,6 +408,103 @@ class AdminController
         throw new ControllerException(
             message: "Vous n'êtes pas authorisé à accéder à cette page",
             action: Action::HOME,
+        );
+    }
+
+    public function gestionEtudiant(): Response
+    {
+
+        /**
+         * @var Etudiant $etu
+         * @var Convention $convention[]
+         */
+        $user = UserConnection::getSignedInUser();
+        if (($user instanceof Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire){
+        $etudiants = (new EtudiantRepository())->select();
+        $param["etudiants"] = $etudiants;
+        if ($etudiants != null) {
+            foreach ($etudiants as $etu) {
+                $nbcandidature[$etu->getlogin()] = (new EtudiantRepository())->getnbcandatures($etu->getlogin());
+                if ($nbcandidature[$etu->getlogin()] === null) {
+                    $nbcandidature[$etu->getlogin()] = 0;
+                }
+            }
+            foreach ($etudiants as $etu) {
+                $conventions[$etu->getlogin()] = (new ConventionRepository())->getByLogin($etu->getlogin());
+                if ($conventions[$etu->getLogin()]) {
+                    $suivies[$etu->getLogin()] = (new SuiviRepository())->getByIdConvention($conventions[$etu->getLogin()]->getIdConvention());
+                }
+            }
+            foreach ($etudiants as $etu) {
+                $condition = new QueryCondition("login", ComparisonOperator::EQUAL, $etu->getLogin());
+                $liste_accepter = (new OffreRepository())->select($condition);
+                $nbaccepter[$etu->getlogin()] = sizeof($liste_accepter);
+                if ($nbaccepter[$etu->getlogin()] === null) {
+                    $nbaccepter[$etu->getlogin()] = 0;
+                }
+            }
+            $param["nbaccepter"] = $nbaccepter;
+            $param["nbcandidature"] = $nbcandidature;
+            $param["conventions"] = $conventions;
+            $param["suivie"] = $suivies;
+        }
+            return new Response(
+                template: "admin/gestionEtudiants.php",
+                params: $param
+            );
+        }
+        return new Response(
+            template: "admin/sign-in.php",
+            params: [
+                "title" => "Se connecter",
+                "nav" => false,
+                "footer" => false,
+                "token" => Token::generateToken(Action::ADMIN_SIGN_IN_FORM)
+            ]
+        );
+    }
+
+    public function validerConventionForm(): Response
+    {
+        $user = UserConnection::getSignedInUser();
+        if (UserConnection::isSignedIn()) {
+            if (($user instanceof Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire) {
+                $etudiantlogin = $_REQUEST["etulogin"];
+                $param["title"] = "Convention de l'étudiant " . $etudiantlogin;
+                $etudiant = (new EtudiantRepository())->getByLogin($etudiantlogin);
+                $param["etudiant"] = $etudiant;
+                $param["convention"] = (new ConventionRepository())->getByLogin($etudiantlogin);
+                $param["suivi"] = (new SuiviRepository())->getByIdConvention($param["convention"]->getIdConvention());
+                $param["entreprise"] = (new EntrepriseRepository())->getById($param["convention"]->getIdEntreprise());
+                $unite = (new UniteGratificationRepository())->getById($param["convention"]->getIdUniteGratification());
+                /**
+                 * @var UniteGratification $unite
+                 */
+                $param["unite_gratification"] = $unite->getLibelle();
+                if (is_null($param["etudiant"]) || is_null($param["convention"]) || is_null($param["suivi"])) {
+                    throw new ControllerException(
+                        message: "il n'y a pas de convention liée a un tel étudiant !",
+                        action: Action::HOME,
+                    );
+                }
+                return new Response(
+                    template: "admin/conventionValidation.php",
+                    params: $param
+                );
+            }
+            throw new ControllerException(
+                message: "Vous n'avez pas acces a cette page!",
+                action: Action::HOME,
+            );
+        }
+        return new Response(
+            template: "admin/sign-in.php",
+            params: [
+                "title" => "Se connecter",
+                "nav" => false,
+                "footer" => false,
+                "token" => Token::generateToken(Action::ADMIN_SIGN_IN_FORM)
+            ]
         );
     }
 }
