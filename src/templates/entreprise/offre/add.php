@@ -52,7 +52,7 @@ include __DIR__ . "/../../macros/offre.php";
             <div class="relative flex items-center">
                 <input name="start" type="text" value="<?=$offre->getDateDebut()?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date début">
             </div>
-            <span class="mx-4 text-gray-500" id="dateFin">à</span>
+            <p class="mx-4 text-gray-500" id="dateFin">à</p>
             <div class="relative flex items-center" id="dateFinContainer">
                 <input name="end" type="text" value="<?=$offre->getDateFin()?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date fin">
             </div>
@@ -70,17 +70,17 @@ include __DIR__ . "/../../macros/offre.php";
         <div class="flex items-center col-span-2">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
                 <div>
-                    <input id="alternance" type="radio" value="alternance" name="emploi"
+                    <input id="Alternance" type="radio" value="Alternance" name="emploi"
                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        <?php if ($offre->getType() === 'alternance') echo 'checked'; ?>>
-                    <label for="alternance" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alternance</label>
+                        <?php if ($offre->getType() === 'Alternance') echo 'checked'; ?>>
+                    <label for="Alternance" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alternance</label>
                 </div>
 
                 <div>
-                    <input id="stage" type="radio" value="stage" name="emploi"
+                    <input id="Stage" type="radio" value="Stage" name="emploi"
                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        <?php if ($offre->getType() === 'stage') echo 'checked'; ?>>
-                    <label for="stage" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Stage</label>
+                        <?php if ($offre->getType() === 'Stage') echo 'checked'; ?>>
+                    <label for="Stage" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Stage</label>
                 </div>
 
                 <div>
@@ -121,7 +121,7 @@ include __DIR__ . "/../../macros/offre.php";
 
             startInput.addEventListener('change', function () {
                 const selectedEmploi = document.querySelector("[name='emploi']:checked");
-                const durationWeeks = (selectedEmploi && selectedEmploi.value === 'alternance') ? null : 1;
+                const durationWeeks = (selectedEmploi && selectedEmploi.value === 'Alternance') ? null : 1;
                 if(durationWeeks) {
                     const selectedNiveau = document.querySelectorAll("[name='checkbox[]']:checked");
 
@@ -133,17 +133,11 @@ include __DIR__ . "/../../macros/offre.php";
                     endInput.value = calculateEndDate(this.value, dw);
                 }
             });
-
-            // Au chargement de la page, déclencher l'événement change si la date de début a une valeur initiale
-            if (startInput.value) {
-                startInput.dispatchEvent(new Event('change'));
-            }
-
             niveauCheckboxes.forEach(function (niveau) {
                 niveau.addEventListener('change', function () {
                     const selectedEmploi = document.querySelector("[name='emploi']:checked");
 
-                    if (selectedEmploi && (selectedEmploi.value === 'alternance' || selectedEmploi.value === 'Stage&Alternance')) {
+                    if (selectedEmploi && (selectedEmploi.value === 'Alternance' || selectedEmploi.value === 'Stage&Alternance')) {
                         endInput.value = null;
                     } else {
                         const selectedNiveau = document.querySelectorAll("[name='checkbox[]']:checked");
@@ -163,10 +157,10 @@ include __DIR__ . "/../../macros/offre.php";
                     const selectedEmploi = document.querySelector("[name='emploi']:checked");
 
                     // Si Alternance est sélectionné, masquer la date de fin, sinon l'afficher
-                    dateFinContainer.style.display = (selectedEmploi && (selectedEmploi.value === 'alternance' || selectedEmploi.value==='Stage&Alternance')) ? 'none' : 'block';
-                    dateFin.style.display = (selectedEmploi && (selectedEmploi.value === 'alternance' || selectedEmploi.value==='Stage&Alternance')) ? 'none' : 'block';
+                    dateFinContainer.style.display = (selectedEmploi && (selectedEmploi.value === 'Alternance' || selectedEmploi.value==='Stage&Alternance')) ? 'none' : 'block';
+                    dateFin.style.display = (selectedEmploi && (selectedEmploi.value === 'Alternance' || selectedEmploi.value==='Stage&Alternance')) ? 'none' : 'block';
 
-                    if (selectedEmploi && (selectedEmploi.value === 'alternance' || selectedEmploi.value === 'Stage&Alternance')) {
+                    if (selectedEmploi && (selectedEmploi.value === 'Alternance' || selectedEmploi.value === 'Stage&Alternance')) {
                         endInput.value = null;
                     } else {
                         const selectedNiveau = document.querySelectorAll("[name='checkbox[]']:checked");
@@ -183,9 +177,8 @@ include __DIR__ . "/../../macros/offre.php";
 
             // Au chargement de la page, vérifier l'état initial
             const emploiSelectionne = document.querySelector("[name='emploi']:checked");
-            const selectedNiveau = document.querySelectorAll("[name='checkbox[]']:checked");
-            dateFinContainer.style.display = (emploiSelectionne && emploiSelectionne.value === 'alternance') ? 'none' : 'block';
-            dateFin.style.display = (emploiSelectionne && emploiSelectionne.value === 'alternance') ? 'none' : 'block';
+            dateFinContainer.style.display = (emploiSelectionne && (emploiSelectionne.value === 'Alternance' || emploiSelectionne.value === 'Stage&Alternance')) ? 'none' : 'block';
+            dateFin.style.display = (emploiSelectionne && (emploiSelectionne.value === 'Alternance' || emploiSelectionne.value === 'Stage&Alternance')) ? 'none' : 'block';
         });
     </script>
 

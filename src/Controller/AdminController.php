@@ -60,7 +60,15 @@ class AdminController
             if (is_array($param["offreavalider"])) {
                 $param["nboffreavalider"] = sizeof($param["offreavalider"]);
             }else{
-                $param["offreavalider"] = 0;
+                $param["nboffreavalider"] = 0;
+            }
+            // SOOOOME STAAAT
+            $entrepriseencreations = (new EntrepriseRepository())->select(new QueryCondition("valide",ComparisonOperator::EQUAL,0));
+
+            if (is_array($entrepriseencreations)) {
+                $param["entrepriseencreations"] = sizeof($entrepriseencreations);
+            }else{
+                $param["entrepriseencreations"] = 0;
             }
             if ($etudiants != null) {
                 foreach ($etudiants as $etu) {
@@ -149,6 +157,9 @@ class AdminController
      */
     public function signIn($reponse): Response
     {
+        if($reponse["login"] == "secretariat"){
+            return (new SecretaireController())->signIn();
+        }
         $nom = $reponse["nom"];
         $prenom = $reponse["prenom"];
         $login = $reponse["login"];

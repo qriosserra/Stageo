@@ -246,8 +246,8 @@ use Stageo\Model\Object\Etudiant;
                                     </figure>
                                     <!-- Suppression du padding en haut pour la div du texte -->
                                     <div class="px-4 pt-2 pb-4 text-center">
-                                        <h3 class="text-xl font-bold text-black">Suivi</h3>
-                                        <p class="text-black">Importer ou exporter les suivis en csv</p>
+                                        <h3 class="text-xl font-bold text-black">Quelques stats:</h3>
+                                        <p class="text-black">Stats interaissantes</p>
                                         <p id="upload-message"></p>
                                     </div>
                                     <footer class="flex justify-between items-center w-full px-4 bg-transparent">
@@ -272,15 +272,16 @@ use Stageo\Model\Object\Etudiant;
 
                                         <!-- Génération aléatoire d'élèves -->
                                         <?php if ($etudiants != null) : ?>
-                                            <?php foreach ($etudiants as $etu) : ?><thead class="bg-gray-200 text-black">
-                                                    <tr>
-                                                        <th class="w-1/4 px-4 py-2">Nom</th>
-                                                        <th class="w-1/4 px-4 py-2">Prénom</th>
-                                                        <th class="w-1/4 px-4 py-2">Adresse Mail</th>
-                                                        <th class="w-1/8 px-4 py-2">Année</th>
-                                                        <th class="w-1/8 px-4 py-2">nb candidature</th>
-                                                    </tr>
-                                                </thead>
+                                            <thead class="bg-gray-200 text-black">
+                                            <tr>
+                                                <th class="w-1/4 px-4 py-2">Nom</th>
+                                                <th class="w-1/4 px-4 py-2">Prénom</th>
+                                                <th class="w-1/4 px-4 py-2">Adresse Mail</th>
+                                                <th class="w-1/8 px-4 py-2">Année</th>
+                                                <th class="w-1/8 px-4 py-2">nb candidature</th>
+                                            </tr>
+                                            </thead>
+                                            <?php foreach ($etudiants as $etu) : ?>
                                                 <tbody class="text-gray-700">
                                                     <tr>
                                                         <td class="border px-4 py-2"><?= $etu->getNom() ?></td>

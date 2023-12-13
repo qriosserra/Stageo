@@ -13,6 +13,7 @@ use Stageo\Lib\HTTP\Cookie;
 use Stageo\Lib\Mailer;
 use Stageo\Lib\Response;
 use Stageo\Lib\UserConnection;
+use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\CategorieRepository;
 use Stageo\Model\Repository\DeCategorieRepository;
@@ -154,12 +155,19 @@ class MainController
              * @var Offre $offre
              */
             $offre = (new OffreRepository)->getById($id);
+            $entreprise = (new EntrepriseRepository())->getById($offre->getIdEntreprise());
+            if ($entreprise instanceof Entreprise){
+                $nomentreprise = $entreprise->getRaisonSociale();
+            }else{
+                $nomentreprise = "EREUR lors de la recherche de l'entreprise !";
+            }
             return new Response(
                 template: "entreprise/offre/offre.php",
                 params: [
                     "title" => "Offre $id",
                     "entreprise" => (new EntrepriseRepository)->getById($offre->getIdEntreprise()),
                     "offre" => $offre,
+                    "nomentreprise" => $nomentreprise,
                     "unite_gratification" => (new UniteGratificationRepository)->getById($offre->getIdUniteGratification())->getLibelle()
                 ]
             );}
