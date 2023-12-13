@@ -674,7 +674,7 @@ use Stageo\Model\Object\Secretaire;
                     <?php endforeach ?>
                 </ul>
             <?php endif ?>
-            <p id="cssgenerator" class="!hidden"></p>
+            <p id="cssgenerator" class="!hidden  self-center"></p>
 </header>
 <?php require_once $template?>
 <!----------------------------bar du bas----------------------------------------->

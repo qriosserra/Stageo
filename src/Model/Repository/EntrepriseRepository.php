@@ -65,7 +65,7 @@ class EntrepriseRepository extends CoreRepository
                         LEFT JOIN stg_statut_juridique sj ON e.id_statut_juridique = sj.id_statut_juridique
                         LEFT JOIN stg_distribution_commune dc ON e.id_distribution_commune = dc.id_distribution_commune
                         LEFT JOIN stg_pays p ON dc.id_pays = p.id_pays
-                   WHERE e.valide = 0";
+                   WHERE e.valide = 0 AND e.email IS NOT NULL AND e.email != ''";
             $pdo= DatabaseConnection::getPdo();
             $stmt = $pdo->prepare($query);
             $stmt->execute();

@@ -11,6 +11,9 @@ use Stageo\Model\Object\Etudiant;
  * @var int $nbentrepriseavalider
  * @var ArrayObject|null $entrepriseavalider
  * @var Entreprise $ent
+ * @var int $nboffreavalider
+ * @var ArrayObject|null $offreavalider
+ * @var Entreprise $offre
  */
 ?>
 <!DOCTYPE html>
@@ -178,7 +181,7 @@ use Stageo\Model\Object\Etudiant;
                                 <!-- Réduction de la hauteur du figure -->
                                 <figure class=" justify-center items-center h-72 aspect-square  ">
                                     <img class="w-3/4 h-3/4 object-cover transition group-hover:scale-110 mx-auto my-auto"
-                                         src="./images/cards/offre.png" />
+                                         src="./assets/img/offre.png" />
                                     <div class="px-4 pt-2 pb-4 text-center">
                                         <h3 class="text-xl font-bold text-black">Offre(s) à valider</h3>
                                         <a href="<?= Action::ADMIN_LISTEOFFRES->value ?>" class="text-blue-400 hover:text-red-400 ">Acceder à la page de validation
@@ -187,19 +190,15 @@ use Stageo\Model\Object\Etudiant;
                                     </div>
                                 </figure>
                                 <div class="hidden md:block">
-                                    <h3 class="text-xl font-bold text-black mb-4 p-4">Offres à valider</h3>
+                                    <h3 class="text-xl font-bold text-black mb-4 p-4"><?=$nboffreavalider?> Offres à valider</h3>
                                     <ul class="ml-2">
-                                        <li><a href="#entreprise1"
-                                               class="text-blue-600 text-blue-400 hover:text-red-400">Googlekpnzkegne
-                                                : Stages .........</a></li>
-                                        <li><a href="#entreprise2"
-                                               class="text-blue-600 text-blue-400 hover:text-red-400">Microsoft :
-                                                Alternance ...</a></li>
-                                        <li><a href="#entreprise3"
-                                               class="text-blue-600 text-blue-400 hover:text-red-400">Apple :
-                                                Stages &
-                                                Alternance apknkaepngm.zenojvazfaz zefzef ze fze
-                                                ffazfazfazfazfazfazfazf..</a></li>
+                                        <?php $limit=3; $count=0; foreach ($offreavalider as $offre):
+                                            $count+=1;
+                                            if ($count>$limit)break;
+                                            if ($count!=1):?><p class="text-black border-b m-1"></p><?php endif;?>
+                                            <li><p class="text-black"><?= $offre["raison_sociale"]?> :
+                                                    <?=substr($offre["description"],0,70)."...";?></p></li>
+                                        <?php endforeach; ?>
                                     </ul>
                                 </div>
                             </div>
@@ -220,7 +219,7 @@ use Stageo\Model\Object\Etudiant;
                                 <figure
                                         class="mb-[-1.5rem] justify-center items-center h-56 aspect-square overflow-hidden ">
                                     <img class="w-3/4 h-3/4 object-cover transition group-hover:scale-110 mx-auto my-auto"
-                                         src="./images/cards/csv.png" />
+                                         src="./assets/img/csv.png" />
                                 </figure>
                                 <!-- Suppression du padding en haut pour la div du texte -->
                                 <div class="px-4 pt-2 pb-4 text-center">
@@ -248,7 +247,7 @@ use Stageo\Model\Object\Etudiant;
                                 <figure
                                         class="mb-[-1.5rem] justify-center items-center h-56 aspect-square overflow-hidden ">
                                     <img class="w-3/4 h-3/4 object-cover transition group-hover:scale-110 mx-auto my-auto"
-                                         src="./images/cards/csv.png" />
+                                         src="./assets/img/csv.png" />
                                 </figure>
                                 <!-- Suppression du padding en haut pour la div du texte -->
                                 <div class="px-4 pt-2 pb-4 text-center">

@@ -13,6 +13,8 @@ use Stageo\Lib\Database\QueryCondition;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
+use Stageo\Lib\Mailer\Email;
+use Stageo\Lib\Mailer\Mailer;
 use Stageo\Lib\Response;
 use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
@@ -53,6 +55,12 @@ class AdminController
                 $param["nbentrepriseavalider"] = sizeof($param["entrepriseavalider"]);
             }else{
                 $param["nbentrepriseavalider"] = 0;
+            }
+            $param["offreavalider"] = (new OffreRepository())->getAllInvalidOffre();
+            if (is_array($param["offreavalider"])) {
+                $param["nboffreavalider"] = sizeof($param["offreavalider"]);
+            }else{
+                $param["offreavalider"] = 0;
             }
             if ($etudiants != null) {
                 foreach ($etudiants as $etu) {
@@ -201,6 +209,33 @@ class AdminController
             /** @var Entreprise $entreprise **/
             $entreprise->setValide(true);
             (new EntrepriseRepository())->update($entreprise);
+            return $this->listeOffreEntreprise($entreprise);
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
+        );
+    }
+    public function listeOffreEntreprise($entreprise){
+        /**
+         * @var Entreprise $entreprise
+         */
+        $user = UserConnection::getSignedInUser();
+        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+            $listeOffres = (new OffreRepository())->getAllInvalidOffreEntreprise($entreprise->getIdEntreprise());
+            if ($listeOffres){
+                return new Response(
+                    template: "admin/listeOffre.php",
+                    params: [
+                        "title" => "Liste offres à valider de l'entreprise ".$entreprise->getRaisonSociale(),
+                        "listeoffres" => $listeOffres
+                    ]
+                );
+            }
+            FlashMessage::add(
+                content: "Aucune offre à valider",
+                type: FlashType::INFO
+            );
             return new Response(
                 action: Action::ADMIN_LISTEENTREPRISE
             );
@@ -210,10 +245,17 @@ class AdminController
             action: Action::HOME,
         );
     }
-
     public function suprimerEntreprise(){
         $user = UserConnection::getSignedInUser();
         if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+            $ent = (new EntrepriseRepository())->select(new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $_REQUEST["idEntreprise"]));
+            /**
+             * @var Entreprise $ent
+             */
+            $email = $_REQUEST["email"];
+            $raison = $_REQUEST["raisonRefus"];
+            $email = new Email($email,"Refus d'une Offre","Bonjour, nous vous informons que votre inscription a était refusé pour les raison suivante :".$raison);
+            //(new Mailer())->send($email);
             (new EntrepriseRepository())->delete([new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $_REQUEST["idEntreprise"])]);
             return new Response(
                 action: Action::ADMIN_LISTEENTREPRISE
@@ -317,9 +359,20 @@ class AdminController
         );
     }
 
+    /**
+     * @throws ControllerException
+     */
     public function suprimerOffre(){
         $user = UserConnection::getSignedInUser();
         if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+            $offre = (new OffreRepository())->select(new QueryCondition("id_offre", ComparisonOperator::EQUAL, $_REQUEST["idOffre"]));
+            /**
+             * @var Offre $offre
+             */
+            $email = $_REQUEST["email"];
+            $raison = $_REQUEST["raisonRefus"];
+            $email = new Email($email,"Refus d'une Offre","Bonjour, nous vous informons que l'offre suivante a était refusé : ".$offre[0]->getDescription()." pour les raison suivante :".$raison);
+            //(new Mailer())->send($email);
             (new OffreRepository())->delete([new QueryCondition("id_offre", ComparisonOperator::EQUAL, $_REQUEST["idOffre"])]);
             return new Response(
                 action: Action::ADMIN_LISTEOFFRES

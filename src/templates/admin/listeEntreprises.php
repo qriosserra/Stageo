@@ -21,7 +21,13 @@ include __DIR__."/../macros/button.php";
             <div class="mb-2 text-sm text-gray-600">Statut juridique : <?=$entreprise["statut_juridique"]?></div>
             <div class="flex">
                 <?=button("Valider","fi-ss-check-circle",Action::ADMIN_VALIDEENTREPRISE->value."&idEntreprise=".$entreprise["id_entreprise"],"!text-primary-400 text-xl w-min","!text-primary-400")?>
-                <?=button("Supprimer","fi-sr-cross-circle",Action::ADMIN_SUPRIMERENTREPRISE->value."&idEntreprise=".$entreprise["id_entreprise"],"!text-red-400 text-xl w-min","!text-red-400")?>
+                <form method="post" action="<?= Action::ADMIN_SUPRIMERENTREPRISE->value."&idEntreprise=".$entreprise["id_entreprise"] ."&email=".$entreprise["email"] ?>">
+                    <input type="text" name="raisonRefus" placeholder="Raisons du refus" required>
+                    <button type="submit" class="button-ghost !text-red-400 text-xl w-min">
+                        <i class="fi fi-sr-cross-circle !text-red-400"></i>
+                        <span>Supprimer</span>
+                    </button>
+                </form>
             </div>
         </div>
     </div>

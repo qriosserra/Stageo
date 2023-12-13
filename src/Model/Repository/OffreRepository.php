@@ -40,6 +40,88 @@ class OffreRepository extends CoreRepository
         return $resulat;
     }
 
+    public function getAllInvalidOffreEntreprise($identreprise) {try {
+        $query = "SELECT 
+                    o.id_offre,
+                    o.type,
+                    o.description,
+                    o.thematique,
+                    o.secteur,
+                    o.taches,
+                    o.commentaires,
+                    o.gratification,
+                    o.login,
+                    o.id_unite_gratification,
+                    o.id_entreprise,
+                    e.email AS entreprise_email,
+                    e.raison_sociale,
+                    e.siret,
+                    e.numero_voie AS entreprise_numero_voie,
+                    e.code_naf,
+                    e.telephone AS entreprise_telephone,
+                    e.fax AS entreprise_fax,
+                    e.site AS entreprise_site,
+                    e.id_taille_entreprise,
+                    e.id_type_structure,
+                    e.id_statut_juridique,
+                    e.id_distribution_commune AS entreprise_id_commune,
+                    c.commune AS entreprise_commune,
+                    tc.libelle AS taille_entreprise_libelle,
+                    tsj.libelle AS statut_juridique_libelle,
+                    ts.libelle AS type_structure_libelle,
+                    cat.id_categorie,
+                    cat.libelle AS categorie_libelle
+                 FROM stg_offre o
+                 JOIN stg_entreprise e ON o.id_entreprise = e.id_entreprise
+                 LEFT JOIN stg_distribution_commune c ON e.id_distribution_commune = c.id_distribution_commune
+                 LEFT JOIN stg_taille_entreprise tc ON e.id_taille_entreprise = tc.id_taille_entreprise
+                 LEFT JOIN stg_statut_juridique tsj ON e.id_statut_juridique = tsj.id_statut_juridique
+                 LEFT JOIN stg_type_structure ts ON e.id_type_structure = ts.id_type_structure
+                 LEFT JOIN stg_offre_categorie oc ON o.id_offre = oc.id_offre
+                 LEFT JOIN stg_categorie cat ON oc.id_categorie = cat.id_categorie
+                 WHERE o.valider = 0 AND e.id_entreprise= :identr";
+
+        $values["identr"] = $identreprise;
+        $pdo = DatabaseConnection::getPdo();
+        $stmt = $pdo->prepare($query);
+        $stmt->execute($values);
+
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Organiser les résultats par id_offre
+        $offresAvecCategories = [];
+        foreach ($result as $row) {
+            $idOffre = $row['id_offre'];
+            if (!isset($offresAvecCategories[$idOffre])) {
+                // Initialiser les données de l'offre
+                $offresAvecCategories[$idOffre] = [
+                    "id_offre" => $idOffre,
+                    "description" => $row['description'],
+                    "thematique" => $row['thematique'],
+                    "taches" => $row['taches'],
+                    "type" =>$row['type'],
+                    "raison_sociale" =>$row['raison_sociale'],
+                    "email" =>$row['entreprise_email'],
+                    "categories" => [],
+                ];
+            }
+
+            // Ajouter la catégorie associée à cette offre
+            $offresAvecCategories[$idOffre]['categories'][] = [
+                "id_categorie" => $row['id_categorie'],
+                "libelle" => $row['categorie_libelle'],
+            ];
+        }
+
+        // Convertir l'array associatif en array simple
+        return array_values($offresAvecCategories);
+
+    } catch (PDOException $e) {
+        echo "Erreur : " . $e->getMessage();
+        return false;
+    }
+    }
+
     public function getAllInvalidOffre() {try {
         $query = "SELECT 
                     o.id_offre,
@@ -100,6 +182,7 @@ class OffreRepository extends CoreRepository
                     "taches" => $row['taches'],
                     "type" =>$row['type'],
                     "raison_sociale" =>$row['raison_sociale'],
+                    "email" =>$row['entreprise_email'],
                     "categories" => [],
                 ];
             }
