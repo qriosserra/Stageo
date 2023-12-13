@@ -258,7 +258,7 @@ class AdminController
              */
             $email = $_REQUEST["email"];
             $raison = $_REQUEST["raisonRefus"];
-            $email = new Email($email,"Refus d'une Offre","Bonjour, nous vous informons que votre inscription a était refusé pour les raison suivante :".$raison);
+            $email = new Email($email,"Refus d'une Offre","Bonjour, nous vous informons que votre inscription a était refusé pour les raison suivante : \n".$raison);
             (new Mailer())->send($email);
             (new EntrepriseRepository())->delete([new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $_REQUEST["idEntreprise"])]);
             return new Response(
