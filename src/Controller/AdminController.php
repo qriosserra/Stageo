@@ -258,7 +258,7 @@ class AdminController
              */
             $email = $_REQUEST["email"];
             $raison = $_REQUEST["raisonRefus"];
-            $email = new Email($email,"Refus d'une Offre","Bonjour, nous vous informons que votre inscription a était refusé pour les raison suivante : \n".$raison);
+            $email = new Email($email,"Refus d'une Offre","Bonjour, nous vous informons que votre inscription a était refusé pour les raison suivante : <br> <br>".$raison);
             (new Mailer())->send($email);
             (new EntrepriseRepository())->delete([new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $_REQUEST["idEntreprise"])]);
             return new Response(
@@ -375,7 +375,7 @@ class AdminController
              */
             $email = $_REQUEST["email"];
             $raison = $_REQUEST["raisonRefus"];
-            $email = new Email($email,"Refus d'une Offre","Bonjour, nous vous informons que l'offre suivante a était refusé : ".$offre[0]->getDescription()." pour les raison suivante : \n".$raison);
+            $email = new Email($email,"Refus d'une Offre","Bonjour, nous vous informons que l'offre suivante a était refusé : ".$offre[0]->getDescription()." pour les raison suivante :  <br> <br>".$raison);
             (new Mailer())->send($email);
             (new OffreRepository())->delete([new QueryCondition("id_offre", ComparisonOperator::EQUAL, $_REQUEST["idOffre"])]);
             return new Response(
