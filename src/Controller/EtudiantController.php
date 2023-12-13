@@ -1041,7 +1041,7 @@ class EtudiantController
         $autrePostulant = (new PostulerRepository())->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre));
         foreach($offres as $o){
             if ($o->getIdOffre() != $idOffre){
-                $o->setLogin(Null);
+                $o->setLogin(new NullDataType());
                 (new OffreRepository())->update($o);
             }
         }
@@ -1117,11 +1117,13 @@ class EtudiantController
             new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre)
         ];
         $offrePotuler = (new PostulerRepository())->select($condition);
-        if(file_exists("assets/document/cv/".$offrePotuler[0]->getCv())){
-            unlink("assets/document/cv/".$offrePotuler[0]->getCv());
-        }
-        if(file_exists("assets/document/lm/".$offrePotuler[0]->getLettreMotivation())){
-            unlink("assets/document/lm/".$offrePotuler[0]->getLettreMotivation());
+        if (!empty($offrePotuler) && isset($offrePotuler[0])) {
+            if (file_exists("assets/document/cv/" . $offrePotuler[0]->getCv())) {
+                unlink("assets/document/cv/" . $offrePotuler[0]->getCv());
+            }
+            if (file_exists("assets/document/lm/" . $offrePotuler[0]->getLettreMotivation())) {
+                unlink("assets/document/lm/" . $offrePotuler[0]->getLettreMotivation());
+            }
         }
         (new OffreRepository)->update($offre);
         $postuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
@@ -1137,6 +1139,43 @@ class EtudiantController
         );
         return new Response(
             action: Action::PROFILE_ETUDIANT,
+        );
+    }
+
+    public function voirMesCandidature():Response{
+        if (UserConnection::isInstance(new Etudiant())) {
+            $user = UserConnection::getSignedInUser();
+            $condition = new QueryCondition("login", ComparisonOperator::EQUAL, $user->getLogin());
+            $liste_accepter = (new OffreRepository())->select($condition);
+            $liste_postuler = (new PostulerRepository())->select($condition);
+            $postuler = [];
+            $id = null;
+
+            foreach ($liste_postuler as $p) {
+                $offrePostuler = (new OffreRepository())->getById($p->getIdOffre());
+                $postuler[] = $offrePostuler;
+            }
+            foreach ($liste_accepter as $p){
+                $offrePostuler = (new OffreRepository())->getById($p->getIdOffre());
+                if($offrePostuler->getValiderParEtudiant()){
+                    $id = $offrePostuler;
+                }
+            }
+            $nbpostuler = count($postuler)+count($liste_accepter);
+            return new Response(
+                template: "etudiant/afficher-offre-postuler.php",
+                params: [
+                    "title" => "Voir les offres auxquelle j'ai postulé",
+                    "postuler"=>$postuler,
+                    "accepter"=>$liste_accepter,
+                    "nombre"=>$nbpostuler,
+                    "id"=>$id
+                ]
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
         );
     }
 }
