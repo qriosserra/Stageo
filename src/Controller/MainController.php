@@ -73,6 +73,7 @@ class MainController
                     $categories =  (new CategorieRepository()) ->select(new QueryCondition("libelle",ComparisonOperator::LIKE,"%".$search."%"));
                     foreach ($categories as $category) {
                         $idOffres [] =  (new DeCategorieRepository())->getByIdCategorie($category->getIdCategorie());
+                        var_dump($idOffres);
                     }
                     foreach ($idOffres as $idOffre){
                         $offres [] =  (new OffreRepository)->getById($idOffre->getIdOffre());
@@ -112,8 +113,8 @@ class MainController
                     }
                 }
             }else{
-                $offres = (new OffreRepository)->select();
-                $idOffres = (new OffreRepository())->getAllOffreId();
+                $offres = (new OffreRepository)->select(new QueryCondition("valider", ComparisonOperator::EQUAL, 1));
+                $idOffres = (new OffreRepository())->getAllValideOffreId();
             }
             $selA = $option === "description"
                 ? "selected"

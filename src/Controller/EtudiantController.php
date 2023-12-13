@@ -80,7 +80,7 @@ class EtudiantController
         );
         if ($response["annee"]==null){
             return (new AdminController())->signIn($response);
-        }
+        }else{
         $etudiant = (new EtudiantRepository)->getByLogin($login);
         if (is_null($etudiant)) {
             $etudiant = new Etudiant(
@@ -100,7 +100,7 @@ class EtudiantController
         UserConnection::signIn($etudiant);
         return new Response(
             action: Action::LISTE_OFFRE
-        );
+        );}
     }
 
     public static function afficherFormulairePostuler(string $id): Response

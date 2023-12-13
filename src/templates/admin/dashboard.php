@@ -1,7 +1,17 @@
 <?php
 
 use Stageo\Lib\enums\Action;
+use Stageo\Model\Object\Entreprise;
+use Stageo\Model\Object\Etudiant;
 
+/**
+ * @var ArrayObject|null $etudiants
+ * @var int[] $nbcandidature
+ * @var Etudiant $etu
+ * @var int $nbentrepriseavalider
+ * @var ArrayObject|null $entrepriseavalider
+ * @var Entreprise $ent
+ */
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -127,41 +137,37 @@ use Stageo\Lib\enums\Action;
                 <div class="flex justify-between mb-6" id="container-card-valide">
 
                     <main id="card-valide" class="grid justify-center items-center p-4 w-1/2 mx-2">
-                        <div id="drop-area"
+                        <a href="<?=Action::ADMIN_LISTEENTREPRISE->value?>"><div id="drop-area"
                              class="bg-black group inline-block p-4 bg-gray-100 border-2 text-white overflow-hidden rounded-2xl shadow hover:shadow-md transition flex flex-col justify-center items-center pt-4">
                             <div class=" flex flex-row">
                                 <!-- Réduction de la hauteur du figure -->
                                 <figure class=" justify-center items-center h-72 aspect-square  ">
                                     <img class="w-3/4 h-3/4 object-cover transition group-hover:scale-110 mx-auto my-auto"
-                                         src="./images/cards/check.png" />
+                                         src="./assets/img/check.png" />
                                     <div class="px-4 pt-2 pb-4 text-center">
                                         <h3 class="text-xl font-bold text-black">Entreprise(s) à valider</h3>
-                                        <a class="text-blue-400 hover:text-red-400 ">Acceder à la page de validation
+                                        <a class="text-blue-400 hover:text-red-400" href="<?=Action::ADMIN_LISTEENTREPRISE->value?>">Acceder à la page de validation
                                         </a>
                                         <p id="upload-message"></p>
                                     </div>
                                 </figure>
                                 <!-- Suppression du padding en haut pour la div du texte -->
                                 <div class="hidden md:block">
-                                    <h3 class="text-xl font-bold text-black mb-4 p-4">Entreprises à vérifier</h3>
+                                    <h3 class="text-xl font-bold text-black mb-4 p-4"><?=$nbentrepriseavalider?> entreprises à vérifier</h3>
                                     <ul class="ml-2">
-                                        <li><a href="#entreprise1"
-                                               class="text-blue-600 text-blue-400 hover:text-red-400">Google :
-                                                bazfizbezjipgzze jpgzeza ad azdaz d a e gjzpegjzpigjem
-                                                peijgejgzjebg</a></li>
-                                        <li><a href="#entreprise2"
-                                               class="text-blue-600 text-blue-400 hover:text-red-400">Microsoft :
-                                                oeiaohgjoizeg zhegizhegizei ogiozh egoizhz nzjogzrioh</a></li>
-                                        <li><a href="#entreprise3"
-                                               class="text-blue-600 text-blue-400 hover:text-red-400">Apple :
-                                                jkeraopjegpozejgipozjgeo jzpoejgpozejgop zjpoegozjnboern</a></li>
-                                        <!-- Ajoutez d'autres entreprises ici... -->
+                                        <?php $limit=3; $count=0; foreach ($entrepriseavalider as $ent):
+                                        $count+=1;
+                                        if ($count>$limit)break;
+                                        if ($count!=1):?><p class="text-black border-b m-1"></p><?php endif;?>
+                                        <li><p class="text-black"><?= $ent["raison_sociale"]?> :
+                                                <?=$ent["numero_voie"]?>, <?=$ent["commune"]?> <?=$ent["code_postal"]?> (<?=$ent["pays"]?>)</p></li>
+                                        <?php endforeach; ?>
                                     </ul>
                                 </div>
                             </div>
 
 
-                        </div>
+                        </div></a>
 
                     </main>
 
@@ -175,7 +181,7 @@ use Stageo\Lib\enums\Action;
                                          src="./images/cards/offre.png" />
                                     <div class="px-4 pt-2 pb-4 text-center">
                                         <h3 class="text-xl font-bold text-black">Offre(s) à valider</h3>
-                                        <a class="text-blue-400 hover:text-red-400 ">Acceder à la page de validation
+                                        <a href="<?= Action::ADMIN_LISTEOFFRES->value ?>" class="text-blue-400 hover:text-red-400 ">Acceder à la page de validation
                                         </a>
                                         <p id="upload-message"></p>
                                     </div>
@@ -266,115 +272,34 @@ use Stageo\Lib\enums\Action;
                     </div>
                     <div id="tableau" class="w-3/5 bg-white mr-6 rounded-xl shadow-lg overflow-hidden">
                         <div class="p-5">
-                            <h2 class="text-lg font-semibold text-gray-700 mb-3">Liste des élèves</h2>
+                            <h2 class="text-lg font-semibold text-gray-700 mb-3">Liste des élèves inscrit sur STAGEO</h2>
                             <div class="overflow-x-auto">
                                 <table class="min-w-full bg-white">
-                                    <thead class="bg-gray-800 text-black">
+
+                                    <!-- Génération aléatoire d'élèves -->
+                                    <?php if ($etudiants != null) :?>
+                                        <?php foreach ($etudiants as $etu) : ?><thead class="bg-gray-800 text-black">
                                     <tr>
                                         <th class="w-1/4 px-4 py-2">Nom</th>
                                         <th class="w-1/4 px-4 py-2">Prénom</th>
                                         <th class="w-1/4 px-4 py-2">Adresse Mail</th>
                                         <th class="w-1/8 px-4 py-2">Année</th>
-                                        <th class="w-1/8 px-4 py-2">Groupe</th>
+                                        <th class="w-1/8 px-4 py-2">nb candidature</th>
                                     </tr>
                                     </thead>
                                     <tbody class="text-gray-700">
-                                    <!-- Génération aléatoire d'élèves -->
-                                    <tr>
-                                        <td class="border px-4 py-2">Doe</td>
-                                        <td class="border px-4 py-2">John</td>
-                                        <td class="border px-4 py-2">john.doe@email.com</td>
-                                        <td class="border px-4 py-2">3ème</td>
-                                        <td class="border px-4 py-2">A1</td>
-                                    </tr>
-                                    <tr class="bg-gray-100">
-                                        <td class="border px-4 py-2">Smith</td>
-                                        <td class="border px-4 py-2">Anna</td>
-                                        <td class="border px-4 py-2">anna.smith@email.com</td>
-                                        <td class="border px-4 py-2">2ème</td>
-                                        <td class="border px-4 py-2">B3</td>
-                                    </tr>
-                                    <tr class="bg-gray-100">
-                                        <td class="border px-4 py-2">Smith</td>
-                                        <td class="border px-4 py-2">Anna</td>
-                                        <td class="border px-4 py-2">anna.smith@email.com</td>
-                                        <td class="border px-4 py-2">2ème</td>
-                                        <td class="border px-4 py-2">B3</td>
-                                    </tr>
-                                    <tr class="bg-gray-100">
-                                        <td class="border px-4 py-2">Smith</td>
-                                        <td class="border px-4 py-2">Anna</td>
-                                        <td class="border px-4 py-2">anna.smith@email.com</td>
-                                        <td class="border px-4 py-2">2ème</td>
-                                        <td class="border px-4 py-2">B3</td>
-                                    </tr>
-                                    <tr class="bg-gray-100">
-                                        <td class="border px-4 py-2">Smith</td>
-                                        <td class="border px-4 py-2">Anna</td>
-                                        <td class="border px-4 py-2">anna.smith@email.com</td>
-                                        <td class="border px-4 py-2">2ème</td>
-                                        <td class="border px-4 py-2">B3</td>
-                                    </tr>
-                                    <tr class="bg-gray-100">
-                                        <td class="border px-4 py-2">Smith</td>
-                                        <td class="border px-4 py-2">Anna</td>
-                                        <td class="border px-4 py-2">anna.smith@email.com</td>
-                                        <td class="border px-4 py-2">2ème</td>
-                                        <td class="border px-4 py-2">B3</td>
-                                    </tr>
-                                    <tr class="bg-gray-100">
-                                        <td class="border px-4 py-2">Smith</td>
-                                        <td class="border px-4 py-2">Anna</td>
-                                        <td class="border px-4 py-2">anna.smith@email.com</td>
-                                        <td class="border px-4 py-2">2ème</td>
-                                        <td class="border px-4 py-2">B3</td>
-                                    </tr>
-                                    <tr class="bg-gray-100">
-                                        <td class="border px-4 py-2">Smith</td>
-                                        <td class="border px-4 py-2">Anna</td>
-                                        <td class="border px-4 py-2">anna.smith@email.com</td>
-                                        <td class="border px-4 py-2">2ème</td>
-                                        <td class="border px-4 py-2">B3</td>
-                                    </tr>
-                                    <tr class="bg-gray-100">
-                                        <td class="border px-4 py-2">Smith</td>
-                                        <td class="border px-4 py-2">Anna</td>
-                                        <td class="border px-4 py-2">anna.smith@email.com</td>
-                                        <td class="border px-4 py-2">2ème</td>
-                                        <td class="border px-4 py-2">B3</td>
-                                    </tr>
-                                    <tr class="bg-gray-100">
-                                        <td class="border px-4 py-2">Smith</td>
-                                        <td class="border px-4 py-2">Anna</td>
-                                        <td class="border px-4 py-2">anna.smith@email.com</td>
-                                        <td class="border px-4 py-2">2ème</td>
-                                        <td class="border px-4 py-2">B3</td>
-                                    </tr>
-                                    <tr class="bg-gray-100">
-                                        <td class="border px-4 py-2">Smith</td>
-                                        <td class="border px-4 py-2">Anna</td>
-                                        <td class="border px-4 py-2">anna.smith@email.com</td>
-                                        <td class="border px-4 py-2">2ème</td>
-                                        <td class="border px-4 py-2">B3</td>
-                                    </tr>
-                                    <tr class="bg-gray-100">
-                                        <td class="border px-4 py-2">Smith</td>
-                                        <td class="border px-4 py-2">Anna</td>
-                                        <td class="border px-4 py-2">anna.smith@email.com</td>
-                                        <td class="border px-4 py-2">2ème</td>
-                                        <td class="border px-4 py-2">B3</td>
-                                    </tr>
-                                    <tr class="bg-gray-100">
-                                        <td class="border px-4 py-2">Smith</td>
-                                        <td class="border px-4 py-2">Anna</td>
-                                        <td class="border px-4 py-2">anna.smith@email.com</td>
-                                        <td class="border px-4 py-2">2ème</td>
-                                        <td class="border px-4 py-2">B3</td>
-                                    </tr>
-
-
-                                    <!-- Ajoutez plus de lignes ici selon le même modèle -->
+                                            <tr>
+                                                <td class="border px-4 py-2"><?=$etu->getNom()?></td>
+                                                <td class="border px-4 py-2"><?=$etu->getPrenom()?></td>
+                                                <td class="border px-4 py-2"><?=$etu->getEmail()?></td>
+                                                <td class="border px-4 py-2"><?=$etu->getAnnee()?></td>
+                                                <td class="border px-4 py-2"><?=$nbcandidature[$etu->getLogin()]?></td>
+                                            </tr>
                                     </tbody>
+                                        <?php endforeach;?>
+                                    <?php else :?>
+                                        <tr>Aucun Étudiant encore inscrit !</tr>
+                                    <?php endif?>
                                 </table>
                             </div>
                         </div>

@@ -64,4 +64,7 @@ enum Action: string
     case PROFILE_METTRE_A_JOUR_ETUDIANT = "?c=etudiant&a=MettreAJourProfile";
     case VALIDER_DEFINITIVEMENT_OFFRE = "?c=etudiant&a=validerDefinitivement";
     case REFUSER_DEFINITIVEMENT_OFFRE = "?c=etudiant&a=refuserDefinitivement";
+    case ADMIN_LISTEOFFRES = "?c=admin&a=listeOffre";
+    case ADMIN_VALIDEOFFRE = "?c=admin&a=validerOffre";
+    case ADMIN_SUPRIMEROFFRES = "?c=admin&a=suprimerOffre";
 }

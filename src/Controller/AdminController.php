@@ -2,6 +2,7 @@
 
 namespace Stageo\Controller;
 
+use ArrayObject;
 use Exception;
 use http\Params;
 use Stageo\Controller\Exception\ControllerException;
@@ -20,20 +21,55 @@ use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Admin;
 use Stageo\Model\Object\Enseignant;
 use Stageo\Model\Object\Entreprise;
+use Stageo\Model\Object\Etudiant;
+use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\AdminRepository;
 use Stageo\Model\Repository\EnseignantRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
+use Stageo\Model\Repository\EtudiantRepository;
+use Stageo\Model\Repository\OffreRepository;
 use Stageo\Model\Repository\SecretaireRepository;
 
 class AdminController
 {
+    /**
+     * @return Response
+     * @throws ControllerException
+     */
     public function dashboard(): Response
     {
         $user =UserConnection::getSignedInUser();
         if ($user instanceof Enseignant && $user->getEstAdmin()){
+            $etudiants = (new EtudiantRepository())->select();
+            /**
+             * @var Etudiant $etu
+             */
+            $param["title"] = "dashboard";
+            $param["nav"] = false;
+            $param["footer"] = false;
+            $param["etudiants"]=$etudiants;
+            $param["entrepriseavalider"] = (new EntrepriseRepository())->getEntreprisesNonValidees();
+            if (is_array($param["entrepriseavalider"])) {
+                $param["nbentrepriseavalider"] = sizeof($param["entrepriseavalider"]);
+            }else{
+                $param["nbentrepriseavalider"] = 0;
+            }
+            if ($etudiants != null) {
+                foreach ($etudiants as $etu) {
+                    $nbcandidature[$etu->getlogin()] = (new EtudiantRepository())->getnbcandatures($etu->getlogin());
+                    if ($nbcandidature[$etu->getlogin()] === null) {
+                        $nbcandidature[$etu->getlogin()] = 0;
+                    }
+                }
+                $param["nbcandidature"] = $nbcandidature;
+                return new Response(
+                    template: "admin/dashboard.php",
+                    params: $param
+                );
+            }
             return new Response(
                 template: "admin/dashboard.php",
-                params: ["title" => "dashboard","nav"=>false,"footer"=>false]
+                params: $param
             );
         }
         throw new ControllerException(
@@ -165,7 +201,6 @@ class AdminController
             /** @var Entreprise $entreprise **/
             $entreprise->setValide(true);
             (new EntrepriseRepository())->update($entreprise);
-            $listeEntreprises = (new EntrepriseRepository())->getEntreprisesNonValidees();
             return new Response(
                 action: Action::ADMIN_LISTEENTREPRISE
             );
@@ -180,7 +215,6 @@ class AdminController
         $user = UserConnection::getSignedInUser();
         if ($user instanceof  Enseignant && $user->getEstAdmin()) {
             (new EntrepriseRepository())->delete([new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $_REQUEST["idEntreprise"])]);
-            $listeEntreprises = (new EntrepriseRepository())->getEntreprisesNonValidees();
             return new Response(
                 action: Action::ADMIN_LISTEENTREPRISE
             );
@@ -233,6 +267,63 @@ class AdminController
                     action: Action::ADMIN_DASH
                 );
             }
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
+        );
+    }
+
+    public function listeOffre(){
+        $user = UserConnection::getSignedInUser();
+        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+            $listeOffres = (new OffreRepository())->getAllInvalidOffre();
+            if ($listeOffres){
+                return new Response(
+                    template: "admin/listeOffre.php",
+                    params: [
+                        "title" => "Liste offres à valider",
+                        "listeoffres" => $listeOffres
+                    ]
+                );
+            }
+            FlashMessage::add(
+                content: "Aucune offre à valider",
+                type: FlashType::INFO
+            );
+            return new Response(
+                action: Action::ADMIN_DASH
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
+        );
+    }
+    public function validerOffre(){
+        $user = UserConnection::getSignedInUser();
+        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+            $offre = (new OffreRepository())->getById($_REQUEST["idOffre"]);
+            /** @var Offre $offre **/
+            $offre->setValider(true);
+            (new OffreRepository())->update($offre);
+            return new Response(
+                action: Action::ADMIN_LISTEOFFRES
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
+        );
+    }
+
+    public function suprimerOffre(){
+        $user = UserConnection::getSignedInUser();
+        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+            (new OffreRepository())->delete([new QueryCondition("id_offre", ComparisonOperator::EQUAL, $_REQUEST["idOffre"])]);
+            return new Response(
+                action: Action::ADMIN_LISTEOFFRES
+            );
         }
         throw new ControllerException(
             message: "Vous n'êtes pas authorisé à accéder à cette page",

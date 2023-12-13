@@ -5,7 +5,7 @@ use Stageo\Model\Object\Entreprise;
 include __DIR__."/../macros/button.php";
 /** @var ArrayObject $listeEntreprise */
 ?>
-    <div class="h-screen mt-[8rem] p-12">
+    <div class="h-min mt-[8rem] p-12">
 <?php foreach ($listeEntreprise as $entreprise) :?>
     <div class="flex border rounded-lg">
         <div class="flex-none w-24 h-24 bg-gray-200" aria-hidden="true"> <!-- Placeholder for image --> </div>
@@ -25,5 +25,4 @@ include __DIR__."/../macros/button.php";
             </div>
         </div>
     </div>
-    </div>
-<?php endforeach; ?>
+<?php endforeach; ?></div>
