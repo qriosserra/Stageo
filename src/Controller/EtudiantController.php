@@ -663,6 +663,12 @@ class EtudiantController
         $etudiant = UserConnection::getSignedInUser();
         $convention = (new ConventionRepository)->getByLogin($etudiant->getLogin());
 
+        if(!$convention){
+            throw new ControllerException(
+                message: "Vous n'avez pas créer de convention",
+                action: Action::HOME
+            );
+        }
 
         if ($convention->getThematique()==""){
             throw new ControllerException(
@@ -1034,6 +1040,24 @@ class EtudiantController
                 ]
             );
         }
+        $condition = [
+            new QueryCondition("login", ComparisonOperator::EQUAL, $etudiant->getLogin(), LogicalOperator::AND),
+            new QueryCondition("valider_par_etudiant", ComparisonOperator::EQUAL, true)
+        ];
+
+        $verif_etudiant = (new OffreRepository())->select($condition);
+        if($verif_etudiant){
+            FlashMessage::add(
+                content: "Tu as dejà un stage ou une alternance",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+
+
         $offre->setValiderParEtudiant(true);
         (new OffreRepository)->update($offre);
         //$postuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
@@ -1108,6 +1132,20 @@ class EtudiantController
             );
             return new Response(
                 action: Action::PROFILE_ETUDIANT,
+                params: []
+            );
+        }
+        $condition2 = [new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin(),LogicalOperator::AND),
+            new QueryCondition("valider_par_etudiant",ComparisonOperator::EQUAL,true)
+        ];
+        $verif_etudiant = (new OffreRepository())->select($condition2);
+        if($verif_etudiant){
+            FlashMessage::add(
+                content: "Tu as dejà un stage ou une alternance",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
                 params: []
             );
         }
