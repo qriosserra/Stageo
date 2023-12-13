@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito+Sans:opsz,wdth,wght,YTLC@6..12,75..125,200..1000,440..540&display=swap");
 @import url(https://db.onlinewebfonts.com/c/98023254fbc516186b4aa88d1e4415fc?family=Aspira+Wide+W01+Heavy);
 /*
-! tailwindcss v3.3.3 | MIT License | https://tailwindcss.com
+! tailwindcss v3.3.5 | MIT License | https://tailwindcss.com
 */
 /*
 1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
@@ -893,6 +893,9 @@ video {
 .w-screen{
   width: 100vw;
 }
+.w-28{
+  width: 7rem;
+}
 .min-w-\[60\%\]{
   min-width: 60%;
 }
@@ -995,10 +998,6 @@ video {
 .list-none{
   list-style-type: none;
 }
-.columns-1{
-  -moz-columns: 1;
-       columns: 1;
-}
 .auto-cols-auto{
   grid-auto-columns: auto;
 }
@@ -1098,9 +1097,6 @@ video {
 .divide-gray-100 > :not([hidden]) ~ :not([hidden]){
   --tw-divide-opacity: 1;
   border-color: rgb(243 244 246 / var(--tw-divide-opacity));
-}
-.self-end{
-  align-self: flex-end;
 }
 .self-center{
   align-self: center;
@@ -1296,6 +1292,10 @@ video {
 .bg-white{
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+.bg-slate-200{
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
 }
 .bg-gradient-radial{
   background-image: radial-gradient(var(--tw-gradient-stops));
