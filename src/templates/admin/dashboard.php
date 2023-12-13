@@ -94,8 +94,8 @@ use Stageo\Model\Object\Etudiant;
                     <a href="<?= Action::ADMIN_DASH->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
                         <span>Tableau de bord</span>
                     </a>
-                    <a href="" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
-                        <span>Etudiants</span>
+                    <a href="<?=Action::ADMIN_GESTION_ETUDIANT->value?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
+                        <span>Gestion etudiants</span>
                     </a>
                     <a href="<?= Action::ADMIN_LISTEENTREPRISE->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
                         <span>Entreprises à valider</span>
@@ -222,7 +222,7 @@ use Stageo\Model\Object\Etudiant;
                                     <p class="text-black">Importer ou exporter les suivis en csv</p>
                                     <p id="upload-message"></p>
                                 </div>
-                                <form id="uploadForm" class="flex justify-between items-center w-full px-4 bg-transparent" action="<?= Action::CSV->value ?>" method="post" enctype="multipart/form-data">
+                                <form id="uploadForm" class="flex justify-between items-center w-full px-4 bg-transparent" action="<?= Action::IMPORT_CSV_FORM->value?>" method="post" enctype="multipart/form-data">
                                     <!-- Bouton personnalisé pour l'importation à gauche -->
                                     <label class="text-blue-400 hover:text-red-400 cursor-pointer">
                                         <i class="fa-solid fa-upload"></i> Importer
