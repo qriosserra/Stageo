@@ -207,6 +207,7 @@ class MainController
             $csvContent = file_get_contents($cheminCSV['tmp_name']);
             (new tableTemporaireRepository())->insertViaCSV($csvContent);
         }
+        FlashMessage::add("Importation réussie", FlashType::SUCCESS);
         return new Response(
             template: "home.php",
             params: [
