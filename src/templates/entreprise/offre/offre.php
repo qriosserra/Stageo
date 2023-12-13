@@ -22,7 +22,7 @@ include __DIR__ . "/../../macros/offre.php";
     <div class=" rounded p-6">
         <div class="mb-4">
             <h1 class="text-2xl  text-center font-bold mb-2"><?= $offre->getThematique() ?> </h1>
-            <h6 class=" text-center"> <?= $nomentreprise ?></h2>
+            <h6 class=" text-center"> <?= $nomentreprise ?></h6>
                 <div class="flex mb-4">
                     Secteur : <?= $offre->getSecteur() ?>
                 </div>
@@ -78,7 +78,7 @@ include __DIR__ . "/../../macros/offre.php";
     </div>
 </div>
 
-<div class="flex flex-col md:flex-row justify-center items-center space-y-4 md:space-x-4 mt-4">
+<div class="flex flex-col md:flex-row justify-center items-center md:space-x-4">
         <?php if (UserConnection::isSignedIn() && UserConnection::isInstance(new Entreprise) && UserConnection::getSignedInUser()->getIdEntreprise() == $offre->getIdEntreprise()) : ?>
         <button onclick="window.location.href='<?= Action::ENTREPRISE_MODIFICATION_OFFRE_FORM->value ?><?= $offre->getIdOffre() ?>'" class="px-4 py-2 bg-blue-500 text-white text-sm font-bold uppercase rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-150 ease-in-out">Modifier</button>
         <button onclick="window.location.href='<?= Action::ENTREPRISE_DELETE_OFFRE->value ?><?= $offre->getIdOffre() ?>'" class="px-4 py-2 bg-red-500 text-white text-sm font-bold uppercase rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300 transition duration-150 ease-in-out">Supprimer</button>
