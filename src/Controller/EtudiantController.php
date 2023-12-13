@@ -263,7 +263,12 @@ class EtudiantController
         else {
             $etudiant = UserConnection::getSignedInUser();
             $convention = (new ConventionRepository)->getByLogin($etudiant->getLogin());
-            $convention = is_null($convention) ? new Convention() : $convention;
+            if (is_null($convention)){
+                $convention = new Convention();
+                if (Session::contains("convention")) {
+                    Session::delete("convention");
+                }
+            }
             $suivi = (new SuiviRepository)->getByIdConvention($convention->getIdConvention());
             if ($suivi != null && !$suivi->getModifiable()) {
                 throw new ControllerException(
@@ -312,6 +317,19 @@ class EtudiantController
          * @var Convention $convention
          */
         $convention = Session::get("convention");
+        if (is_null($convention)){
+            $user = UserConnection::getSignedInUser();
+            /**
+             * @var Etudiant $user
+             */
+            $convention = (new ConventionRepository())->getByLogin($user->getLogin());
+            if (is_null($convention)){
+                throw new ControllerException(
+                    message: "Vous avez prit trop de temps, veuillé recommencer !",
+                    action: Action::HOME
+                );
+            }
+        }
         $convention->setLogin((UserConnection::getSignedInUser())->getLogin());
         $convention->setTypeConvention($_REQUEST["type_convention"]);
         $convention->setOrigineStage($_REQUEST["origine_stage"]);
@@ -426,6 +444,19 @@ class EtudiantController
          * @var Convention $convention
          */
         $convention = Session::get("convention");
+        if (is_null($convention)){
+            $user = UserConnection::getSignedInUser();
+            /**
+             * @var Etudiant $user
+             */
+            $convention = (new ConventionRepository())->getByLogin($user->getLogin());
+            if (is_null($convention)){
+                throw new ControllerException(
+                    message: "Vous avez prit trop de temps, veuillé recommencer !",
+                    action: Action::HOME
+                );
+            }
+        }
         $convention->setDateDebut($_REQUEST["date_debut"] === "" ? null : $_REQUEST["date_debut"]);
         $convention->setDateFin($_REQUEST["date_fin"] === "" ? null : $_REQUEST["date_fin"]);
 //        $convention->setInterruption($_REQUEST["interruption"]);
@@ -550,6 +581,19 @@ class EtudiantController
          * @var Convention $convention
          */
         $convention = Session::get("convention");
+        if (is_null($convention)){
+            $user = UserConnection::getSignedInUser();
+            /**
+             * @var Etudiant $user
+             */
+            $convention = (new ConventionRepository())->getByLogin($user->getLogin());
+            if (is_null($convention)){
+                throw new ControllerException(
+                    message: "Vous avez prit trop de temps, veuillé recommencer !",
+                    action: Action::HOME
+                );
+            }
+        }
         $convention->setIdEntreprise($_REQUEST["entreprise"]);
         $convention->setIdDistributionCommune($_REQUEST["id_distribution_commune"]);
         $convention->setNumeroVoie($_REQUEST["numero_voie"]);
@@ -572,8 +616,8 @@ class EtudiantController
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
             );
         }
-
-        if (is_null($convention->getIdConvention())) {
+        $conventionBDD = (new ConventionRepository())->getById($convention->getIdConvention());
+        if (is_null($conventionBDD)) {
             $id_convention = (new ConventionRepository)->insert($convention);
             $convention->setIdConvention($id_convention);
             (new SuiviRepository)->insert(new Suivi(
@@ -619,10 +663,23 @@ class EtudiantController
         $etudiant = UserConnection::getSignedInUser();
         $convention = (new ConventionRepository)->getByLogin($etudiant->getLogin());
 
+
+        if ($convention->getThematique()==""){
+            throw new ControllerException(
+                message: "veuillé inscrire la thématique du stage/alternance !",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
         if (!Validate::isName($convention->getThematique(), false)) {
             throw new ControllerException(
                 message: "La thématique doit faire moins de 257 caractères",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM
+            );
+        }
+        if ($convention->getSujet()==""){
+            throw new ControllerException(
+                message: "veuillé inscrire le sujet du stage/alternance !",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
         if (!Validate::isName($convention->getSujet(), false)) {
@@ -631,10 +688,22 @@ class EtudiantController
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM
             );
         }
+        if ($convention->getOrigineStage()==""){
+            throw new ControllerException(
+                message: "veuillé inscrire l'origine du stage/alternance !",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
         if (!Validate::isName($convention->getOrigineStage(), false)) {
             throw new ControllerException(
                 message: "L'origine du stage doit faire moins de 257 caractères",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM
+            );
+        }
+        if ($convention->getTaches()==""){
+            throw new ControllerException(
+                message: "veuillé inscrire les tâches de stage/alternance !",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
         if (!Validate::isText($convention->getTaches())) {
@@ -643,16 +712,28 @@ class EtudiantController
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM
             );
         }
-        if (!Validate::isText($convention->getCommentaires())) {
+        if (!is_null($convention->getCommentaires()) && !Validate::isText($convention->getCommentaires())) {
             throw new ControllerException(
                 message: "Les commentaires doivent faire moins de 3065 caractères",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM
+            );
+        }
+        if ($convention->getDetails()==""){
+            throw new ControllerException(
+                message: "veuillé inscrire les détails de stage/alternance !",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
         if (!Validate::isText($convention->getDetails())) {
             throw new ControllerException(
                 message: "Les détails doivent faire moins de 3065 caractères",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM
+            );
+        }
+        if (is_null($convention->getDateDebut())|| is_null($convention->getDateFin())){
+            throw new ControllerException(
+                message: "veuillé inscrire les date de stage/alternance !",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
         if (!Validate::isDate($convention->getDateDebut()) or date("Y-m-d") > $convention->getDateDebut()) {
@@ -685,7 +766,7 @@ class EtudiantController
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
-        if (!Validate::isText($convention->getCommentairesDuree())) {
+        if (!is_null($convention->getCommentairesDuree()) && !Validate::isText($convention->getCommentairesDuree())) {
             throw new ControllerException(
                 message: "Le commentaire sur la durée doit faire moins de 3065 caractères",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
@@ -697,9 +778,15 @@ class EtudiantController
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
+        if ($convention->getAvantagesNature()=="") {
+            throw new ControllerException(
+                message: "veuillé inscrire les avantages nature de stage/alternance et \"Aucun\" si vous n'en avait pas !",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
         if (!Validate::isText($convention->getAvantagesNature())) {
             throw new ControllerException(
-                message: "Le commentaire sur la durée doit faire moins de 3065 caractères",
+                message: "Les avantages nature doit faire moins de 3065 caractères",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
@@ -713,6 +800,12 @@ class EtudiantController
             throw new ControllerException(
                 message: "La commune n'existe pas",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if ($convention->getNumeroVoie()=="") {
+            throw new ControllerException(
+                message: "veuillé inscrire le numéro de voie du lieu de stage/alternance!",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
         if (!Validate::isName($convention->getNumeroVoie())) {
