@@ -155,9 +155,9 @@ use Stageo\Lib\enums\Action;
         </div>
     </form>
     </div>
-    <div class="auto-cols-auto rounded-lg border border-gray-300 bg-white">
+    <div class="auto-cols-auto rounded-lg border border-gray-300 bg-white m-32">
         <div class="flex justify-center border-b">
-            <span class="tracking-wide">Offres postulé</span>
+            <span class="tracking-wide">Offres postulées</span>
         </div>
         <div class="grid grid-cols-1 gap-2 px-4 py-4 lg:grid lg:grid-cols-4 lg:space-x-3 lg:space-y-0">
             <?php foreach ($offres as $offrecouple): ?>
