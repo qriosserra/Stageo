@@ -4,6 +4,6 @@
  */
 ?>
 <main>
-    <h1>Bip boop</h1>
+    <h1 class="mt-3">Bip boop</h1>
     <p><?=$message?></p>
 </main>

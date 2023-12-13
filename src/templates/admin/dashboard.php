@@ -242,7 +242,34 @@ use Stageo\Model\Object\Etudiant;
                                 </footer>
                             </div>
                         </main>
-                        
+                        <main class="grid justify-center items-center  p-4 ">
+                            <div id="drop-area"
+                                 class="bg-black group inline-block pb-4 bg-gray-100 border-2 text-white overflow-hidden rounded-2xl shadow hover:shadow-md transition flex flex-col justify-center items-center pt-4">
+
+                                <!-- Réduction de la hauteur du figure -->
+                                <figure
+                                        class="mb-[-1.5rem] justify-center items-center h-56 aspect-square overflow-hidden ">
+                                    <img class="w-3/4 h-3/4 object-cover transition group-hover:scale-110 mx-auto my-auto"
+                                         src="./assets/img/stats.png" />
+                                </figure>
+                                <!-- Suppression du padding en haut pour la div du texte -->
+                                <div class="px-4 pt-2 pb-4 text-center">
+                                    <h3 class="text-xl font-bold text-black">Suivi</h3>
+                                    <p class="text-black">Importer ou exporter les suivis en csv</p>
+                                    <p id="upload-message"></p>
+                                </div>
+                                <footer class="flex justify-between items-center w-full px-4">
+                                    <!-- Bouton pour l'importation à gauche -->
+                                    <button class="text-blue-400 hover:text-red-400">
+                                        <i class="fa-solid fa-upload"></i> Importer
+                                    </button>
+                                    <!-- Bouton pour l'exportation à droite -->
+                                    <button class="text-blue-400 hover:text-red-400">
+                                        <i class="fa-solid fa-download"></i> Exporter
+                                    </button>
+                                </footer>
+                            </div>
+                        </main>
 
                     </div>
                     <div id="tableau" class="w-3/5 bg-white mr-6 rounded-xl shadow-lg overflow-hidden">

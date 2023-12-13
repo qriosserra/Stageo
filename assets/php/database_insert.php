@@ -10,6 +10,8 @@ INSERT INTO stg_categorie (libelle) VALUES
 ('JavaScript'),
 ('HTML');
 
+INSERT INTO stg_admin(login) VALUES ('coletta');
+
 INSERT INTO stg_etape (id_etape, libelle) VALUES
 ('TAIB21', 'BUT 2 Informatique - Réalisation d''application, conception, développement et validation');
 

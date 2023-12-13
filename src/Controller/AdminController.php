@@ -245,6 +245,10 @@ class AdminController
             action: Action::HOME,
         );
     }
+
+    /**
+     * @throws ControllerException
+     */
     public function suprimerEntreprise(){
         $user = UserConnection::getSignedInUser();
         if ($user instanceof  Enseignant && $user->getEstAdmin()) {
@@ -255,7 +259,7 @@ class AdminController
             $email = $_REQUEST["email"];
             $raison = $_REQUEST["raisonRefus"];
             $email = new Email($email,"Refus d'une Offre","Bonjour, nous vous informons que votre inscription a était refusé pour les raison suivante :".$raison);
-            //(new Mailer())->send($email);
+            (new Mailer())->send($email);
             (new EntrepriseRepository())->delete([new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $_REQUEST["idEntreprise"])]);
             return new Response(
                 action: Action::ADMIN_LISTEENTREPRISE
@@ -372,7 +376,7 @@ class AdminController
             $email = $_REQUEST["email"];
             $raison = $_REQUEST["raisonRefus"];
             $email = new Email($email,"Refus d'une Offre","Bonjour, nous vous informons que l'offre suivante a était refusé : ".$offre[0]->getDescription()." pour les raison suivante :".$raison);
-            //(new Mailer())->send($email);
+            (new Mailer())->send($email);
             (new OffreRepository())->delete([new QueryCondition("id_offre", ComparisonOperator::EQUAL, $_REQUEST["idOffre"])]);
             return new Response(
                 action: Action::ADMIN_LISTEOFFRES

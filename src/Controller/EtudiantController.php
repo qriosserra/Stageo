@@ -616,8 +616,7 @@ class EtudiantController
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
             );
         }
-        $conventionBDD = (new ConventionRepository())->getById($convention->getIdConvention());
-        if (is_null($conventionBDD)) {
+        if (is_null($convention->getIdConvention())) {
             $id_convention = (new ConventionRepository)->insert($convention);
             $convention->setIdConvention($id_convention);
             (new SuiviRepository)->insert(new Suivi(
@@ -627,6 +626,7 @@ class EtudiantController
             ));
         }
         else {
+            $conventionBDD = (new ConventionRepository())->getById($convention->getIdConvention());
             (new ConventionRepository)->update($convention);
             /**
              * @var Suivi $suivi

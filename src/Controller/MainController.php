@@ -42,9 +42,7 @@ class MainController
         return new Response(
             template: "home.php",
             params: [
-                "title" => "Accueil",
-                "categories" => (new CategorieRepository)->select(),
-                "offres" => (new OffreRepository())->select()
+                "title" => "Accueil"
             ]
         );
     }
