@@ -436,7 +436,8 @@ class EntrepriseController
         );
     }
 
-    public function offreAddForm(string $email = null): Response {
+    public function offreAddForm(string $email = null): Response
+    {
         if (UserConnection::isInstance(new Entreprise())) {
             return new Response(
                 template: "entreprise/offre/add.php",
@@ -581,7 +582,7 @@ class EntrepriseController
                 action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
             );
         }
-        if($type!='alternance'){
+        if($type == "stage"){
             if(!Validate::isDateStage($date_debut,$date_fin,$niveau)){
                 throw new ControllerException(
                     message: "Les dates de stages ne sont pas conforment",
