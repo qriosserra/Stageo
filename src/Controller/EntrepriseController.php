@@ -471,6 +471,9 @@ class EntrepriseController
         $type = $_REQUEST["emploi"];
         $date_debut = $_REQUEST["start"];
         $date_fin = $_REQUEST["end"];
+        if(!$date_fin){
+            $date_fin =null;
+        }
         if(!$_REQUEST["checkbox"]){
             throw new ControllerException(
                 message: "Niveau d'étude pas selectionner",
@@ -658,7 +661,6 @@ class EntrepriseController
                 action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
             );
         }
-
         if (count($_REQUEST["checkbox"]) == 1) {
             $niveau = $_REQUEST["checkbox"][0];
         }
@@ -776,7 +778,7 @@ class EntrepriseController
             (new OffreRepository())->delete($condition);
             return new Response(
                 action: Action::HOME,
-            );  
+            );
         }
         else{
             throw new ControllerException(
@@ -791,8 +793,7 @@ class EntrepriseController
             $id = $_REQUEST["id"];
             $offre = (new OffreRepository())->getById($id);
             $user = UserConnection::getSignedInUser();
-            $idEntreprise = $user->getIdEntreprise();
-            if($user and UserConnection::isInstance(new Entreprise) and $idEntreprise == $offre->getIdEntreprise()){
+            if($user and $offre and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
                 $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
                 $liste_offrePostuler = (new PostulerRepository())->select($condition);
                 return new Response(
@@ -818,11 +819,10 @@ class EntrepriseController
         $etudiant = $_REQUEST["login"];
         $offre = (new OffreRepository())->getById($id);
         $user = UserConnection::getSignedInUser();
-        $idEntreprise = $user->getIdEntreprise();
-        if($user and UserConnection::isInstance(new Entreprise) and $idEntreprise == $offre->getIdEntreprise()){
+        if($user and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
             $offre->setLogin($etudiant);
             (new OffreRepository())->update($offre);
-            $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
+            $condition = new QueryCondition("login", ComparisonOperator::EQUAL,$etudiant);
             (new PostulerRepository())->delete($condition);
             FlashMessage::add("Etudiant accepter avec success", FlashType::SUCCESS);
             return new Response(
@@ -835,18 +835,25 @@ class EntrepriseController
         );
     }
 
-    public static function afficherOffreEntreprise():Response{
+    public static function afficherOffreEntreprise(): Response
+    {
         if (UserConnection::isInstance(new Entreprise())) {
             $user = UserConnection::getSignedInUser();
             $idEntreprise = $user->getIdEntreprise();
             $condition = new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $idEntreprise);
+            $listeoffres = (new OffreRepository())->getOffresDetailsAvecCategories();
             $liste_offre = (new OffreRepository())->select($condition);
+            $idOffres =  [];
+            foreach ($liste_offre as $offre){
+                $idOffres [] = $offre->getIdOffre();
+            }
             return new Response(
                 template: "entreprise/offre/liste-offre.php",
                 params: [
                     "title" => "Liste des offres",
-                    "offres" => $liste_offre,
-                    "selA" => null,
+                    "listeoffres" => $listeoffres,
+                    "idOffres" => $idOffres,
+                    "nbRechercheTrouver" => count($idOffres),
                     "selB" => null,
                     "search" => null
                 ]

@@ -121,10 +121,17 @@ include __DIR__ . "/../../macros/offre.php";
 
             startInput.addEventListener('change', function () {
                 const selectedEmploi = document.querySelector("[name='emploi']:checked");
-                const durationWeeks = (selectedEmploi && selectedEmploi.value === 'alternance') ? 10 : 16;
+                const durationWeeks = (selectedEmploi && selectedEmploi.value === 'alternance') ? null : 1;
+                if(durationWeeks) {
+                    const selectedNiveau = document.querySelectorAll("[name='checkbox[]']:checked");
 
-                // Calcul de la date de fin
-                endInput.value = calculateEndDate(this.value, durationWeeks);
+                    const hasBUT2 = Array.from(selectedNiveau).some(checkbox => checkbox.value === 'BUT2');
+                    const hasBUT3 = Array.from(selectedNiveau).some(checkbox => checkbox.value === 'BUT3');
+
+                    const dw = (hasBUT3 || (hasBUT2 && hasBUT3)) ? 16 : 10;
+                    // Calcul de la date de fin
+                    endInput.value = calculateEndDate(this.value, dw);
+                }
             });
 
             // Au chargement de la page, déclencher l'événement change si la date de début a une valeur initiale
@@ -134,6 +141,11 @@ include __DIR__ . "/../../macros/offre.php";
 
             niveauCheckboxes.forEach(function (niveau) {
                 niveau.addEventListener('change', function () {
+                    const selectedEmploi = document.querySelector("[name='emploi']:checked");
+
+                    if (selectedEmploi && (selectedEmploi.value === 'alternance' || selectedEmploi.value === 'Stage&Alternance')) {
+                        endInput.value = null;
+                    } else {
                         const selectedNiveau = document.querySelectorAll("[name='checkbox[]']:checked");
 
                         const hasBUT2 = Array.from(selectedNiveau).some(checkbox => checkbox.value === 'BUT2');
@@ -141,7 +153,8 @@ include __DIR__ . "/../../macros/offre.php";
 
                         const durationWeeks = (hasBUT3 || (hasBUT2 && hasBUT3)) ? 16 : 10;
 
-                        endInput.value = calculateEndDate(startInput.value, durationWeeks);
+                        endInput.value = calculateEndDate(startInput.value, durationWeeks)
+                    }
                 });
             });
 

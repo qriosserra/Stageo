@@ -1,6 +1,7 @@
 <?php
 use Stageo\Lib\enums\Action;
 /**
+ * @var string $login
  * @var string $nom
  * @var string $prenom
  * @var string $email
@@ -11,10 +12,14 @@ use Stageo\Lib\enums\Action;
  * @var string $voie
  * @var \Stageo\Model\Object\DistributionCommune $commune
  * @var \Stageo\Model\Object\DistributionCommune [] $communes
+ * @var \Stageo\Model\Object\Offre [] $offres
+ * @var \Stageo\Model\Object\Offre $offre
+ * @var \Stageo\Model\Object\Entreprise $entreprise
  */
 ?>
+<body>
 <section class="bg-slate-50 flex-col justify-center items-center">
-    <div class="flex justify-center lg:justify-start lg:px-4 lg:py-2">
+    <!-- <div class="flex justify-center lg:justify-start lg:px-4 lg:py-2">
         <div class="flex items-center gap-4">
             <img class="h-10 w-10 rounded-full" src="/docs/images/people/profile-picture-5.jpg" alt="" />
             <div class="font-medium dark:text-white">
@@ -22,8 +27,8 @@ use Stageo\Lib\enums\Action;
                 <div class="text-sm text-gray-500 dark:text-gray-400">Année <?= $annee ?></div>
             </div>
         </div>
-    </div>
-    <form action="<?=Action::Profile_METTRE_A_JOUR_ETUDIANT->value?>" method="post">
+    </div> -->
+    <form action="<?=Action::PROFILE_METTRE_A_JOUR_ETUDIANT->value?>" method="post">
         <div class="grid w-full grid-cols-1 gap-2 space-y-3 px-4 py-2 lg:space-x-3 lg:space-y-0">
             <div class="auto-cols-auto rounded-lg border border-gray-300 bg-white">
                 <div class="flex justify-center border-b">
@@ -129,7 +134,7 @@ use Stageo\Lib\enums\Action;
                         <span class="font-semibold tracking-wide">Description</span>
                         <div class="flex items-center">
                             <div class="absolute flex items-center border-r px-4 text-gray-600"></div>
-                            <textarea id="bio" class="flex h-20 w-full resize-y items-center rounded border border-gray-300 p-2 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none" placeholder="Écrivez votre bio ici..."></textarea>
+                            <textarea id="bio" class="flex h-20 w-full resize-y items-center rounded border border-gray-300 p-2 text-sm font-normal text-gray-600 focus:border focus:border-indigo-700 focus:outline-none min-h-[50px]" placeholder="Écrivez votre bio ici..."></textarea>
                         </div>
                     </div>
                 </div>
@@ -140,7 +145,7 @@ use Stageo\Lib\enums\Action;
                                 id="saveButton">Sauvegarder</button>
                         <button type="button"
                                 class="focus:shadow-outline-gray rounded-lg bg-gradient-to-tr from-slate-500 to-slate-400 px-4 py-2 font-bold text-white hover:bg-gray-500 focus:outline-none transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-gray-500"
-                                id="cancelButton">Annuler</button>
+                                id="cancelButton" onclick="window.location.href='?c=etudiant&a=afficherProfile'">Annuler</button>
                     </div>
                 </div>
             </div>
@@ -148,29 +153,45 @@ use Stageo\Lib\enums\Action;
         </div>
         </div>
     </form>
+    </div>
+    <div class="auto-cols-auto rounded-lg border border-gray-300 bg-white">
+        <div class="flex justify-center border-b">
+            <span class="tracking-wide">offres postuler</span>
         </div>
-        <div class="auto-cols-auto rounded-lg border border-gray-300 bg-white">
-            <div class="flex justify-center border-b">
-                <span class="tracking-wide">offres postuler</span>
-            </div>
-            <div class="grid grid-cols-1 gap-2 px-4 py-4 lg:grid lg:grid-cols-4 lg:space-x-3 lg:space-y-0">
-                <div class="flex flex-col items-center rounded-xl border border-slate-200 py-4">
-                    <span class="font-bold"> Nom Offre </span>
-                    <p>description de l'offre</p>
-                    <p>Valider</p>
-                    <button class="rounded-xl bg-gradient-to-tr from-blue-600 to-blue-400 bg-clip-border px-4 py-2 text-white shadow-md shadow-blue-500/40 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500">
+        <div class="grid grid-cols-1 gap-2 px-4 py-4 lg:grid lg:grid-cols-4 lg:space-x-3 lg:space-y-0">
+            <?php foreach ($offres as $offrecouple): ?>
+                <?php
+                $offre = $offrecouple["offre"];
+                $entreprise = $offrecouple["entreprise"];
+                ?>
+                <div class=" flex flex-col items-center rounded-xl border border-slate-200 p-4 shadow-2xl">
+                    <span class="font-bold"> <?= $entreprise->getRaisonSociale() ?> </span>
+                    <span class="font-bold"> <?= $offre->getThematique() ?> </span>
+                    <p class="text-justify m-3"><?= $offre->getDescription()?></p>
+                    <p> <?php echo ($offre->getLogin() == null) ? "En cours de validation" : (($offre->getLogin() == $login) ? (!$offre->getValiderParEtudiant() ? "En Attente de Validation" : "Accepter" ) : (!$offre->getValiderParEtudiant() ? "En Liste d'attente" : "Refuser" )); ?> </p>
+                    <button onclick="<?php echo ("window.location.href='".Action::AFFICHER_OFFRE->value."&id=".$offre->getIdOffre()) ?>'" class="rounded-xl bg-gradient-to-tr from-blue-600 to-blue-400 bg-clip-border px-4 py-2 text-white shadow-md shadow-blue-500/40 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500">
                         <span class="font-bold">En savoir plus</span>
                     </button>
                 </div>
-                <div class="flex flex-col items-center rounded-xl border border-slate-200 py-4">
-                    <span class="font-bold"> Nom Offre </span>
-                    <p>description de l'offre</p>
-                    <p>En cours de validation</p>
-                    <button class="rounded-xl bg-gradient-to-tr from-blue-600 to-blue-400 bg-clip-border px-4 py-2 text-white shadow-md shadow-blue-500/40 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500">
-                        <span class="font-bold">En savoir plus</span>
-                    </button>
-                </div>
-            </div>
+            <?php endforeach;?>
+            <!--  <div class="flex flex-col items-center rounded-xl border border-slate-200 py-4 shadow-2xl">
+                  <span class="font-bold"> Nom Offre </span>
+                  <p>description de l'offre</p>
+                  <p>Valider</p>
+                  <button class="rounded-xl bg-gradient-to-tr from-blue-600 to-blue-400 bg-clip-border px-4 py-2 text-white shadow-md shadow-blue-500/40 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500">
+                      <span class="font-bold">En savoir plus</span>
+                  </button>
+              </div>
+              <div class="flex flex-col items-center rounded-xl border border-slate-200 py-4">
+                  <span class="font-bold"> Nom Offre </span>
+                  <p>description de l'offre</p>
+                  <p>En cours de validation</p>
+                  <button class="rounded-xl bg-gradient-to-tr from-blue-600 to-blue-400 bg-clip-border px-4 py-2 text-white shadow-md shadow-blue-500/40 transition-all hover:scale-[1.02] hover:shadow-lg hover:shadow-blue-500">
+                      <span class="font-bold">En savoir plus</span>
+                  </button>
+              </div>-->
         </div>
     </div>
+    </div>
 </section>
+</body>

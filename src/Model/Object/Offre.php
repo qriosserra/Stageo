@@ -25,8 +25,19 @@ class Offre extends CoreObject
                                 private string|NullDataType|null $date_fin = null,
                                 private string|NullDataType|null $niveau = null,
                                 private bool|NullDataType|null $valider = null,
+                                private bool|NullDataType|null $valider_par_etudiant = null,
     )
     {
+    }
+
+    public function getValiderParEtudiant(): bool|NullDataType|null
+    {
+        return $this->valider_par_etudiant;
+    }
+
+    public function setValiderParEtudiant(bool|NullDataType|null $valider_par_etudiant): void
+    {
+        $this->valider_par_etudiant = $valider_par_etudiant;
     }
 
     public function getValider(): bool|NullDataType|null

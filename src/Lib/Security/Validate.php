@@ -116,8 +116,14 @@ class Validate
             return false;
         }
 
-        if ($date_fin > date('Y-m-d', strtotime("$anneeStage-08-15")) || $date_debut < date('Y-m-d', strtotime("$anneeStage-04-08"))) {
-            return false;
+        if ($niveau == 'BUT2') {
+            if ($date_fin > date('Y-m-d', strtotime("$anneeStage-07-05")) || $date_debut < date('Y-m-d', strtotime("$anneeStage-04-08"))) {
+                return false;
+            }
+        } else {
+            if ($date_fin > date('Y-m-d', strtotime("$anneeStage-08-28")) || $date_debut < date('Y-m-d', strtotime("$anneeStage-03-25"))) {
+                return false;
+            }
         }
 
         switch ($niveau) {

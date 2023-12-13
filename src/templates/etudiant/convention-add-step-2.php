@@ -33,9 +33,9 @@ include __DIR__ . "/../macros/button.php";
         <form action="<?=Action::ETUDIANT_CONVENTION_ADD_STEP_2->value?>" method="post" class="bg-white p-6 grid grid-cols-2 gap-4 rounded shadow-md border-t-4 border-blue-500">
             <?=field("date_debut", "Date de début", "date", "Entrez la date de début", null, false, $convention->getDateDebut())?>
             <?=field("date_fin", "Date de fin", "date", "Entrez la date de fin", null, false, $convention->getDateFin())?>
-<!--               --><?php //=dropdown("interruption", "Interruption", $convention->getInterruption(), null, false, [false => "Non", true => "Oui"])?>
-<!--               --><?php //=field("date_debut_interruption", "Date de début de l'interruption", "date", "Entrez la date de début de l'interruption", null ,false, $convention->getDateInterruptionDebut())?>
-<!--               --><?php //=field("date_fin_interruption", "Date de fin de l'interruption", "date", "Entrez la date de fin de l'interruption", null, false, $convention->getDateInterruptionFin())?>
+            <!--               --><?php //=dropdown("interruption", "Interruption", $convention->getInterruption(), null, false, [false => "Non", true => "Oui"])?>
+            <!--               --><?php //=field("date_debut_interruption", "Date de début de l'interruption", "date", "Entrez la date de début de l'interruption", null ,false, $convention->getDateInterruptionDebut())?>
+            <!--               --><?php //=field("date_fin_interruption", "Date de fin de l'interruption", "date", "Entrez la date de fin de l'interruption", null, false, $convention->getDateInterruptionFin())?>
             <?=dropdown("annee_universitaire", "Année universitaire", $convention->getAnneeUniversitaire(), null ,"2023-2024", $annees_universitaires)?>
             <?=field("heures_total", "Heures total", "number", "Entrez les heures total", null, false, $convention->getHeuresTotal())?>
             <?=field("jours_hebdomadaire", "Jours hebdomadaire", "number", "Entrez les jours de travail hebdomadaire", null, false, $convention->getJoursHebdomadaire())?>
