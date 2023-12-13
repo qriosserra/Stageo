@@ -103,12 +103,12 @@ include __DIR__ . "/../../macros/input.php";
 </style>
 <body class="p-2 font-base ">
 <main class="h-screen flex flex-col items-center justify-center">
-    <?php if(empty($liste_offre)):?>
+    <?php if(empty($postuler)):?>
         <h2>Aucun étudiant n'a postulé à une de vos offres</h2>
     <?php endif; ?>
     <div class="relative overflow-x-auto sm:rounded-lg">
         <?php foreach ($postuler as $liste_offre): ?>
-        <a href="<?=Action::AFFICHER_OFFRE->value?>&id=<?=$liste_offre[0]->getIdOffre()?>"><h2><?=(new OffreRepository())->getById($liste_offre[0]->getIdOffre())->getThematique() ?></h2></a>
+        <a href="<?=Action::AFFICHER_OFFRE->value?>&id=<?=$liste_offre[0]->getIdOffre()?>"><h4><?=(new OffreRepository())->getById($liste_offre[0]->getIdOffre())->getThematique() ?>:</h4></a>
         <table class="table border-collapse block sm:table shadow-lg  rounded-xl mb-5">
             <thead class="hidden sm:table-header-group">
             <tr class="border-gray-600 ">
