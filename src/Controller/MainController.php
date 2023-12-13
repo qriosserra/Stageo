@@ -13,6 +13,7 @@ use Stageo\Lib\HTTP\Cookie;
 use Stageo\Lib\Mailer;
 use Stageo\Lib\Response;
 use Stageo\Lib\UserConnection;
+use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\CategorieRepository;
 use Stageo\Model\Repository\DeCategorieRepository;
@@ -143,6 +144,64 @@ class MainController
         );
     }
 
+    public function listeEntreprises() : Response
+    {
+        if (UserConnection::isSignedIn()) {
+        $search = $_REQUEST["search"] ?? "";
+        $commune = $_REQUEST["commune"] ?? "";
+        $option = $_POST["OptionL"] ?? "raison_sociale";
+        $tabla = $option === "raison_sociale"
+            ? "raison_sociale"
+            : "commune";
+        $entreprises = [];
+        $idEntreprises =  [];
+
+        if (isset($search)){
+            if ($option == "commune"){
+                $entreprises = (new EntrepriseRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
+                foreach ($entreprises as $entreprise) {
+                    $idEntreprises [] = $entreprise->getIdEntreprise();
+                }
+            }else {
+                $entreprises = (new EntrepriseRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
+                foreach ($entreprises as $o){
+                    $idEntreprises [] = $o->getIdEntreprise();
+                }
+
+            }
+        }else{
+            $entreprises = (new EntrepriseRepository)->select();
+            $idEntreprises = (new EntrepriseRepository())->getAllEntrepriseId();
+        }
+        $selA = $option === "raison_sociale"
+            ? "selected"
+            : null;
+        $selB = $option === "commune"
+            ? "selected"
+            : null;
+        $listeEntreprises = (new EntrepriseRepository())->getEntrepriseDetails();
+        $Categories = (new CategorieRepository()) ->select();
+        return new Response(
+            template: "entreprise/liste-entreprise.php",
+            params: [
+                "title" => "Liste des entreprises",
+                "entreprises" => $entreprises,
+                "listeEntreprises" => $listeEntreprises,
+                "idEntreprises" => $idEntreprises,
+                "selA" => $selA,
+                "selB" => $selB,
+                "Categories" => $Categories,
+                "nbRechercheTrouver" => count($entreprises),
+                "communeTaper" => $commune,
+                "search" => $search
+            ]
+        );}
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
+        );
+    }
+
     public function afficherOffre(string $id): Response
     {
         if (UserConnection::isSignedIn()) {
@@ -157,6 +216,27 @@ class MainController
                 "entreprise" => (new EntrepriseRepository)->getById($offre->getIdEntreprise()),
                 "offre" => $offre,
                 "unite_gratification" => (new UniteGratificationRepository)->getById($offre->getIdUniteGratification())->getLibelle()
+            ]
+        );}
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
+        );
+    }
+
+    public function afficherEntreprise(string $id): Response
+    {
+        if (UserConnection::isSignedIn()) {
+        /**
+         * @var Entreprise $entreprise
+         */
+        $entreprise = (new EntrepriseRepository)->getById($id);
+        return new Response(
+            template: "entreprise/entreprise.php",
+            params: [
+                "title" => "Entreprise $id",
+                "entreprise" => $entreprise,
+                "commune" => (new DistributionCommuneRepository)->getById($entreprise->getIdDistributionCommune())->getCommune()
             ]
         );}
         throw new ControllerException(

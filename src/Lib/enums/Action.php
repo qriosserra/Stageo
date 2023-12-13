@@ -24,6 +24,7 @@ enum Action: string
     case ENTREPRISE_SIGN_IN = "?c=entreprise&a=signIn";
     case LISTE_OFFRE = "?a=listeOffre";
     case AFFICHER_OFFRE = "?a=afficherOffre";
+    case AFFICHER_ENTREPRISE = "?a=afficherEntreprise";
     case ENTREPRISE_POSTULE_OFFRE_ETUDIANT = "?c=entreprise&a=voirAPostuler";
     case ENTREPRISE_ACCEPTE_ETUDIANT_OFFRE = "?c=entreprise&a=accepterEtudiantOffre";
     case ENTREPRISE_CREATION_OFFRE_FORM = "?c=entreprise&a=offreAddForm";
@@ -62,4 +63,5 @@ enum Action: string
     case Profile_METTRE_A_JOUR_ETUDIANT = "?c=etudiant&a=MettreAJourProfile";
     case SECRETAIRE_CONVENTION_VALIDATION = "?c=secretaire&a=conventionValidation";
     case SECRETAIRE_CONVENTION_REFUS = "?c=secretaire&a=conventionRefus";
+    case LISTE_ENTREPRISES = "?a=listeEntreprises";
 }
