@@ -32,3 +32,6 @@ include __DIR__ . "/../macros/entreprise.php";
                     <dt class="mb-1 text-gray-500 md:text-lg dark:text-gray-400 underline-offset-1">Site</dt>
                     <dd class="text-lg text-black font-semibold"><?=$entreprise->getSite()?></dd>
                 </div>
+            </dl>
+        </div>
+</main>
