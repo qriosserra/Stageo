@@ -80,7 +80,7 @@ class EtudiantController
         );
         if ($response["annee"]==null){
             return (new AdminController())->signIn($response);
-        }
+        }else{
         $etudiant = (new EtudiantRepository)->getByLogin($login);
         if (is_null($etudiant)) {
             $etudiant = new Etudiant(
@@ -100,7 +100,7 @@ class EtudiantController
         UserConnection::signIn($etudiant);
         return new Response(
             action: Action::LISTE_OFFRE
-        );
+        );}
     }
 
     public static function afficherFormulairePostuler(string $id): Response
@@ -254,12 +254,31 @@ class EtudiantController
         }
         /**
          * @var Etudiant $etudiant
+         * @var Convention $convention
+         * @var Suivi $suivi
          */
-        $etudiant = UserConnection::getSignedInUser();
-        $convention = (new ConventionRepository)->getByLogin($etudiant->getLogin());
-        $convention = is_null($convention) ? new Convention() : $convention;
-        Session::set("convention", $convention);
+        if (Session::contains("convention")) {
+            $convention = Session::get("convention");
+        }
+        else {
+            $etudiant = UserConnection::getSignedInUser();
+            $convention = (new ConventionRepository)->getByLogin($etudiant->getLogin());
+            if (is_null($convention)){
+                $convention = new Convention();
+                if (Session::contains("convention")) {
+                    Session::delete("convention");
+                }
+            }
+            $suivi = (new SuiviRepository)->getByIdConvention($convention->getIdConvention());
+            if ($suivi != null && !$suivi->getModifiable()) {
+                throw new ControllerException(
+                    "Vous ne pouvez plus modifier la convention",
+                    Action::HOME
+                );
+            }
+        }
 
+        Session::set("convention", $convention);
         return new Response(
             template: "etudiant/convention-add-step-1.php",
             params: [
@@ -298,6 +317,19 @@ class EtudiantController
          * @var Convention $convention
          */
         $convention = Session::get("convention");
+        if (is_null($convention)){
+            $user = UserConnection::getSignedInUser();
+            /**
+             * @var Etudiant $user
+             */
+            $convention = (new ConventionRepository())->getByLogin($user->getLogin());
+            if (is_null($convention)){
+                throw new ControllerException(
+                    message: "Vous avez prit trop de temps, veuillé recommencer !",
+                    action: Action::HOME
+                );
+            }
+        }
         $convention->setLogin((UserConnection::getSignedInUser())->getLogin());
         $convention->setTypeConvention($_REQUEST["type_convention"]);
         $convention->setOrigineStage($_REQUEST["origine_stage"]);
@@ -412,6 +444,19 @@ class EtudiantController
          * @var Convention $convention
          */
         $convention = Session::get("convention");
+        if (is_null($convention)){
+            $user = UserConnection::getSignedInUser();
+            /**
+             * @var Etudiant $user
+             */
+            $convention = (new ConventionRepository())->getByLogin($user->getLogin());
+            if (is_null($convention)){
+                throw new ControllerException(
+                    message: "Vous avez prit trop de temps, veuillé recommencer !",
+                    action: Action::HOME
+                );
+            }
+        }
         $convention->setDateDebut($_REQUEST["date_debut"] === "" ? null : $_REQUEST["date_debut"]);
         $convention->setDateFin($_REQUEST["date_fin"] === "" ? null : $_REQUEST["date_fin"]);
 //        $convention->setInterruption($_REQUEST["interruption"]);
@@ -463,7 +508,7 @@ class EtudiantController
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
-        if (!is_null($convention->getDateDebut()) and $convention->getGratification() < (new ConfigurationRepository)->getGratificationMinimale()) {
+        if (!is_null($convention->getGratification()) and $convention->getGratification() < (new ConfigurationRepository)->getGratificationMinimale()) {
             throw new ControllerException(
                 message: "La gratification doit être supérieur à " . (new ConfigurationRepository)->getGratificationMinimale(),
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
@@ -536,6 +581,19 @@ class EtudiantController
          * @var Convention $convention
          */
         $convention = Session::get("convention");
+        if (is_null($convention)){
+            $user = UserConnection::getSignedInUser();
+            /**
+             * @var Etudiant $user
+             */
+            $convention = (new ConventionRepository())->getByLogin($user->getLogin());
+            if (is_null($convention)){
+                throw new ControllerException(
+                    message: "Vous avez prit trop de temps, veuillé recommencer !",
+                    action: Action::HOME
+                );
+            }
+        }
         $convention->setIdEntreprise($_REQUEST["entreprise"]);
         $convention->setIdDistributionCommune($_REQUEST["id_distribution_commune"]);
         $convention->setNumeroVoie($_REQUEST["numero_voie"]);
@@ -552,13 +610,12 @@ class EtudiantController
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
             );
         }
-        if (!Validate::isName($convention->getNumeroVoie(), true)) {
+        if (!Validate::isName($convention->getNumeroVoie())) {
             throw new ControllerException(
                 message: "Le numéro de voie doit faire moins de 257 caractères",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
             );
         }
-
         if (is_null($convention->getIdConvention())) {
             $id_convention = (new ConventionRepository)->insert($convention);
             $convention->setIdConvention($id_convention);
@@ -569,6 +626,7 @@ class EtudiantController
             ));
         }
         else {
+            $conventionBDD = (new ConventionRepository())->getById($convention->getIdConvention());
             (new ConventionRepository)->update($convention);
             /**
              * @var Suivi $suivi
@@ -577,6 +635,7 @@ class EtudiantController
             $suivi->setDateModification(date("Y-m-d H:i:s"));
             (new SuiviRepository)->update($suivi);
         }
+        Session::delete("convention");
         FlashMessage::add("Convention enregistrée comme brouillon. Veuillez la soumettre une fois complétée.", FlashType::INFO);
 
         return new Response(
@@ -586,184 +645,194 @@ class EtudiantController
 
     public function soumettreConvention(): Response
     {
+        if (!UserConnection::isSignedIn()) {
+            throw new ControllerException(
+                message: "Vous devez être connecté pour acceder à cette page",
+                action: Action::ETUDIANT_SIGN_IN_FORM
+            );
+        }
+        if (!UserConnection::isInstance(new Etudiant)) {
+            throw new ControllerException(
+                message: "Vous ne pouvez pas acceder à cette page",
+                action: Action::HOME
+            );
+        }
         /**
          * @var Etudiant $etudiant
          */
         $etudiant = UserConnection::getSignedInUser();
-        $type_convention = $_REQUEST["type_convention"];
-        $annee_universitaire = $_REQUEST["annee_universitaire"];
-        $origine_stage = $_REQUEST["origine_stage"];
-        $sujet = $_REQUEST["sujet"];
-        $taches = $_REQUEST["taches"];
-        $date_debut = $_REQUEST["date_debut"];
-        $date_fin = $_REQUEST["date_fin"];
-        $gratification = $_REQUEST["gratification"];
-        $id_unite_gratification = $_REQUEST["id_unite_gratification"];
-        $numero_voie = $_REQUEST["numero_voie"];
-        $id_distribution_commune = $_REQUEST["id_distribution_commune"];
-        $thematique = $_REQUEST["thematique"];
-        $commentaires = $_REQUEST["commentaires"];
-        $details = $_REQUEST["details"];
-        $interruption = $_REQUEST["interruption"];
-        $date_debut_interruption = $_REQUEST["date_debut_interruption"];
-        $date_fin_interruption = $_REQUEST["date_fin_interruption"];
-        if ($interruption == "0") {
-            $date_debut_interruption = null;
-            $date_fin_interruption = null;
-        }
-        if ($_REQUEST["date_fin_interruption"] == "") {
-            $date_fin_interruption = null;
-        }
-        if ($_REQUEST["date_debut_interruption"] == "") {
-            $date_debut_interruption = null;
-        }
-        $heures_total = $_REQUEST["heures_total"];
-        $jours_hebdomadaire = $_REQUEST["jours_hebdomadaire"];
-        $heures_hebdomadaire = $_REQUEST["heures_hebdomadaire"];
-        $commentaire_duree = $_REQUEST["commentaire_duree"];
-        $avantages_nature = $_REQUEST["avantages_nature"];
-        $code_elp = $_REQUEST["code_elp"];
-        $entreprise = $_REQUEST["entreprise"];
-        if ($date_debut > $date_fin) {
+        $convention = (new ConventionRepository)->getByLogin($etudiant->getLogin());
+
+        if(!$convention){
             throw new ControllerException(
-                message: "La date de début doit être inférieur à la date de fin",
-                action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM,
-                params: [
-                    "type_convention" => $type_convention,
-                    "annee_universitaire" => $annee_universitaire,
-                    "origine_stage" => $origine_stage,
-                    "sujet" => $sujet,
-                    "taches" => $taches,
-                    "date_debut" => $date_debut,
-                    "date_fin" => $date_fin,
-                    "gratification" => $gratification,
-                    "id_unite_gratification" => $id_unite_gratification,
-                    "numero_voie" => $numero_voie,
-                    "id_distribution_commune" => $id_distribution_commune,
-                ]
-            );
-        }
-        if ($date_debut_interruption > $date_fin_interruption) {
-            throw new ControllerException(
-                message: "La date de début de l'interruption doit être inférieur à la date de fin de l'interruption",
-                action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM,
-                params: [
-                    "type_convention" => $type_convention,
-                    "annee_universitaire" => $annee_universitaire,
-                    "origine_stage" => $origine_stage,
-                    "sujet" => $sujet,
-                    "taches" => $taches,
-                    "date_debut" => $date_debut,
-                    "date_fin" => $date_fin,
-                    "gratification" => $gratification,
-                    "id_unite_gratification" => $id_unite_gratification,
-                    "numero_voie" => $numero_voie,
-                    "id_distribution_commune" => $id_distribution_commune,
-                ]
-            );
-        }
-        if ($interruption == 1 and ($date_debut_interruption == null or $date_fin_interruption == null)) {
-            throw new ControllerException(
-                message: "Vous devez renseigner les dates de début et de fin de l'interruption",
-                action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM,
-                params: [
-                    "type_convention" => $type_convention,
-                    "annee_universitaire" => $annee_universitaire,
-                    "origine_stage" => $origine_stage,
-                    "sujet" => $sujet,
-                    "taches" => $taches,
-                    "date_debut" => $date_debut,
-                    "date_fin" => $date_fin,
-                    "gratification" => $gratification,
-                    "id_unite_gratification" => $id_unite_gratification,
-                    "numero_voie" => $numero_voie,
-                    "id_distribution_commune" => $id_distribution_commune,
-                ]
+                message: "Vous n'avez pas créer de convention",
+                action: Action::HOME
             );
         }
 
-        $convention = new Convention(
-            login: $etudiant->getLogin(),
-            type_convention: $type_convention,
-            origine_stage: $origine_stage,
-            annee_universitaire: $annee_universitaire,
-            sujet: $sujet,
-            taches: $taches,
-            date_debut: $date_debut,
-            date_fin: $date_fin,
-            gratification: $gratification,
-            id_unite_gratification: $id_unite_gratification,
-            numero_voie: $numero_voie,
-            id_distribution_commune: $id_distribution_commune,
-            thematique: $thematique,
-            commentaires: $commentaires,
-            details: $details,
-            interruption: $interruption,
-            date_interruption_debut: $date_debut_interruption,
-            date_interruption_fin: $date_fin_interruption,
-            heures_total: $heures_total,
-            jours_hebdomadaire: $jours_hebdomadaire,
-            heures_hebdomadaire: $heures_hebdomadaire,
-            commentaires_duree: $commentaire_duree,
-            avantages_nature: $avantages_nature,
-            code_elp: $code_elp,
-            id_entreprise: $entreprise
-        );
-        $date_creation = date("Y-m-d");
-        $date_modification = date("Y-m-d");
-        $modifiable = 1;
-        $valide = 0;
-        $raison_refus = null;
-        $valide_pedagogiquement = 0;
-        $avenants = 0;
-        $details_avenants = null;
-        $date_retour = null;
-        $id_convention = (new ConventionRepository)->select()[count((new ConventionRepository)->select())-1]->getIdConvention();
-        $suivi = new Suivi(
-            date_creation: $date_creation,
-            date_modification: $date_modification,
-            modifiable: $modifiable,
-            valide: $valide,
-            raison_refus: $raison_refus,
-            valide_pedagogiquement: $valide_pedagogiquement,
-            avenants: $avenants,
-            details_avenants: $details_avenants,
-            date_retour: $date_retour,
-            id_convention: $id_convention
-        );
-        if (!Token::verify(Action::ETUDIANT_CONVENTION_ADD_BROUILLON, $_REQUEST["token"]))
-            throw new InvalidTokenException();
-        if (Token::isTimeout(Action::ETUDIANT_CONVENTION_ADD_BROUILLON)) {
-            throw new TokenTimeoutException(
-                action: Action::ETUDIANT_CONVENTION_ADD_STEP_1,
-                params: ["convention" => $convention,
-                    "type_convention" => $type_convention,
-                    "annee_universitaire" => $annee_universitaire,
-                    "origine_stage" => $origine_stage,
-                    "sujet" => $sujet,
-                    "taches" => $taches,
-                    "date_debut" => $date_debut,
-                    "date_fin" => $date_fin,
-                    "gratification" => $gratification,
-                    "id_unite_gratification" => $id_unite_gratification,
-                    "numero_voie" => $numero_voie,
-                    "id_distribution_commune" => $id_distribution_commune,
-                ]
+        if ($convention->getThematique()==""){
+            throw new ControllerException(
+                message: "veuillé inscrire la thématique du stage/alternance !",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
-        (new ConventionRepository)->insert($convention);
-        //TODO comprendre pourquoi l'instruction suivante ne fonctionne pas
-        (new SuiviRepository)->insert($suivi);
-        FlashMessage::add(
-            content: "Convention enregistrée en tant que brouillon avec succès",
-            type: FlashType::SUCCESS
-        );
+        if (!Validate::isName($convention->getThematique(), false)) {
+            throw new ControllerException(
+                message: "La thématique doit faire moins de 257 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM
+            );
+        }
+        if ($convention->getSujet()==""){
+            throw new ControllerException(
+                message: "veuillé inscrire le sujet du stage/alternance !",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if (!Validate::isName($convention->getSujet(), false)) {
+            throw new ControllerException(
+                message: "Le sujet doit faire moins de 257 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM
+            );
+        }
+        if ($convention->getOrigineStage()==""){
+            throw new ControllerException(
+                message: "veuillé inscrire l'origine du stage/alternance !",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if (!Validate::isName($convention->getOrigineStage(), false)) {
+            throw new ControllerException(
+                message: "L'origine du stage doit faire moins de 257 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM
+            );
+        }
+        if ($convention->getTaches()==""){
+            throw new ControllerException(
+                message: "veuillé inscrire les tâches de stage/alternance !",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if (!Validate::isText($convention->getTaches())) {
+            throw new ControllerException(
+                message: "Les tâches doivent faire moins de 3065 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM
+            );
+        }
+        if (!is_null($convention->getCommentaires()) && !Validate::isText($convention->getCommentaires())) {
+            throw new ControllerException(
+                message: "Les commentaires doivent faire moins de 3065 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM
+            );
+        }
+        if ($convention->getDetails()==""){
+            throw new ControllerException(
+                message: "veuillé inscrire les détails de stage/alternance !",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if (!Validate::isText($convention->getDetails())) {
+            throw new ControllerException(
+                message: "Les détails doivent faire moins de 3065 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM
+            );
+        }
+        if (is_null($convention->getDateDebut())|| is_null($convention->getDateFin())){
+            throw new ControllerException(
+                message: "veuillé inscrire les date de stage/alternance !",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if (!Validate::isDate($convention->getDateDebut()) or date("Y-m-d") > $convention->getDateDebut()) {
+            throw new ControllerException(
+                message: "La date de début doit être supérieur à la date du jour",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if (!Validate::isDate($convention->getDateFin()) or $convention->getDateDebut() >= $convention->getDateFin()) {
+            throw new ControllerException(
+                message: "La date de début doit être inférieur à la date de fin",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if (!is_int((int) $convention->getHeuresTotal()) or $convention->getHeuresTotal() < 0) {
+            throw new ControllerException(
+                message: "Le nombre d'heures total doit être supérieur à 0",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if (!is_int((int) $convention->getJoursHebdomadaire()) or $convention->getJoursHebdomadaire() < 0 or $convention->getJoursHebdomadaire() > 7) {
+            throw new ControllerException(
+                message: "Le nombre de jours hebdomadaire doit être compris entre 0 et 7",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if (!is_int((int) $convention->getHeuresHebdomadaire()) or $convention->getHeuresHebdomadaire() < 0 or $convention->getHeuresHebdomadaire() > 45) {
+            throw new ControllerException(
+                message: "Le nombre d'heures hebdomadaire doit être compris entre 0 et 45",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if (!is_null($convention->getCommentairesDuree()) && !Validate::isText($convention->getCommentairesDuree())) {
+            throw new ControllerException(
+                message: "Le commentaire sur la durée doit faire moins de 3065 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if (is_null($convention->getGratification()) or $convention->getGratification() < (new ConfigurationRepository)->getGratificationMinimale()) {
+            throw new ControllerException(
+                message: "La gratification doit être supérieur à " . (new ConfigurationRepository)->getGratificationMinimale(),
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if ($convention->getAvantagesNature()=="") {
+            throw new ControllerException(
+                message: "veuillé inscrire les avantages nature de stage/alternance et \"Aucun\" si vous n'en avait pas !",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if (!Validate::isText($convention->getAvantagesNature())) {
+            throw new ControllerException(
+                message: "Les avantages nature doit faire moins de 3065 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if (is_null((new EntrepriseRepository)->getById($convention->getIdEntreprise()))) {
+            throw new ControllerException(
+                message: "L'entreprise n'existe pas",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if (is_null((new DistributionCommuneRepository)->getById($convention->getIdDistributionCommune()))) {
+            throw new ControllerException(
+                message: "La commune n'existe pas",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if ($convention->getNumeroVoie()=="") {
+            throw new ControllerException(
+                message: "veuillé inscrire le numéro de voie du lieu de stage/alternance!",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+            );
+        }
+        if (!Validate::isName($convention->getNumeroVoie())) {
+            throw new ControllerException(
+                message: "Le numéro de voie doit faire moins de 257 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+
+        /**
+         * @var Suivi $suivi
+         */
+        $suivi = (new SuiviRepository)->getByIdConvention($convention->getIdConvention());
+        $suivi->setDateModification(date("Y-m-d H:i:s"));
+        $suivi->setModifiable(false);
+        (new SuiviRepository)->update($suivi);
+
+        FlashMessage::add("La convention a été soumise avec succès", FlashType::SUCCESS);
         return new Response(
             action: Action::HOME
         );
-
-
-
     }
 
     public function sauvegarderEntreprise(): Response {
@@ -971,6 +1040,24 @@ class EtudiantController
                 ]
             );
         }
+        $condition = [
+            new QueryCondition("login", ComparisonOperator::EQUAL, $etudiant->getLogin(), LogicalOperator::AND),
+            new QueryCondition("valider_par_etudiant", ComparisonOperator::EQUAL, true)
+        ];
+
+        $verif_etudiant = (new OffreRepository())->select($condition);
+        if($verif_etudiant){
+            FlashMessage::add(
+                content: "Tu as dejà un stage ou une alternance",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
+
+
         $offre->setValiderParEtudiant(true);
         (new OffreRepository)->update($offre);
         //$postuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
@@ -978,7 +1065,7 @@ class EtudiantController
         $autrePostulant = (new PostulerRepository())->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre));
         foreach($offres as $o){
             if ($o->getIdOffre() != $idOffre){
-                $o->setLogin(Null);
+                $o->setLogin(new NullDataType());
                 (new OffreRepository())->update($o);
             }
         }
@@ -1048,17 +1135,33 @@ class EtudiantController
                 params: []
             );
         }
+        $condition2 = [new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin(),LogicalOperator::AND),
+            new QueryCondition("valider_par_etudiant",ComparisonOperator::EQUAL,true)
+        ];
+        $verif_etudiant = (new OffreRepository())->select($condition2);
+        if($verif_etudiant){
+            FlashMessage::add(
+                content: "Tu as dejà un stage ou une alternance",
+                type: FlashType::ERROR
+            );
+            return new Response(
+                action: Action::HOME,
+                params: []
+            );
+        }
         $offre->setLogin(new NullDataType());
         $condition = [
             new QueryCondition("login",ComparisonOperator::EQUAL,$login,LogicalOperator::AND),
             new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre)
         ];
         $offrePotuler = (new PostulerRepository())->select($condition);
-        if(file_exists("assets/document/cv/".$offrePotuler[0]->getCv())){
-            unlink("assets/document/cv/".$offrePotuler[0]->getCv());
-        }
-        if(file_exists("assets/document/lm/".$offrePotuler[0]->getLettreMotivation())){
-            unlink("assets/document/lm/".$offrePotuler[0]->getLettreMotivation());
+        if (!empty($offrePotuler) && isset($offrePotuler[0])) {
+            if (file_exists("assets/document/cv/" . $offrePotuler[0]->getCv())) {
+                unlink("assets/document/cv/" . $offrePotuler[0]->getCv());
+            }
+            if (file_exists("assets/document/lm/" . $offrePotuler[0]->getLettreMotivation())) {
+                unlink("assets/document/lm/" . $offrePotuler[0]->getLettreMotivation());
+            }
         }
         (new OffreRepository)->update($offre);
         $postuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
@@ -1074,6 +1177,43 @@ class EtudiantController
         );
         return new Response(
             action: Action::PROFILE_ETUDIANT,
+        );
+    }
+
+    public function voirMesCandidature():Response{
+        if (UserConnection::isInstance(new Etudiant())) {
+            $user = UserConnection::getSignedInUser();
+            $condition = new QueryCondition("login", ComparisonOperator::EQUAL, $user->getLogin());
+            $liste_accepter = (new OffreRepository())->select($condition);
+            $liste_postuler = (new PostulerRepository())->select($condition);
+            $postuler = [];
+            $id = null;
+
+            foreach ($liste_postuler as $p) {
+                $offrePostuler = (new OffreRepository())->getById($p->getIdOffre());
+                $postuler[] = $offrePostuler;
+            }
+            foreach ($liste_accepter as $p){
+                $offrePostuler = (new OffreRepository())->getById($p->getIdOffre());
+                if($offrePostuler->getValiderParEtudiant()){
+                    $id = $offrePostuler;
+                }
+            }
+            $nbpostuler = count($postuler)+count($liste_accepter);
+            return new Response(
+                template: "etudiant/afficher-offre-postuler.php",
+                params: [
+                    "title" => "Voir les offres auxquelle j'ai postulé",
+                    "postuler"=>$postuler,
+                    "accepter"=>$liste_accepter,
+                    "nombre"=>$nbpostuler,
+                    "id"=>$id
+                ]
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
         );
     }
 }

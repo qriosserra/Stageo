@@ -12,6 +12,8 @@ class Mailer
      */
     public static function send(Email $email): void
     {
+
+        if ($_ENV["HOSTNAME"] != "webinfo.iutmontp.univ-montp2.fr") {
         $mailer = new PHPMailer(true);
         $mailer->isSMTP();
         $mailer->SMTPAuth   = true;
@@ -28,6 +30,6 @@ class Mailer
             $mailer->send();
         } catch (Exception $e) {
             throw new ControllerException($mailer->ErrorInfo);
-        }
+        }}
     }
 }

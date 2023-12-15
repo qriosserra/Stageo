@@ -7,6 +7,7 @@ use Stageo\Controller\Exception\ControllerException;
 use Stageo\Controller\Exception\InvalidTokenException;
 use Stageo\Controller\Exception\TokenTimeoutException;
 use Stageo\Lib\Database\ComparisonOperator;
+use Stageo\Lib\Database\LogicalOperator;
 use Stageo\Lib\Database\NullDataType;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
@@ -31,6 +32,7 @@ use Stageo\Model\Repository\StatutJuridiqueRepository;
 use Stageo\Model\Repository\TailleEntrepriseRepository;
 use Stageo\Model\Repository\TypeStructureRepository;
 use Stageo\Model\Repository\UniteGratificationRepository;
+use function Sodium\add;
 
 class EntrepriseController
 {
@@ -434,7 +436,8 @@ class EntrepriseController
         );
     }
 
-    public function offreAddForm(string $email = null): Response {
+    public function offreAddForm(string $email = null): Response
+    {
         if (UserConnection::isInstance(new Entreprise())) {
             return new Response(
                 template: "entreprise/offre/add.php",
@@ -579,7 +582,7 @@ class EntrepriseController
                 action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
             );
         }
-        if($type!='alternance'){
+        if($type == "stage"){
             if(!Validate::isDateStage($date_debut,$date_fin,$niveau)){
                 throw new ControllerException(
                     message: "Les dates de stages ne sont pas conforment",
@@ -609,9 +612,10 @@ class EntrepriseController
     /**
      * @throws ControllerException
      */
-    public static function afficherFormulaireMiseAJourOffre(string $id): Response
+    public static function afficherFormulaireMiseAJourOffre(): Response
     {
         $user = UserConnection::getSignedInUser();
+        $id = $_REQUEST["id"];
         $offre = (new OffreRepository)->getById($id);
         if (!$user) {
             throw new ControllerException(
@@ -658,7 +662,8 @@ class EntrepriseController
         if(!$_REQUEST["checkbox"]){
             throw new ControllerException(
                 message: "Niveau d'étude pas selectionner",
-                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                action: Action::ENTREPRISE_MODIFICATION_OFFRE,
+                params: ["id"=>$idOffre]
             );
         }
         if (count($_REQUEST["checkbox"]) == 1) {
@@ -677,6 +682,7 @@ class EntrepriseController
         if (Token::isTimeout(Action::ENTREPRISE_MODIFICATION_OFFRE_FORM)) {
             throw new TokenTimeoutException(
                 action: Action::ENTREPRISE_MODIFICATION_OFFRE_FORM,
+                params: ["id"=>$idOffre]
             );
         }
         if(!$user){
@@ -700,56 +706,65 @@ class EntrepriseController
         if (!Validate::isName($secteur)) {
             throw new ControllerException(
                 message: "Le secteur n'est pas valide",
-                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                action: Action::ENTREPRISE_MODIFICATION_OFFRE_FORM,
+                params: ["id"=>$idOffre]
             );
         }
         if (!Validate::isName($thematique)) {
             throw new ControllerException(
                 message: "La thématique n'est pas valide",
-                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                action: Action::ENTREPRISE_MODIFICATION_OFFRE_FORM,
+                params: ["id"=>$idOffre]
             );
         }
         if (!Validate::isText($description)) {
             throw new ControllerException(
                 message: "La description n'est pas valide",
-                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                action: Action::ENTREPRISE_MODIFICATION_OFFRE_FORM,
+                params: ["id"=>$idOffre]
             );
         }
         if (!Validate::isText($taches)) {
             throw new ControllerException(
                 message: "Les fonctions et tâches ne sont pas valide",
-                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                action: Action::ENTREPRISE_MODIFICATION_OFFRE_FORM,
+                params: ["id"=>$idOffre]
             );
         }
         if (!Validate::isText($commentaires)) {
             throw new ControllerException(
                 message: "Les commmentaires sur l'offre ne sont pas valide",
-                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                action: Action::ENTREPRISE_MODIFICATION_OFFRE_FORM,
+                params: ["id"=>$idOffre]
             );
         }
         if (!Validate::isFloat($gratification)) {
             throw new ControllerException(
                 message: "La gratification n'est pas valide",
-                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                action: Action::ENTREPRISE_MODIFICATION_OFFRE_FORM,
+                params: ["id"=>$idOffre]
             );
         }
         if (is_null(new UniteGratificationRepository($id_unite_gratification))) {
             throw new ControllerException(
                 message: "L'unité de gratification n'est pas valide",
-                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                action: Action::ENTREPRISE_MODIFICATION_OFFRE_FORM,
+                params: ["id"=>$idOffre]
             );
         }
         if(!Validate::isNiveau($niveau)){
             throw new ControllerException(
                 message: "Le niveau scolaire n'existe pas",
-                action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                action: Action::ENTREPRISE_MODIFICATION_OFFRE_FORM,
+                params: ["id"=>$idOffre]
             );
         }
         if($type!='alternance'){
             if(!Validate::isDateStage($date_debut,$date_fin,$niveau)){
                 throw new ControllerException(
                     message: "Les dates de stages ne sont pas conforment",
-                    action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                    action: Action::ENTREPRISE_MODIFICATION_OFFRE_FORM,
+                    params: ["id"=>$idOffre]
                 );
             }
         }
@@ -757,11 +772,16 @@ class EntrepriseController
             if(!Validate::isDate($date_debut) && !Validate::isDate($date_fin)){
                 throw new ControllerException(
                     message: "Les dates ne sont pas au bon format",
-                    action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
+                    action: Action::ENTREPRISE_MODIFICATION_OFFRE_FORM,
+                    params: ["id"=>$idOffre]
                 );
             }
         }
-
+        var_dump($type);
+        if ($type == "Stage&Alternance" || $type == "Alternance"){
+            $date_fin = null;
+        }
+        var_dump($type);
         $o = new Offre($idOffre, $description, $thematique,$secteur , $taches, $commentaires, $gratification,$type , null,$id_unite_gratification, $user->getIdEntreprise(),$date_debut,$date_fin,$niveau,$offre->getValider());
         (new OffreRepository())->update($o);
         return new Response(
@@ -788,32 +808,6 @@ class EntrepriseController
         }
     }
 
-    public static function voirAPostuler():Response{
-        if(UserConnection::isSignedIn()){
-            $id = $_REQUEST["id"];
-            $offre = (new OffreRepository())->getById($id);
-            $user = UserConnection::getSignedInUser();
-            if($user and $offre and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
-                $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
-                $liste_offrePostuler = (new PostulerRepository())->select($condition);
-                return new Response(
-                    template: "entreprise/offre/etudiant_postulant_offre.php",
-                    params: [
-                        "title" => "Liste des etudiant ayant postuler",
-                        "postuler" => $liste_offrePostuler,
-                    ]
-                );
-            }
-            return new Response(
-                action: Action::HOME,
-            );
-        }
-        throw new ControllerException(
-            message: "Vous n'avez pas accès à cette page.",
-            action: Action::HOME
-        );
-    }
-
     public static function accepterEtudiantOffre():Response{
         $id = $_REQUEST["id"];
         $etudiant = $_REQUEST["login"];
@@ -822,7 +816,10 @@ class EntrepriseController
         if($user and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
             $offre->setLogin($etudiant);
             (new OffreRepository())->update($offre);
-            $condition = new QueryCondition("login", ComparisonOperator::EQUAL,$etudiant);
+            $condition = [
+                new QueryCondition("login", ComparisonOperator::EQUAL,$etudiant,LogicalOperator::AND),
+                new QueryCondition("id_offre", ComparisonOperator::EQUAL,$id)
+            ];
             (new PostulerRepository())->delete($condition);
             FlashMessage::add("Etudiant accepter avec success", FlashType::SUCCESS);
             return new Response(
@@ -864,4 +861,57 @@ class EntrepriseController
             action: Action::HOME
         );
     }
+
+    public static function afficherPostuleEtudiantAll():Response{
+        if (UserConnection::isInstance(new Entreprise())) {
+            $result = (new EntrepriseRepository())->getOffreEntreprise(UserConnection::getSignedInUser()->getIdEntreprise());
+            $offre = $result['offre'];
+            $personne = [];
+
+            foreach ($offre as $id) {
+                $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
+                $liste_offrePostuler = (new PostulerRepository())->select($condition);
+                $personne[] = $liste_offrePostuler;
+            }
+
+            return new Response(
+                template: "entreprise/offre/etudiant_postulant_offre.php",
+                params: [
+                    "title" => "Voir les candidats ayant postulé à nos offre",
+                    "postuler"=>$personne
+                ]
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
+        );
+    }
+
+    public static function voirAPostuler():Response{
+        if(UserConnection::isSignedIn()){
+            $id = $_REQUEST["id"];
+            $offre = (new OffreRepository())->getById($id);
+            $user = UserConnection::getSignedInUser();
+            if($user and $offre and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
+                $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
+                $liste_offrePostuler = (new PostulerRepository())->select($condition);
+                return new Response(
+                    template: "entreprise/offre/etudiant_postulant_offre.php",
+                    params: [
+                        "title" => "Liste des etudiant ayant postuler",
+                        "postuler" => $liste_offrePostuler,
+                    ]
+                );
+            }
+            return new Response(
+                action: Action::HOME,
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
+        );
+    }
+
 }

@@ -103,8 +103,13 @@ include __DIR__ . "/../../macros/input.php";
 </style>
 <body class="p-2 font-base ">
 <main class="h-screen flex flex-col items-center justify-center">
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="table border-collapse block sm:table shadow-lg  rounded-xl">
+    <?php if(empty($postuler)):?>
+        <h2>Aucun étudiant n'a postulé à une de vos offres</h2>
+    <?php endif; ?>
+    <div class="relative overflow-x-auto sm:rounded-lg">
+        <?php foreach ($postuler as $liste_offre): ?>
+        <a href="<?=Action::AFFICHER_OFFRE->value?>&id=<?=$liste_offre[0]->getIdOffre()?>"><h4><?=(new OffreRepository())->getById($liste_offre[0]->getIdOffre())->getThematique() ?>:</h4></a>
+        <table class="table border-collapse block sm:table shadow-lg  rounded-xl mb-5">
             <thead class="hidden sm:table-header-group">
             <tr class="border-gray-600 ">
                 <th class="py-2 px-4 border text-left text-black bg-slate-100 font-medium rounded-tl-xl">Nom</th>
@@ -114,7 +119,7 @@ include __DIR__ . "/../../macros/input.php";
             </tr>
             </thead>
             <tbody>
-            <?php foreach ($postuler as $p): ?>
+            <?php foreach ($liste_offre as $p): ?>
                 <tr class="">
                     <th scope="row" class="py-3 px-4  borders text-center text-base" data-label="Nom">
                         <?= ((new EtudiantRepository())->getByLogin($p->getLogin()))->getNom() ?> <?= ((new EtudiantRepository())->getByLogin($p->getLogin()))->getPrenom()?>
@@ -139,7 +144,7 @@ include __DIR__ . "/../../macros/input.php";
                         </a>
                     </td>
                     <?php if (!((new \Stageo\Model\Repository\OffreRepository())->getById($p->getIdOffre()))->getLogin()): ?>
-                    <td class="text-green-600  items-center text-center text-base ">
+                    <td class="text-green-600  items-center text-center text-base borders border-r ">
                         <a href="<?=Action::ENTREPRISE_ACCEPTE_ETUDIANT_OFFRE->value."&login=".$p->getLogin()."&id=".$p->getIdOffre()?>" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Accepter</a>
                     </td>
                     <?php endif; ?>
@@ -154,6 +159,7 @@ include __DIR__ . "/../../macros/input.php";
             <?php endforeach; ?>
             </tbody>
         </table>
+        <?php endforeach; ?>
 
     </div>
 </main>

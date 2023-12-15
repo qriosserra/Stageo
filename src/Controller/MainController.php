@@ -16,6 +16,7 @@ use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Offre;
 use Stageo\Model\Repository\CategorieRepository;
+use Stageo\Model\Repository\ConventionRepository;
 use Stageo\Model\Repository\DeCategorieRepository;
 use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
@@ -43,9 +44,7 @@ class MainController
         return new Response(
             template: "home.php",
             params: [
-                "title" => "Accueil",
-                "categories" => (new CategorieRepository)->select(),
-                "offres" => (new OffreRepository())->select()
+                "title" => "Accueil"
             ]
         );
     }
@@ -74,6 +73,7 @@ class MainController
                     $categories =  (new CategorieRepository()) ->select(new QueryCondition("libelle",ComparisonOperator::LIKE,"%".$search."%"));
                     foreach ($categories as $category) {
                         $idOffres [] =  (new DeCategorieRepository())->getByIdCategorie($category->getIdCategorie());
+                        var_dump($idOffres);
                     }
                     foreach ($idOffres as $idOffre){
                         $offres [] =  (new OffreRepository)->getById($idOffre->getIdOffre());
@@ -113,8 +113,8 @@ class MainController
                     }
                 }
             }else{
-                $offres = (new OffreRepository)->select();
-                $idOffres = (new OffreRepository())->getAllOffreId();
+                $offres = (new OffreRepository)->select(new QueryCondition("valider", ComparisonOperator::EQUAL, 1));
+                $idOffres = (new OffreRepository())->getAllValideOffreId();
             }
             $selA = $option === "description"
                 ? "selected"
@@ -214,12 +214,19 @@ class MainController
              * @var Offre $offre
              */
             $offre = (new OffreRepository)->getById($id);
+            $entreprise = (new EntrepriseRepository())->getById($offre->getIdEntreprise());
+            if ($entreprise instanceof Entreprise){
+                $nomentreprise = $entreprise->getRaisonSociale();
+            }else{
+                $nomentreprise = "EREUR lors de la recherche de l'entreprise !";
+            }
             return new Response(
                 template: "entreprise/offre/offre.php",
                 params: [
                     "title" => "Offre $id",
                     "entreprise" => (new EntrepriseRepository)->getById($offre->getIdEntreprise()),
                     "offre" => $offre,
+                    "nomentreprise" => $nomentreprise,
                     "unite_gratification" => (new UniteGratificationRepository)->getById($offre->getIdUniteGratification())->getLibelle()
                 ]
             );}
@@ -261,18 +268,53 @@ class MainController
             template: "about.php"
         );
     }
-    public function csvForm() : Response {
+
+    public function importCsvForm() : Response
+    {
         return new Response(
-            template: "csvForm.php"
+            template: "csvForm.php",
+            params: [
+                "title" => "Importation depuis CSV"
+            ]
         );
     }
-    public function csv() : Response
+
+    public function importCsv() : Response
     {
         $cheminCSV = $_FILES['CHEMINCSV'];
         if ($cheminCSV["size"]!=0){
             $csvContent = file_get_contents($cheminCSV['tmp_name']);
             (new tableTemporaireRepository())->insertViaCSV($csvContent);
         }
+        FlashMessage::add("Importation réussie", FlashType::SUCCESS);
+        return new Response(
+            template: "home.php",
+            params: [
+                "title" => "Accueil",
+                "categories" => (new CategorieRepository)->select(),
+                "offres" => (new OffreRepository())->select()
+            ]
+        );
+    }
+
+    public function exportCsv() : Response
+    {
+        foreach ((new ConventionRepository)->select() as $convention) {
+            $entreprise = (new EntrepriseRepository)->getById($convention->getIdEntreprise());
+            $etudiant = (new EtudiantRepository)->getById($convention->getIdEtudiant());
+            $export[] = [
+                "id_convention" => $convention->getIdConvention(),
+                "id_etudiant" => $convention->getIdEtudiant(),
+                "id_entreprise" => $convention->getIdEntreprise(),
+                "id_offre" => $convention->getIdOffre(),
+                "date_debut" => $convention->getDateDebut(),
+                "date_fin" => $convention->getDateFin(),
+                "date_signature" => $convention->getDateSignature(),
+                "date_debut_stage" => $convention->getDateDebutStage(),
+            ];
+        }
+        $offres = (new OffreRepository())->select();
+        $csv = (new OffreRepository())->exportToCsv($offres);
         return new Response(
             template: "home.php",
             params: [

@@ -28,11 +28,22 @@ class EtudiantRepository extends CoreRepository
         return $this->select([new QueryCondition("email", ComparisonOperator::EQUAL, $email)])[0] ?? null;
     }
 
-    /**
-     * @throws Exception
-     */
-    public function getByUnverifiedEmail(string $email): ?CoreObject
+    public function getnbcandatures(string $login): ?int
     {
-        return $this->select([new QueryCondition("unverified_email", ComparisonOperator::EQUAL, $email)])[0] ?? null;
+        try {
+            $query = "SELECT COUNT(*)
+                  FROM stg_postuler
+                  WHERE login = :login"; // Use a named parameter for login
+            $pdo = DatabaseConnection::getPdo()->prepare($query);
+            $values["login"]= $login;
+            $pdo->execute($values);
+
+            $result = $pdo->fetchColumn(); // Use fetchColumn to directly retrieve the count
+
+            return $result !== false ? (int)$result : null;
+        } catch (PDOException $e) {
+            echo "Erreur : " . $e->getMessage();
+            return null;
+        }
     }
 }
