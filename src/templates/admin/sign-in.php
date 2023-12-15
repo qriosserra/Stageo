@@ -14,25 +14,25 @@ include __DIR__ . "/../macros/button.php";
 <body class="">
 <nav class="flex justify-between items-center border-b bg-slate-50 shadow">
     <a href="<?=Action::HOME->value?>" class="inline-flex items-center">
-        <div class="mt-3 ml-3">
-            <img src="assets/img/logo.png" class="h-[1.8rem] w-[7rem] ">
-            <p style="font-family: Montserrat;" class="text-blue-900">Pour les admins</p>
-        </div>
-    </a>
+            <div class="mt-3 ml-3">
+                <img src="assets/img/logo.png" class="h-[1.8rem] w-[7rem] ">
+                <p style="font-family: Montserrat;" class="text-blue-900">Pour les admins</p>
+            </div>
+        </a>
 
-</nav>
-<div class="bg-gray-100 flex items-center justify-center h-screen">
+    </nav>
+    <div class="bg-gray-100 flex items-center justify-center h-screen">
     <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-sm">
         <h2 class="text-2xl font-bold mb-6 text-center">Connectez-vous au Centre administrateurs</h2>
-        <form class="space-y-4" action="<?=Action::ETUDIANT_SIGN_IN->value?>" method="post">
+        <form class="space-y-4" action="<?=Action::ADMIN_SIGN_IN->value?>" method="post">
             <div>
-                <?=field("login", "Login*", "text", "Entrez votre login", null, true, $email ?? null)?>
+            <?=field("email", "Email*", "email", "Entrez l'email utilisé par l'entreprise", null, true, $email ?? null)?>
 
             </div>
 
             <div>
-                <?=field("password", "Mot de passe", "password", "Entrez le mot de passe", Pattern::PASSWORD, true)?>
-                <?=token($token)?>
+            <?=field("password", "Mot de passe", "password", "Entrez le mot de passe d'entreprise", Pattern::PASSWORD, true)?>
+            <?=token($token)?>
 
             </div>
 
@@ -51,16 +51,16 @@ include __DIR__ . "/../macros/button.php";
 
     </div>
 </div>
-<footer class="bg-gray-200 ">
+    <footer class="bg-gray-200 ">
 
 
-    <!-- Bottom text -->
-    <div class=" border-t border-gray-300 pt-3">
-        <p class="text-gray-600 text-center">Se connecter en tant que : Etudiant, Entreprise</p>
-        <p class="text-gray-500 text-xs text-center mt-4">Copyright © 2023, Stageo « Stageo » et son logo
-            sont des branches officiel de l'IUT Montpellier/Sète.
-        </p>
-    </div>
-    </div>
-</footer>
+        <!-- Bottom text -->
+        <div class=" border-t border-gray-300 pt-3">
+            <p class="text-gray-600 text-center">Se connecter en tant que : Etudiant, Entreprise</p>
+            <p class="text-gray-500 text-xs text-center mt-4">Copyright © 2023, Stageo « Stageo » et son logo
+                sont des branches officiel de l'IUT Montpellier/Sète.
+            </p>
+        </div>
+        </div>
+    </footer>
 </body>

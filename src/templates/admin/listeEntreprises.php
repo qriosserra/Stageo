@@ -3,17 +3,9 @@
 use Stageo\Lib\enums\Action;
 use Stageo\Model\Object\Entreprise;
 include __DIR__."/../macros/button.php";
-/** @var ArrayObject $listeEntreprise
- * @var string $title
- */
+/** @var ArrayObject $listeEntreprise */
 ?>
-<div class="h-40 flex justify-center items-center mt-[4rem]"
-       style="background: linear-gradient(120deg, rgba(21, 129, 230, 0.75) 0%, rgba(0, 45, 141, 0.75) 50%, rgba(1, 7, 68, 0.75) 100%)">
-    <h1 class="text-center font-medium text-white text-3xl text-shadow">
-        <?= $title?>
-    </h1>
-</div>
-    <div class="h-min mt-[8rem] p-12">
+    <div class="h-screen mt-[8rem] p-12">
 <?php foreach ($listeEntreprise as $entreprise) :?>
     <div class="flex border rounded-lg">
         <div class="flex-none w-24 h-24 bg-gray-200" aria-hidden="true"> <!-- Placeholder for image --> </div>
@@ -29,14 +21,9 @@ include __DIR__."/../macros/button.php";
             <div class="mb-2 text-sm text-gray-600">Statut juridique : <?=$entreprise["statut_juridique"]?></div>
             <div class="flex">
                 <?=button("Valider","fi-ss-check-circle",Action::ADMIN_VALIDEENTREPRISE->value."&idEntreprise=".$entreprise["id_entreprise"],"!text-primary-400 text-xl w-min","!text-primary-400")?>
-                <form method="post" action="<?= Action::ADMIN_SUPRIMERENTREPRISE->value."&idEntreprise=".$entreprise["id_entreprise"] ."&email=".$entreprise["email"] ?>">
-                    <input type="text" name="raisonRefus" placeholder="Raisons du refus" required>
-                    <button type="submit" class="button-ghost !text-red-400 text-xl w-min">
-                        <i class="fi fi-sr-cross-circle !text-red-400"></i>
-                        <span>Supprimer</span>
-                    </button>
-                </form>
+                <?=button("Supprimer","fi-sr-cross-circle",Action::ADMIN_SUPRIMERENTREPRISE->value."&idEntreprise=".$entreprise["id_entreprise"],"!text-red-400 text-xl w-min","!text-red-400")?>
             </div>
         </div>
     </div>
-<?php endforeach; ?></div>
+    </div>
+<?php endforeach; ?>

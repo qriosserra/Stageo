@@ -10,7 +10,6 @@
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Admin;
-use Stageo\Model\Object\Enseignant;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Etudiant;
 use Stageo\Model\Object\Secretaire;
@@ -19,7 +18,6 @@ use Stageo\Model\Object\Secretaire;
 
 <!DOCTYPE html>
 <html lang="en">
-<!----------------------------parameter, JS, css----------------------------------------->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,9 +87,7 @@ use Stageo\Model\Object\Secretaire;
     </style>
 </head>
 <body class="overflow-x-hidden">
-<!----------------------------bar du haut----------------------------------------->
 <header class="fixed w-full z-20 top-0 left-0">
-    <!----------------------------Bar nav----------------------------------------->
     <?php if ($nav):?>
         <nav class="bg-white w-full z-20 border-b border-gray-200 dark:border-gray-200" >
             <div class="max-w-screen-xl flex flex-wrap md:pl-4 md:pr-4 items-center justify-between mx-auto md:p-0 p-4">
@@ -99,105 +95,34 @@ use Stageo\Model\Object\Secretaire;
                     <img src="assets/img/logo.png" alt="logo" class="h-[1.8rem] w-[7rem] mr-3">
                 </a>
 
-            <!----------------------------Bouton à droite----------------------------------------->
-            <div class="flex md:order-2">
-                <!----------------------------Drop down User !!! ----------------------------------------->
-                <?php if (is_null($user)) : ?>
-                    <a href="<?=Action::ETUDIANT_SIGN_IN_FORM->value?>" class="space-x-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                        <i class="fi fi-rr-sign-in-alt flex align-middle text-lg float-left"></i>
-                        <span>Se connecter</span>
-                    </a>
-                <?php else : ?>
-                    <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
-                        <button type="button"
-                                class="flex text-sm rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                                id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
-                                data-dropdown-placement="bottom">
-                            <span class="sr-only">Open user menu</span>
-                            <img class="w-8 h-8 rounded-full" src="assets/img/utilisateur.png" alt="user photo">
-                            <!-- //TODO : Photo -->
-                        </button>
-                        <!-- Dropdown menu -->
-                        <div
-                                class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
-                                id="user-dropdown">
-                            <div class="px-4 py-3">
+                <div class="flex md:order-2">
+                    <!----------------------------Drop down User !!! ----------------------------------------->
+                    <?php if (is_null($user)) : ?>
+                        <a href="<?=Action::ETUDIANT_SIGN_IN_FORM->value?>" class="space-x-3 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                            <i class="fi fi-rr-sign-in-alt flex align-middle text-lg float-left"></i>
+                            <span>Se connecter</span>
+                        </a>
+                    <?php else : ?>
+                        <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+                            <button type="button"
+                                    class="flex text-sm rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
+                                    id="user-menu-button" aria-expanded="false" data-dropdown-toggle="user-dropdown"
+                                    data-dropdown-placement="bottom">
+                                <span class="sr-only">Open user menu</span>
+                                <img class="w-8 h-8 rounded-full" src="assets/img/utilisateur.png" alt="user photo">
+                                <!-- //TODO : Photo -->
+                            </button>
+                            <!-- Dropdown menu -->
+                            <div
+                                    class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-700 dark:divide-gray-600"
+                                    id="user-dropdown">
+                                <div class="px-4 py-3">
                                     <span class="block text-sm text-gray-900 dark:text-white">
-                                        <?php if ($user instanceof Enseignant || UserConnection::isInstance(new Etudiant())) :?><?=/** @var Admin|Etudiant $user */ $user->getNom()." ".$user->getPrenom()?>
+                                        <?php if (UserConnection::isInstance(new Admin()) || UserConnection::isInstance(new Etudiant())) :?><?=/** @var Admin|Etudiant $user */ $user->getNom()." ".$user->getPrenom()?>
                                         <?php elseif (UserConnection::isInstance(new Entreprise())) : ?><?=/** @var Entreprise $user */ $user->getRaisonSociale()?>
                                         <?php else : ?>secrétariat
                                         <?php endif ?>
                                     </span>
-                                <span class="block text-sm  text-gray-500 truncate dark:text-gray-400"><?=$user->getEmail()?></span>
-                                <!-- //TODO : email du mec et tout -->
-                            </div>
-                            <!-- Menu étudiant -->
-                            <?php if (UserConnection::isInstance(new Etudiant())) :?>
-                                <ul class="py-2" aria-labelledby="user-menu-button">
-                                    <li>
-                                        <a href="<?=Action::PROFILE_ETUDIANT->value?>"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profil</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?=Action::ETUDIANT_MES_CANDIDATURE->value?>"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?=Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM->value?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déposer ou modifier une convention</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?=Action::ETUDIANT_SOUMETTRE_CONVENTION->value?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Soumettre ma convention</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?=Action::SIGN_OUT->value?>"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
-                                    </li>
-                                </ul>
-                            <?php endif ?>
-                            <!-- Menue entreprise -->
-                            <?php if (UserConnection::isInstance(new Entreprise())) :?>
-                                <ul class="py-2" aria-labelledby="user-menu-button">
-                                    <li>
-                                        <a href="#"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profil</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?=Action::ENTREPRISE_POSTULE_OFFRE_ETUDIANT->value?>"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Candidats Offres</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?=Action::SIGN_OUT->value?>"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
-                                    </li>
-                                </ul>
-                            <?php endif ?>
-                            <!-- Menu Admin -->
-                            <?php if (($user instanceof Enseignant && $user->getEstAdmin())) :?>
-                                <ul class="py-2" aria-labelledby="user-menu-button">
-                                    <li>
-                                        <a href="<?= Action::ADMIN_DASH->value?>"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Tableau de bord</a>
-                                    </li>
-                                    <li>
-                                        <a href="#"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
-                                    </li>
-                                    <li>
-                                        <a href="<?=Action::SIGN_OUT->value?>"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
-                                    </li>
-                                </ul>
-                            <?php endif ?>
-                            <!-- Menu Prof -->
-                            <?php if (($user instanceof Enseignant && !$user->getEstAdmin())) :?>
                                     <span class="block text-sm  text-gray-500 truncate dark:text-gray-400"><?=$user->getEmail()?></span>
                                     <!-- //TODO : email du mec et tout -->
                                 </div>
@@ -211,21 +136,8 @@ use Stageo\Model\Object\Secretaire;
                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
                                     </li>
                                     <li>
-                                        <a href="<?=Action::SIGN_OUT->value?>"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
-                                    </li>
-                                </ul>
-                            <?php endif ?>
-                            <!-- Menu Secretaries -->
-                            <?php if (UserConnection::isInstance(new Secretaire())) :?>
-                                <ul class="py-2" aria-labelledby="user-menu-button">
-                                    <li>
-                                        <a href="<?= Action::SECRETAIRE_DASH->value?>"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Tableau de bord</a>
-                                    </li>
-                                    <li>
                                         <a href="#"
-                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
+                                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Mes Candidatures</a>
                                     </li>
                                     <?php if (UserConnection::isInstance(new Etudiant())) {
                                         echo "<li>
@@ -237,33 +149,30 @@ use Stageo\Model\Object\Secretaire;
                                            class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>
                                     </li>
                                 </ul>
-                                </ul>
-                            <?php endif ?>
+                            </div>
                         </div>
-                    </div>
-                <?php endif ?>
-                <!----------------------------Menu Burger !!! ----------------------------------------->
-                <button data-collapse-toggle="navbar-user" type="button"
-                        class=" ml-4 inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-                        aria-controls="navbar-user" aria-expanded="false">
-                    <span class="sr-only">Open main menu</span>
-                    <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M1 1h15M1 7h15M1 13h15" />
-                    </svg>
-                </button>
-            </div>
-            <!----------------------------Bouton central----------------------------------------->
-            <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 lg:mr-32" id="navbar-user">
-                <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white  dark:border-gray-700">
-                    <li class="relative">
-                        <button class="block py-2 pl-3 pr-4 h-[4rem] text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700  md:dark:hover:text-blue-500 focus:outline-none" id="dropdownOffres">
+                    <?php endif ?>
+                    <!----------------------------Menu Burger !!! ----------------------------------------->
+                    <button data-collapse-toggle="navbar-user" type="button"
+                            class=" ml-4 inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                            aria-controls="navbar-user" aria-expanded="false">
+                        <span class="sr-only">Open main menu</span>
+                        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M1 1h15M1 7h15M1 13h15" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1 lg:mr-32" id="navbar-user">
+                    <ul class="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white  dark:border-gray-700">
+                        <li class="relative">
+                            <button class="block py-2 pl-3 pr-4 h-[4rem] text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700  md:dark:hover:text-blue-500 focus:outline-none" id="dropdownOffres">
 
                                 <?php if(UserConnection::isSignedIn()) :?><a href="<?=Action::LISTE_OFFRE->value?>">Offres</a>
                                 <?php else : ?><a href="<?=Action::ETUDIANT_SIGN_IN_FORM->value?>">Offres</a><?php endif ?>
                             </button>
-                            <button>
-                                <a href="<?=Action::LISTE_ENTREPRISES->value?>">Entreprises</a>
+                            <button class="block py-2 pl-3 pr-4 h-[4rem] text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700  md:dark:hover:text-blue-500 focus:outline-none" id="dropdownOffres">
+                            <a href="<?=Action::LISTE_ENTREPRISES->value?>">Entreprises</a>
                             </button>
                             <div id="dropdownContentOffres" class="block opacity-0 absolute bg-white invisible active:opacity-100 active:visible text-gray-700 pt-1 border border-slate-300 w-[500px] h-[210px]">
                                 <div class="rounded  ease-in-out ml-3 mt-3 flex flex-row ">
@@ -650,45 +559,128 @@ use Stageo\Model\Object\Secretaire;
                                 </div>
                             </div>
                         </li>
-                    <?php endif?>
-                    <?php if(($user instanceof Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire) :?>
-                        <li class="relative ">
-                            <button
-                                    class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500"
-                                    id="dropdownButtonEntreprise">
-                                <a href="<?php if($user instanceof Enseignant && $user->getEstAdmin()) :?><?=Action::ADMIN_DASH->value?>
+                        <?php endif?>
+                        <?php if($user instanceof Admin || $user instanceof Secretaire) :?>
+                            <li class="relative ">
+                                <button
+                                        class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500"
+                                        id="dropdownButtonEntreprise">
+                                    <a href="<?php if($user instanceof Admin) :?><?=Action::ADMIN_DASH->value?>
                                     <?php else: ?><?=Action::SECRETAIRE_DASH->value?><?php endif ?>">Dashboard</a>
-                            </button>
-                        </li>
+                                </button>
+                            </li>
+                        <?php endif ?>
+                    </ul>
+                </div>
+
+        </nav>
+        <!--                <nav id="sidenav" class="hidden transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidenav">-->
+        <!--                    <div>-->
+        <!--                        <ul>-->
+        <!--                            <li>-->
+        <!--                                <a href="--><?php //=Action::HOME->value?><!--">-->
+        <!--                                    <i aria-hidden="true" class="fi fi-sr-home"></i>-->
+        <!--                                    <span>Accueil</span>-->
+        <!--                                </a>-->
+        <!--                            </li>-->
+        <!--                            --><?php //if (is_null($user)): ?>
+        <!--                            <li>-->
+        <!--                                <a href="--><?php //=Action::ETUDIANT_SIGN_IN_FORM->value?><!--">-->
+        <!--                                    <i aria-hidden="true" class="fi fi-sr-graduation-cap"></i>-->
+        <!--                                    <span>Connexion étudiant</span>-->
+        <!--                                </a>-->
+        <!--                            </li>-->
+        <!--                            <li>-->
+        <!--                                <a href="--><?php //=Action::ENTREPRISE_SIGN_IN_FORM->value?><!--">-->
+        <!--                                    <i aria-hidden="true" class="fi fi-ss-building"></i>-->
+        <!--                                    <span>Connexion entreprise</span>-->
+        <!--                                </a>-->
+        <!--                            </li>-->
+        <!--                            --><?php //elseif ($user instanceof Etudiant): ?>
+        <!--                            <li>-->
+        <!--                                <a href="--><?php //=Action::LISTE_OFFRE->value?><!--">-->
+        <!--                                    <i aria-hidden="true" class="fi fi-sr-document"></i>-->
+        <!--                                    <span>Rechercher une offre</span>-->
+        <!--                                </a>-->
+        <!--                            </li>-->
+        <!--                            --><?php //elseif ($user instanceof Entreprise): ?>
+        <!--                            <li>-->
+        <!--                                <button type="button" aria-controls="dropdown-pages" data-collapse-toggle="dropdown-pages">-->
+        <!--                                    <i aria-hidden="true" class="fi fi-sr-document"></i>-->
+        <!--                                    <span>Offres</span>-->
+        <!--                                    <i aria-hidden="true" class="fi fi-rr-angle-small-down"></i>-->
+        <!--                                </button>-->
+        <!--                                <ul id="dropdown-pages" class="hidden py-2 space-y-2">-->
+        <!--                                    <li>-->
+        <!--                                        <a href="--><?php //=Action::ENTREPRISE_CREATION_OFFRE_FORM->value?><!--">Ajouter une nouvelle offre</a>-->
+        <!--                                    </li>-->
+        <!--                                    <li>-->
+        <!--                                        <a href="--><?php //=Action::ENTREPRISE_AFFICHER_OFFRE->value?><!--">Voir mes offres</a>-->
+        <!--                                    </li>-->
+        <!--                                </ul>-->
+        <!--                            </li>-->
+        <!--                            --><?php //elseif ($user instanceof Admin): ?>
+        <!--                            <li>-->
+        <!--                                <a href="#">-->
+        <!--                                    <i aria-hidden="true" class="fi fi-ss-check-circle"></i>-->
+        <!--                                    <span>Entreprises à valider</span>-->
+        <!--                                    <span class="!flex-none inline-flex justify-center items-center w-6 h-6 text-xs font-semibold rounded-full text-primary-800 bg-primary-100 dark:bg-primary-200 dark:text-primary-800">-->
+        <!--                                        6-->
+        <!--                                    </span>-->
+        <!--                                </a>-->
+        <!--                            </li>-->
+        <!--                            --><?php //endif; ?>
+        <!--                        </ul>-->
+        <!--                        <ul>-->
+        <!--                            <li>-->
+        <!--                                <a href="--><?php //=Action::ABOUT->value?><!--">-->
+        <!--                                    <i aria-hidden="true" class="fi fi-sr-info"></i>-->
+        <!--                                    <span>A propos</span>-->
+        <!--                                </a>-->
+        <!--                            </li>-->
+        <!--                        </ul>-->
+        <!--                    </div>-->
+        <!--                    <div class="hidden absolute bottom-0 left-0 p-4 space-x-4 w-full lg:flex bg-white dark:bg-gray-800 z-20 border-r border-gray-200 dark:border-gray-700">-->
+        <!--                        --><?php //if (!is_null($user)): ?>
+        <!--                        <button type="button" data-dropdown-toggle="language-dropdown" class="inline-flex justify-center p-2 text-gray-500 rounded cursor-pointer dark:hover:text-white dark:text-gray-400 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600">-->
+        <!--                            <img src="" class="h-6 w-6 rounded-full mt-0.5" alt="">-->
+        <!--                        </button>-->
+        <!--                        Dropdown -->
+        <!--                        <div class="hidden z-50 my-4 text-base list-none bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700" id="language-dropdown">-->
+        <!--                            <ul class="py-1" role="none">-->
+        <!--                                <li>-->
+        <!--                                    <a href="--><?php //=Action::SIGN_OUT->value?><!--" class="block py-2 px-4 text-sm text-red-700 hover:bg-gray-100 dark:hover:text-white dark:text-gray-300 dark:hover:bg-gray-600" role="menuitem">-->
+        <!--                                        <i class="fi fi-rr-exit"></i>-->
+        <!--                                        <span>Déconnexion</span>-->
+        <!--                                    </a>-->
+        <!--                                </li>-->
+        <!--                            </ul>-->
+        <!--                        </div>-->
+        <!--                        --><?php //endif ?>
+        <!--                    </div>-->
+        <!--                </nav>-->
+    <?php endif ?>
+    <?php if (!empty($flashMessages)): ?>
+        <ul class="flash-messages-container">
+            <?php foreach ($flashMessages as $flashMessage): ?>
+                <li class="flash-message <?=$flashMessage->getType()?>">
+                    <?php if ($flashMessage->getType() === "success"): ?>
+                        <i class="success fi fi-rr-check-circle text-red-500"></i>
+                    <?php elseif ($flashMessage->getType() === "info"): ?>
+                        <i class="info fi fi-rr-info"></i>
+                    <?php elseif ($flashMessage->getType() === "warning"): ?>
+                        <i class="warning fi fi-rr-exclamation"></i>
+                    <?php elseif ($flashMessage->getType() === "error"): ?>
+                        <i class="error fi fi-rr-cross-circle"></i>
                     <?php endif ?>
-                </ul>
-            </div>
-            </div>
-            </nav>
-            <?php endif ?>
-            <!----------------------------Message Flash----------------------------------------->
-            <?php if (!empty($flashMessages)): ?>
-                <ul class="flash-messages-container">
-                    <?php foreach ($flashMessages as $flashMessage): ?>
-                        <li class="flash-message <?=$flashMessage->getType()?>">
-                            <?php if ($flashMessage->getType() === "success"): ?>
-                                <i class="success fi fi-rr-check-circle text-red-500"></i>
-                            <?php elseif ($flashMessage->getType() === "info"): ?>
-                                <i class="info fi fi-rr-info"></i>
-                            <?php elseif ($flashMessage->getType() === "warning"): ?>
-                                <i class="warning fi fi-rr-exclamation"></i>
-                            <?php elseif ($flashMessage->getType() === "error"): ?>
-                                <i class="error fi fi-rr-cross-circle"></i>
-                            <?php endif ?>
-                            <p><?=$flashMessage->getContent()?></p>
-                        </li>
-                    <?php endforeach ?>
-                </ul>
-            <?php endif ?>
-            <p id="cssgenerator" class="!hidden  self-center"></p>
+                    <p><?=$flashMessage->getContent()?></p>
+                </li>
+            <?php endforeach ?>
+        </ul>
+    <?php endif ?>
+    <p id="cssgenerator" class="!hidden"></p>
 </header>
 <?php require_once $template?>
-<!----------------------------bar du bas----------------------------------------->
 <?php if ($footer):?>
     <footer class="bg-slate-50">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
@@ -755,7 +747,6 @@ use Stageo\Model\Object\Secretaire;
                 <p class="text-gray-500 text-xs text-center mt-4">
                     Copyright © 2023, Stageo « Stageo » et son logo sont des branches officiel de l'IUT Montpellier/Sète.
                 </p>
-                <!----------------------------bouton pour connexion Admin----------------------------------------->
                 <p class="text-gray-500 text-xs text-center mt-4"><a href="<?=Action::ADMIN_SIGN_IN_FORM->value ?>">Espace Admin</a></p>
             </div>
         </div>

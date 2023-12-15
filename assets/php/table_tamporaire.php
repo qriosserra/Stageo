@@ -2,7 +2,7 @@
 
 $query = <<<SQL
 
-DROP TABLE IF EXISTS table_temporaire;
+DROP TABLE IF EXISTS table_temporaire ;
 CREATE TABLE table_temporaire(
     id_table INT,
     Numero_Convention INT,

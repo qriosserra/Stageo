@@ -26,7 +26,7 @@ class DeCategorieRepository extends CoreRepository
 
     public function getByIdCategorie(int $id): ?CoreObject
     {
-        return $this->select([new QueryCondition("id_categorie", ComparisonOperator::EQUAL, $id)])[0] ?? null;
+        return $this->select(new QueryCondition("id_categorie", ComparisonOperator::EQUAL, $id))[0] ?? null;
     }
     public function getByIdCategorieliste(  $cate ): array
     {
