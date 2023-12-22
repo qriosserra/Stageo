@@ -219,18 +219,10 @@ use Stageo\Model\Object\Etudiant;
                                     <p class="text-black">Importer ou exporter les suivis en csv</p>
                                     <p id="upload-message"></p>
                                 </div>
-                                <form id="uploadForm" class="flex justify-between items-center w-full px-4 bg-transparent" action="<?= Action::IMPORT_CSV_FORM->value?>" method="post" enctype="multipart/form-data">
-                                    <!-- Bouton personnalisé pour l'importation à gauche -->
-                                    <label class="text-blue-400 hover:text-red-400 cursor-pointer">
-                                        <i class="fa-solid fa-upload"></i> Importer
-                                        <input type="file" name="CHEMINCSV" id="CHEMINCSV" accept=".csv" class="hidden" onchange="submitForm()">
-                                    </label>
-
-                                    <!-- Bouton pour l'exportation à droite -->
-                                    <button type="submit" class="text-blue-400 hover:text-red-400">
-                                        <i class="fa-solid fa-download"></i> Exporter
-                                    </button>
-                                </form>
+                                <div class="flex gap-4">
+                                    <a class="text-blue-400 hover:text-red-400" href="<?=Action::IMPORT_CSV_FORM->value?>">Importer</a>
+                                    <a class="text-blue-400 hover:text-red-400" href="<?=Action::EXPORT_CSV->value?>">Exporter</a>
+                                </div>
                             </div>
                         </main>
                         <main class="grid justify-center items-center  p-4 ">
