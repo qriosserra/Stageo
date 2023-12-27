@@ -71,52 +71,57 @@ use Stageo\Model\Object\Etudiant;
 
 <body :class="{'dark text-bodydark bg-boxdark-2': darkMode === true}">
 
+<div id="sidebarButton" class="justify-center bg-gray-800 pt-3 pb-3">
+    <div class=" bg-white  rounded-2xl flex pt-2 pb-2 pl-2">
+        <i class="bi bi-x text-xl cursor-pointer fi-rr-menu-burger mr-2" id="sidebarButton" onclick="openSidebaractiver()"></i>
+        <a href="<?= Action::HOME->value ?>" class="flex items-center">
+            <img src="assets/img/logo.png" alt="logo" class="h-[1.8rem] w-[7rem] mr-3">
+        </a>
+    </div>
+</div>
 
 <div class="flex h-screen overflow-hidden">
+    <div class="sidebar flex flex-col h-screen overflow-hidden">
 
-    <div>
-        <!-- Sidebar Start -->
-        <div class="flex flex-col w-64 h-full bg-gray-800 hidden md:flex">
-            <div class="md:hidden flex items-center">
-                <button class="mobile-menu-button">
-                    <svg class="w-6 h-6 text-gray-500" x-show="!showMenu" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor">
-                        <path d="M4 6h16M4 12h16m-7 6h7"></path>
-                    </svg>
-                </button>
+        <nav class=" h-full">
+            <!-- Sidebar Start -->
+            <div id="width-contrainte" class="flex flex-col w-64  bg-gray-800 md:flex h-full">
+                <div class="flex flex-col items-center mt-10 mb-10 bg-white pt-3 pb-3">
+                    <div class=" bg-white flex p-2">
+                        <i class="bi bi-x text-xl cursor-pointer fi-rr-menu-burger mr-4" id="sidebarButtonnav" onclick="openSidebaractiver()"></i>
+                        <a href="<?= Action::HOME->value ?>" class="flex items-center">
+                            <img src="assets/img/logo.png" alt="logo" class="h-[1.8rem] w-[7rem] mr-3">
+                        </a>
+                    </div>
+                </div>
+                <div id="nav-bouton" class="flex flex-grow">
+                    <nav class="mt-10">
+                        <a href="<?= Action::ADMIN_DASH->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
+                            <span>Tableau de bord</span>
+                        </a>
+                        <a href="<?=Action::ADMIN_GESTION_ETUDIANT->value?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
+                            <span>Gestion etudiants</span>
+                        </a>
+                        <a href="<?= Action::ADMIN_LISTEENTREPRISE->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
+                            <span>Entreprises à valider</span>
+                        </a>
+                        <a href="<?= Action::ADMIN_LISTEOFFRES->value?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
+                            <span>Offres à valider</span>
+                        </a>
+                        <a href="<?= Action::ADMIN_SIGN_UP_FORM->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
+                            <span>Ajouter des Admin</span>
+                        </a>
+                        <a href="<?= Action::ADMIN_SUPRIMERADMIN_FROM->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
+                            <span>Supprimer des Admin</span>
+                        </a>
+                    </nav>
+                </div>
             </div>
-            <div class="flex flex-col items-center mt-10 mb-10 bg-white pt-3 pb-3">
-                <a href="<?= Action::HOME->value ?>" class="flex items-center">
-                    <img src="assets/img/logo.png" alt="logo" class="h-[1.8rem] w-[7rem] mr-3">
-                </a>
-            </div>
-            <div class="flex-grow">
-                <nav class="mt-10">
-                    <a href="<?= Action::ADMIN_DASH->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
-                        <span>Tableau de bord</span>
-                    </a>
-                    <a href="<?=Action::ADMIN_GESTION_ETUDIANT->value?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
-                        <span>Gestion etudiants</span>
-                    </a>
-                    <a href="<?= Action::ADMIN_LISTEENTREPRISE->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
-                        <span>Entreprises à valider</span>
-                    </a>
-                    <a href="<?= Action::ADMIN_LISTEOFFRES->value?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
-                        <span>Offres à valider</span>
-                    </a>
-                    <a href="<?= Action::ADMIN_SIGN_UP_FORM->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
-                        <span>Ajouter des Admin</span>
-                    </a>
-                    <a href="<?= Action::ADMIN_SUPRIMERADMIN_FROM->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
-                        <span>Supprimer des Admin</span>
-                    </a>
-                </nav>
-            </div>
-        </div>
-
+        </nav>
     </div>
 
 
-    <div class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden ">
+    <div id="contenue" class="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden ">
 
         <div class="flex min-h-screen">
 
@@ -294,12 +299,81 @@ use Stageo\Model\Object\Etudiant;
 </div>
 </body>
 <script>
-    const btn = document.querySelector("button.mobile-menu-button");
-    const sidebar = document.querySelector(".sidebar");
+    function openSidebaractiver() {
+        var bout = document.querySelector(".sidebar");
+        var button = document.getElementById('sidebarButton');
+        var cont = document.getElementById("contenue");
+        var widthcontrainte = document.getElementById("width-contrainte");
+        var navbouton = document.getElementById("nav-bouton")
+        if (!bout.classList.contains("hidden")){
+            button.style.display = 'flex';
+            bout.classList.add("hidden");
+            bout.classList.remove("w-full");
+            widthcontrainte.classList.add("w-64");
+            navbouton.classList.remove("items-center");
+            if (cont.classList.contains("hidden")){
+                cont.classList.remove("hidden");
+            }
+        }else{
+            button.style.display = 'none';
+            bout.classList.remove("hidden");
+            bout.classList.add("w-full");
+            widthcontrainte.classList.remove("w-64");
+            navbouton.classList.add("items-center");
+            if (!cont.classList.contains("hidden")){
+                cont.classList.add("hidden");
+            }
+        }
+    }
+    function openSidebar() {
+        var bout = document.querySelector(".sidebar");
+        var button = document.getElementById('sidebarButton');
+        var widthcontrainte = document.getElementById("width-contrainte");
+        var cont = document.getElementById("contenue");
+        if (!bout.classList.contains("hidden")){
+            button.style.display = 'flex';
+            bout.classList.add("hidden");
+            if (cont.classList.contains("hidden")){
+                cont.classList.remove("hidden");
+            }
+        }else{
+            button.style.display = 'none';
+            bout.classList.remove("hidden");
+            if (cont.classList.contains("hidden")){
+                cont.classList.remove("hidden");
+            }
+            bout.classList.remove("w-full");
+            widthcontrainte.classList.add("w-64");
+        }
+    }
 
-    btn.addEventListener("click", () => {
-        sidebar.classList.toggle("-translate-x-full");
-    });
+    function updateButtonVisibility() {
+        var button = document.getElementById('sidebarButton');
+        var nav = document.getElementById('sidebarButtonnav');
+        var screenWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+
+        // Définissez la largeur à laquelle le bouton doit être visible
+        var breakpointWidth = 600;
+        if (screenWidth <= breakpointWidth) {
+            if (! document.querySelector(".sidebar").classList.contains("hidden")){
+                openSidebar();
+            }
+            button.style.display = 'flex';
+            nav.style.display ='block';
+        } else {
+            if (document.querySelector(".sidebar").classList.contains("hidden")){
+                openSidebar();
+            }
+            button.style.display = 'none';
+            nav.style.display ='none';
+        }
+    }
+
+    // Attachez l'événement de redimensionnement à la fonction
+    window.addEventListener('resize', updateButtonVisibility);
+
+    // Appelez la fonction une fois pour définir l'état initial
+    updateButtonVisibility();
 </script>
 
 </html>
