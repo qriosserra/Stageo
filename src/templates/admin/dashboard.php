@@ -96,22 +96,22 @@ use Stageo\Model\Object\Etudiant;
                 </div>
                 <div id="nav-bouton" class="flex flex-grow">
                     <nav class="mt-10">
-                        <a href="<?= Action::ADMIN_DASH->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
+                        <a href="<?= Action::ADMIN_DASH->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5 rounded-r-2xl">
                             <span>Tableau de bord</span>
                         </a>
-                        <a href="<?=Action::ADMIN_GESTION_ETUDIANT->value?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
+                        <a href="<?=Action::ADMIN_GESTION_ETUDIANT->value?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5 rounded-r-2xl">
                             <span>Gestion etudiants</span>
                         </a>
-                        <a href="<?= Action::ADMIN_LISTEENTREPRISE->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
+                        <a href="<?= Action::ADMIN_LISTEENTREPRISE->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5 rounded-r-2xl">
                             <span>Entreprises à valider</span>
                         </a>
-                        <a href="<?= Action::ADMIN_LISTEOFFRES->value?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
+                        <a href="<?= Action::ADMIN_LISTEOFFRES->value?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5 rounded-r-2xl">
                             <span>Offres à valider</span>
                         </a>
-                        <a href="<?= Action::ADMIN_SIGN_UP_FORM->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
+                        <a href="<?= Action::ADMIN_SIGN_UP_FORM->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5 rounded-r-2xl">
                             <span>Ajouter des Admin</span>
                         </a>
-                        <a href="<?= Action::ADMIN_SUPRIMERADMIN_FROM->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
+                        <a href="<?= Action::ADMIN_SUPRIMERADMIN_FROM->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5 rounded-r-2xl">
                             <span>Supprimer des Admin</span>
                         </a>
                     </nav>

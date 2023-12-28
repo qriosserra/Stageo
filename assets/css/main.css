@@ -1173,6 +1173,10 @@ video {
   border-top-left-radius: 0.75rem;
   border-top-right-radius: 0.75rem;
 }
+.rounded-r-2xl{
+  border-top-right-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+}
 .rounded-tl-xl{
   border-top-left-radius: 0.75rem;
 }
