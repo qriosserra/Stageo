@@ -230,6 +230,9 @@ class EtudiantController
             content: "Vous avez postuler avec succes",
             type: FlashType::SUCCESS
         );
+
+        // envoyer un mail à l'entreprise
+        
         return new Response(
             action: Action::AFFICHER_OFFRE,
             params: [
