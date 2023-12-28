@@ -18,7 +18,7 @@ class EnseignantRepository extends CoreRepository
     /**
      * @throws Exception
      */
-    public function getByLogin(string $login): ?CoreObject
+    public function getByLogin(?string $login): ?CoreObject
     {
         return $this->select([new QueryCondition("login", ComparisonOperator::EQUAL, $login)])[0] ?? null;
     }

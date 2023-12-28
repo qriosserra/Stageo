@@ -403,6 +403,27 @@ class EtudiantController
             "2024-2025" => "2024-2025"
         ];
 
+        if (Session::contains("convention")) {
+            $convention = Session::get("convention");
+        }
+        else {
+            $etudiant = UserConnection::getSignedInUser();
+            $convention = (new ConventionRepository)->getByLogin($etudiant->getLogin());
+            if (is_null($convention)){
+                $convention = new Convention();
+                if (Session::contains("convention")) {
+                    Session::delete("convention");
+                }
+            }
+            $suivi = (new SuiviRepository)->getByIdConvention($convention->getIdConvention());
+            if ($suivi != null && !$suivi->getModifiable()) {
+                throw new ControllerException(
+                    "Vous ne pouvez plus modifier la convention",
+                    Action::HOME
+                );
+            }
+        }
+
         return new Response(
             template: "etudiant/convention-add-step-2.php",
             params: [
@@ -539,6 +560,27 @@ class EtudiantController
                 message: "Vous ne pouvez pas acceder à cette page",
                 action: Action::HOME
             );
+        }
+
+        if (Session::contains("convention")) {
+            $convention = Session::get("convention");
+        }
+        else {
+            $etudiant = UserConnection::getSignedInUser();
+            $convention = (new ConventionRepository)->getByLogin($etudiant->getLogin());
+            if (is_null($convention)){
+                $convention = new Convention();
+                if (Session::contains("convention")) {
+                    Session::delete("convention");
+                }
+            }
+            $suivi = (new SuiviRepository)->getByIdConvention($convention->getIdConvention());
+            if ($suivi != null && !$suivi->getModifiable()) {
+                throw new ControllerException(
+                    "Vous ne pouvez plus modifier la convention",
+                    Action::HOME
+                );
+            }
         }
 
         return new Response(
