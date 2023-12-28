@@ -5,13 +5,13 @@ namespace Stageo\Controller;
 use Stageo\Controller\Exception\ControllerException;
 use Stageo\Lib\Database\ComparisonOperator;
 use Stageo\Lib\Database\QueryCondition;
-use Stageo\Lib\Email;
+use Stageo\Lib\Mailer\Email;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
 use Stageo\Lib\HTTP\Cookie;
 use Stageo\Lib\HTTP\Session;
-use Stageo\Lib\Mailer;
+use Stageo\Lib\Mailer\Mailer;
 use Stageo\Lib\Response;
 use Stageo\Lib\UserConnection;
 use Stageo\Model\Object\Convention;
@@ -409,4 +409,34 @@ class MainController
             ]
         );
     }
+
+
+    public static function contact_form(): Response
+    {
+        $email = $_POST["email"];
+        $subject = $_POST["subject"];
+        $message = $_POST["message"];
+        $name = $_POST["name"];
+        $message = "Nom : ".$name."\nEmail : ".$email."\nMessage : ".$message."\nSujet : ".$subject;
+        
+        $email = new Email(
+           "jintek781@gmail.com",
+            'Message contact stageo',
+            $message,
+            
+        );
+        $mailer = new Mailer();
+        $mailer->send($email);
+        FlashMessage::add(
+            content: "Votre message a bien été envoyé",
+            type: FlashType::SUCCESS
+        );
+        return new Response(
+            action: Action::HOME
+        );
+
+    }
+
+
+    
 }

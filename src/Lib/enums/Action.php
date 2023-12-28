@@ -73,4 +73,5 @@ enum Action: string
     case ADMIN_SUPRIMEROFFRES = "?c=admin&a=suprimerOffre";
     case A_PROPOS = "?a=a_propos";
     case CONTACT = "?a=contact";
+    case CONTACT_FORM = "?a=contact_form";
 }
