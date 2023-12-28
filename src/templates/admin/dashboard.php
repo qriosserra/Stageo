@@ -75,18 +75,13 @@ use Stageo\Model\Object\Etudiant;
 
 <body :class="{'dark text-bodydark bg-boxdark-2': darkMode === true}">
 
-<div id="sidebarButton" class="justify-center bg-gray-800 pt-3 pb-3">
-    <div class=" bg-white  rounded-2xl flex pt-2 pb-2 pl-2">
-        <i class="bi bi-x text-xl cursor-pointer fi-rr-menu-burger mr-2" id="sidebarButton" onclick="openSidebaractiver()"></i>
-        <a href="<?= Action::HOME->value ?>" class="flex items-center">
-            <img src="assets/img/logo.png" alt="logo" class="h-[1.8rem] w-[7rem] mr-3">
-        </a>
-    </div>
+<div class="w-full bg-slate-700 h-[85px] shadow-xl">
+ 
 </div>
 
-    <div class="flex h-screen overflow-hidden">
+    <div class="flex h-screen overflow-hidden"> 
         <nav class="w-[300px]" id="navba-dash">
-            <span class="absolute text-white text-4xl top-5 left-4 cursor-pointer" onclick="openSidebar()">
+            <span class="absolute text-white text-4xl top-[-4rem] left-4 cursor-pointer" onclick="openSidebar()">
                 <i class="bi bi-filter-left px-2 bg-gray-900 rounded-md"></i>
             </span>
             <div class="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[300px] overflow-y-auto text-center bg-slate-700">
