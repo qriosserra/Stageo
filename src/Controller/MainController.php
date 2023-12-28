@@ -207,6 +207,13 @@ class MainController
         );
     }
 
+
+    public function contact(): Response
+    {
+        return new Response(
+            template: "Contact.php"
+        );
+    }
     public function importCsvForm() : Response
     {
         return new Response(
