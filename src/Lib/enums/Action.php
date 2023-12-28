@@ -71,4 +71,5 @@ enum Action: string
     case ADMIN_LISTEOFFRES = "?c=admin&a=listeOffre";
     case ADMIN_VALIDEOFFRE = "?c=admin&a=validerOffre";
     case ADMIN_SUPRIMEROFFRES = "?c=admin&a=suprimerOffre";
+    case A_PROPOS = "?a=a_propos";
 }

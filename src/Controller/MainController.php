@@ -200,6 +200,13 @@ class MainController
         );
     }
 
+    public function a_propos(): Response
+    {
+        return new Response(
+            template: "Propos.php"
+        );
+    }
+
     public function importCsvForm() : Response
     {
         return new Response(

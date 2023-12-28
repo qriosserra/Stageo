@@ -353,9 +353,10 @@ use Stageo\Model\Object\Secretaire;
                     <li class="relative">
                         <button class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500"
                                 id=
-                                <?php if(UserConnection::isInstance(new Etudiant())) :?>""><a href="<?=Action::ABOUT->value?>">Fonctionement</a>
+                                <?php if(UserConnection::isInstance(new Etudiant())) :?>""><a href="<?=Action::A_PROPOS->value?>">A propos</a>
                             <?php else :?>"dropdownButtonMission"><a href="<?=Action::ABOUT->value?>">Notre mission</a><?php endif?>
                         </button>
+                        
                         <div class="absolute hidden text-gray-700 pt-1 border border-slate-300 "
                              id="dropdownContentMission">
                             <div class="rounded  ease-in-out ml-3 mt-3 flex flex-row justify-end ">
