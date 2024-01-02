@@ -221,6 +221,16 @@ class MainController
         );
     }
 
+    public function confidentialite(): Response
+    {
+        return new Response(
+            template: "Confidentialite.php",
+            params: [
+                "title" => "Contact"
+            ]
+        );
+    }
+
 
     public function importCsvForm() : Response
     {

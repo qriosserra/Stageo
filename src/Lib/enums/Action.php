@@ -75,4 +75,5 @@ enum Action: string
     case CONTACT = "?a=contact";
     case CONTACT_FORM = "?a=contact_form";
     case FAQ = "?a=faq";
+    case CONFIDENTIALITE = "?a=confidentialite";
 }
