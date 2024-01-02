@@ -203,7 +203,10 @@ class MainController
     public function a_propos(): Response
     {
         return new Response(
-            template: "Propos.php"
+            template: "Propos.php",
+            params: [
+                "title" => "A propos"
+            ]
         );
     }
 
@@ -211,9 +214,14 @@ class MainController
     public function contact(): Response
     {
         return new Response(
-            template: "Contact.php"
+            template: "Contact.php",
+            params: [
+                "title" => "Contact"
+            ]
         );
     }
+
+
     public function importCsvForm() : Response
     {
         return new Response(
@@ -376,7 +384,10 @@ class MainController
     public function faq(): Response
     {
         return new Response(
-            template: "faq.php"
+            template: "FAQ.php",
+            params: [
+                "title" => "FAQ"
+            ]
         );
     }
 

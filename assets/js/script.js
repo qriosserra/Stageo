@@ -75,6 +75,8 @@ document.addEventListener('DOMContentLoaded', function () {
             dropdownContent.classList.remove('active');
         });
     }
+  // Wait for the DOM to fully load
+
 
     setupDropdown('dropdownOffres', 'dropdownContentOffres');
     setupDropdown('dropdownButtonEntreprise', 'dropdownContentEntreprise');
