@@ -75,29 +75,29 @@ class MainController
                 isset($_REQUEST['toggle']["Stages"]) ? "oui" : "non",
             ];
 
-            if (isset($_REQUEST['categoriesSelectionnees'])){
+            if (isset($_REQUEST['categoriesSelectionnees'])) {
                 $categoriesSelect = $_REQUEST['categoriesSelectionnees'];
             }
-            if (isset($search)){
-                if ($option == "Categories"){
-                    $categories =  (new CategorieRepository()) ->select(new QueryCondition("libelle",ComparisonOperator::LIKE,"%".$search."%"));
+            if (isset($search)) {
+                if ($option == "Categories") {
+                    $categories =  (new CategorieRepository())->select(new QueryCondition("libelle", ComparisonOperator::LIKE, "%" . $search . "%"));
                     foreach ($categories as $category) {
-                        $idOffres [] =  (new DeCategorieRepository())->getByIdCategorie($category->getIdCategorie());
+                        $idOffres[] =  (new DeCategorieRepository())->getByIdCategorie($category->getIdCategorie());
                         var_dump($idOffres);
                     }
-                    foreach ($idOffres as $idOffre){
-                        $offres [] =  (new OffreRepository)->getById($idOffre->getIdOffre());
+                    foreach ($idOffres as $idOffre) {
+                        $offres[] =  (new OffreRepository)->getById($idOffre->getIdOffre());
                         //$offres [] =  (new OffreRepository)->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,"%".$idOffre->getIdOffre()."%"));
                     }
-                }else {
-                    if (isset($categoriesSelect)){
+                } else {
+                    if (isset($categoriesSelect)) {
                         //$categories = [];
                         //$res = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
-                        $res = (new OffreRepository)->getByTextAndLocalisation($search,$commune,$Togle);
+                        $res = (new OffreRepository)->getByTextAndLocalisation($search, $commune, $Togle);
                         $cate = [];
                         foreach ($categoriesSelect as $category) {
                             //$cate [] = (new CategorieRepository())->select(new QueryCondition("libelle", ComparisonOperator::LIKE, "%" . $category . "%"));
-                            $cate [] = (new CategorieRepository())->getByLibelle($category);
+                            $cate[] = (new CategorieRepository())->getByLibelle($category);
                         }
                         /*foreach ($cate as  $category){
                             //$categories [] =  (new DeCategorieRepository()) ->select(new QueryCondition("id_categorie",ComparisonOperator::EQUAL,"%".$category."%"));
@@ -106,23 +106,23 @@ class MainController
                         $categories = (new DeCategorieRepository())->getByIdCategorieliste($cate);
                         foreach ($res as $resu) {
                             foreach ($categories as $category) {
-                                if ($category !=null) {
-                                    if ($resu->getIdOffre() == $category && !in_array($resu,$offres)) {
-                                        $offres [] = $resu;
-                                        $idOffres [] = $resu->getIdOffre();
+                                if ($category != null) {
+                                    if ($resu->getIdOffre() == $category && !in_array($resu, $offres)) {
+                                        $offres[] = $resu;
+                                        $idOffres[] = $resu->getIdOffre();
                                     }
                                 }
                             }
                         }
-                    }else {
+                    } else {
                         //$offres = (new OffreRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
-                        $offres =  (new OffreRepository)->getByTextAndLocalisation($search,$commune,$Togle);
-                        foreach ($offres as $o){
-                            $idOffres [] = $o->getIdOffre();
+                        $offres =  (new OffreRepository)->getByTextAndLocalisation($search, $commune, $Togle);
+                        foreach ($offres as $o) {
+                            $idOffres[] = $o->getIdOffre();
                         }
                     }
                 }
-            }else{
+            } else {
                 $offres = (new OffreRepository)->select(new QueryCondition("valider", ComparisonOperator::EQUAL, 1));
                 $idOffres = (new OffreRepository())->getAllValideOffreId();
             }
@@ -136,7 +136,7 @@ class MainController
                 ? "selected"
                 : null;
             $listeoffres = (new OffreRepository())->getOffresDetailsAvecCategories();
-            $Categories = (new CategorieRepository()) ->select();
+            $Categories = (new CategorieRepository())->select();
             return new Response(
                 template: "entreprise/offre/liste-offre.php",
                 params: [
@@ -152,7 +152,66 @@ class MainController
                     "communeTaper" => $commune,
                     "search" => $search
                 ]
-            );}
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
+        );
+    }
+
+    public function listeEntreprises(): Response
+    {
+        if (UserConnection::isSignedIn()) {
+            $search = $_REQUEST["search"] ?? "";
+            $commune = $_REQUEST["commune"] ?? "";
+            $option = $_POST["OptionL"] ?? "raison_sociale";
+            $tabla = $option === "raison_sociale"
+                ? "raison_sociale"
+                : "commune";
+            $entreprises = [];
+            $idEntreprises =  [];
+
+            if (isset($search)) {
+                if ($option == "commune") {
+                    $entreprises = (new EntrepriseRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
+                    foreach ($entreprises as $entreprise) {
+                        $idEntreprises[] = $entreprise->getIdEntreprise();
+                    }
+                } else {
+                    $entreprises = (new EntrepriseRepository)->select(new QueryCondition($tabla, ComparisonOperator::LIKE, "%" . $search . "%"));
+                    foreach ($entreprises as $o) {
+                        $idEntreprises[] = $o->getIdEntreprise();
+                    }
+                }
+            } else {
+                $entreprises = (new EntrepriseRepository)->select();
+                $idEntreprises = (new EntrepriseRepository())->getAllEntrepriseId();
+            }
+            $selA = $option === "raison_sociale"
+                ? "selected"
+                : null;
+            $selB = $option === "commune"
+                ? "selected"
+                : null;
+            $listeEntreprises = (new EntrepriseRepository())->getEntrepriseDetails();
+            $Categories = (new CategorieRepository())->select();
+            return new Response(
+                template: "entreprise/liste-entreprise.php",
+                params: [
+                    "title" => "Liste des entreprises",
+                    "entreprises" => $entreprises,
+                    "listeEntreprises" => $listeEntreprises,
+                    "idEntreprises" => $idEntreprises,
+                    "selA" => $selA,
+                    "selB" => $selB,
+                    "Categories" => $Categories,
+                    "nbRechercheTrouver" => count($entreprises),
+                    "communeTaper" => $commune,
+                    "search" => $search
+                ]
+            );
+        }
         throw new ControllerException(
             message: "Vous n'avez pas accès à cette page.",
             action: Action::HOME
@@ -167,9 +226,9 @@ class MainController
              */
             $offre = (new OffreRepository)->getById($id);
             $entreprise = (new EntrepriseRepository())->getById($offre->getIdEntreprise());
-            if ($entreprise instanceof Entreprise){
+            if ($entreprise instanceof Entreprise) {
                 $nomentreprise = $entreprise->getRaisonSociale();
-            }else{
+            } else {
                 $nomentreprise = "EREUR lors de la recherche de l'entreprise !";
             }
             return new Response(
@@ -181,7 +240,30 @@ class MainController
                     "nomentreprise" => $nomentreprise,
                     "unite_gratification" => (new UniteGratificationRepository)->getById($offre->getIdUniteGratification())->getLibelle()
                 ]
-            );}
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette page.",
+            action: Action::HOME
+        );
+    }
+
+    public function afficherEntreprise(string $id): Response
+    {
+        if (UserConnection::isSignedIn()) {
+            /**
+             * @var Entreprise $entreprise
+             */
+            $entreprise = (new EntrepriseRepository)->getById($id);
+            return new Response(
+                template: "entreprise/entreprise.php",
+                params: [
+                    "title" => "Entreprise $id",
+                    "entreprise" => $entreprise,
+                    "commune" => (new DistributionCommuneRepository)->getById($entreprise->getIdDistributionCommune())->getCommune()
+                ]
+            );
+        }
         throw new ControllerException(
             message: "Vous n'avez pas accès à cette page.",
             action: Action::HOME
@@ -213,10 +295,12 @@ class MainController
 
     public function contact(): Response
     {
+        $listeEmailadmin = (new EnseignantRepository())->getAllEmails();
         return new Response(
             template: "Contact.php",
             params: [
-                "title" => "Contact"
+                "title" => "Contact",
+                "listeEmailadmin" => $listeEmailadmin
             ]
         );
     }
@@ -232,7 +316,7 @@ class MainController
     }
 
 
-    public function importCsvForm() : Response
+    public function importCsvForm(): Response
     {
         return new Response(
             template: "csvForm.php",
@@ -242,10 +326,10 @@ class MainController
         );
     }
 
-    public function importCsv() : Response
+    public function importCsv(): Response
     {
         $cheminCSV = $_FILES['CHEMINCSV'];
-        if ($cheminCSV["size"]!=0){
+        if ($cheminCSV["size"] != 0) {
             $csvContent = file_get_contents($cheminCSV['tmp_name']);
             (new tableTemporaireRepository())->insertViaCSV($csvContent);
         }
@@ -260,7 +344,7 @@ class MainController
         );
     }
 
-    public function exportCsv() : Response
+    public function exportCsv(): Response
     {
         /**
          * @var Convention $convention
@@ -438,13 +522,33 @@ class MainController
         $subject = $_POST["subject"];
         $message = $_POST["message"];
         $name = $_POST["name"];
-        $message = "Nom : ".$name."\nEmail : ".$email."\nMessage : ".$message."\nSujet : ".$subject;
-        
+        $message = "Nom : " . $name . "\nEmail : " . $email . "\nMessage : " . $message . "\nSujet : " . $subject;
+        $email_target = $_POST["email_target"];
+        if (isset($email_target)) {
+
+
+            $emailTargetPart = explode("@", $email_target)[0];
+            $listeEmailadmin = (new EnseignantRepository())->getAllEmails();
+            foreach ($listeEmailadmin as $emailadmin) {
+                $emailClean = trim($emailadmin['email']); // Nettoie l'e-mail et utilise la clé correcte
+                $emailAdminPart = explode("@", $emailClean)[0];
+
+                if ($emailTargetPart == $emailAdminPart) {
+                    $email_target = $emailClean;
+                    var_dump($emailClean);
+                    break;
+                }
+            }
+        }
+        if (empty($email_target)) {
+            $email_target = "jintek781@gmail.com";
+        }
+        (new EnseignantRepository())->getAllEmails();
         $email = new Email(
-           "jintek781@gmail.com",
+            $email_target,
             'Message contact stageo',
             $message,
-            
+
         );
         $mailer = new Mailer();
         $mailer->send($email);
@@ -455,9 +559,5 @@ class MainController
         return new Response(
             action: Action::HOME
         );
-
     }
-
-
-    
 }

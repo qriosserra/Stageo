@@ -22,4 +22,24 @@ class EnseignantRepository extends CoreRepository
     {
         return $this->select([new QueryCondition("login", ComparisonOperator::EQUAL, $login)])[0] ?? null;
     }
+
+    /**
+     * @throws Exception
+     */
+    public function getAllEmails(): array
+    {
+        $query = "SELECT email from stg_enseignant";
+
+        $pdo = DatabaseConnection::getPdo();
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+
+        $listeEmail = $stmt->fetchAll();
+
+        return $listeEmail;
+
+
+
+    }
+
 }
