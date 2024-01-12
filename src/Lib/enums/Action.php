@@ -24,13 +24,13 @@ enum Action: string
     case ENTREPRISE_SIGN_IN = "?c=entreprise&a=signIn";
     case LISTE_OFFRE = "?a=listeOffre";
     case AFFICHER_OFFRE = "?a=afficherOffre";
+    case ENTREPRISE_POSTULE_OFFRE_ETUDIANT = "?c=entreprise&a=afficherPostuleEtudiantAll";
     case AFFICHER_ENTREPRISE = "?a=afficherEntreprise";
-    case ENTREPRISE_POSTULE_OFFRE_ETUDIANT = "?c=entreprise&a=voirAPostuler";
     case ENTREPRISE_ACCEPTE_ETUDIANT_OFFRE = "?c=entreprise&a=accepterEtudiantOffre";
     case ENTREPRISE_CREATION_OFFRE_FORM = "?c=entreprise&a=offreAddForm";
     case ENTREPRISE_CREATION_OFFRE = "?c=entreprise&a=offreAdd";
     case ENTREPRISE_AFFICHER_OFFRE = "?c=entreprise&a=afficherOffreEntreprise";
-    case ENTREPRISE_MODIFICATION_OFFRE_FORM = "?c=entreprise&a=afficherFormulaireMiseAJourOffre";
+    case ENTREPRISE_MODIFICATION_OFFRE_FORM = "?c=entreprise&a=afficherFormulaireMiseAJourOffre&id=";
     case ENTREPRISE_MODIFICATION_OFFRE = "?c=entreprise&a=mettreAJourOffre";
     case ENTREPRISE_DELETE_OFFRE = "?c=entreprise&a=deleteOffre";
     case ADMIN_MODIFICATION_INFO_FORM = "?c=admin&a=afficherFormulaireMiseAJour";
@@ -41,13 +41,16 @@ enum Action: string
     case ADMIN_SIGN_IN = "?c=admin&a=signIn";
     case ADMIN_DASH = "?c=admin&a=dashboard";
     case ADMIN_LISTEENTREPRISE = "?c=admin&a=listeEntreprises";
+    case ADMIN_GESTION_ETUDIANT = "?c=admin&a=gestionEtudiant";
+    case ADMIN_VALIDECONV_FROM = "?c=admin&a=validerConventionForm";
     case ADMIN_VALIDEENTREPRISE = "?c=admin&a=validerEntreprise";
     case ADMIN_SUPRIMERENTREPRISE = "?c=admin&a=suprimerEntreprise";
     case ADMIN_SUPRIMERADMIN_FROM = "?c=admin&a=supprimerAdminForm";
     case ADMIN_SUPRIMERADMIN = "?c=admin&a=supprimerAdmin";
     case ABOUT = "?a=about";
-    case CSVFORM = "?a=csvForm";
-    case CSV = "?a=csv&XDEBUG_SESSION_START=";
+    case IMPORT_CSV_FORM = "?c=main&a=importCsvForm";
+    case IMPORT_CSV = "?c=main&a=importCsv";
+    case EXPORT_CSV = "?c=main&a=exportCsv";
     case SECRETAIRE_SIGN_UP_FORM = "?c=secretaire&a=signUpForm";
     case SECRETAIRE_SIGN_UP = "?c=secretaire&a=signUp";
     case SECRETAIRE_SIGN_IN = "?c=secretaire&a=signIn";
@@ -59,6 +62,7 @@ enum Action: string
     case ETUDIANT_CONVENTION_ADD_STEP_3_FORM = "?c=etudiant&a=conventionAddStep3Form";
     case ETUDIANT_CONVENTION_ADD_STEP_3 = "?c=etudiant&a=conventionAddStep3";
     case ETUDIANT_SOUMETTRE_CONVENTION = "?c=etudiant&a=soumettreConvention";
+    case ETUDIANT_MES_CANDIDATURE = "?c=etudiant&a=voirMesCandidature";
     case SECRETAIRE_LISTE_CONVENTIONS = "?c=secretaire&a=listeConventions";
     case SECRETAIRE_CONVENTION_DETAILS = "?c=secretaire&a=conventionDetails&id_convention=";
     case SECRETAIRE_CONVENTION_VALIDATION = "?c=secretaire&a=conventionValidation";
@@ -67,5 +71,15 @@ enum Action: string
     case PROFILE_METTRE_A_JOUR_ETUDIANT = "?c=etudiant&a=MettreAJourProfile";
     case VALIDER_DEFINITIVEMENT_OFFRE = "?c=etudiant&a=validerDefinitivement";
     case REFUSER_DEFINITIVEMENT_OFFRE = "?c=etudiant&a=refuserDefinitivement";
+    case ADMIN_LISTEOFFRES = "?c=admin&a=listeOffre";
+    case ADMIN_VALIDEOFFRE = "?c=admin&a=validerOffre";
+    case ADMIN_SUPRIMEROFFRES = "?c=admin&a=suprimerOffre";
     case LISTE_ENTREPRISES = "?a=listeEntreprises";
+    case A_PROPOS = "?a=a_propos";
+    case CONTACT = "?a=contact";
+    case CONTACT_FORM = "?a=contact_form";
+    case FAQ = "?a=faq";
+    case CONFIDENTIALITE = "?a=confidentialite";
+    case SUIVI_STAGIAIRE_FORM = "?c=admin&a=suiviStagiaire";
+
 }

@@ -18,8 +18,8 @@ include __DIR__ . "/../../macros/offre.php";
 ?>
 
 
-<div class="container mx-auto p-4 mt-[10rem]  border-2 rounded-2xl ">
-    <div class=" rounded p-6">
+<div class="container mx-auto p-4 mt-[10rem]  border-2 rounded-2xl bg-slate-50 ">
+    <div class=" rounded p-6 ">
         <div class="mb-4">
             <h1 class="text-2xl  text-center font-bold mb-2"><?= $offre->getThematique() ?> </h1>
             <h6 class=" text-center"> <?= $nomentreprise ?></h6>
