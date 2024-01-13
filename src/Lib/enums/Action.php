@@ -77,4 +77,8 @@ enum Action: string
     case FAQ = "?a=faq";
     case CONFIDENTIALITE = "?a=confidentialite";
     case SUIVI_STAGIAIRE_FORM = "?c=admin&a=suiviStagiaire";
+
+    case LISTE_ENTREPRISES = "?a=listeEntreprises";
+
+    case AFFICHER_ENTREPRISE = "?a=afficherEntreprise";
 }
