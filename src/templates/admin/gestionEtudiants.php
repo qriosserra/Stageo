@@ -95,7 +95,7 @@ use Stageo\Model\Object\Suivi;
     }
   }
 </style>
-<main class=" h-screen flex justify-center items-center">
+<main class="mt-[5rem] h-screen flex justify-center items-center">
 <table class="mb-[15rem] ml-4 mr-4">
   <caption>Gestion d'étudiants</caption>
   <thead>
