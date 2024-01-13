@@ -578,4 +578,13 @@ class MainController
             action: Action::HOME
         );
     }
+    public static function tutoriel(): Response
+    {
+        return new Response(
+            template: "visiteur/tutoriel.php",
+            params: [
+                "title" => "Tutoriel"
+            ]
+        );
+    }
 }

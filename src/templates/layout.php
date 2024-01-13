@@ -489,13 +489,17 @@ use Stageo\Model\Object\Secretaire;
                             <li><a href="<?= Action::A_PROPOS->value?>">À propos</a></li>
                             <li><a href="<?= Action::CONTACT->value?>">Contact</a></li>
                             <li><a href="<?= Action::CONTACT->value?>"> Nous contacter</a></li>
+                            <li><a href="<?= Action::TUTORIEL->value?>">Tutoriel</a></li>
                         </ul>
                     </div>
                     <div class="space-y-4">
                         <h2 class="text-lg font-semibold text-gray-800">Employeurs</h2>
                         <ul class="text-gray-600 space-y-2">
                             <li>
-                                <a href="<?= Action::ENTREPRISE_SIGN_IN_FORM->value?>">Obtenez un Compte Employeur gratuit</a>
+                                <a href="<?= Action::ENTREPRISE_SIGN_UP_STEP_1_FORM->value?>">Créer son compte Entreprise</a>
+                            </li>
+                            <li>
+                                <a href="<?= Action::ENTREPRISE_SIGN_IN_FORM->value?>">Connexion Entreprise</a>
                             </li>
                         </ul>
                     </div>

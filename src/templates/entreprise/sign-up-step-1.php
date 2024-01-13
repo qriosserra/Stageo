@@ -29,7 +29,7 @@ include __DIR__ . "/../macros/button.php";
         <span class="text-center" style="font-size: clamp(1rem, 5vw, 2rem)">Créer votre compte entreprise</span>
     </div>
     <div class="max-w-lg mx-auto p-8 space-y-4">
-        <h4 class="text-center">Information générale</h4>
+        <h4 class="text-center">Informations générales</h4>
         <form action="<?=Action::ENTREPRISE_SIGN_UP_STEP_1->value?>" method="post" class="bg-white p-6 rounded shadow-md border-t-4 border-blue-500 space-y-4">
             <form class="bg-white p-12 text-gray-600 rounded-lg shadow-lg grid gap-8" action="<?=Action::ENTREPRISE_SIGN_UP_STEP_1->value?>" method="post">
                 <?=field("raison_sociale", "Nom de l'entreprise*", "text", "Entrez le nom de l'entreprise", Pattern::NAME, true, $entreprise->getRaisonSociale())?>

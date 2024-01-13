@@ -34,7 +34,7 @@ include __DIR__ . "/../macros/breadcrumb.php";
                 <label class="block">
                     <input type="checkbox" name="terms" class="mr-2 leading-tight">
                     <span class="text-sm">
-                        Restez connecté ?
+                        Rester connecté ?
                     </span>
                     <a class="text-blue-600 sm:float-right">Mot de passe oublié ?</a>
                 </label>
