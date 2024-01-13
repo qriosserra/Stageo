@@ -486,23 +486,16 @@ use Stageo\Model\Object\Secretaire;
                     <div class="space-y-4">
                         <h2 class="text-lg font-semibold text-gray-800">Stageo</h2>
                         <ul class="text-gray-600 space-y-2">
-                            <li>À propos</li>
-                            <li>Contact</li>
-                            <li>Blog</li>
-                            <li>Nous contacter</li>
+                            <li><a href="<?= Action::A_PROPOS->value?>">À propos</a></li>
+                            <li><a href="<?= Action::CONTACT->value?>">Contact</a></li>
+                            <li><a href="<?= Action::CONTACT->value?>"> Nous contacter</a></li>
                         </ul>
                     </div>
                     <div class="space-y-4">
                         <h2 class="text-lg font-semibold text-gray-800">Employeurs</h2>
                         <ul class="text-gray-600 space-y-2">
                             <li>
-                                <a href="">Obtenez un Compte Employeur gratuit</a>
-                            </li>
-                            <li>
-                                <a href="">Centre employeur</a>
-                            </li>
-                            <li>
-                                <a href="">Contacter les services</a>
+                                <a href="<?= Action::ENTREPRISE_SIGN_IN_FORM->value?>">Obtenez un Compte Employeur gratuit</a>
                             </li>
                         </ul>
                     </div>
@@ -513,13 +506,10 @@ use Stageo\Model\Object\Secretaire;
                                 <a href="">Aide et contact</a>
                             </li>
                             <li>
-                                <a href="">Règlement</a>
-                            </li>
-                            <li>
                                 <a href="">Conditions d'utilisation</a>
                             </li>
                             <li>
-                                <a href="">Confidentialité et cookies</a>
+                                <a href="<?= Action::CONFIDENTIALITE->value ?>">Confidentialité et cookies</a>
                             </li>
                             <li>
                                 <a href="">Centre de confidentialité</a>
