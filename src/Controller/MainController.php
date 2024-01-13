@@ -544,11 +544,29 @@ class MainController
             $email_target = "jintek781@gmail.com";
         }
         (new EnseignantRepository())->getAllEmails();
+        $htmlContent = '<html> 
+                    <head> 
+                        <title>Mail automatique Stageo</title> 
+                    </head> 
+                    <body style="text-align: center; margin: 0 auto;"> 
+                        <div>
+                            <p style="padding: 1em; text-align: left; padding-left: 2%;">'.$message.'</p>
+                            <div style="text-align: left; padding-left: 2%;">
+                                <h3 style="margin: 0;">'.$name.'</h3>
+                                <a href="'.$email.'" style="margin: 0; text-decoration: none; color: black;">'.$email.'</a>
+                            </div>
+                        </div>
+                        <div style="display: flex; gap: 20px;  flex-wrap: wrap;  margin: 2%;">
+                            <img src="assets/img/logo.txt" style="max-width: 200px; padding-right: 1%; border-right: 1px solid grey;">
+                            <img src="assets/img/um.txt" style="max-width: 200px; padding-right: 1%; border-right: 1px solid grey;">
+                            <img src="assets/img/iut_montpellier_sete.txt" style="max-width: 200px;">
+                        </div>        
+                    </body> 
+                </html>';
         $email = new Email(
             $email_target,
-            'Message contact stageo',
-            $message,
-
+            'Message contact stageo : '.$subject,
+            $htmlContent,
         );
         $mailer = new Mailer();
         $mailer->send($email);
