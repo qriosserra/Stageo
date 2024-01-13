@@ -664,6 +664,8 @@ class EntrepriseController
                 params: [
                     "entreprise" => $user,
                     "offre" => $offre,
+                    "nav" => false,
+                    "footer" => false,
                     "liste_tag" => array_column(array_map(fn($e) => $e->toArray(), (new CategorieRepository)->select()), "libelle"),
                     "liste_tag_choisi" => $nomTag,
                     "token" => Token::generateToken(Action::ENTREPRISE_MODIFICATION_OFFRE_FORM),

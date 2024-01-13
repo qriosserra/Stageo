@@ -20,10 +20,10 @@ include __DIR__ . "/../../macros/offre.php";
  */
 ?>
 <main class="h-screen flex flex-col items-center justify-center">
-    <?=button("Accueil", "fi-rr-home", Action::HOME, "!absolute !pl-2 top-16 left-0")?>
+    <?=button("Accueil", "fi-rr-home", Action::HOME, "!absolute !pl-2 top-8 left-8")?>
     <h5 class="font-bold py-6"><?= $offre->getIdOffre() !== null ? 'Modifier' : 'Ajouter' ?> une offre</h5>
 
-    <form class="w-[60vw] grid grid-cols-2 gap-8"
+    <form class="w-[60vw] h-[80vh] grid grid-cols-2 gap-8"
           action="<?= $offre->getIdOffre() !== null ? Action::ENTREPRISE_MODIFICATION_OFFRE->value . '&id=' . $offre->getIdOffre() : Action::ENTREPRISE_CREATION_OFFRE->value ?>"
           method="post">
 
@@ -50,7 +50,7 @@ include __DIR__ . "/../../macros/offre.php";
         <?=field("gratification", "Gratification par heure", "float", "", null, true,$offre->getGratification())?>
         <?=dropdown("id_unite_gratification", "Unité de gratification", null, null, 2, $unite_gratifications)?>
 
-        <div date-rangepicker class="flex items-center col-span-2">
+        <div date-rangepicker class="flex flex-col sm:flex-row items-center col-span-2">
             <div class="relative flex items-center">
                 <input name="start" type="text" value="<?=$offre->getDateDebut()?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date début">
             </div>
@@ -111,7 +111,8 @@ include __DIR__ . "/../../macros/offre.php";
             </div>
         </div>
 
-        <?=submit($offre->getIdOffre() !== null ? "Modifier" : "Publier")?>
+        <?=submit($offre->getIdOffre() !== null ? "Modifier" : "Publier")?>*
+        <div class="mb-10px"></div>
         <?=token($token)?>
     </form>
     <script>
