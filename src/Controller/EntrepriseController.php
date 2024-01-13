@@ -451,6 +451,7 @@ class EntrepriseController
                     "nav" => false,
                     "footer" => false,
                     "offre" => Session::get("offre") ?? new Offre(),
+                    "liste_tag_choisi" => [],
                     "liste_tag" => array_column(array_map(fn($e) => $e->toArray(), (new CategorieRepository)->select()), "libelle"),
                     "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
                     "token" => Token::generateToken(Action::ENTREPRISE_CREATION_OFFRE_FORM)
@@ -663,7 +664,8 @@ class EntrepriseController
                 params: [
                     "entreprise" => $user,
                     "offre" => $offre,
-                    "liste_tag" => $nomTag,
+                    "liste_tag" => array_column(array_map(fn($e) => $e->toArray(), (new CategorieRepository)->select()), "libelle"),
+                    "liste_tag_choisi" => $nomTag,
                     "token" => Token::generateToken(Action::ENTREPRISE_MODIFICATION_OFFRE_FORM),
                     "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository())->select()), "libelle", "id_unite_gratification")
                 ]
@@ -785,7 +787,7 @@ class EntrepriseController
                 params: ["id"=>$idOffre]
             );
         }
-        if($type!='alternance'){
+        if($type!='alternance' and $type!='Alternance'){
             if(!Validate::isDateStage($date_debut,$date_fin,$niveau)){
                 throw new ControllerException(
                     message: "Les dates de stages ne sont pas conforment",
@@ -803,11 +805,9 @@ class EntrepriseController
                 );
             }
         }
-        var_dump($type);
         if ($type == "Stage&Alternance" || $type == "Alternance"){
             $date_fin = null;
         }
-        var_dump($type);
         $o = new Offre($idOffre, $description, $thematique,$secteur , $taches, $commentaires, $gratification,$type , null,$id_unite_gratification, $user->getIdEntreprise(),$date_debut,$date_fin,$niveau,$offre->getValider());
         (new OffreRepository())->update($o);
         return new Response(
