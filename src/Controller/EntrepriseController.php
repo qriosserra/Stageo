@@ -862,6 +862,7 @@ class EntrepriseController
         );
     }
 
+    /*Permet de renvoyer la liste des étudiants ayant postuler aux offre de l'entreprise*/
     public static function afficherPostuleEtudiantAll():Response{
         if (UserConnection::isInstance(new Entreprise())) {
             $result = (new EntrepriseRepository())->getOffreEntreprise(UserConnection::getSignedInUser()->getIdEntreprise());
