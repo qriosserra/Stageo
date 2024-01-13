@@ -133,7 +133,7 @@ include __DIR__ . "/../../macros/offre.php";
                     //const tagExists = Array.from(existingTags).some(tag => tag.querySelector('input').value.trim() === selectedTag);
 
                     if (!tagExists) {
-                        /*const tagElement = document.createElement('span');
+                        /*const tagElement = document.createElement('input');
                         tagElement.textContent = selectedTag;
                         tagElement.className = 'bg-indigo-200 text-indigo-800 px-2 py-1 m-1 rounded-full tag-element';
                         tagContainer.appendChild(tagElement);

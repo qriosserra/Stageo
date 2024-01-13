@@ -479,9 +479,7 @@ class EntrepriseController
         $type = $_REQUEST["emploi"];
         $date_debut = $_REQUEST["start"];
         $date_fin = $_REQUEST["end"];
-        var_dump($_REQUEST["selectedTags"]);
-        exit();
-        $selectedTags = json_decode($_REQUEST["selectedTags"], true);
+        $selectedTags = $_REQUEST["selectedTags"];
         if(!$date_fin){
             $date_fin =null;
         }
@@ -608,11 +606,7 @@ class EntrepriseController
         }
         $id_offre = (new OffreRepository)->insert($offre);
 
-        var_dump($selectedTags);
-        exit();
-
         foreach ($selectedTags as $tag){
-            exit();
             $categorie = (new CategorieRepository())->getByLibelle($tag);
             $id_categorie = $categorie->getIdCategorie();
             (new DeCategorieRepository())->insert(new DeCategorie($id_categorie,$id_offre));
@@ -650,11 +644,26 @@ class EntrepriseController
                 action: Action::HOME
             );
         } else {
+            $selectedTags = (new DeCategorieRepository)->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,$id));
+            $idCategorie = [];
+
+            foreach ($selectedTags as $tag){
+                $idCategorie[] = $tag->getIdCategorie();
+            }
+
+            $nomTag = [];
+
+            foreach ($idCategorie as $tag){
+                $t = (new CategorieRepository())->select(new QueryCondition("id_categorie",ComparisonOperator::EQUAL,$tag));
+                $nomTag[] = $t[0]->getLibelle();
+            }
+
             return new Response(
                 template: "entreprise/offre/add.php",
                 params: [
                     "entreprise" => $user,
                     "offre" => $offre,
+                    "liste_tag" => $nomTag,
                     "token" => Token::generateToken(Action::ENTREPRISE_MODIFICATION_OFFRE_FORM),
                     "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository())->select()), "libelle", "id_unite_gratification")
                 ]
