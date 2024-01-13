@@ -687,6 +687,7 @@ class EntrepriseController
         $type = $_REQUEST["emploi"];
         $date_debut = $_REQUEST["start"];
         $date_fin = $_REQUEST["end"];
+        $selectedTags = $_REQUEST["selectedTags"];
         if(!$_REQUEST["checkbox"]){
             throw new ControllerException(
                 message: "Niveau d'étude pas selectionner",
@@ -809,6 +810,43 @@ class EntrepriseController
             $date_fin = null;
         }
         $o = new Offre($idOffre, $description, $thematique,$secteur , $taches, $commentaires, $gratification,$type , null,$id_unite_gratification, $user->getIdEntreprise(),$date_debut,$date_fin,$niveau,$offre->getValider());
+
+        $tags = (new DeCategorieRepository)->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre));
+        $idCategorie_avant = [];
+        $idCategorie_apres = [];
+
+        foreach ($tags as $tag){
+            $idCategorie_avant[] = $tag->getIdCategorie();
+        }
+
+        foreach ($selectedTags as $tag){
+            $categorie = (new CategorieRepository())->getByLibelle($tag);
+            $idCategorie_apres[] = $categorie->getIdCategorie();
+        }
+
+        foreach ($idCategorie_apres as $c){
+            if(!in_array($c, $idCategorie_avant)){
+                (new DeCategorieRepository())->insert(new DeCategorie($c,$idOffre));
+            }
+            else{
+                $key = array_search($c, $idCategorie_avant);
+                if ($key !== false) {
+                    unset($idCategorie_avant[$key]);
+                }
+            }
+            $key = array_search($c, $idCategorie_apres);
+            if ($key !== false) {
+                unset($idCategorie_apres[$key]);
+            }
+        }
+
+        foreach($idCategorie_avant as $c){
+            $condition = [new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre, LogicalOperator::AND),
+                new QueryCondition("id_categorie",ComparisonOperator::EQUAL,$c)
+            ];
+            (new DeCategorieRepository())->delete($condition);
+        }
+
         (new OffreRepository())->update($o);
         return new Response(
             action: Action::HOME,
