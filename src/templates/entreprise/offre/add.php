@@ -130,16 +130,31 @@ include __DIR__ . "/../../macros/offre.php";
                     //je regarde si j'ai déjà rajouté le tag
                     const existingTags = tagContainer.querySelectorAll('.tag-element');
                     const tagExists = Array.from(existingTags).some(tag => tag.textContent.trim() === selectedTag);
+                    //const tagExists = Array.from(existingTags).some(tag => tag.querySelector('input').value.trim() === selectedTag);
 
                     if (!tagExists) {
-                        const tagElement = document.createElement('span');
+                        /*const tagElement = document.createElement('span');
                         tagElement.textContent = selectedTag;
                         tagElement.className = 'bg-indigo-200 text-indigo-800 px-2 py-1 m-1 rounded-full tag-element';
                         tagContainer.appendChild(tagElement);
                         tagDropdown.value = '';
                         const selectedTags = Array.from(tagContainer.querySelectorAll('.tag-element')).map(tag => tag.textContent.trim());
                         document.querySelector('[name="selectedTags"]').value = JSON.stringify(selectedTags);
-                        console.log("Selected Tags:", selectedTags);
+                        console.log("Selected Tags:", selectedTags);*/
+
+                        const tagElement = document.createElement('input');
+                        tagElement.value = selectedTag;
+                        tagElement.name = 'selectedTags[]';
+                        tagElement.className = 'hidden';
+                        tagElement.setAttribute('readonly', true);
+                        const tagLabel = document.createElement('label');
+                        tagLabel.textContent = selectedTag;
+                        tagLabel.appendChild(tagElement);
+                        tagLabel.className = 'bg-indigo-200 text-indigo-800 px-2 py-1 m-1 rounded-full tag-element';
+                        tagContainer.appendChild(tagLabel);
+                        tagDropdown.value = '';
+                        const selectedTags = Array.from(tagContainer.querySelectorAll('.tag-element')).map(tag => tag.value.trim());
+                        document.querySelector('[name="selectedTags"]').value = JSON.stringify(selectedTags);
                     } else {
                         tagDropdown.value = '';
                     }
