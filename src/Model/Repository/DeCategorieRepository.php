@@ -23,7 +23,10 @@ class DeCategorieRepository extends CoreRepository
     {
         return $this->select(new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id))[0] ?? null;
     }
-
+    public function getByIdOffreA(int $id): ?array
+    {
+        return $this->select(new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id)) ?? null;
+    }
     public function getByIdCategorie(int $id): ?CoreObject
     {
         return $this->select([new QueryCondition("id_categorie", ComparisonOperator::EQUAL, $id)])[0] ?? null;

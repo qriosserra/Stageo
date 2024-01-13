@@ -22,4 +22,13 @@ class CategorieRepository extends CoreRepository
             return Null;
         }
     }
+    public function getById(String $id): ?String
+    {
+        $res =  $this->select(new QueryCondition("id_categorie", ComparisonOperator::EQUAL, $id ));
+        if (isset($res[0]) && $res[0] != NUll){
+            return $res[0]->getLibelle();
+        }else{
+            return Null;
+        }
+    }
 }

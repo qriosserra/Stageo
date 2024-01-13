@@ -14,6 +14,7 @@ include __DIR__ . "/../../macros/offre.php";
  * @var Offre $offre
  * @var string $nomentreprise
  * @var string $unite_gratification
+ * @var string[] $nomCategory
  */
 ?>
 
@@ -74,7 +75,11 @@ include __DIR__ . "/../../macros/offre.php";
                         <?php endif ?>
                     </div>
         </div>
-
+        <div class="mb-8 flex flex-row">
+            <?php foreach ($nomCategory as $nom):?>
+            <p class="pl-2"><?=$nom ?></p>
+            <?php endforeach; ?>
+        </div>
     </div>
 </div>
 

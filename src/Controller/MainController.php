@@ -226,6 +226,12 @@ class MainController
              */
             $offre = (new OffreRepository)->getById($id);
             $entreprise = (new EntrepriseRepository())->getById($offre->getIdEntreprise());
+            $categorie = (new DeCategorieRepository())->getByIdOffreA($id);
+            $nomCategory = [];
+            foreach ($categorie as $category) {
+                $idCategorie = $category->getIdCategorie();
+                $nomCategory[] = (new CategorieRepository())->getById($idCategorie);
+            }
             if ($entreprise instanceof Entreprise) {
                 $nomentreprise = $entreprise->getRaisonSociale();
             } else {
@@ -238,7 +244,8 @@ class MainController
                     "entreprise" => (new EntrepriseRepository)->getById($offre->getIdEntreprise()),
                     "offre" => $offre,
                     "nomentreprise" => $nomentreprise,
-                    "unite_gratification" => (new UniteGratificationRepository)->getById($offre->getIdUniteGratification())->getLibelle()
+                    "unite_gratification" => (new UniteGratificationRepository)->getById($offre->getIdUniteGratification())->getLibelle(),
+                    "nomCategory" => $nomCategory
                 ]
             );
         }
