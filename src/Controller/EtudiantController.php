@@ -1016,6 +1016,10 @@ class EtudiantController
             action: Action::PROFILE_ETUDIANT,
         );
     }
+
+    /*Cette fonction à deux utiliser, celle de permettre à l'étudiant d'accepter une offre et le rediriger vers une page de création de convention
+    Prérempli. Ou bien servir à rediriger vers une convention préremplie si l'étudiant à déjà accepter l'offre. Dans le premier cas, la BD est
+    nettoyer en enlevant les étudiants ayant postulé à l'offre ainsi que leur CV et LM.*/
     public function validerDefinitivement() : Response{
         $login = $_REQUEST['login'];
         $idOffre = $_REQUEST['idOffre'];
@@ -1087,7 +1091,8 @@ class EtudiantController
         }
         $condition = [
             new QueryCondition("login", ComparisonOperator::EQUAL, $etudiant->getLogin(), LogicalOperator::AND),
-            new QueryCondition("valider_par_etudiant", ComparisonOperator::EQUAL, true)
+            new QueryCondition("valider_par_etudiant", ComparisonOperator::EQUAL, true, LogicalOperator::AND),
+            new QueryCondition("id_offre", ComparisonOperator::NOT_EQUAL, $idOffre)
         ];
 
         $verif_etudiant = (new OffreRepository())->select($condition);
@@ -1102,37 +1107,52 @@ class EtudiantController
             );
         }
 
+        $condition_deja_accepter = [
+            new QueryCondition("login", ComparisonOperator::EQUAL, $etudiant->getLogin(), LogicalOperator::AND),
+            new QueryCondition("valider_par_etudiant", ComparisonOperator::EQUAL, true, LogicalOperator::AND),
+            new QueryCondition("id_offre", ComparisonOperator::EQUAL, $idOffre)
+        ];
 
-        $offre->setValiderParEtudiant(true);
-        (new OffreRepository)->update($offre);
-        //$postuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
-        $offres =  (new OffreRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
-        $autrePostulant = (new PostulerRepository())->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre));
-        foreach($offres as $o){
-            if ($o->getIdOffre() != $idOffre){
-                $o->setLogin(new NullDataType());
-                (new OffreRepository())->update($o);
-            }
-        }
-        foreach($autrePostulant as $post){
-                if(file_exists("assets/document/cv/".$post->getCv())){
-                    unlink("assets/document/cv/".$post->getCv());
+        $already_accept = (new OffreRepository())->select($condition_deja_accepter);
+
+        if(!$already_accept) {
+            $offre->setValiderParEtudiant(true);
+            (new OffreRepository)->update($offre);
+            //$postuler = (new PostulerRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+            $offres =  (new OffreRepository())->select(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+            $autrePostulant = (new PostulerRepository())->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre));
+            foreach($offres as $o){
+                if ($o->getIdOffre() != $idOffre){
+                    $o->setLogin(new NullDataType());
+                    (new OffreRepository())->update($o);
                 }
-                if(file_exists("assets/document/lm/".$post->getLettreMotivation())){
-                    unlink("assets/document/lm/".$post->getLettreMotivation());
             }
+            foreach($autrePostulant as $post){
+                    if(file_exists("assets/document/cv/".$post->getCv())){
+                        unlink("assets/document/cv/".$post->getCv());
+                    }
+                    if(file_exists("assets/document/lm/".$post->getLettreMotivation())){
+                        unlink("assets/document/lm/".$post->getLettreMotivation());
+                }
+            }
+            (new PostulerRepository())->delete(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
+
+
+
+
+            FlashMessage::add(
+                content: "Profile mis à jours",
+                type: FlashType::SUCCESS
+            );
         }
-        (new PostulerRepository())->delete(new QueryCondition("login",ComparisonOperator::EQUAL,$etudiant->getLogin()));
-        FlashMessage::add(
-            content: "Profile mis à jours",
-            type: FlashType::SUCCESS
-        );
         Session::set("convention",$convention);
         return new Response(
             action: Action::ETUDIANT_CONVENTION_ADD_STEP_1_FORM ,
             params: []
         );
     }
+
+    /*Permets à un étudiant choisi par une entreprise pour un stage ou une alternance de refuser le poste*/
     public function refuserDefinitivement() : Response{
         $login = $_REQUEST['login'];
         $idOffre = $_REQUEST['idOffre'];
@@ -1172,7 +1192,7 @@ class EtudiantController
 
         if ($offre->getLogin() != $login){
             FlashMessage::add(
-                content: "vous n'êtes pas valider dans l'offre",
+                content: "Vous n'êtes pas valider dans l'offre",
                 type: FlashType::ERROR
             );
             return new Response(
@@ -1186,7 +1206,7 @@ class EtudiantController
         $verif_etudiant = (new OffreRepository())->select($condition2);
         if($verif_etudiant){
             FlashMessage::add(
-                content: "Tu as dejà un stage ou une alternance",
+                content: "Vous avez dejà un stage ou une alternance",
                 type: FlashType::ERROR
             );
             return new Response(
@@ -1225,6 +1245,8 @@ class EtudiantController
         );
     }
 
+    /*Retourner deux listes, une liste avec les offres auxquelles on a postulé et une liste avec les offres sur lesquelles on a été accepter.
+    Cette fonction renvoie aussi le nombre d'offres total auxquelles on a postulé*/
     public function voirMesCandidature():Response{
         if (UserConnection::isInstance(new Etudiant())) {
             $user = UserConnection::getSignedInUser();
