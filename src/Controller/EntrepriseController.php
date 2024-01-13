@@ -22,8 +22,12 @@ use Stageo\Lib\Security\Validate;
 use Stageo\Lib\UserConnection;
 use Stageo\Lib\Database\QueryCondition;
 use Stageo\Model\Object\Admin;
+use Stageo\Model\Object\Categorie;
+use Stageo\Model\Object\DeCategorie;
 use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Offre;
+use Stageo\Model\Repository\CategorieRepository;
+use Stageo\Model\Repository\DeCategorieRepository;
 use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\OffreRepository;
@@ -447,6 +451,7 @@ class EntrepriseController
                     "nav" => false,
                     "footer" => false,
                     "offre" => Session::get("offre") ?? new Offre(),
+                    "liste_tag" => array_column(array_map(fn($e) => $e->toArray(), (new CategorieRepository)->select()), "libelle"),
                     "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
                     "token" => Token::generateToken(Action::ENTREPRISE_CREATION_OFFRE_FORM)
                 ]
@@ -474,6 +479,9 @@ class EntrepriseController
         $type = $_REQUEST["emploi"];
         $date_debut = $_REQUEST["start"];
         $date_fin = $_REQUEST["end"];
+        var_dump($_REQUEST["selectedTags"]);
+        exit();
+        $selectedTags = json_decode($_REQUEST["selectedTags"], true);
         if(!$date_fin){
             $date_fin =null;
         }
@@ -598,9 +606,18 @@ class EntrepriseController
                 );
             }
         }
-
-
         $id_offre = (new OffreRepository)->insert($offre);
+
+        var_dump($selectedTags);
+        exit();
+
+        foreach ($selectedTags as $tag){
+            exit();
+            $categorie = (new CategorieRepository())->getByLibelle($tag);
+            $id_categorie = $categorie->getIdCategorie();
+            (new DeCategorieRepository())->insert(new DeCategorie($id_categorie,$id_offre));
+        }
+
         FlashMessage::add("L'offre a été ajoutée avec succès", FlashType::SUCCESS);
 
         Session::delete("offre");

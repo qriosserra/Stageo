@@ -15,6 +15,7 @@ include __DIR__ . "/../../macros/offre.php";
  * @var array $unite_gratifications
  * @var string $token
  * @var float $gratification
+ * @var array $liste_tag
  */
 ?>
 <main class="h-screen flex flex-col items-center justify-center">
@@ -92,11 +93,59 @@ include __DIR__ . "/../../macros/offre.php";
             </div>
         </div>
 
+        <div class="max-w-md mx-auto">
+
+            <!-- Dropdown + button add pour les tags -->
+            <div class="relative rounded-md shadow-sm flex">
+                <?= dropdown("tag", "Tag", null, null, 2, $liste_tag) ?>
+                <button type="button" id="addTagButton" class="ml-2 px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-800">
+                    Add
+                </button>
+            </div>
+
+            <!-- les tags seront ajouter ici -->
+            <div class="mt-4">
+                <div id="tagContainer" class="flex flex-wrap">
+                </div>
+            </div>
+        </div>
+
         <?=submit($offre->getIdOffre() !== null ? "Modifier" : "Publier")?>
         <?=token($token)?>
     </form>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            const tagList = <?php echo json_encode($liste_tag); ?>;//Merci GPT
+            const addTagButton = document.getElementById('addTagButton');
+            addTagButton.addEventListener('click', addTag);
+
+            function addTag() {
+                const tagDropdown = document.querySelector('[name="tag"]');
+                //Attention c'est dans le texte les valeurs correspondent aux index
+                const selectedTag = tagDropdown.options[tagDropdown.selectedIndex].text.trim();
+
+                if (selectedTag !== '' && tagList.includes(selectedTag)) {
+                    const tagContainer = document.getElementById('tagContainer');
+
+                    //je regarde si j'ai déjà rajouté le tag
+                    const existingTags = tagContainer.querySelectorAll('.tag-element');
+                    const tagExists = Array.from(existingTags).some(tag => tag.textContent.trim() === selectedTag);
+
+                    if (!tagExists) {
+                        const tagElement = document.createElement('span');
+                        tagElement.textContent = selectedTag;
+                        tagElement.className = 'bg-indigo-200 text-indigo-800 px-2 py-1 m-1 rounded-full tag-element';
+                        tagContainer.appendChild(tagElement);
+                        tagDropdown.value = '';
+                        const selectedTags = Array.from(tagContainer.querySelectorAll('.tag-element')).map(tag => tag.textContent.trim());
+                        document.querySelector('[name="selectedTags"]').value = JSON.stringify(selectedTags);
+                        console.log("Selected Tags:", selectedTags);
+                    } else {
+                        tagDropdown.value = '';
+                    }
+                }
+            }
+
             flatpickr("[name='start']", {
                 enableTime: false,
                 dateFormat: "Y-m-d",
