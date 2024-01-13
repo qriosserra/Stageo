@@ -49,7 +49,7 @@ use Stageo\Model\Object\Suivi;
     text-transform: uppercase;
   }
 
-  @media screen and (max-width: 817px) {
+  @media screen and (max-width: 910px) {
     table {
       border: 0;
     }
@@ -121,8 +121,10 @@ use Stageo\Model\Object\Suivi;
                         <td class="px-4 py-3 border-b border-gray-200 text-sm text-gray-700">
                             <a href="<?= Action::ADMIN_VALIDECONV_FROM->value."&etulogin=".$etu->getLogin() ?>"
                                >
-                               <button class="ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 ease-in-out transform hover:scale-105">
+                               
+<button class=" flex-col ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50  px-[2rem] inline-flex items-center justify-center h-[60px] border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 ease-in-out transform hover:scale-105">
   Voir la convention
+  <span class="block text-red-500 text-xs ">Action requise</span>
 </button>
                             </a>
                             
