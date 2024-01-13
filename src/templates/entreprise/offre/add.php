@@ -16,6 +16,7 @@ include __DIR__ . "/../../macros/offre.php";
  * @var string $token
  * @var float $gratification
  * @var array $liste_tag
+ * @var array $liste_tag_choisi
  */
 ?>
 <main class="h-screen flex flex-col items-center justify-center">
@@ -114,34 +115,37 @@ include __DIR__ . "/../../macros/offre.php";
         <?=token($token)?>
     </form>
     <script>
+        const tagListChoisi = <?php echo json_encode($liste_tag_choisi); ?>;
         document.addEventListener('DOMContentLoaded', function () {
             const tagList = <?php echo json_encode($liste_tag); ?>;//Merci GPT
-            const addTagButton = document.getElementById('addTagButton');
-            addTagButton.addEventListener('click', addTag);
 
-            function addTag() {
+            const addTagButton = document.getElementById('addTagButton');
+            addTagButton.addEventListener('click', function () {
+                addTag(null);
+            });
+
+            tagListChoisi.forEach(tag=>{
+                console.log(tag);
+                addTag(tag);
+            });
+
+            function addTag(selectedTag) {
                 const tagDropdown = document.querySelector('[name="tag"]');
                 //Attention c'est dans le texte les valeurs correspondent aux index
-                const selectedTag = tagDropdown.options[tagDropdown.selectedIndex].text.trim();
+                if(selectedTag === null){
+                    selectedTag = tagDropdown.options[tagDropdown.selectedIndex].text.trim();
+                }
 
                 if (selectedTag !== '' && tagList.includes(selectedTag)) {
                     const tagContainer = document.getElementById('tagContainer');
 
                     //je regarde si j'ai déjà rajouté le tag
                     const existingTags = tagContainer.querySelectorAll('.tag-element');
+                    console.log(existingTags);
                     const tagExists = Array.from(existingTags).some(tag => tag.textContent.trim() === selectedTag);
                     //const tagExists = Array.from(existingTags).some(tag => tag.querySelector('input').value.trim() === selectedTag);
 
                     if (!tagExists) {
-                        /*const tagElement = document.createElement('input');
-                        tagElement.textContent = selectedTag;
-                        tagElement.className = 'bg-indigo-200 text-indigo-800 px-2 py-1 m-1 rounded-full tag-element';
-                        tagContainer.appendChild(tagElement);
-                        tagDropdown.value = '';
-                        const selectedTags = Array.from(tagContainer.querySelectorAll('.tag-element')).map(tag => tag.textContent.trim());
-                        document.querySelector('[name="selectedTags"]').value = JSON.stringify(selectedTags);
-                        console.log("Selected Tags:", selectedTags);*/
-
                         const tagElement = document.createElement('input');
                         tagElement.value = selectedTag;
                         tagElement.name = 'selectedTags[]';
@@ -153,8 +157,6 @@ include __DIR__ . "/../../macros/offre.php";
                         tagLabel.className = 'bg-indigo-200 text-indigo-800 px-2 py-1 m-1 rounded-full tag-element';
                         tagContainer.appendChild(tagLabel);
                         tagDropdown.value = '';
-                        const selectedTags = Array.from(tagContainer.querySelectorAll('.tag-element')).map(tag => tag.value.trim());
-                        document.querySelector('[name="selectedTags"]').value = JSON.stringify(selectedTags);
                     } else {
                         tagDropdown.value = '';
                     }
