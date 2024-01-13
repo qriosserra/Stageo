@@ -16,42 +16,122 @@ use Stageo\Model\Object\Etudiant;
 use Stageo\Model\Object\Suivi;
 
 ?>
-<div class="bg-gray-100 h-screen flex justify-center items-center p-12">
+<style>
+    table {
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    table-layout: fixed;
+  }
 
-    <div class="w-full max-w-4xl">
-        <table class="min-w-full table-auto bg-white rounded-lg shadow-md overflow-hidden">
-            <thead class="bg-gray-200">
-            <tr>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Login</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Nom</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Prenom</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Nombre de candidature</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">candidatures acceptées</th>
-                <th class="px-4 py-2 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">convention</th>
-            </tr>
-            </thead>
-            <tbody class="bg-white">
-            <?php foreach ($etudiants as $etu) : ?>
+  table caption {
+    font-size: 1.5em;
+    margin: .5em 0 .75em;
+  }
+
+  table tr {
+    background-color: #f8f8f8;
+    border: 1px solid #ddd;
+    padding: .35em;
+  }
+
+  table th,
+  table td {
+    padding: .625em;
+    text-align: center;
+  }
+
+  table th {
+    font-size: .85em;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+
+  @media screen and (max-width: 817px) {
+    table {
+      border: 0;
+    }
+
+    table caption {
+      font-size: 1.3em;
+    }
+
+    table thead {
+      border: none;
+      clip: rect(0 0 0 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
+    }
+
+    table tr {
+      border-bottom: 3px solid #ddd;
+      display: block;
+      margin-bottom: .625em;
+    }
+
+    table td {
+      border-bottom: 1px solid #ddd;
+      display: block;
+      font-size: .8em;
+      text-align: right;
+    }
+
+    table td::before {
+  
+      content: attr(data-label);
+      float: left;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+
+    table td:last-child {
+      border-bottom: 0;
+    }
+  }
+</style>
+<main class=" h-screen flex justify-center items-center">
+<table class="mb-[15rem] ml-4 mr-4">
+  <caption>Gestion d'étudiants</caption>
+  <thead>
+    <tr>
+      <th scope="col">Login</th>
+      <th scope="col">Nom</th>
+      <th scope="col">Prenom</th>
+      <th scope="col">Nombre de candidature</th>
+      <th scope="col">Candidatures acceptées</th>
+      <th scope="col">Convention</th>
+
+    </tr>
+  </thead>
+  <tbody>
+  <?php foreach ($etudiants as $etu) : ?>
                 <tr>
-                    <td class="px-4 py-3 border-b border-gray-200 text-sm text-gray-700"><?= $etu->getLogin() ?></td>
-                    <td class="px-4 py-3 border-b border-gray-200 text-sm text-gray-700"><?= $etu->getNom() ?></td>
-                    <td class="px-4 py-3 border-b border-gray-200 text-sm text-gray-700"><?= $etu->getPrenom() ?></td>
-                    <td class="px-4 py-3 border-b border-gray-200 text-sm text-gray-700"><?= $nbcandidature[$etu->getlogin()] ?></td>
-                    <td class="px-4 py-3 border-b border-gray-200 text-sm text-gray-700"><?= $nbaccepter[$etu->getlogin()] ?></td>
+                    <td data-label="Login" ><?= $etu->getLogin() ?></td>
+                    <td data-label="Nom" ><?= $etu->getNom() ?></td>
+                    <td data-label="Prenom" ><?= $etu->getPrenom() ?></td>
+                    <td data-label="Nombre de candidature" ><?= $nbcandidature[$etu->getlogin()] ?></td>
+                    <td data-label="Convention" ><?= $nbaccepter[$etu->getlogin()] ?></td>
                     <?php if ($conventions[$etu->getlogin()]!=null):?>
                         <td class="px-4 py-3 border-b border-gray-200 text-sm text-gray-700">
                             <a href="<?= Action::ADMIN_VALIDECONV_FROM->value."&etulogin=".$etu->getLogin() ?>"
-                               class="text-white bg-red-500 hover:bg-red-700 rounded px-4 py-1">
-                                Voir la convention [ en construction ]
+                               >
+                               <button class="ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-gray-800 hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all duration-200 ease-in-out transform hover:scale-105">
+  Voir la convention
+</button>
                             </a>
+                            
                         </td>
                     <?php else :?>
                         <td class="px-4 py-3 border-b border-gray-200 text-sm text-gray-700">Pas de convention!</td>
                     <?php endif;?>
                 </tr>
             <?php endforeach; ?>
-            </tbody>
-        </table>
-    </div>
-
-</div>
+  </tbody>
+</table>
+</main>
