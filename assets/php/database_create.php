@@ -278,6 +278,91 @@ CREATE TABLE stg_postuler(
    FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
 );
 
+CREATE TABLE stg_convention_archive(
+   id_convention INT AUTO_INCREMENT,
+   type_convention VARCHAR(256),
+   origine_stage VARCHAR(256),
+   annee_universitaire VARCHAR(256),
+   thematique VARCHAR(256),
+   sujet VARCHAR(256),
+   taches VARCHAR(3064),
+   commentaires VARCHAR(3064),
+   details VARCHAR(3064),
+   date_debut DATE,
+   date_fin DATE,
+   interruption BOOL,
+   date_interruption_debut DATE,
+   date_interruption_fin DATE,
+   heures_total INT,
+   jours_hebdomadaire TINYINT,
+   heures_hebdomadaire TINYINT,
+   commentaires_duree VARCHAR(3064),
+   gratification DECIMAL(15,2),
+   avantages_nature VARCHAR(256),
+   code_elp VARCHAR(256),
+   numero_voie VARCHAR(256),
+   id_unite_gratification INT,
+   login_enseignant VARCHAR(256),
+   id_tuteur INT,
+   id_entreprise INT,
+   id_distribution_commune INT,
+   login VARCHAR(256),
+   PRIMARY KEY(id_convention),
+   FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
+   FOREIGN KEY(login_enseignant) REFERENCES stg_enseignant(login),
+   FOREIGN KEY(id_tuteur) REFERENCES stg_tuteur(id_tuteur),
+   FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise),
+   FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune),
+   FOREIGN KEY(login) REFERENCES stg_etudiant(login)
+);
+
+CREATE TABLE stg_offre_archive(
+   id_offre INT AUTO_INCREMENT,
+   description TEXT,
+   thematique VARCHAR(256),
+   secteur VARCHAR(256),
+   taches TEXT,
+   commentaires TEXT,
+   gratification DECIMAL(15,2),
+   type VARCHAR(256) NOT NULL DEFAULT 'Stage&Alternance',
+   date_debut DATE,
+   date_fin DATE,
+   niveau VARCHAR(10),
+   valider BOOL,
+   valider_par_etudiant BOOL,
+   login VARCHAR(256),
+   id_unite_gratification INT,
+   id_entreprise INT NOT NULL,
+   PRIMARY KEY(id_offre),
+   FOREIGN KEY(login) REFERENCES stg_etudiant(login),
+   FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
+   FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise)
+);
+
+CREATE TABLE stg_entreprise_archive(
+   id_entreprise INT AUTO_INCREMENT,
+   email VARCHAR(256),
+   raison_sociale VARCHAR(256),
+   siret CHAR(14),
+   numero_voie VARCHAR(256),
+   code_naf VARCHAR(256),
+   telephone VARCHAR(20),
+   fax VARCHAR(20),
+   site VARCHAR(256),
+   valide BOOL NOT NULL DEFAULT FALSE,
+   id_taille_entreprise VARCHAR(3),
+   id_type_structure INT,
+   id_statut_juridique VARCHAR(4),
+   id_distribution_commune INT,
+   PRIMARY KEY(id_entreprise),
+   FOREIGN KEY(id_taille_entreprise) REFERENCES stg_taille_entreprise(id_taille_entreprise),
+   FOREIGN KEY(id_type_structure) REFERENCES stg_type_structure(id_type_structure),
+   FOREIGN KEY(id_statut_juridique) REFERENCES stg_statut_juridique(id_statut_juridique),
+   FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune)
+);
+
+
+
 
 SQL;
 
