@@ -186,7 +186,17 @@ BEGIN
 END;
 //
 DELIMITER ;
-
+DELIMITER //
+CREATE TRIGGER stg_etudiant_before_delete
+BEFORE DELETE ON stg_etudiant
+FOR EACH ROW
+BEGIN
+    DELETE FROM stg_convention WHERE login = OLD.login;
+    
+    UPDATE stg_convention_archive SET login = NULL WHERE login = OLD.login;
+END;
+//
+DELIMITER ;
 
 SQL;
 
