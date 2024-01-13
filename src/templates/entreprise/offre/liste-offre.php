@@ -158,6 +158,6 @@ include __DIR__ . "/../../macros/newOffre.php";
 
 
 
-</div>
+    </div>
 
 </body>

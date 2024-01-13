@@ -261,13 +261,15 @@ class MainController
             /**
              * @var Entreprise $entreprise
              */
-            $entreprise = (new EntrepriseRepository)->getById($id);
+            $entreprise = (new EntrepriseRepository)->getEntrepriseDetailsById($id);
+            $listeoffres = (new OffreRepository())->getOffresDetailsAvecCategoriesByIdEntreprise($id);
             return new Response(
                 template: "entreprise/entreprise.php",
                 params: [
                     "title" => "Entreprise $id",
-                    "entreprise" => $entreprise,
-                    "commune" => (new DistributionCommuneRepository)->getById($entreprise->getIdDistributionCommune())->getCommune()
+                    "entreprise" => $entreprise[0],
+                    "listeoffres" => $listeoffres,
+                    "nbRechercheTrouver" => sizeof($listeoffres),
                 ]
             );
         }
