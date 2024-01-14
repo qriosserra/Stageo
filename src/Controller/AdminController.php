@@ -560,6 +560,50 @@ class AdminController
             action: Action::HOME,
         );
     }
+
+    public function offreArchive(){
+        $user = UserConnection::getSignedInUser();
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
+            $listeOffres = (new OffreRepository())->getOffersArchive();
+            if ($listeOffres){
+                return new Response(
+                    template: "admin/offreArchive.php",
+                    params: [
+                        "title" => "Liste offres archivé",
+                        "listeoffres" => $listeOffres
+                    ]
+                );
+            }
+            FlashMessage::add(
+                content: "Aucune offre archivé",
+                type: FlashType::INFO
+            );
+            return new Response(
+                action: Action::ADMIN_DASH
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
+        );
+    }
+
+    /**
+     * @throws ControllerException
+     */
+    public function suprimerOffreArchive(){
+        $user = UserConnection::getSignedInUser();
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
+            (new OffreRepository())->deleteOfferFromArchive($_REQUEST["idOffre"]);
+            return new Response(
+                action: Action::ADMIN_OFFRESARCHIVE
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
+        );
+    }
 }
 
 

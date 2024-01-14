@@ -418,4 +418,173 @@ class OffreRepository extends CoreRepository
         }
         return $objects ?? [];
     }
+
+public static function getOffersArchive() {
+        try {
+            $query = "SELECT 
+                        oa.id_offre,
+                        oa.description,
+                        oa.thematique,
+                        oa.secteur,
+                        oa.taches,
+                        oa.commentaires,
+                        oa.gratification,
+                        oa.type,
+                        oa.date_debut,
+                        oa.date_fin,
+                        oa.niveau,
+                        oa.valider,
+                        oa.valider_par_etudiant,
+                        e.login AS login_etudiant,
+                        ug.libelle AS unite_gratification,
+                        ea.id_entreprise,
+                        ea.email AS entreprise_email,
+                        ea.raison_sociale,
+                        ea.siret,
+                        ea.numero_voie AS entreprise_numero_voie,
+                        ea.code_naf,
+                        ea.telephone AS entreprise_telephone,
+                        ea.fax AS entreprise_fax,
+                        ea.site AS entreprise_site,
+                        ea.id_taille_entreprise,
+                        ea.id_type_structure,
+                        ea.id_statut_juridique,
+                        dc.id_distribution_commune AS entreprise_id_commune,
+                        dc.commune AS entreprise_commune,
+                        tc.libelle AS taille_entreprise_libelle,
+                        tsj.libelle AS statut_juridique_libelle,
+                        ts.libelle AS type_structure_libelle,
+                        cat.id_categorie,
+                        cat.libelle AS categorie_libelle
+                    FROM stg_offre_archive oa
+                    LEFT JOIN stg_etudiant e ON oa.login = e.login
+                    LEFT JOIN stg_unite_gratification ug ON oa.id_unite_gratification = ug.id_unite_gratification
+                    LEFT JOIN stg_entreprise_archive ea ON oa.id_entreprise = ea.id_entreprise
+                    LEFT JOIN stg_distribution_commune dc ON ea.id_distribution_commune = dc.id_distribution_commune
+                    LEFT JOIN stg_taille_entreprise tc ON ea.id_taille_entreprise = tc.id_taille_entreprise
+                    LEFT JOIN stg_statut_juridique tsj ON ea.id_statut_juridique = tsj.id_statut_juridique
+                    LEFT JOIN stg_type_structure ts ON ea.id_type_structure = ts.id_type_structure
+                    LEFT JOIN stg_offre_categorie oc ON oa.id_offre = oc.id_offre
+                    LEFT JOIN stg_categorie cat ON oc.id_categorie = cat.id_categorie;
+                    ";
+
+            $pdo = DatabaseConnection::getPdo();
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Organiser les résultats par id_offre
+            $offresAvecCategories = [];
+            foreach ($result as $row) {
+                $idOffre = $row['id_offre'];
+                if (!isset($offresAvecCategories[$idOffre])) {
+                    // Initialiser les données de l'offre
+                    $offresAvecCategories[$idOffre] = [
+                        "id_offre" => $idOffre,
+                        "description" => $row['description'],
+                        "thematique" => $row['thematique'],
+                        "taches" => $row['taches'],
+                        "type" =>$row['type'],
+                        "raison_sociale" =>$row['raison_sociale'],
+                        "email" =>$row['entreprise_email'],
+                        "categories" => [],
+                    ];
+                }
+
+                // Ajouter la catégorie associée à cette offre
+                $offresAvecCategories[$idOffre]['categories'][] = [
+                    "id_categorie" => $row['id_categorie'],
+                    "libelle" => $row['categorie_libelle'],
+                ];
+            }
+
+            // Convertir l'array associatif en array simple
+            return array_values($offresAvecCategories);
+
+        } catch (PDOException $e) {
+            echo "Erreur : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    public static function deleteOfferFromArchive($id_offre) {
+        try {
+            $query = "DELETE FROM stg_offre_archive WHERE id_offre = :id_offre";
+            $pdo = DatabaseConnection::getPdo();
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':id_offre', $id_offre, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return true;
+        } catch (PDOException $e) {
+            echo "Erreur : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    function getOffresDetailsAvecCategoriesByIdEntrepriseArchive($id) {
+        try {
+            $query = "SELECT 
+                oa.id_offre,
+                oa.description,
+                oa.thematique,
+                oa.taches,
+                oa.type,
+                ea.raison_sociale,
+                c.cat_id AS id_categorie,
+                cat.libelle AS categorie_libelle
+             FROM stg_offre_archive oa
+             JOIN stg_entreprise_archive ea ON oa.id_entreprise = ea.id_entreprise
+             LEFT JOIN (
+                 SELECT oc.id_offre, GROUP_CONCAT(c.id_categorie) AS cat_id
+                 FROM stg_offre_categorie oc
+                 JOIN stg_categorie c ON oc.id_categorie = c.id_categorie
+                 GROUP BY oc.id_offre
+             ) c ON oa.id_offre = c.id_offre
+             LEFT JOIN stg_categorie cat ON FIND_IN_SET(cat.id_categorie, c.cat_id)
+             WHERE oa.id_entreprise = :idTag";
+
+            $pdo = DatabaseConnection::getPdo();
+            $stmt = $pdo->prepare($query);
+            $rep = [
+                "idTag" => $id
+            ];
+            $stmt->execute($rep);
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Organiser les résultats par id_offre
+            $offresAvecCategories = [];
+            foreach ($result as $row) {
+                $idOffre = $row['id_offre'];
+                if (!isset($offresAvecCategories[$idOffre])) {
+                    // Initialiser les données de l'offre
+                    $offresAvecCategories[$idOffre] = [
+                        "id_offre" => $idOffre,
+                        "description" => $row['description'],
+                        "thematique" => $row['thematique'],
+                        "taches" => $row['taches'],
+                        "type" => $row['type'],
+                        "raison_sociale" => $row['raison_sociale'],
+                        "categories" => [],
+                    ];
+                }
+
+                // Ajouter la catégorie associée à cette offre
+                $offresAvecCategories[$idOffre]['categories'][] = [
+                    "id_categorie" => $row['id_categorie'],
+                    "libelle" => $row['categorie_libelle'],
+                ];
+            }
+
+            // Convertir l'array associatif en array simple
+            return array_values($offresAvecCategories);
+
+        } catch (PDOException $e) {
+            echo "Erreur : " . $e->getMessage();
+            return false;
+        }
+    }
+
 }
