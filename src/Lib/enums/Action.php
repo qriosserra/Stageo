@@ -87,8 +87,8 @@ enum Action: string
     case CONTACT_FORM = "?a=contact_form";
     case FAQ = "?a=faq";
     case CONFIDENTIALITE = "?a=confidentialite";
-    case SUIVI_STAGIAIRE_FORM = "?c=admin&a=suiviStagiaire";
-
+    case ENSEIGNANT_TUTORER_ETUDIANT_FORM = "?c=enseignant&a=tutorerEtudiantForm";
+    case ENSEIGNANT_TUTORER_ETUDIANT = "?c=enseignant&a=tutorerEtudiant";
     case LISTE_ENTREPRISES = "?a=listeEntreprises";
 
     case AFFICHER_ENTREPRISE = "?a=afficherEntreprise";

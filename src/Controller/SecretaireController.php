@@ -206,7 +206,8 @@ class SecretaireController
         );
     }
 
-    public function conventionDetails(int $id_convention): Response {
+    public function conventionDetails(int $id_convention): Response
+    {
         $convention = (new ConventionRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0] ?? null;
         if (!UserConnection::isInstance(new Secretaire) && !UserConnection::isInstance(new Admin)) {
             throw new ControllerException(

@@ -55,4 +55,23 @@ class EtudiantRepository extends CoreRepository
             return null;
         }
     }
+
+    public function getWhereLoginEnseignantIsNull(int $limit = 999): array
+    {
+        $pdo = DatabaseConnection::getPdo()->prepare(<<<SQL
+            SELECT *
+            FROM stg_etudiant
+            WHERE login IN (SELECT login FROM stg_convention WHERE login_enseignant IS NULL)
+            LIMIT $limit;
+        SQL
+        );
+        $pdo->execute();
+
+        for ($objectArray = $pdo->fetch();
+             $objectArray != false;
+             $objectArray = $pdo->fetch()) {
+            $objects[] = $this->getObject()->construct($objectArray);
+        }
+        return $objects ?? [];
+    }
 }

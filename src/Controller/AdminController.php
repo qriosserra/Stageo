@@ -507,17 +507,6 @@ class AdminController
             ]
         );
     }
-    public function suiviStagiaire(): Response {
-        return new Response(
-            template: "admin/suiviStagiaire.php",
-            params: [
-                "title" => "Suvi du stagiaire",
-                "nav" => false,
-                "footer" => false
-                
-            ]
-        );
-    }
 
     // archive
     public function entreprisesArchive(){
@@ -623,5 +612,3 @@ class AdminController
         );
     }
 }
-
-
