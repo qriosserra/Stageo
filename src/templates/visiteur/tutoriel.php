@@ -1,20 +1,33 @@
 <?php
 // ...
 ?>
-
-<main class="container mx-auto p-8">
+<style>
+    html {
+    scroll-behavior: smooth;
+}
+</style>
+<main class="container mx-auto p-8 mt-[6rem]">
     <!-- Table of Contents -->
-    <div class="bg-gray-100 p-8 rounded-md mb-8 mt-4">
-        <h6 class="text-xl font-bold mb-2">Sommaire</h6>
-        <ul>
-            <li class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-1/4  sm:invisible"><a href="#connexion-etudiant-enseignant">Connexion Étudiant ou Enseignant</a></li>
-            <li class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-1/4  sm:invisible"><a href="#connexion-entreprise">Connexion Entreprise</a></li>
-            <li class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-1/4  sm:invisible"><a href="#inscription-entreprise">Inscription Entreprise</a></li>
-        </ul>
+
+
+
+    <div class="flex flex-col-reverse  md:flex-row">
+        <div class="md:w-1/3  rounded-lg p-4">
+            <h6 class="mb-4 text-lg font-bold">Sommaire des tutos</h2>
+            <ul class="space-y-2">
+                <li><a href="#connexion-etudiant-enseignant" class="bg-gray-200 border-2 ring-offset-background focus-visible:ring-ring border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-full items-center justify-center rounded-md  px-4 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">1) Connexion Étudiant ou Enseignant</a></li>
+                <li><a href="#connexion-entreprise" class="bg-gray-200 border-2 ring-offset-background focus-visible:ring-ring border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-full items-center justify-center rounded-md  px-4 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">2) Connexion Entreprise</a></li>
+                <li><a  href="#inscription-entreprise" class="bg-gray-200 border-2 ring-offset-background focus-visible:ring-ring border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-full items-center justify-center rounded-md  px-4 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">3) Inscription Entreprise</a></li>
+            </ul>
+        </div>
+        <div class="md:w-2/3 p-4">
+            <h2 class="mb-4 text-2xl font-bold">Sections</h2>
+            <p class="text-gray-600">Cliquez sur n'importe qu'elle section pour être rediriger vers cette dernière. </p>
+        </div>
     </div>
 
 
-    <div  class="bg-gray-100 p-8 rounded-md flex flex-col items-center mb-8">
+    <div class="bg-gray-100 p-8 rounded-md flex flex-col items-center mb-8">
         <div class="md:w-1/2 md:mr-8 text-center">
             <section class="mb-8">
                 <h10 class="text-2xl font-bold mb-4">Tutoriel de connexion</h10>
@@ -24,7 +37,7 @@
     </div>
 
     <div id="connexion-etudiant-enseignant" class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center">
-    <h4 class="text-2xl font-bold text-gray-700">Connexion Étudiant ou Enseignant</h4>
+        <h4 class="text-3xl font-bold text-gray-700 underline mt-[4rem]">1) Connexion Étudiant ou Enseignant</h4>
     </div>
     <div class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center mb-8">
         <div class="md:w-1/2 md:mr-8">
@@ -53,8 +66,8 @@
             <p class="text-gray-800 font-bold">Si vous avez perdu vos identifiants LDAP, veuillez contacter le secrétariat de votre établissement.</p>
         </div>
     </div>
-    <div  id="connexion-entreprise"  class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center">
-    <h4 class="text-2xl font-bold text-gray-700">Connexion Entreprise</h4>
+    <div id="connexion-entreprise" class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center">
+        <h4 class="text-3xl font-bold text-gray-700 underline mt-[4rem] ">2) Connexion Entreprise</h4>
     </div>
     <div class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center mb-8">
         <div class="md:w-1/2 md:mr-8">
@@ -86,7 +99,7 @@
         </div>
     </div>
     <div id="inscription-entreprise" class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center">
-    <h4 class="text-2xl font-bold text-gray-700">Inscription Entreprise</h4>
+        <h4 class="text-3xl font-bold text-gray-700 underline mt-[4rem] ">3) Inscription Entreprise</h4>
     </div>
     <div class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center mb-8">
         <div class="md:w-1/2 md:mr-8">
@@ -96,7 +109,7 @@
         </div>
         <div class="md:w-1/2 flex justify-center items-center">
             <div class="flex flex-col items-center">
-                <img src="assets/img/inscription_entreprise.png" alt="Emplacement du lien" >
+                <img src="assets/img/inscription_entreprise.png" alt="Emplacement du lien">
             </div>
         </div>
     </div>
@@ -108,10 +121,10 @@
             <p class="text-lg  text-gray-700 text-left"> Vous allez normalement recevoir un <span style="font-weight: bold; color: #000000;">mail</span> vous permettant de valider la création du compte.</p>
         </div>
         <div class="md:w-1/2 flex justify-center items-center">
-            <img src="assets/img/formulaire_inscription_entreprise.png" alt="Page d'inscription entreprise" >
+            <img src="assets/img/formulaire_inscription_entreprise.png" alt="Page d'inscription entreprise">
         </div>
         <div class="md:w-1/2 flex justify-center items-center">
-            <img src="assets/img/inscription_etape4_entreprise.png" alt="Dernière page d'inscription" >
+            <img src="assets/img/inscription_etape4_entreprise.png" alt="Dernière page d'inscription">
         </div>
     </div>
     <div class="bg-gray-100 p-8 rounded-md flex flex-col items-center mb-8">
