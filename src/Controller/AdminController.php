@@ -48,7 +48,7 @@ class AdminController
     public function dashboard(): Response
     {
         $user =UserConnection::getSignedInUser();
-        if ($user instanceof Enseignant && $user->getEstAdmin()){
+        if (($user instanceof Enseignant && $user->getEstAdmin())  || $user instanceof Secretaire){
             $etudiants = (new EtudiantRepository())->select();
             /**
              * @var Etudiant $etu
@@ -130,7 +130,7 @@ class AdminController
     public function signUpForm(): Response
     {
         $user = UserConnection::getSignedInUser();
-        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
             return new Response(
                 template: "admin/sign-up.php",
                 params: [
@@ -201,7 +201,7 @@ class AdminController
 
     public function listeEntreprises(){
         $user = UserConnection::getSignedInUser();
-        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
             $listeEntreprises = (new EntrepriseRepository())->getEntreprisesNonValidees();
             if ($listeEntreprises){
                 return new Response(
@@ -227,7 +227,7 @@ class AdminController
     }
     public function validerEntreprise(){
         $user = UserConnection::getSignedInUser();
-        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
             $entreprise = (new EntrepriseRepository())->getById($_REQUEST["idEntreprise"]);
             /** @var Entreprise $entreprise **/
             $entreprise->setValide(true);
@@ -244,7 +244,7 @@ class AdminController
          * @var Entreprise $entreprise
          */
         $user = UserConnection::getSignedInUser();
-        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
             $listeOffres = (new OffreRepository())->getAllInvalidOffreEntreprise($entreprise->getIdEntreprise());
             if ($listeOffres){
                 return new Response(
@@ -274,14 +274,14 @@ class AdminController
      */
     public function suprimerEntreprise(){
         $user = UserConnection::getSignedInUser();
-        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
             $ent = (new EntrepriseRepository())->select(new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $_REQUEST["idEntreprise"]));
             /**
              * @var Entreprise $ent
              */
                 $email = $_REQUEST["email"];
                 $raison = $_REQUEST["raisonRefus"];
-                $email = new Email($email,"Refus d'une Offre","Bonjour, nous vous informons que votre inscription a était refusé pour les raison suivante : <br> <br>".$raison);
+                $email = new Email($email,"Refus d'une Offre","Bonjour, nous vous informons que votre inscription a était refusé pour les raisons suivantes : <br> <br>".$raison);
                 (new Mailer())->send($email);
             (new EntrepriseRepository())->delete([new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $_REQUEST["idEntreprise"])]);
             return new Response(
@@ -297,7 +297,7 @@ class AdminController
     public function supprimerAdminForm(){
         $admis = (new AdminRepository())->select();
         $user = UserConnection::getSignedInUser();
-        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
             return new Response(
                 template: "admin/supprimerAdmin.php",
                 params: [
@@ -314,7 +314,7 @@ class AdminController
 
     public function supprimerAdmin(){
         $user = UserConnection::getSignedInUser();
-        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
             if ((new AdminRepository())->getByLogin($_REQUEST["login"])){
                 (new AdminRepository())->delete([new QueryCondition("login", ComparisonOperator::EQUAL, $_REQUEST["login"])]);
                 $user = (new EnseignantRepository())->getByLogin($user->getLogin());
@@ -345,7 +345,7 @@ class AdminController
 
     public function listeOffre(){
         $user = UserConnection::getSignedInUser();
-        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
             $listeOffres = (new OffreRepository())->getAllInvalidOffre();
             if ($listeOffres){
                 return new Response(
@@ -371,7 +371,7 @@ class AdminController
     }
     public function validerOffre(){
         $user = UserConnection::getSignedInUser();
-        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
             $offre = (new OffreRepository())->getById($_REQUEST["idOffre"]);
             /** @var Offre $offre **/
             $offre->setValider(true);
@@ -391,7 +391,7 @@ class AdminController
      */
     public function suprimerOffre(){
         $user = UserConnection::getSignedInUser();
-        if ($user instanceof  Enseignant && $user->getEstAdmin()) {
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
             $offre = (new OffreRepository())->select(new QueryCondition("id_offre", ComparisonOperator::EQUAL, $_REQUEST["idOffre"]));
             /**
              * @var Offre $offre
@@ -516,6 +516,48 @@ class AdminController
                 "footer" => false
                 
             ]
+        );
+    }
+
+    // archive
+    public function entreprisesArchive(){
+        $user = UserConnection::getSignedInUser();
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
+            $listeEntreprises = (new EntrepriseRepository())->getEntreprisesAchive();
+            if ($listeEntreprises){
+                return new Response(
+                    template: "admin/entrepriseArchive.php",
+                    params: [
+                        "title" => "Liste entreprises archivé",
+                        "listeEntreprise" => $listeEntreprises
+                    ]
+                );
+            }
+            FlashMessage::add(
+                content: "Aucune entreprise archivé",
+                type: FlashType::INFO
+            );
+            return new Response(
+                action: Action::ADMIN_DASH
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
+        );
+    }
+
+    public function suprimerEntrepriseArchive(){
+        $user = UserConnection::getSignedInUser();
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
+            (new EntrepriseRepository())->deleteEnterpriseFromArchive($_REQUEST["idEntreprise"]);
+            return new Response(
+                action: Action::ADMIN_ENTREPRISEARCHIVE
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
         );
     }
 }

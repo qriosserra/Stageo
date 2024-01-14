@@ -44,6 +44,8 @@ enum Action: string
     case ADMIN_SUPRIMERENTREPRISE = "?c=admin&a=suprimerEntreprise";
     case ADMIN_SUPRIMERADMIN_FROM = "?c=admin&a=supprimerAdminForm";
     case ADMIN_SUPRIMERADMIN = "?c=admin&a=supprimerAdmin";
+    case ADMIN_ENTREPRISEARCHIVE = "?c=admin&a=entreprisesArchive";
+    case ADMIN_SUPRIMERENTREPRISEARCHIVE = "?c=admin&a=suprimerEntrepriseArchive";
     case ABOUT = "?a=about";
     case IMPORT_CSV_FORM = "?c=main&a=importCsvForm";
     case IMPORT_CSV = "?c=main&a=importCsv";

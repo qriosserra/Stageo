@@ -79,6 +79,63 @@ class EntrepriseRepository extends CoreRepository
             return false;
         }
     }
+
+    function deleteEnterpriseFromArchive($id_entreprise) {
+        try {
+            $query = "DELETE FROM stg_entreprise_archive WHERE id_entreprise = :id_entreprise";
+            $pdo = DatabaseConnection::getPdo();
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':id_entreprise', $id_entreprise, PDO::PARAM_INT);
+            $stmt->execute();
+
+            return true;
+        } catch (PDOException $e) {
+            echo "Erreur : " . $e->getMessage();
+            return false;
+        }
+    }
+
+    function getEntreprisesAchive() {
+        try {
+            $query = "SELECT 
+                        ea.id_entreprise,
+                        ea.email,
+                        ea.raison_sociale,
+                        ea.siret,
+                        ea.numero_voie,
+                        ea.code_naf,
+                        ea.telephone,
+                        ea.fax,
+                        ea.site,
+                        ea.valide,
+                        te.libelle AS taille_entreprise,
+                        ts.libelle AS type_structure,
+                        sj.libelle AS statut_juridique,
+                        dc.code_postal,
+                        dc.commune,
+                        p.nom AS pays
+                    FROM
+                        stg_entreprise_archive ea
+                    LEFT JOIN stg_taille_entreprise te ON ea.id_taille_entreprise = te.id_taille_entreprise
+                    LEFT JOIN stg_type_structure ts ON ea.id_type_structure = ts.id_type_structure
+                    LEFT JOIN stg_statut_juridique sj ON ea.id_statut_juridique = sj.id_statut_juridique
+                    LEFT JOIN stg_distribution_commune dc ON ea.id_distribution_commune = dc.id_distribution_commune
+                    LEFT JOIN stg_pays p ON dc.id_pays = p.id_pays;
+                    ";
+            $pdo= DatabaseConnection::getPdo();
+            $stmt = $pdo->prepare($query);
+            $stmt->execute();
+
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return $result;
+
+        } catch (PDOException $e) {
+            echo "Erreur : " . $e->getMessage();
+            return false;
+        }
+    }
+
     public function getEntrepriseDetails() {
         try {
             $query = "SELECT e.id_entreprise, e.email, e.raison_sociale, e.siret, e.numero_voie, e.code_naf, e.telephone, e.fax, e.site, e.valide,
