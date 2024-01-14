@@ -2238,19 +2238,29 @@ use Stageo\Model\Object\Secretaire;
                         <h2 class="text-lg font-semibold text-gray-800">Informations</h2>
                         <ul class="text-gray-600 space-y-2">
                             <li>
-                                <a href="">Aide et contact</a>
+                                <?php if (UserConnection::isInstance(new Entreprise)) : ?>
+                                    <a href="<?= Action::TUTORIEL_ENTREPRISE->value ?>">Aide et contact</a>
+                                <?php elseif (UserConnection::isInstance(new Etudiant)) : ?>
+                                    <a href="<?= Action::TUTORIEL_ETUDIANT->value ?>">Aide et contact</a>
+                                <?php elseif (UserConnection::isInstance(new Secretaire)) : ?>
+                                    <a href="<?= Action::TUTORIEL_SECRETAIRE->value ?>">Aide et contact</a>
+                                <?php elseif (UserConnection::isInstance(new Admin)) : ?>
+                                    <a href="<?= Action::TUTORIEL_ADMIN->value ?>">Aide et contact</a>
+                                <?php else: ?>
+                                    <a href="<?= Action::TUTORIEL->value ?>">Aide et contact</a>
+                                <?php endif; ?>
                             </li>
                             <li>
-                                <a href="">Conditions d'utilisation</a>
+                                <a href="<?= Action::CONFIDENTIALITE->value ?>">Conditions d'utilisation</a>
                             </li>
                             <li>
                                 <a href="<?= Action::CONFIDENTIALITE->value ?>">Confidentialité et cookies</a>
                             </li>
                             <li>
-                                <a href="">Centre de confidentialité</a>
+                                <a href="<?= Action::CONFIDENTIALITE->value ?>">Centre de confidentialité</a>
                             </li>
                             <li>
-                                <a href="">Outil de consentement aux cookies</a>
+                                <a href="<?= Action::CONFIDENTIALITE->value ?>">Outil de consentement aux cookies</a>
                             </li>
                         </ul>
                     </div>
