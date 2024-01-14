@@ -4,6 +4,7 @@ $query = <<<SQL
 INSERT INTO stg_configuration(gratification_minimale) VALUES
 (4.35);
 
+
 INSERT INTO stg_admin(login) VALUES ('coletta');
 
 INSERT INTO stg_etape (id_etape, libelle) VALUES

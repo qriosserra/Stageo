@@ -1,6 +1,6 @@
 <?php
 $query = <<<SQL
-INSERT INTO stg_categorie (libelle) VALUES
+INSERT IGNORE  INTO stg_categorie (libelle) VALUES
 ('PHP'),
 ('CSS'),
 ('JavaScript'),

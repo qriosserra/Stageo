@@ -51,7 +51,7 @@ CREATE TABLE stg_code_postal(
 
 CREATE TABLE stg_categorie(
    id_categorie INT AUTO_INCREMENT,
-   libelle VARCHAR(256),
+   libelle VARCHAR(256)UNIQUE,
    PRIMARY KEY(id_categorie)
 );
 
