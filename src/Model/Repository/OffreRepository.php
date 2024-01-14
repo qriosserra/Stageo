@@ -324,7 +324,7 @@ class OffreRepository extends CoreRepository
                  LEFT JOIN stg_type_structure ts ON e.id_type_structure = ts.id_type_structure
                  LEFT JOIN stg_offre_categorie oc ON o.id_offre = oc.id_offre
                  LEFT JOIN stg_categorie cat ON oc.id_categorie = cat.id_categorie
-                 WHERE o.id_entreprise = :idTag";
+                 WHERE o.id_entreprise LIKE :idTag";
 
             $pdo = DatabaseConnection::getPdo();
             $stmt = $pdo->prepare($query);

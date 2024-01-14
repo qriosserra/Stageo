@@ -918,7 +918,7 @@ class EntrepriseController
             $user = UserConnection::getSignedInUser();
             $idEntreprise = $user->getIdEntreprise();
             $condition = new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $idEntreprise);
-            $listeoffres = (new OffreRepository())->getOffresDetailsAvecCategories();
+            $listeoffres = (new OffreRepository())->getOffresDetailsAvecCategoriesByIdEntreprise("%%");
             $liste_offre = (new OffreRepository())->select($condition);
             $idOffres =  [];
             foreach ($liste_offre as $offre){
