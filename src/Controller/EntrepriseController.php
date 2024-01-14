@@ -927,12 +927,14 @@ class EntrepriseController
             foreach ($liste_offre as $offre){
                 $idOffres [] = $offre->getIdOffre();
             }
+            $Categories = (new CategorieRepository())->select();
             return new Response(
                 template: "entreprise/offre/liste-offre.php",
                 params: [
                     "title" => "Liste des offres",
                     "listeoffres" => $listeoffres,
                     "idOffres" => $idOffres,
+                    "Categories" => $Categories,
                     "nbRechercheTrouver" => count($idOffres),
                     "selB" => null,
                     "search" => null

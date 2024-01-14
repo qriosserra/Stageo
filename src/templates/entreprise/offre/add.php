@@ -267,9 +267,6 @@ include __DIR__ . "/../../macros/offre.php";
             dateFinContainer.style.display = (emploiSelectionne && (emploiSelectionne.value === 'Alternance' || emploiSelectionne.value === 'Stage&Alternance')) ? 'none' : 'block';
             dateFin.style.display = (emploiSelectionne && (emploiSelectionne.value === 'Alternance' || emploiSelectionne.value === 'Stage&Alternance')) ? 'none' : 'block';
         });
-
-
-     
     </script>
 
 </main>

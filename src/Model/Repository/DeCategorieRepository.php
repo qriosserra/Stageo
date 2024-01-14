@@ -35,53 +35,21 @@ class DeCategorieRepository extends CoreRepository
     {
         foreach ($cate as $item) {
             if (!Null && $item instanceof Categorie) {
-                $listeprepare [] = ["tag" => ":" . $item->getLibelle(), "id" => $item->getIdCategorie(), "libelle" => $item->getLibelle()];
+                $listeprepare[] = [
+                    "tag" => ":" . htmlspecialchars(preg_replace('/[^a-zA-Z0-9]/', '', $item->getLibelle())),
+                    "id" => $item->getIdCategorie(),
+                    "libelle" => htmlspecialchars(preg_replace('/[^a-zA-Z0-9]/', '', $item->getLibelle()))
+                ];
             }
         }
-        /*$sql = "SELECT id_offre
-            FROM {$this->getTable()}
-            WHERE id_categorie = ".$listeprepare[0]["tag"];
 
-        for ($i = 1; $i < count($listeprepare); $i++){
-            $sql .= "
-            Intersect 
-            SELECT id_offre
-            FROM {$this->getTable()}
-            WHERE id_categorie = ".$listeprepare[$i]["tag"];
-        }*/
         if (isset($listeprepare)&&$listeprepare != NULL) {
             $categories = array_column($listeprepare, 'tag');
 
-// Construire la requête SQL avec des sous-requêtes
-        /* $sql = "SELECT id_offre
-         FROM {$this->getTable()}
-         WHERE id_categorie = " . $categories[0];
 
-         for ($i = 1; $i < count($categories); $i++) {
-             $sql .= "
-         INTERSECT
-         SELECT id_offre
-         FROM {$this->getTable()}
-         WHERE id_categorie = " . $categories[$i];
-         }
-
-         $pdo = DatabaseConnection::getPdo()->prepare($sql);
-         $counteur = 0;*/
-        /* $categories = array_column($listeprepare, 'tag');
-         $sql = "SELECT id_offre
-         FROM {$this->getTable()}  t1";
-
-         for ($i = 2; $i <= count($categories); $i++) {
-             $sql .= "
-         JOIN {$this->getTable()}  t$i ON t1.id_offre = t$i.id_offre
-         AND t$i.id_categorie = " . $categories[$i - 1]."  AND t1.id_categorie != t$i.id_categorie ";
-         }*/
-
-        //$pdo = DatabaseConnection::getPdo()->prepare($sql);
-
-        foreach ($listeprepare as list("libelle" => $libelle, "id" => $id)) {
-            $res[$libelle] = $id;
-        }
+            foreach ($listeprepare as list("libelle" => $libelle, "id" => $id)) {
+                $res[$libelle] = $id;
+            }
             $sql = "SELECT t0.id_offre
                 FROM {$this->getTable()} t0";
 
@@ -92,10 +60,10 @@ class DeCategorieRepository extends CoreRepository
             $sql .= " 
             WHERE   t0.id_categorie = " . $listeprepare[0]["tag"];
             for ($i = 1; $i < count($listeprepare); $i++) {
-                $sql .= "  AND  t".($i).".id_categorie = " . $listeprepare[$i]["tag"];
+                $sql .= '  AND  t'.($i).'.id_categorie = ' . $listeprepare[$i]["tag"];
             }
-             $pdo = DatabaseConnection::getPdo()->prepare($sql);
-             $pdo->execute($res);
+            $pdo = DatabaseConnection::getPdo()->prepare($sql);
+            $pdo->execute($res);
 
             for ($objectArray = $pdo->fetch();
                  $objectArray != false;
