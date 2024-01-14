@@ -999,6 +999,9 @@ video {
 .max-w-2xl{
   max-width: 42rem;
 }
+.max-w-\[700px\]{
+  max-width: 700px;
+}
 .flex-1{
   flex: 1 1 0%;
 }
@@ -1664,6 +1667,10 @@ video {
   font-size: 3.75rem;
   line-height: 1;
 }
+.text-sm\/relaxed{
+  font-size: 0.875rem;
+  line-height: 1.625;
+}
 .\!font-bold{
   font-weight: 700 !important;
 }
@@ -1717,6 +1724,9 @@ video {
 }
 .tracking-wider{
   letter-spacing: 0.05em;
+}
+.tracking-tighter{
+  letter-spacing: -0.05em;
 }
 .\!text-primary-400{
   --tw-text-opacity: 1 !important;
@@ -3154,6 +3164,14 @@ footer .footer-information-container .footer-description-container .footer-descr
   .md\:p-0{
     padding: 0px;
   }
+  .md\:px-6{
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  .md\:py-24{
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
   .md\:pl-4{
     padding-left: 1rem;
   }
@@ -3163,6 +3181,10 @@ footer .footer-information-container .footer-description-container .footer-descr
   .md\:text-5xl{
     font-size: 3rem;
     line-height: 1;
+  }
+  .md\:text-xl{
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
   .md\:hover\:bg-transparent:hover{
     background-color: transparent;
@@ -3270,6 +3292,10 @@ footer .footer-information-container .footer-description-container .footer-descr
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
   }
+  .lg\:py-32{
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
   .lg\:text-2xl{
     font-size: 1.5rem;
     line-height: 2rem;
@@ -3279,6 +3305,10 @@ footer .footer-information-container .footer-description-container .footer-descr
     line-height: 2.25rem;
   }
   .lg\:text-6xl{
+    font-size: 3.75rem;
+    line-height: 1;
+  }
+  .lg\:text-6xl\/none{
     font-size: 3.75rem;
     line-height: 1;
   }
@@ -3313,6 +3343,10 @@ footer .footer-information-container .footer-description-container .footer-descr
   }
   .xl\:overflow-hidden{
     overflow: hidden;
+  }
+  .xl\:py-48{
+    padding-top: 12rem;
+    padding-bottom: 12rem;
   }
   .xl\:text-3xl{
     font-size: 1.875rem;

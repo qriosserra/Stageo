@@ -2258,7 +2258,7 @@ use Stageo\Model\Object\Secretaire;
                         <h2 class="text-lg font-semibold text-gray-800">Mention légales</h2>
                         <ul class="text-gray-600 space-y-2">
                             <li>
-                                <a href="">Mentions</a>
+                                <a href="<?= Action::MENTION->value ?>">Mentions</a>
                             </li>
                         </ul>
                     </div>

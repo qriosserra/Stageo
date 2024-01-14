@@ -695,4 +695,14 @@ class MainController
             ]
         );
     }
+
+    public static function mention() : Response
+    {
+        return new Response(
+            template: "mention.php",
+            params: [
+                "title" => "Mentions légales"
+            ]
+        );
+    }
 }
