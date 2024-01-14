@@ -139,6 +139,27 @@ class EtudiantController
         );
     }
 
+    /**
+     * Méthode de contrôleur permettant à un étudiant de postuler à une offre de stage ou d'alternance. Les informations nécessaires
+     * sont récupérées depuis les paramètres de la requête. La fonction effectue plusieurs vérifications pour garantir que l'opération
+     * se déroule correctement. En cas de problème, une exception est lancée avec un message approprié et l'utilisateur est redirigé
+     * vers la page correspondante pour effectuer les corrections nécessaires. Si la postulation est réussie, un email de confirmation
+     * est envoyé à l'entreprise et un message de succès est affiché.
+     *
+     * @return Response une redirection vers la page d'affichage de l'offre postulée.
+     *
+     * @throws ControllerException Si une vérification échoue, une exception est lancée avec un message explicatif et une action de redirection.
+     *
+     * @var string $login Login de l'étudiant postulant.
+     * @var string $id_offre Identifiant de l'offre à laquelle l'étudiant postule.
+     * @var array $cv Informations du fichier du CV envoyé par l'étudiant.
+     * @var array $lm Informations du fichier de la lettre de motivation envoyée par l'étudiant.
+     * @var string $complement Informations complémentaires fournies par l'étudiant.
+     * @var Offre $offre Instance de l'offre à laquelle l'étudiant postule.
+     * @var Entreprise $entreprise Instance de l'entreprise liée à l'offre.
+     * @var string $cvName Nom du fichier du CV après l'enregistrement.
+     * @var string|null $lmName Nom du fichier de la lettre de motivation après l'enregistrement (peut être null s'il n'y a pas de lettre).
+     */
     public function postuler(): Response
     {
         $login = $_REQUEST["login"];
@@ -830,6 +851,21 @@ class EtudiantController
         );
     }
 
+    /**
+     * Méthode de contrôleur permettant à l'étudiant de soumettre une convention. Cette fonction effectue une série de vérifications
+     * pour s'assurer que la convention est correctement remplie. En cas de problème, elle lance une exception avec un message
+     * approprié et redirige l'utilisateur vers la page correspondante pour corriger les informations nécessaires. Si toutes les
+     * vérifications passent, la convention est marquée comme soumise, et un message de réussite est affiché.
+     *
+     * @return Response une redirection vers la page d'accueil.
+     *
+     * @throws ControllerException Si une vérification échoue, une exception est lancée avec un message explicatif et une action de redirection.
+     *
+     * @var Etudiant $etudiant Instance de l'étudiant actuellement connecté.
+     * @var Convention $convention Instance de la convention associée à l'étudiant.
+     * @var Suivi $suivi Instance du suivi associé à la convention.
+     */
+
     public function soumettreConvention(): Response
     {
         if (!UserConnection::isSignedIn()) {
@@ -1082,7 +1118,7 @@ class EtudiantController
         );
     }
 
-    public function sauvegarderEntreprise(): Response {
+  /*  public function sauvegarderEntreprise(): Response {
 
         if (!isset($_REQUEST['Entreprise']) || !isset($_REQUEST['Entreprise']['id']) || !isset($_REQUEST['Entreprise']['nom']) ){
             FlashMessage::add(
@@ -1110,7 +1146,7 @@ class EtudiantController
                 params: ["id" => urlencode($id)]
             );
         }
-    }
+    }*/
     public function afficherProfile() : Response{
 
         if (!UserConnection::isInstance(new Etudiant())){
@@ -1219,9 +1255,28 @@ class EtudiantController
         );
     }
 
-    /*Cette fonction à deux utiliser, celle de permettre à l'étudiant d'accepter une offre et le rediriger vers une page de création de convention
-    Prérempli. Ou bien servir à rediriger vers une convention préremplie si l'étudiant à déjà accepter l'offre. Dans le premier cas, la BD est
-    nettoyer en enlevant les étudiants ayant postulé à l'offre ainsi que leur CV et LM.*/
+
+    /**
+     * Méthode de contrôleur permettant à l'étudiant d'accepter une offre et d'être redirigé vers une page de création de convention
+     * préremplie. Si l'étudiant a déjà accepté l'offre, la fonction redirige également vers la convention préremplie associée.
+     * Dans le premier cas, la base de données est nettoyée en supprimant les autres étudiants ayant postulé à la même offre, ainsi
+     * que leurs CV et lettres de motivation.
+     *
+     * @return Response une redirection vers la page de création de convention.
+     *
+     * @var string $login Login de l'étudiant.
+     * @var string $idOffre Identifiant de l'offre acceptée.
+     * @var Etudiant $etudiant Instance de l'étudiant actuellement connecté.
+     * @var OffreRepository $offreRepository Instance du référentiel d'offres pour interagir avec la base de données des offres.
+     * @var EntrepriseRepository $entrepriseRepository Instance du référentiel d'entreprises pour interagir avec la base de données des entreprises.
+     * @var Convention $convention Instance d'une convention préremplie.
+     * @var array $condition Condition de requête pour vérifier si l'étudiant a déjà un stage ou une alternance.
+     * @var array $verif_etudiant Résultat de la requête de vérification de l'étudiant.
+     * @var array $condition_deja_accepter Condition de requête pour vérifier si l'étudiant a déjà accepté cette offre.
+     * @var array $already_accept Résultat de la requête pour vérifier si l'étudiant a déjà accepté cette offre.
+     * @var array $offres Résultat de la requête pour récupérer toutes les offres auxquelles l'étudiant a postulé.
+     * @var array $autrePostulant Résultat de la requête pour récupérer les autres étudiants ayant postulé à la même offre.
+     */
     public function validerDefinitivement() : Response{
         $login = $_REQUEST['login'];
         $idOffre = $_REQUEST['idOffre'];
@@ -1354,7 +1409,23 @@ class EtudiantController
         );
     }
 
-    /*Permets à un étudiant choisi par une entreprise pour un stage ou une alternance de refuser le poste*/
+
+    /**
+     * Méthode de contrôleur permettant à un étudiant choisi par une entreprise pour un stage ou une alternance de refuser
+     * définitivement le poste. La fonction supprime l'association entre l'étudiant et l'offre, et supprime également les
+     * documents (CV, lettre de motivation) associés à cette candidature.
+     *
+     * @return Response  une redirection vers la page de profil de l'étudiant.
+     *
+     * @var string $login Login de l'étudiant.
+     * @var string $idOffre Identifiant de l'offre à laquelle l'étudiant a été choisi.
+     * @var Etudiant $etudiant Instance de l'étudiant actuellement connecté.
+     * @var OffreRepository $offreRepository Instance du référentiel d'offres pour interagir avec la base de données des offres.
+     * @var array $condition2 Condition de requête pour vérifier si l'étudiant a déjà un stage ou une alternance.
+     * @var array $verif_etudiant Résultat de la requête de vérification de l'étudiant.
+     * @var array $condition Condition de requête pour récupérer la candidature de l'étudiant à l'offre choisie.
+     * @var array $offrePotuler Résultat de la requête pour récupérer la candidature de l'étudiant à l'offre.
+     */
     public function refuserDefinitivement() : Response{
         $login = $_REQUEST['login'];
         $idOffre = $_REQUEST['idOffre'];
@@ -1447,8 +1518,21 @@ class EtudiantController
         );
     }
 
-    /*Retourner deux listes, une liste avec les offres auxquelles on a postulé et une liste avec les offres sur lesquelles on a été accepter.
-    Cette fonction renvoie aussi le nombre d'offres total auxquelles on a postulé*/
+    /**
+     * Méthode de contrôleur permettant à un étudiant de visualiser les offres sur lesquelles il a postulé,
+     * ainsi que celles pour lesquelles il a été accepté. La fonction renvoie également le nombre total d'offres auxquelles
+     * l'étudiant a postulé.
+     *
+     * @return Response une page affichant les offres postulées.
+     *
+     * @var Etudiant $user Instance de l'étudiant actuellement connecté.
+     * @var QueryCondition $condition Condition de requête pour filtrer les offres en fonction du login de l'étudiant.
+     * @var array $liste_accepter Liste des offres acceptées par l'étudiant.
+     * @var array $liste_postuler Liste des offres auxquelles l'étudiant a postulé.
+     * @var array $postuler Liste complète des offres auxquelles l'étudiant a postulé.
+     * @var int $nbpostuler Nombre total d'offres auxquelles l'étudiant a postulé.
+     * @var Offre|null $id ID de l'offre acceptée par l'étudiant, null si aucune offre n'a été acceptée.
+     */
     public function voirMesCandidature():Response{
         if (UserConnection::isInstance(new Etudiant())) {
             $user = UserConnection::getSignedInUser();
