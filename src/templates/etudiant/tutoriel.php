@@ -3,13 +3,19 @@
 ?>
 
 <main class="container mx-auto p-8">
-    <div class="bg-gray-100 p-8 rounded-md mb-8 mt-4">
-        <h6 class="text-xl font-bold mb-2">Sommaire</h6>
-        <ul>
-            <li class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-1/4  sm:invisible"><a href="#connexion-etudiant-enseignant">Connexion Étudiant ou Enseignant</a></li>
-            <li class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-1/4  sm:invisible"><a href="#connexion-entreprise">Connexion Entreprise</a></li>
-            <li class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-1/4  sm:invisible"><a href="#inscription-entreprise">Inscription Entreprise</a></li>
-        </ul>
+    <div class="flex flex-col-reverse  md:flex-row">
+        <div class="md:w-1/3  rounded-lg p-4">
+            <h6 class="mb-4 text-lg font-bold">Sommaire des tutos</h6>
+            <ul class="space-y-2">
+                <li><a href="#candidature" class="bg-gray-200 border-2 ring-offset-background focus-visible:ring-ring border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-full items-center justify-center rounded-md  px-4 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">Candidater à une offre</a></li>
+                <li><a href="#consulterCandidature" class="bg-gray-200 border-2 ring-offset-background focus-visible:ring-ring border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-full items-center justify-center rounded-md  px-4 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">Consulter ses candidatures</a></li>
+                <li><a  href="#creerConvention" class="bg-gray-200 border-2 ring-offset-background focus-visible:ring-ring border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-full items-center justify-center rounded-md  px-4 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">Créer et déposer une convention</a></li>
+            </ul>
+        </div>
+        <div class="md:w-2/3 p-4">
+            <h2 class="mb-4 text-2xl font-bold">Sections</h2>
+            <p class="text-gray-600">Cliquez sur n'importe quelle section pour être redirigé vers cette dernière. </p>
+        </div>
     </div>
 
     <div  class="bg-gray-100 p-8 rounded-md flex flex-col items-center mb-8">
