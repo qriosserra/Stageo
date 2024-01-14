@@ -40,14 +40,14 @@ include __DIR__ . "/../macros/newOffre.php";
                     <?= $entreprise["statut_juridique"] ?>
                 </p>
             </div>
-
+            <?php if(isset($entreprise["code_naf"])): ?>
             <div class="mb-8">
                 <h2 class="text-xl font-bold mb-2">Naf : </h2>
                 <p class="text-gray-700 text-base mb-4">
                     <?= $entreprise["code_naf"] ?>
                 </p>
             </div>
-
+            <?php endif; ?>
             <div class="mb-8">
                 <h2 class="text-xl font-bold mb-2">Localisation : </h2>
                 <p class="text-gray-700 text-base mb-4">
@@ -57,28 +57,30 @@ include __DIR__ . "/../macros/newOffre.php";
                     <?= $entreprise["code_postal"] ?>
                 </p>
             </div>
-
+            <?php if(isset($entreprise["telephone"])): ?>
             <div class="mb-8">
                 <h2 class="text-xl font-bold mb-2">Telephone : </h2>
                 <p class="text-gray-700 text-base mb-4">
                     <?= $entreprise["telephone"] ?>
                 </p>
             </div>
-
+            <?php endif; ?>
+            <?php if(isset($entreprise["site"])): ?>
             <div class="mb-8">
                 <h2 class="text-xl font-bold mb-2">Site Web : </h2>
                 <p class="text-gray-700 text-base mb-4">
                     <?= $entreprise["site"] ?>
                 </p>
             </div>
-
+            <?php endif; ?>
+            <?php if(isset($entreprise["fax"])): ?>
             <div class="mb-8">
                 <h2 class="text-xl font-bold mb-2">Fax : </h2>
                 <p class="text-gray-700 text-base mb-4">
                     <?= $entreprise["fax"] ?>
                 </p>
             </div>
-
+            <?php endif; ?>
         </div>
     </div>
 <div class="mx-auto p-4">
