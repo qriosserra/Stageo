@@ -998,4 +998,20 @@ class EntrepriseController
         );
     }
 
+    public static function delete(){
+        $user = UserConnection::getSignedInUser();
+        $id =  $_REQUEST["idEntreprise"];
+        if ($user instanceof Entreprise && $user->getIdEntreprise() == $id){
+            (new EntrepriseRepository())->delete([new QueryCondition("id_entreprise", ComparisonOperator::EQUAL, $id)]);
+            UserConnection::signOut();
+            return new Response(
+                action: Action::HOME
+            );
+        }
+        throw new ControllerException(
+            message: "Vous n'avez pas accès à cette action.",
+            action: Action::HOME
+        );
+    }
+
 }

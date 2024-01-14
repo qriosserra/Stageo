@@ -179,13 +179,10 @@ use Stageo\Model\Object\Secretaire;
                                     <?php if (UserConnection::isInstance(new Entreprise())) : ?>
                                         <ul class="py-2" aria-labelledby="user-menu-button">
                                             <li>
-                                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profil</a>
+                                                <a href="<?= Action::AFFICHER_ENTREPRISE->value ."&id=".$user->getIdEntreprise() ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Profil</a>
                                             </li>
                                             <li>
                                                 <a href="<?= Action::ENTREPRISE_POSTULE_OFFRE_ETUDIANT->value ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Candidats Offres</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Paramètres</a>
                                             </li>
                                             <li>
                                                 <a href="<?= Action::SIGN_OUT->value ?>" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Déconnexion</a>

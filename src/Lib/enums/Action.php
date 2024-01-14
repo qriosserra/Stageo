@@ -32,6 +32,7 @@ enum Action: string
     case ENTREPRISE_MODIFICATION_OFFRE_FORM = "?c=entreprise&a=afficherFormulaireMiseAJourOffre&id=";
     case ENTREPRISE_MODIFICATION_OFFRE = "?c=entreprise&a=mettreAJourOffre";
     case ENTREPRISE_DELETE_OFFRE = "?c=entreprise&a=deleteOffre";
+    case ENTREPRISE_DELETE = "?c=entreprise&a=delete";
     case ADMIN_SIGN_UP_FORM = "?c=admin&a=signUpForm";
     case ADMIN_SIGN_UP = "?c=admin&a=signUp";
     case ADMIN_SIGN_IN_FORM = "?c=admin&a=signInForm";

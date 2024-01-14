@@ -1,5 +1,7 @@
 <?php
 
+use Stageo\Lib\enums\Action;
+
 include __DIR__ . "/../macros/button.php";
 include __DIR__ . "/../macros/input.php";
 include __DIR__ . "/../macros/entreprise.php";
@@ -9,6 +11,8 @@ include __DIR__ . "/../macros/newOffre.php";
  * @var array $listeoffres
  * @var int $nbRechercheTrouver
  */
+
+$user = \Stageo\Lib\UserConnection::getSignedInUser();
 ?>
     <div class="container mx-auto p-4 mt-[10rem]  border-2 rounded-2xl bg-slate-50 ">
         <div class=" rounded p-6 ">
@@ -80,6 +84,16 @@ include __DIR__ . "/../macros/newOffre.php";
                     <?= $entreprise["fax"] ?>
                 </p>
             </div>
+            <?php endif; ?>
+            <?php if($user instanceof \Stageo\Model\Object\Entreprise && $user->getIdEntreprise()==$entreprise["id_entreprise"]): ?>
+                <div class="mb-8">
+                    <form method="post" action="<?= Action::ENTREPRISE_DELETE->value."&idEntreprise=".$entreprise["id_entreprise"]?>">
+                        <button type="submit" class="button-ghost !text-red-400 text-xl w-min">
+                            <i class="fi fi-sr-cross-circle !text-red-400"></i>
+                            <span>Supprimer mon compte</span>
+                        </button>
+                    </form>
+                </div>
             <?php endif; ?>
         </div>
     </div>
