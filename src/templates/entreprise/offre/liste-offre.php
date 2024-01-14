@@ -2,6 +2,7 @@
 
 use Stageo\Model\Object\Categorie;
 use Stageo\Lib\UserConnection;
+use Stageo\Model\Object\Entreprise;
 use Stageo\Model\Object\Etudiant;
 use \Stageo\Model\Object\Offre;
 use Stageo\Lib\enums\Action;
@@ -153,11 +154,16 @@ include __DIR__ . "/../../macros/newOffre.php";
 
         <p class="text-lg font-semibold mb-4">Aucune offre disponible selon vos recherches !</p>
     <?php endif ?>
-
-
-
-
-
+    <?php if (UserConnection::isInstance(new Entreprise())) :?>
+    <div class="w-full flex justify-center">
+        <a href="<?= Action::ENTREPRISE_CREATION_OFFRE_FORM->value ?>">
+        <button
+                class="text-3xl rounded-lg px-4 py-1 border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-green-100 duration-300">
+            +
+        </button>
+        </a>
+    </div>
+    <?php endif ?>
     </div>
 
 </body>

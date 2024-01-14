@@ -898,7 +898,7 @@ class EntrepriseController
         );
     }
 
-    public static function afficherOffreEntreprise(): Response
+    public static function mesOffres(): Response
     {
         if (UserConnection::isInstance(new Entreprise())) {
             $user = UserConnection::getSignedInUser();
