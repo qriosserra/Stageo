@@ -10,9 +10,9 @@ include __DIR__ . "/../macros/button.php";
  * @var string $login
  */
 ?>
-<main class="h-screen flex items-center justify-center gap-8 relative">
+<main class="h-screen flex items-center flex-wrap justify-center gap-8 relative">
     <?=button("Accueil", "fi-rr-angle-small-left", Action::HOME, "!absolute !pl-2 top-16 left-0")?>
-    <h1 class="w-[36rem]">Crée un administrateur</h1>
+    <h1 class="text-6xl">Crée un administrateur</h1>
     <form class="flex flex-col items-center gap-4" action="<?=Action::ADMIN_SIGN_UP->value?>" method="post">
         <?=field("login", "Login", "text", "fi-rr-user", null, "required", $login ?? null)?>
         <?=token($token)?>

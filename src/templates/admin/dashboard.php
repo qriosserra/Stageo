@@ -65,7 +65,18 @@ use Stageo\Model\Object\Etudiant;
                 justify-content: center;
                 align-items: center;
             }
+
+           
+
         }
+
+        @media (max-width : 600px) {
+            #barre1, #barre2 {
+                display: none;
+            }
+        }
+
+        
     </style>
 </head>
 
@@ -86,10 +97,10 @@ use Stageo\Model\Object\Etudiant;
 
     <div class="flex h-screen overflow-hidden">
         <div class="sidebar flex flex-col h-screen overflow-hidden">
-        <div class="h-[2.5rem] bg-gray-800 w-[120rem] absolute left-[16rem] z-10">
+        <div class="h-[2.5rem] bg-gray-800 w-[120rem] absolute left-[16rem] z-10" id="barre1">
             
         </div>
-        <div class="h-[4.5rem] bg-white w-[120rem] absolute left-[16rem] top-10 z-10">
+        <div class="h-[4.5rem] bg-white w-[120rem] absolute left-[16rem] top-10 z-10" id="barre2">
 
         </div>
             <nav class=" h-full">
