@@ -30,6 +30,12 @@ class OffreRepository extends CoreRepository
         return $resulat;
     }
 
+    /**
+     * Récupère les identifiants de toutes les offres validées.
+     *
+     * @return array|null Un tableau contenant les identifiants des offres validées, ou null en cas d'erreur.
+     *
+     */
     public function getAllValideOffreId(): ?array{
         $offres = (new OffreRepository())->select(new QueryCondition("valider", ComparisonOperator::EQUAL, 1));
         $i =0;
@@ -40,6 +46,13 @@ class OffreRepository extends CoreRepository
         return $resulat;
     }
 
+    /**
+     * Récupère toutes les offres non validées associées à une entreprise spécifiée.
+     *
+     * @param int $identreprise Identifiant de l'entreprise
+     *
+     * @return array|false Tableau associatif des offres avec leurs catégories, ou false en cas d'erreur.
+     */
     public function getAllInvalidOffreEntreprise($identreprise) {try {
         $query = "SELECT 
                     o.id_offre,
@@ -122,6 +135,18 @@ class OffreRepository extends CoreRepository
     }
     }
 
+    /**
+     * Fonction qui récupère les détails de toutes les offres non validées avec les informations de l'entreprise associée.
+     *
+     * @return array|false Un tableau contenant les détails des offres non validées, incluant les informations de l'entreprise et les catégories associées, ou false en cas d'erreur.
+     *
+     * @throws PDOException En cas d'erreur lors de l'exécution de la requête SQL, une exception PDO est attrapée, affichant le message d'erreur.
+     *
+     * @var array|false $result Résultats de la requête SQL sous forme de tableau associatif.
+     * @var array $offresAvecCategories Tableau associatif organisant les offres par leur identifiant avec les informations de l'entreprise et les catégories associées.
+     * @var int $idOffre Identifiant de l'offre en cours de traitement.
+     * @var array|false $categories Tableau associatif contenant les informations de la catégorie associée à l'offre.
+     */
     public function getAllInvalidOffre() {try {
         $query = "SELECT 
                     o.id_offre,
@@ -203,6 +228,18 @@ class OffreRepository extends CoreRepository
     }
     }
 
+    /**
+     * Fonction qui récupère les détails de toutes les offres validées avec les informations de l'entreprise associée et les catégories associées.
+     *
+     * @return array|false Un tableau contenant les détails des offres validées, incluant les informations de l'entreprise et les catégories associées, ou false en cas d'erreur.
+     *
+     * @throws PDOException En cas d'erreur lors de l'exécution de la requête SQL, une exception PDO est attrapée, affichant le message d'erreur.
+     *
+     * @var array|false $result Résultats de la requête SQL sous forme de tableau associatif.
+     * @var array $offresAvecCategories Tableau associatif organisant les offres par leur identifiant avec les informations de l'entreprise et les catégories associées.
+     * @var int $idOffre Identifiant de l'offre en cours de traitement.
+     * @var array|false $categories Tableau associatif contenant les informations de la catégorie associée à l'offre.
+     */
     function getOffresDetailsAvecCategories() {
         try {
             $query = "SELECT 
@@ -284,6 +321,19 @@ class OffreRepository extends CoreRepository
         }
     }
 
+    /**
+     * Fonction qui récupère les détails des offres validées pour une entreprise spécifique avec les informations de l'entreprise associée et les catégories.
+     *
+     * @param int|string $id Identifiant de l'entreprise pour laquelle récupérer les offres.
+     * @return array|false Un tableau contenant les détails des offres validées pour l'entreprise spécifiée, incluant les informations de l'entreprise et les catégories associées, ou false en cas d'erreur.
+     *
+     * @throws PDOException En cas d'erreur lors de l'exécution de la requête SQL, une exception PDO est attrapée, affichant le message d'erreur.
+     *
+     * @var array|false $result Résultats de la requête SQL sous forme de tableau associatif.
+     * @var array $offresAvecCategories Tableau associatif organisant les offres par leur identifiant avec les informations de l'entreprise et les catégories associées.
+     * @var int $idOffre Identifiant de l'offre en cours de traitement.
+     * @var array|false $categories Tableau associatif contenant les informations de la catégorie associée à l'offre.
+     */
     function getOffresDetailsAvecCategoriesByIdEntreprise($id) {
         try {
             $query = "SELECT 
@@ -370,6 +420,23 @@ class OffreRepository extends CoreRepository
 
 
 
+    /**
+     * Fonction qui récupère les offres en fonction d'un texte, d'une localisation et d'un type spécifié.
+     *
+     * @param string $texte Texte à rechercher dans les champs description, secteur, thematique, et taches des offres.
+     * @param string $localisation Localisation à rechercher parmi les communes des entreprises associées aux offres.
+     * @param array $Togle Tableau de deux valeurs (alternance et stage) déterminant le type d'offres à rechercher.
+     * @return array Un tableau d'objets représentant les offres correspondant aux critères de recherche, ou un tableau vide si aucune offre n'est trouvée.
+     *
+     * @var string $toglle Condition de recherche basée sur les valeurs du tableau $Togle pour déterminer le type d'offres à rechercher.
+     * @var string $texte Valeur du texte à rechercher, préfixée et suffixée par '%'.
+     * @var string $localisation Valeur de la localisation à rechercher, préfixée et suffixée par '%'.
+     * @var array $val Tableau associatif contenant les valeurs des paramètres à substituer dans la requête SQL.
+     * @var string $sql Requête SQL permettant de récupérer les offres en fonction des critères spécifiés.
+     * @var PDOStatement $pdo Représente une requête préparée et exécutée.
+     * @var array|false $objectArray Résultats de la requête SQL sous forme de tableau associatif.
+     * @var array $objects Tableau d'objets représentant les offres correspondant aux critères de recherche.
+     */
     public function getByTextAndLocalisation (String $texte, String $localisation, array $Togle): ?array{
        /* $val ["text1"] = $texte;
         $val ["text2"] = $texte;
@@ -523,6 +590,16 @@ public static function getOffersArchive() {
         }
     }
 
+    /**
+     * Fonction qui récupère les détails des offres archivées avec leurs catégories associées pour une entreprise spécifiée.
+     *
+     * @param int $id Identifiant de l'entreprise pour laquelle récupérer les offres archivées.
+     * @return array|false Un tableau d'objets représentant les détails des offres archivées avec leurs catégories associées pour l'entreprise spécifiée, ou false en cas d'erreur.
+     *
+     * @var array $rep Tableau associatif contenant l'identifiant de l'entreprise à substituer dans la requête SQL.
+     * @var array|false $result Résultats de la requête SQL sous forme de tableau associatif.
+     * @var array $offresAvecCategories Tableau associatif pour organiser les résultats par id_offre.
+     */
     function getOffresDetailsAvecCategoriesByIdEntrepriseArchive($id) {
         try {
             $query = "SELECT 

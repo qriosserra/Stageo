@@ -28,6 +28,15 @@ class EtudiantRepository extends CoreRepository
         return $this->select([new QueryCondition("email", ComparisonOperator::EQUAL, $email)])[0] ?? null;
     }
 
+    /**
+     * Fonction qui récupère le nombre de candidatures pour un étudiant spécifique, identifié par son login.
+     *
+     * @param string $login Le login de l'étudiant pour lequel on souhaite obtenir le nombre de candidatures.
+     *
+     * @return int|null Le nombre de candidatures pour l'étudiant donné, ou null en cas d'erreur lors de l'exécution de la requête.
+     *
+     * @throws PDOException En cas d'erreur lors de l'exécution de la requête SQL, une exception PDO est attrapée, affichant le message d'erreur.
+     */
     public function getnbcandatures(string $login): ?int
     {
         try {
