@@ -33,8 +33,8 @@ class EntrepriseRepository extends CoreRepository
     function getOffreEntreprise($id_entreprise){
         $query = "Select o.id_offre,count(p.login)
         from stg_entreprise e
-        join stg_offre o on o.id_entreprise = e.id_entreprise
-        join stg_postuler p on p.id_offre=o.id_offre
+        LEFT join stg_offre o on o.id_entreprise = e.id_entreprise
+        LEFT join stg_postuler p on p.id_offre=o.id_offre
         WHERE e.id_entreprise = :id_entreprise
         GROUP BY o.id_offre";
 
@@ -44,7 +44,6 @@ class EntrepriseRepository extends CoreRepository
         $stmt->execute();
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
         $offre = [];
 
         foreach ($result as $row) {

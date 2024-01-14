@@ -763,6 +763,12 @@ class EtudiantController
         );
     }
 
+    /**
+     * @throws TokenTimeoutException
+     * @throws ControllerException
+     * @throws InvalidTokenException
+     * @throws \Exception
+     */
     public function conventionAddStep4(): Response
     {
         if (!UserConnection::isSignedIn()) {
@@ -824,7 +830,11 @@ class EtudiantController
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
             );
         }
-        if (is_null($convention->getIdConvention())) {
+        $etudiant = UserConnection::getSignedInUser();
+        /**
+        * @var Etudiant $etudiant.
+         * */
+        if (is_null($convention->getIdConvention()) || is_null((new ConventionRepository)->getByLogin($etudiant->getLogin()))) {
             $id_convention = (new ConventionRepository)->insert($convention);
             $convention->setIdConvention($id_convention);
             (new SuiviRepository)->insert(new Suivi(
@@ -857,9 +867,10 @@ class EtudiantController
      * approprié et redirige l'utilisateur vers la page correspondante pour corriger les informations nécessaires. Si toutes les
      * vérifications passent, la convention est marquée comme soumise, et un message de réussite est affiché.
      *
-     * @return Response une redirection vers la page d'accueil.
+     * @return Response Une redirection vers la page d'accueil.
      *
      * @throws ControllerException Si une vérification échoue, une exception est lancée avec un message explicatif et une action de redirection.
+     * @throws \Exception
      *
      * @var Etudiant $etudiant Instance de l'étudiant actuellement connecté.
      * @var Convention $convention Instance de la convention associée à l'étudiant.

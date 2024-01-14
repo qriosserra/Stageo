@@ -345,6 +345,77 @@ class AdminController
         );
     }
 
+    /**
+     * @throws ControllerException
+     * @throws Exception
+     */
+    public function validerconvention(){
+        $user = UserConnection::getSignedInUser();
+        if (($user instanceof  Enseignant && $user->getEstAdmin())) {
+            $convention = (new ConventionRepository())->getById($_REQUEST["idConv"]);
+            /**
+            * @var Convention $convention
+             */
+            if (!$convention->getVerificationAdmin()) {
+                $convention->setVerificationAdmin(true);
+                (new ConventionRepository())->update($convention);
+                $etu = (new EtudiantRepository())->getByLogin($convention->getLogin());
+                /**
+                 * @var Etudiant $etu
+                 */
+                $email = $etu->getEmail();
+                $email = new Email($email,"Validation d'admin de votre convention par Mr ".$user->getNom(),"Bonjour, nous vous informons que votre convention a était validé par Mr ".$user->getNom());
+                (new Mailer())->send($email);
+                FlashMessage::add(
+                    content: "Convention envoyer au secretariat!",
+                    type: FlashType::SUCCESS
+                );
+                return $this->gestionEtudiant();
+            }
+            FlashMessage::add(
+                content: "déjà validé !",
+                type: FlashType::ERROR
+            );
+            return $this->gestionEtudiant();
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette action",
+            action: Action::HOME,
+        );
+    }
+
+    /**
+     * @throws ControllerException
+     */
+    public function invaliderconvention(){
+        $user = UserConnection::getSignedInUser();
+        if (($user instanceof  Enseignant && $user->getEstAdmin())) {
+            $convention = (new ConventionRepository())->getById($_REQUEST["idConv"]);
+            /**
+             * @var Convention $convention
+             */
+            (new ConventionRepository())->delete([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $convention->getIdConvention())]);
+            $etu = (new EtudiantRepository())->getByLogin($convention->getLogin());
+            /**
+             * @var Etudiant $etu
+             */
+            $email = $etu->getEmail();
+            $raison = $_REQUEST["raisonRefus"];
+            $email = new Email($email,"Refus de votre convention par Mr ".$user->getNom(),"Bonjour, nous vous informons que votre convention a était refusé par Mr ".$user->getNom()." pour les raisons suivantes : <br> <br>".$raison);
+            (new Mailer())->send($email);
+            FlashMessage::add(
+                content: "Convention invalidé!",
+                type: FlashType::SUCCESS
+            );
+            return $this->gestionEtudiant();
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette action",
+            action: Action::HOME,
+        );
+
+    }
+
     public function supprimerAdmin(){
         $user = UserConnection::getSignedInUser();
         if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
@@ -461,14 +532,10 @@ class AdminController
                 if ($nbcandidature[$etu->getlogin()] === null) {
                     $nbcandidature[$etu->getlogin()] = 0;
                 }
-            }
-            foreach ($etudiants as $etu) {
                 $conventions[$etu->getlogin()] = (new ConventionRepository())->getByLogin($etu->getlogin());
                 if ($conventions[$etu->getLogin()]) {
                     $suivies[$etu->getLogin()] = (new SuiviRepository())->getByIdConvention($conventions[$etu->getLogin()]->getIdConvention());
                 }
-            }
-            foreach ($etudiants as $etu) {
                 $condition = new QueryCondition("login", ComparisonOperator::EQUAL, $etu->getLogin());
                 $liste_accepter = (new OffreRepository())->select($condition);
                 $nbaccepter[$etu->getlogin()] = sizeof($liste_accepter);
@@ -479,7 +546,7 @@ class AdminController
             $param["nbaccepter"] = $nbaccepter;
             $param["nbcandidature"] = $nbcandidature;
             $param["conventions"] = $conventions;
-            $param["suivie"] = $suivies;
+            $param["suivies"] = $suivies;
         }
             return new Response(
                 template: "admin/gestionEtudiants.php",
@@ -501,10 +568,14 @@ class AdminController
     {
         $user = UserConnection::getSignedInUser();
         if (UserConnection::isSignedIn()) {
-            if (($user instanceof Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire) {
-                $etudiantlogin = $_REQUEST["etulogin"];
-                $param["title"] = "Convention de l'étudiant " . $etudiantlogin;
-                $etudiant = (new EtudiantRepository())->getByLogin($etudiantlogin);
+            $etudiantlogin = $_REQUEST["etulogin"];
+            $param["title"] = "Convention de l'étudiant " . $etudiantlogin;
+            $etudiant = (new EtudiantRepository())->getByLogin($etudiantlogin);
+            $param["convention"] = (new ConventionRepository())->getByLogin($etudiantlogin);
+            /**
+             * @var Convention $param["convention"]
+             */
+            if (($user instanceof Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire || ($user instanceof Entreprise && $user->getIdEntreprise() == $param["convention"]->getIdEntreprise())) {
                 $param["etudiant"] = $etudiant;
                 $param["convention"] = (new ConventionRepository())->getByLogin($etudiantlogin);
                 $param["suivi"] = (new SuiviRepository())->getByIdConvention($param["convention"]->getIdConvention());

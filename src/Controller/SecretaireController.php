@@ -223,84 +223,6 @@ class SecretaireController
             ]
         );
     }
-
-    public function conventionValidation(int $id_convention): Response {
-        /**
-         * @var Convention $convention
-         * @var Etudiant $etudiant
-         */
-        $conventions = (new ConventionRepository())->select();
-        $convention = (new ConventionRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0];
-        $etudiant = (new EtudiantRepository)->getByLogin($convention->getLogin());
-        if (!UserConnection::isInstance(new Secretaire) && !UserConnection::isInstance(new Admin)) {
-            throw new ControllerException(
-                message: "Vous n'êtes pas authorisé à accéder à cette page",
-                action: Action::HOME,
-            );
-        }
-        $suivi = (new SuiviRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0] ?? null;
-        // changer le statut de la convention en "validée"
-        $suivi->setModifiable(false);
-        if (UserConnection::isInstance(new Admin)) {
-            $suivi->setValidePedagogiquement(true);
-        }
-        else {
-            $suivi->setValide(true);
-        }
-        (new SuiviRepository())->update($suivi);
-        Mailer::send(new Email(
-            $etudiant->getEmail(),
-            "Votre convention a été validé pédaogiquement",
-            "Votre convention a été validé pédaogiquement"
-        ));
-        return new Response(
-            template: "secretaire/liste-conventions.php",
-            params: [
-                "title" => "Validation de la convention",
-                "suivi" => $suivi,
-                "convention" => $convention,
-                "conventions" => $conventions,
-            ]
-        );
-    }
-
-    public function conventionRefus(int $id_convention): Response {
-        /**
-         * @var Convention $convention
-         * @var Etudiant $etudiant
-         * @var Suivi $suivi
-         */
-        $conventions = (new ConventionRepository())->select();
-        $convention = (new ConventionRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0];
-        $etudiant = (new EtudiantRepository)->getByLogin($convention->getLogin());
-        if (!UserConnection::isInstance(new Secretaire) && !UserConnection::isInstance(new Admin)) {
-            throw new ControllerException(
-                message: "Vous n'êtes pas authorisé à accéder à cette page",
-                action: Action::HOME,
-            );
-        }
-        $suivi = (new SuiviRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0];
-        // changer le statut de la convention en "refusée"
-        $suivi->setModifiable(true);
-        $suivi->setValide(false);
-        $suivi->setValidePedagogiquement(false);
-        $suivi->setRaisonRefus($_REQUEST["raison_refus"]);
-        Mailer::send(new Email(
-            $etudiant->getEmail(),
-            "Votre convention n'est pas valide",
-            "Votre convention n'est pas valide pour les raisons suivantes: $suivi->getRaisonRefus()"
-        ));
-        (new SuiviRepository())->update($suivi);
-        return new Response(
-            template: "secretaire/liste-conventions.php",
-            params: [
-                "title" => "Refus de la convention",
-                "suivi" => $suivi,
-                "convention" => $convention,
-                "conventions" => $conventions,
-            ]
-        );
-    }
     public function tutorielSecretaire() : Response
     {
         return new Response(
@@ -309,5 +231,76 @@ class SecretaireController
                 "title" => "Tutoriel Secrétaire",
             ]
         );
+    }
+
+    /**
+     * @throws ControllerException
+     * @throws Exception
+     */
+    public function validerconvention(){
+        $user = UserConnection::getSignedInUser();
+        if (($user instanceof  Secretaire)) {
+            $convention = (new ConventionRepository())->getById($_REQUEST["idConv"]);
+            /**
+             * @var Convention $convention
+             */
+            if (!$convention->getVerificationSecretaire()) {
+                $convention->setVerificationSecretaire(true);
+                (new ConventionRepository())->update($convention);
+                $etu = (new EtudiantRepository())->getByLogin($convention->getLogin());
+                /**
+                 * @var Etudiant $etu
+                 */
+                $email = $etu->getEmail();
+                $email = new Email($email,"Validation definitive de votre convention par le secretariat","Bonjour, nous vous informons que votre convention a était validé par définitive pas le secretariat ! GG 🎉");
+                (new Mailer())->send($email);
+                FlashMessage::add(
+                    content: "Convention envoyer au secretariat!",
+                    type: FlashType::SUCCESS
+                );
+                return (new AdminController())->gestionEtudiant();
+            }
+            FlashMessage::add(
+                content: "déjà validé !",
+                type: FlashType::ERROR
+            );
+            return (new AdminController())->gestionEtudiant();
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette action",
+            action: Action::HOME,
+        );
+    }
+
+    /**
+     * @throws ControllerException
+     */
+    public function invaliderconvention(){
+        $user = UserConnection::getSignedInUser();
+        if (($user instanceof  Enseignant && $user->getEstAdmin())) {
+            $convention = (new ConventionRepository())->getById($_REQUEST["idConv"]);
+            /**
+             * @var Convention $convention
+             */
+            (new ConventionRepository())->delete([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $convention->getIdConvention())]);
+            $etu = (new EtudiantRepository())->getByLogin($convention->getLogin());
+            /**
+             * @var Etudiant $etu
+             */
+            $email = $etu->getEmail();
+            $raison = $_REQUEST["raisonRefus"];
+            $email = new Email($email,"Refus de votre convention par Mr ".$user->getNom(),"Bonjour, nous vous informons que votre convention a était refusé par Mr ".$user->getNom()." pour les raisons suivantes : <br> <br>".$raison);
+            (new Mailer())->send($email);
+            FlashMessage::add(
+                content: "Convention invalidé!",
+                type: FlashType::SUCCESS
+            );
+            return $this->gestionEtudiant();
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette action",
+            action: Action::HOME,
+        );
+
     }
 }

@@ -51,6 +51,13 @@ enum Action: string
     case ADMIN_SUPRIMERADMIN = "?c=admin&a=supprimerAdmin";
     case ADMIN_ENTREPRISEARCHIVE = "?c=admin&a=entreprisesArchive";
     case ADMIN_SUPRIMERENTREPRISEARCHIVE = "?c=admin&a=suprimerEntrepriseArchive";
+    case ADMIN_VALIDERCONV = "?c=admin&a=validerconvention";
+    case ADMIN_INVALIDERCONV = "?c=admin&a=invaliderconvention";
+    case SECRETAIRE_VALIDERCONV = "?c=secretaire&a=validerconvention";
+    case SECRETAIRE_INVALIDERCONV = "?c=secretaire&a=invaliderconvention";
+    case ENTREPRISE_GESTIONETU = "?c=entreprise&a=gestionEtudiant";
+    case ENTREPRISE_VALIDERCONV = "?c=entreprise&a=validerconvention";
+    case ENTREPRISE_INVALIDERCONV = "?c=entreprise&a=invaliderconvention";
     case ABOUT = "?a=about";
     case IMPORT_CSV_FORM = "?c=main&a=importCsvForm";
     case IMPORT_CSV = "?c=main&a=importCsv";

@@ -575,6 +575,27 @@ public static function getOffersArchive() {
         }
     }
 
+    function getEtudiantsByOffreId($id_offre) {
+        try {
+            $query = "SELECT etudiant.*
+                      FROM stg_etudiant etudiant
+                      JOIN stg_postuler postuler ON etudiant.login = postuler.login
+                      WHERE postuler.id_offre = :id_offre";
+
+            $pdo = DatabaseConnection::getPdo();
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':id_offre', $id_offre, PDO::PARAM_INT);
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            var_dump($result);
+            die();
+            return $result;
+        } catch (PDOException $e) {
+            echo "Erreur : " . $e->getMessage();
+            return false;
+        }
+    }
+
     public static function deleteOfferFromArchive($id_offre) {
         try {
             $query = "DELETE FROM stg_offre_archive WHERE id_offre = :id_offre";

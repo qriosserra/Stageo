@@ -302,19 +302,19 @@ CREATE TABLE stg_convention_archive(
    tuteur_telephone VARCHAR(256),
    tuteur_fonction VARCHAR(256),
    id_unite_gratification INT,
-   login VARCHAR(256),
+   login_enseignant VARCHAR(256),
    id_entreprise INT,
    id_distribution_commune INT,
-   login_1 VARCHAR(256),
+   login VARCHAR(256),   
    verification_admin BOOL,
    verification_secretaire BOOL,
    verification_entreprise BOOL,
    PRIMARY KEY(id_convention),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
-   FOREIGN KEY(login) REFERENCES stg_enseignant(login),
+   FOREIGN KEY(login_enseignant) REFERENCES stg_enseignant(login),
    FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise),
    FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune),
-   FOREIGN KEY(login_1) REFERENCES stg_etudiant(login)
+   FOREIGN KEY(login) REFERENCES stg_etudiant(login)
 );
 
 CREATE TABLE stg_offre_archive(

@@ -25,10 +25,15 @@ use Stageo\Lib\UserConnection;
 use Stageo\Lib\Database\QueryCondition;
 use Stageo\Model\Object\Admin;
 use Stageo\Model\Object\Categorie;
+use Stageo\Model\Object\Convention;
 use Stageo\Model\Object\DeCategorie;
+use Stageo\Model\Object\Enseignant;
 use Stageo\Model\Object\Entreprise;
+use Stageo\Model\Object\Etudiant;
 use Stageo\Model\Object\Offre;
+use Stageo\Model\Object\Secretaire;
 use Stageo\Model\Repository\CategorieRepository;
+use Stageo\Model\Repository\ConventionRepository;
 use Stageo\Model\Repository\DeCategorieRepository;
 use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
@@ -36,6 +41,7 @@ use Stageo\Model\Repository\EtudiantRepository;
 use Stageo\Model\Repository\OffreRepository;
 use Stageo\Model\Repository\PostulerRepository;
 use Stageo\Model\Repository\StatutJuridiqueRepository;
+use Stageo\Model\Repository\SuiviRepository;
 use Stageo\Model\Repository\TailleEntrepriseRepository;
 use Stageo\Model\Repository\TypeStructureRepository;
 use Stageo\Model\Repository\UniteGratificationRepository;
@@ -990,6 +996,138 @@ class EntrepriseController
         );
     }
 
+    public function gestionEtudiant(): Response
+    {
+        /**
+         * @var Etudiant $etu
+         * @var Convention $convention[]
+         */
+        $user = UserConnection::getSignedInUser();
+        if (($user instanceof Entreprise)){
+            $offres = (new EntrepriseRepository())->getOffreEntreprise($user->getIdEntreprise())["offre"];
+            /**
+            * @var Offre $ofr
+             * @var Etudiant[] $etudiants
+             */
+            $etudiants = [];
+            foreach ($offres as $ofr){
+                $offre = (new OffreRepository())->getById($ofr);
+                /**
+                 * @var Offre $offre
+                */
+                if ($offre->getLogin()!=null) {
+                    $etudiants[] = (new EtudiantRepository())->getByLogin($offre->getLogin());
+                }
+            }
+            $param["etudiants"] = $etudiants;
+            if ($etudiants != null) {
+                foreach ($etudiants as $etu) {
+                    $nbcandidature[$etu->getlogin()] = (new EtudiantRepository())->getnbcandatures($etu->getlogin());
+                    if ($nbcandidature[$etu->getlogin()] === null) {
+                        $nbcandidature[$etu->getlogin()] = 0;
+                    }
+                    $conventions[$etu->getlogin()] = (new ConventionRepository())->getByLogin($etu->getlogin());
+                    if ($conventions[$etu->getLogin()]) {
+                        $suivies[$etu->getLogin()] = (new SuiviRepository())->getByIdConvention($conventions[$etu->getLogin()]->getIdConvention());
+                    }
+                    $condition = new QueryCondition("login", ComparisonOperator::EQUAL, $etu->getLogin());
+                    $liste_accepter = (new OffreRepository())->select($condition);
+                    $nbaccepter[$etu->getlogin()] = sizeof($liste_accepter);
+                    if ($nbaccepter[$etu->getlogin()] === null) {
+                        $nbaccepter[$etu->getlogin()] = 0;
+                    }
+                }
+                $param["nbaccepter"] = $nbaccepter;
+                $param["nbcandidature"] = $nbcandidature;
+                $param["conventions"] = $conventions;
+                $param["suivies"] = $suivies;
+            }
+            return new Response(
+                template: "admin/gestionEtudiants.php",
+                params: $param
+            );
+        }
+        return new Response(
+            template: "admin/sign-in.php",
+            params: [
+                "title" => "Se connecter",
+                "nav" => false,
+                "footer" => false,
+                "token" => Token::generateToken(Action::ADMIN_SIGN_IN_FORM)
+            ]
+        );
+    }
+
+    public function validerconvention(){
+        $user = UserConnection::getSignedInUser();
+        $convention = (new ConventionRepository())->getById($_REQUEST["idConv"]);
+        /**
+         * @var Convention $convention
+         */
+        if (($user instanceof  Entreprise && $user->getIdEntreprise()== $convention->getIdEntreprise())) {
+            if (!$convention->getVerificationEntreprise()) {
+                $convention->setVerificationEntreprise(true);
+                (new ConventionRepository())->update($convention);
+                $etu = (new EtudiantRepository())->getByLogin($convention->getLogin());
+                /**
+                 * @var Etudiant $etu
+                 */
+                $email = $etu->getEmail();
+                $email = new Email($email,"Validation de l'entreprise de votre convention","Bonjour, nous vous informons que votre convention a était validé par l'entreprise");
+                (new Mailer())->send($email);
+                FlashMessage::add(
+                    content: "Convention envoyer au secretariat!",
+                    type: FlashType::SUCCESS
+                );
+                return $this->gestionEtudiant();
+            }
+            FlashMessage::add(
+                content: "déjà validé !",
+                type: FlashType::ERROR
+            );
+            return $this->gestionEtudiant();
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette action",
+            action: Action::HOME,
+        );
+    }
+
+    /**
+     * @throws ControllerException
+     */
+    public function invaliderconvention(){
+        $user = UserConnection::getSignedInUser();
+        $convention = (new ConventionRepository())->getById($_REQUEST["idConv"]);
+        /**
+         * @var Convention $convention
+         */
+        if (($user instanceof  Entreprise && $user->getIdEntreprise()== $convention->getIdEntreprise())) {
+            /**
+             * @var Convention $convention
+             */
+            (new ConventionRepository())->delete([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $convention->getIdConvention())]);
+            $etu = (new EtudiantRepository())->getByLogin($convention->getLogin());
+            /**
+             * @var Etudiant $etu
+             */
+            $email = $etu->getEmail();
+            $raison = $_REQUEST["raisonRefus"];
+            $email = new Email($email,"Refus de votre convention par l'entreprise","Bonjour, nous vous informons que votre convention a était refusé par l'entreprise pour les raisons suivantes : <br> <br>".$raison);
+            (new Mailer())->send($email);
+            FlashMessage::add(
+                content: "Convention invalidé!",
+                type: FlashType::SUCCESS
+            );
+            return $this->gestionEtudiant();
+        }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette action",
+            action: Action::HOME,
+        );
+
+    }
+
     /**
      * Supprime une offre.
      *
@@ -1007,7 +1145,7 @@ class EntrepriseController
         $offre = (new OffreRepository())->getById($id);
         $user = UserConnection::getSignedInUser();
 
-        /* Vérifier si l'utilisateur est connecté, est une instance de Entreprise ou de Admin
+        /* Vérifier si l'utilisateur est connecté, est une instance d'Entreprise ou d'Admin
         et s'il appartient à la même entreprise que l'offre si c'est une Entreprise*/
         if($user and (UserConnection::isInstance(new Admin())) or (UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise())){
             $condition = new QueryCondition("id_offre",ComparisonOperator::EQUAL,$id);

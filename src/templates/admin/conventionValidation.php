@@ -2,12 +2,19 @@
 
 /**
  * @var \Stageo\Model\Object\Convention $convention
- * @var \Stageo\Model\Object\Entreprise $entreprise
+ * @var Entreprise $entreprise
  * @var \Stageo\Model\Object\Suivi $suivi
  * @var \Stageo\Model\Object\Etudiant $etudiant
  * @var string $unite_gratification
  * @var string $title
  */
+
+use Stageo\Lib\enums\Action;
+use Stageo\Lib\UserConnection;
+use Stageo\Model\Object\Admin;
+use Stageo\Model\Object\Enseignant;
+use Stageo\Model\Object\Entreprise;
+use Stageo\Model\Object\Secretaire;
 
 if ($convention->getTypeConvention() == 1) {
     $type = "Stage";
@@ -79,28 +86,28 @@ if ($convention->getTypeConvention() == 1) {
             
             <div>
                 <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="first-name">Prénom</label>
-                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="first-name"><?= $etudiant->getPrenom() ?></p>
+                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="first-name"><?= $convention->getTuteurPrenom() ?></p>
             </div>
             <div>
                 <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="last-name">Nom</label>
-                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="last-name"><?= $etudiant->getNom() ?></p>
+                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="last-name"><?= $convention->getTuteurNom() ?></p>
             </div>
         </div>
         <div class="grid grid-cols-2 gap-4">
             
             <div>
                 <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" >Téléphone</label>
-                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="first-name"><?= $etudiant->getPrenom() ?></p>
+                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="first-name"><?= $convention->getTuteurTelephone() ?></p>
             </div>
             <div>
                 <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" >Email</label>
-                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="last-name"><?= $etudiant->getNom() ?></p>
+                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="last-name"><?= $convention->getTuteurEmail() ?></p>
             </div>
         </div>
         <div class="grid grid-cols-2 gap-1">
         <div>
                 <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" >Fonction</label>
-                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="last-name"><?= $etudiant->getNom() ?></p>
+                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="last-name"><?= $convention->getTuteurFonction() ?></p>
             </div>
         </div>
         <div class=" ">
@@ -115,11 +122,34 @@ if ($convention->getTypeConvention() == 1) {
         </div>
         <div class="flex flex-col justify-center items-center">
             <div class="m-3">
-                <button class="rounded-lg px-4 py-2 bg-green-700 text-green-100 hover:bg-green-800 duration-300">Valider</button>
+                <?php $user = UserConnection::getSignedInUser()?>
+                <?php if ( ($user instanceof Enseignant && $user->getEstAdmin()) && $convention->getVerificationEntreprise() && !$convention->getVerificationSecretaire() && !$suivi->getModifiable()):?>
+                    <button class="rounded-lg px-4 py-2 bg-green-700 text-green-100 hover:bg-green-800 duration-300">
+                        <a href="<?= Action::ADMIN_VALIDERCONV->value."&idConv=".$convention->getIdConvention()?>">Valider et envoyer au secretaria</a>
+                    </button>
+                    <form method="post" action="<?= Action::ADMIN_INVALIDERCONV->value."&idConv=".$convention->getIdConvention() ?>">
+                        <input name="raisonRefus" type="text" class="p-2 rounded-md bg-slate-100 m-1" placeholder="Raison du refus">
+                        <button type="submit" class="rounded-lg px-4 py-2 bg-red-600 text-red-100 hover:bg-red-700 duration-300">Refuser</button>
+                    </form>
+                <?php elseif($user instanceof Secretaire && $convention->getVerificationEntreprise() && $convention->getVerificationAdmin() && !$suivi->getModifiable()):?>
+                    <button class="rounded-lg px-4 py-2 bg-green-700 text-green-100 hover:bg-green-800 duration-300">
+                        <a href="<?= Action::SECRETAIRE_VALIDERCONV->value."&idConv=".$convention->getIdConvention()?>">Valider définitivement la convention</a>
+                    </button>
+                    <form method="post" action="<?= Action::SECRETAIRE_INVALIDERCONV->value."&idConv=".$convention->getIdConvention() ?>">
+                        <input name="raisonRefus" type="text" class="p-2 rounded-md bg-slate-100 m-1" placeholder="Raison du refus">
+                        <button type="submit" class="rounded-lg px-4 py-2 bg-red-600 text-red-100 hover:bg-red-700 duration-300">Refuser</button>
+                    </form>
+                <?php elseif($user instanceof Entreprise && $user->getIdEntreprise()==$convention->getIdEntreprise() && !$convention->getVerificationAdmin() && !$convention->getVerificationSecretaire() && !$suivi->getModifiable()):?>
+                    <button class="rounded-lg px-4 py-2 bg-green-700 text-green-100 hover:bg-green-800 duration-300">
+                        <a href="<?= Action::ENTREPRISE_VALIDERCONV->value."&idConv=".$convention->getIdConvention()?>">Valider définitivement la convention</a>
+                    </button>
+                    <form method="post" action="<?= Action::ENTREPRISE_INVALIDERCONV->value."&idConv=".$convention->getIdConvention() ?>">
+                        <input name="raisonRefus" type="text" class="p-2 rounded-md bg-slate-100 m-1" placeholder="Raison du refus">
+                        <button type="submit" class="rounded-lg px-4 py-2 bg-red-600 text-red-100 hover:bg-red-700 duration-300">Refuser</button>
+                    </form>
+                <?php endif?>
 
             </div>
-                <button class="rounded-lg px-4 py-2 bg-red-600 text-red-100 hover:bg-red-700 duration-300">Refuser</button>
-                <input type="text" class="p-2 rounded-md bg-slate-100 m-1" placeholder="Raison du refus">
 
         </div>
     </div>
