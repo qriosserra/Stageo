@@ -37,7 +37,7 @@
     </div>
 
     <div id="connexion-etudiant-enseignant" class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center">
-        <h4 class="text-3xl font-bold text-gray-700 underline mt-[4rem]">1) Connexion Étudiant ou Enseignant</h4>
+        <h4 class="text-3xl font-bold text-gray-700 underline mt-[4rem]">1) Connexion Étudiant ou Enseignant ou Secretariat</h4>
     </div>
     <div class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center mb-8">
         <div class="md:w-1/2 md:mr-8">
