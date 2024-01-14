@@ -3,16 +3,26 @@
 ?>
 
 <main class="container mx-auto p-8">
-    <div class="bg-gray-100 p-8 rounded-md flex flex-col items-center mb-8">
+    <!-- Table of Contents -->
+    <div class="bg-gray-100 p-8 rounded-md mb-8 mt-4">
+        <h6 class="text-xl font-bold mb-2">Sommaire</h6>
+        <ul>
+            <li class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-1/4  sm:invisible"><a href="#connexion-etudiant-enseignant">Connexion Étudiant ou Enseignant</a></li>
+            <li class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-1/4  sm:invisible"><a href="#connexion-entreprise">Connexion Entreprise</a></li>
+            <li class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 w-1/4  sm:invisible"><a href="#inscription-entreprise">Inscription Entreprise</a></li>
+        </ul>
+    </div>
+
+    <div  class="bg-gray-100 p-8 rounded-md flex flex-col items-center mb-8">
         <div class="md:w-1/2 md:mr-8 text-center">
-            <section class="mb-8 mt-4">
+            <section class="mb-8">
                 <h10 class="text-2xl font-bold mb-4">Tutoriel de connexion</h10>
             </section>
             <p class="text-lg  text-gray-700 mb-4">Vous êtes un étudiant, un enseignant ou une entreprise et vous ne savez pas comment vous connecter à votre compte ? Suivez ce tutoriel.</p>
         </div>
     </div>
 
-    <div class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center">
+    <div id="connexion-etudiant-enseignant" class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center">
     <h4 class="text-2xl font-bold text-gray-700">Connexion Étudiant ou Enseignant</h4>
     </div>
     <div class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center mb-8">
@@ -42,7 +52,7 @@
             <p class="text-gray-800 font-bold">Si vous avez perdu vos identifiants LDAP, veuillez contacter le secrétariat de votre établissement.</p>
         </div>
     </div>
-    <div class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center">
+    <div  id="connexion-entreprise"  class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center">
     <h4 class="text-2xl font-bold text-gray-700">Connexion Entreprise</h4>
     </div>
     <div class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center mb-8">
@@ -74,7 +84,7 @@
             <p class="text-gray-800 font-bold">Si vous n'avez pas encore de compte entreprise, suivez les étapes suivantes :</p>
         </div>
     </div>
-    <div class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center">
+    <div id="inscription-entreprise" class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center">
     <h4 class="text-2xl font-bold text-gray-700">Inscription Entreprise</h4>
     </div>
     <div class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center mb-8">
