@@ -42,32 +42,29 @@ use Stageo\Model\Object\Etudiant;
                   $commune = $communes[$index];
               ?>
               <li>
-                <div class="bg-card text-card-foreground flex items-center gap-4 rounded-lg border bg-slate-100 shadow-lg p-4">
-                    <label>
-                        <input type="checkbox" name="id_conventions[]" value="<?=$convention->getIdConvention()?>">
-                    </label>
-                    <div class="flex flex-row flex-1 justify-between items-center p-4 gap-4">
-                        <div class="p-6">
-                            <h3 class="font-bold"><?="{$etudiant->getPrenom()} {$etudiant->getNom()}"?></h3>
-                            <p><?=$convention->getThematique()?></p>
-                            <p><?=$convention->getNumeroVoie()?></p>
-                            <p class="font-bold"><?=$entreprise->getRaisonSociale()?></p>
-                            <p class="italic"><?="{$convention->getNumeroVoie()}, {$commune->getCommune()} ({$commune->getCodePostal()})"?></p>
-                        </div>
-                        <div>
-                            <p class="font-bold">Tâches:</p>
-                            <p><?=$convention->getTaches()?></p>
-                        </div>
-                        <div>
-                            <p class="font-bold">Commentaires:</p>
-                            <p><?=$convention->getCommentaires()?></p>
-                        </div>
-                        <div>
-                            <p class="font-bold">Détails:</p>
-                            <p><?=$convention->getDetails()?></p>
-                        </div>
-                    </div>
-                </div>
+                  <label for="<?=$convention->getIdConvention()?>" class="bg-card text-card-foreground flex items-center gap-4 rounded-lg border bg-slate-100 shadow-lg p-4">
+                        <input type="checkbox" name="id_conventions[]" value="<?=$convention->getIdConvention()?>" id="<?=$convention->getIdConvention()?>">
+                      <div class="flex flex-row flex-1 justify-between items-center p-4 gap-4">
+                          <div class="p-6 w-[67rem]">
+                              <h3 class="font-bold"><?="{$etudiant->getPrenom()} {$etudiant->getNom()}"?></h3>
+                              <p><?=$convention->getThematique()?></p>
+                              <p class="font-bold"><?=$entreprise->getRaisonSociale()?></p>
+                              <p class="italic"><?="{$convention->getNumeroVoie()}, {$commune->getCommune()} ({$commune->getCodePostal()})"?></p>
+                          </div>
+                          <div>
+                              <p class="font-bold">Tâches:</p>
+                              <p><?=$convention->getTaches()?></p>
+                          </div>
+                          <div>
+                              <p class="font-bold">Commentaires:</p>
+                              <p><?=$convention->getCommentaires()?></p>
+                          </div>
+                          <div>
+                              <p class="font-bold">Détails:</p>
+                              <p><?=$convention->getDetails()?></p>
+                          </div>
+                      </div>
+                  </label>
               </li>
           <?php endforeach; ?>
         </ul>
