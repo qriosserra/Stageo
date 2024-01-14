@@ -300,4 +300,13 @@ class SecretaireController
             ]
         );
     }
+    public function tutorielSecretaire() : Response
+    {
+        return new Response(
+            template: "secretaire/tutoriel.php",
+            params: [
+                "title" => "Tutoriel Secrétaire",
+            ]
+        );
+    }
 }

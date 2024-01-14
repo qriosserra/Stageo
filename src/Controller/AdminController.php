@@ -604,6 +604,15 @@ class AdminController
             action: Action::HOME,
         );
     }
+    public function tutorielSecretaire() : Response
+    {
+        return new Response(
+            template: "secretaire/tutoriel.php",
+            params: [
+                "title" => "Tutoriel Secrétaire",
+            ]
+        );
+    }
 }
 
 

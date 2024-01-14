@@ -115,10 +115,10 @@ use Stageo\Model\Object\Etudiant;
                             <span>Supprimer des Admin</span>
                         </a>
                         <a href="<?= Action::ADMIN_ENTREPRISEARCHIVE->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
-                            <span>Entreprises archivés</span>
+                            <span>Entreprises archivées</span>
                         </a>
                         <a href="<?= Action::ADMIN_OFFRESARCHIVE->value ?>" class="flex items-center text-gray-300 hover:bg-gray-700 px-4 py-2 mt-5">
-                            <span>Offres archivés</span>
+                            <span>Offres archivées</span>
                         </a>
                     </nav>
                 </div>
