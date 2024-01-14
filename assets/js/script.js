@@ -43,6 +43,8 @@ document.addEventListener('DOMContentLoaded', function () {
     function setupDropdown(dropdownButtonId, dropdownContentId) {
         const dropdownButton = document.getElementById(dropdownButtonId);
         const dropdownContent = document.getElementById(dropdownContentId);
+        console.log(dropdownButton)
+        console.log(dropdownContent)
 
         dropdownButton.addEventListener('click', function (e) {
             if (window.innerWidth < 768) {
@@ -56,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (window.innerWidth >= 768) {
                 dropdownContent.classList.add('active');
             }
+            console.log("trgqe")
         });
 
         dropdownButton.addEventListener('mouseleave', function () {
@@ -80,7 +83,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     setupDropdown('dropdownOffres', 'dropdownContentOffres');
     setupDropdown('dropdownButtonEntreprise', 'dropdownContentEntreprise');
+    setupDropdown('dropdownButtonContact', 'dropdownContentContact');
     setupDropdown('dropdownButtonMission', 'dropdownContentMission');
+    setupDropdown('dropdownButtonListEntreprise', 'dropdownContentListEntreprise');
 });
 const toggleButton = document.querySelector('[data-collapse-toggle="navbar-use"]');
 const navbar = document.getElementById('navbar-use');
