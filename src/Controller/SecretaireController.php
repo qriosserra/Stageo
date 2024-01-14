@@ -10,6 +10,8 @@ use Stageo\Lib\Database\QueryCondition;
 use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
+use Stageo\Lib\Mailer\Email;
+use Stageo\Lib\Mailer\Mailer;
 use Stageo\Lib\Response;
 use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
@@ -222,8 +224,13 @@ class SecretaireController
     }
 
     public function conventionValidation(int $id_convention): Response {
+        /**
+         * @var Convention $convention
+         * @var Etudiant $etudiant
+         */
         $conventions = (new ConventionRepository())->select();
-        $convention = (new ConventionRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0] ?? null;
+        $convention = (new ConventionRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0];
+        $etudiant = (new EtudiantRepository)->getByLogin($convention->getLogin());
         if (!UserConnection::isInstance(new Secretaire) && !UserConnection::isInstance(new Admin)) {
             throw new ControllerException(
                 message: "Vous n'êtes pas authorisé à accéder à cette page",
@@ -240,6 +247,11 @@ class SecretaireController
             $suivi->setValide(true);
         }
         (new SuiviRepository())->update($suivi);
+        Mailer::send(new Email(
+            $etudiant->getEmail(),
+            "Votre convention a été validé pédaogiquement",
+            "Votre convention a été validé pédaogiquement"
+        ));
         return new Response(
             template: "secretaire/liste-conventions.php",
             params: [
@@ -252,20 +264,31 @@ class SecretaireController
     }
 
     public function conventionRefus(int $id_convention): Response {
+        /**
+         * @var Convention $convention
+         * @var Etudiant $etudiant
+         * @var Suivi $suivi
+         */
         $conventions = (new ConventionRepository())->select();
-        $convention = (new ConventionRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0] ?? null;
+        $convention = (new ConventionRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0];
+        $etudiant = (new EtudiantRepository)->getByLogin($convention->getLogin());
         if (!UserConnection::isInstance(new Secretaire) && !UserConnection::isInstance(new Admin)) {
             throw new ControllerException(
                 message: "Vous n'êtes pas authorisé à accéder à cette page",
                 action: Action::HOME,
             );
         }
-        $suivi = (new SuiviRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0] ?? null;
+        $suivi = (new SuiviRepository())->select([new QueryCondition("id_convention", ComparisonOperator::EQUAL, $id_convention)])[0];
         // changer le statut de la convention en "refusée"
         $suivi->setModifiable(true);
         $suivi->setValide(false);
         $suivi->setValidePedagogiquement(false);
         $suivi->setRaisonRefus($_REQUEST["raison_refus"]);
+        Mailer::send(new Email(
+            $etudiant->getEmail(),
+            "Votre convention n'est pas valide",
+            "Votre convention n'est pas valide pour les raisons suivantes: $suivi->getRaisonRefus()"
+        ));
         (new SuiviRepository())->update($suivi);
         return new Response(
             template: "secretaire/liste-conventions.php",

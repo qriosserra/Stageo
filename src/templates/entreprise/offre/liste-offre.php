@@ -158,8 +158,8 @@ include __DIR__ . "/../../macros/newOffre.php";
     <div class="w-full flex justify-center">
         <a href="<?= Action::ENTREPRISE_CREATION_OFFRE_FORM->value ?>">
         <button
-                class="text-3xl rounded-lg px-4 py-1 border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-green-100 duration-300">
-            +
+                class="text-xl rounded-lg px-8 py-2 border-2 border-green-500 text-green-500 hover:bg-green-500 hover:text-green-100 duration-300">
+            Ajouter une Offre
         </button>
         </a>
     </div>
