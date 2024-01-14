@@ -665,9 +665,9 @@ class MainController
                             </div>
                         </div>
                         <div style="display: flex; gap: 20px;  flex-wrap: wrap;  margin: 2%;">
-                            <img src="assets/img/logo.txt" style="max-width: 200px; padding-right: 1%; border-right: 1px solid grey;">
-                            <img src="assets/img/um.txt" style="max-width: 200px; padding-right: 1%; border-right: 1px solid grey;">
-                            <img src="assets/img/iut_montpellier_sete.txt" style="max-width: 200px;">
+                            <img src="https://media.discordapp.net/attachments/1130996891409207379/1196206354776477756/logo.png?ex=65b6c8fb&is=65a453fb&hm=6c88ace93cb3a47abbe5977ff8f635b7536a709a874fef49ff129786cc39bd5c&=&format=webp&quality=lossless" style="max-width: 200px; padding-right: 1%; border-right: 1px solid grey;">
+                            <img src="https://media.discordapp.net/attachments/1130996891409207379/1196206354260570272/um.png?ex=65b6c8fb&is=65a453fb&hm=472c4236a255cb014683b1632e014506ad6d761eb24771b35349ee5ef99e7c04&=&format=webp&quality=lossless" style="max-width: 200px; padding-right: 1%; border-right: 1px solid grey;">
+                            <img src="https://media.discordapp.net/attachments/1130996891409207379/1196206354537381888/iut_montpellier_sete.png?ex=65b6c8fb&is=65a453fb&hm=00670b0cb9e7cafd1902089232e43dcd1a50b441d0b13ca0dd6a67cfe9bc0d8e&=&format=webp&quality=lossless" style="max-width: 200px;">
                         </div>        
                     </body> 
                 </html>';

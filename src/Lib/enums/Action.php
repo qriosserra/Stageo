@@ -102,5 +102,5 @@ enum Action: string
 
     case TUTORIEL_ADMIN = "?c=admin&a=tutorielSecretaire";
 
-    case ADMIN_STATS= "?c=admin&a=statsAdmin";
+    case ADMIN_STATS= "?c=admin&a=listeStat&XDEBUG_SESSION_START=";
 }

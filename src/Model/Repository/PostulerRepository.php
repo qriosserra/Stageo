@@ -3,6 +3,7 @@
 namespace Stageo\Model\Repository;
 
 use Exception;
+use PDO;
 use Stageo\Lib\Database\ComparisonOperator;
 use Stageo\Lib\Database\LogicalOperator;
 use Stageo\Lib\Database\QueryCondition;
@@ -33,6 +34,15 @@ class PostulerRepository extends CoreRepository
             new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id)
         ];
         return $this->select($conditions)[0] ?? null;
+    }
+
+    public function getNombreEtudiantPostuler(): array {
+        $query = "SELECT count(distinct login) FROM stg_postuler;";
+        $pdo = DatabaseConnection::getPdo();
+        $stmt = $pdo->prepare($query);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result[0];
     }
 
 }

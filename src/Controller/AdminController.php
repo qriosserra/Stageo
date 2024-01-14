@@ -35,6 +35,7 @@ use Stageo\Model\Repository\EnseignantRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
 use Stageo\Model\Repository\EtudiantRepository;
 use Stageo\Model\Repository\OffreRepository;
+use Stageo\Model\Repository\PostulerRepository;
 use Stageo\Model\Repository\SecretaireRepository;
 use Stageo\Model\Repository\SuiviRepository;
 use Stageo\Model\Repository\UniteGratificationRepository;
@@ -225,6 +226,7 @@ class AdminController
             action: Action::HOME,
         );
     }
+
     public function validerEntreprise(){
         $user = UserConnection::getSignedInUser();
         if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
@@ -263,6 +265,37 @@ class AdminController
                 action: Action::ADMIN_LISTEENTREPRISE
             );
         }
+        throw new ControllerException(
+            message: "Vous n'êtes pas authorisé à accéder à cette page",
+            action: Action::HOME,
+        );
+    }
+    public function listeStat() : Response{
+
+        $user = UserConnection::getSignedInUser();
+        if (($user instanceof  Enseignant && $user->getEstAdmin()) || $user instanceof Secretaire ) {
+            $etudiant  =  (new EtudiantRepository())->select();
+            $Offre = (new OffreRepository())->select();
+            $OffreValider = (new OffreRepository())->getAllValideOffreId();
+            $Entreprise = (new EntrepriseRepository())->select();
+            $Postulant = (new PostulerRepository())->getNombreEtudiantPostuler();
+            $EtudiantConvention = (new ConventionRepository())->select();
+            $toto = $Postulant;
+            return new Response(
+                template: "admin/statsAdmin.php",
+                params: [
+                    "title" => "Statistique",
+                    "nbEtudiant" => count($etudiant),
+                    "nbOffre" => count($Offre),
+                    "nbOffreValider" => count($OffreValider),
+                    "nbOffreNonValider" => (count($Offre) - count($OffreValider)),
+                    "nbEntreprise" => count($Entreprise),
+                    "nbEtudiantPostulant" => implode(", ", $Postulant),
+                    "NbEtudiantConvention" => count($EtudiantConvention)
+                ]
+            );
+        }
+
         throw new ControllerException(
             message: "Vous n'êtes pas authorisé à accéder à cette page",
             action: Action::HOME,
