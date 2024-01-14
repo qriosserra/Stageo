@@ -13,6 +13,7 @@
         </ul>
     </div>
 
+
     <div  class="bg-gray-100 p-8 rounded-md flex flex-col items-center mb-8">
         <div class="md:w-1/2 md:mr-8 text-center">
             <section class="mb-8">
