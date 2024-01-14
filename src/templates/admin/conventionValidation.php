@@ -21,7 +21,7 @@ if ($convention->getTypeConvention() == 1) {
     </h1>
 </div>
 <main class="flex w-full   my-20 justify-center items-center">
-    <div class="w-[40rem] space-y-6 rounded-lg p-6 shadow-lg bg-white">
+    <div class="w-[40rem] space-y-6 rounded-lg p-8 shadow-lg bg-white mr-10 ">
         <div style="background-color: #dedede;" class="rounded-md  p-2">
             <h1 class="text-center text-xl font-bold">Informations De la Convention</h1>
         </div>
@@ -74,8 +74,37 @@ if ($convention->getTypeConvention() == 1) {
 
 
         </div>
+        <h6 class="text-center">Informations Tuteurs</h6>
+        <div class="grid grid-cols-2 gap-4">
+            
+            <div>
+                <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="first-name">Prénom</label>
+                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="first-name"><?= $etudiant->getPrenom() ?></p>
+            </div>
+            <div>
+                <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="last-name">Nom</label>
+                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="last-name"><?= $etudiant->getNom() ?></p>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+            
+            <div>
+                <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" >Téléphone</label>
+                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="first-name"><?= $etudiant->getPrenom() ?></p>
+            </div>
+            <div>
+                <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" >Email</label>
+                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="last-name"><?= $etudiant->getNom() ?></p>
+            </div>
+        </div>
+        <div class="grid grid-cols-2 gap-1">
+        <div>
+                <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" >Fonction</label>
+                <p class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md bg-gray-100 border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="last-name"><?= $etudiant->getNom() ?></p>
+            </div>
+        </div>
         <div class=" ">
-            <label>Dates</label>
+            <label>Dates du contrat</label>
             <div class="flex items-center space-x-2 rounded-md">
                 <div class="border border-gray-300 bg-gray-100 rounded-md p-2"><?= $convention->getDateDebut() ?></div>
                 <?php if ($convention->getDateFin()) : ?>
