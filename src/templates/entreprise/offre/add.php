@@ -24,8 +24,9 @@ include __DIR__ . "/../../macros/offre.php";
     display: flex;
     flex-direction: column  ;
 }
-
-
+.tag_container{
+    max-width: 60vw;
+}
 </style>
 <main class="h-screen flex flex-col items-center justify-center">
     <?= button("Accueil", "fi-rr-home", Action::HOME, "!absolute !pl-2 top-8 left-8") ?>
@@ -94,10 +95,10 @@ include __DIR__ . "/../../macros/offre.php";
             </div>
         </div>
 
-        <div class="max-w-md mx-auto grid grid-cols-2 w-[25rem]">
+        <div class="max-w-md grid grid-cols-1 md:grid-cols-2">
 
             <!-- Dropdown + bouton "Add" pour les tags -->
-            <div class="relative flex flex-col col-span-1 items-center mb-4">
+            <div class="relative flex flex-col col-span-1 items-center mb-4 justify-self-start w-[13rem]">
                 <?= dropdown("tag", "Tag", null, null, 2, $liste_tag) ?>
                 <button type="button" id="addTagButton" class="mt-5 h-10 px-4 py-2 text-sm font-medium leading-5 text-center text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-800">
                     Add
@@ -105,12 +106,11 @@ include __DIR__ . "/../../macros/offre.php";
             </div>
 
             <!-- Les tags seront ajoutés ici à droite -->
-            <div class="mt-4 col-span-1">
+            <div class="tag_container mt-4 col-span-1 w-[25rem]">
                 <div id="tagContainer" class="flex flex-wrap">
                     <!-- Contenu des tags -->
                 </div>
             </div>
-
 
         </div>
 
