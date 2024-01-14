@@ -94,25 +94,31 @@ include __DIR__ . "/../../macros/offre.php";
             </div>
         </div>
 
-        <div class="max-w-md mx-auto">
+        <div class="max-w-md mx-auto grid grid-cols-2">
 
-            <!-- Dropdown + button add pour les tags -->
-            <div class="relative rounded-md shadow-sm flex">
+            <!-- Dropdown + bouton "Add" pour les tags -->
+            <div class="relative flex col-span-1 items-center mb-4">
                 <?= dropdown("tag", "Tag", null, null, 2, $liste_tag) ?>
-                <button type="button" id="addTagButton" class="ml-2 px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-800">
+                <button type="button" id="addTagButton" class="mt-5 h-10 px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-800">
                     Add
                 </button>
             </div>
 
-            <!-- les tags seront ajouter ici -->
-            <div class="mt-4">
+            <!-- Les tags seront ajoutés ici à droite -->
+            <div class="mt-4 col-span-1">
                 <div id="tagContainer" class="flex flex-wrap">
+                    <!-- Contenu des tags -->
                 </div>
             </div>
+
+
         </div>
 
-        <?=submit($offre->getIdOffre() !== null ? "Modifier" : "Publier")?>*
-        <div class="mb-10px"></div>
+        <!-- Nouvelle div pour le bouton "Submit" -->
+        <div class="col-span-2 mb-10">
+            <?= submit($offre->getIdOffre() !== null ? "Modifier" : "Publier") ?>
+        </div>
+
         <?=token($token)?>
     </form>
     <script>
