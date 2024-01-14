@@ -43,4 +43,35 @@
         <div class="md:w-1/2 flex justify-center items-center">
             <img src="assets/img/bouton_recherche.png" alt="Bouton de lancement de la recherche">
         </div>
+    </div>
+    <div class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center mb-8">
+        <div class="md:w-1/2 md:mr-8">
+            <p class="text-lg  text-gray-700 text-left">Vous pouvez également voir un bouton <span style="font-weight: bold; color: #000000;">"Entreprises"</span> vous menant à une page vous permettant de rechercher des Entreprises proposant des offres.</p>
+        </div>
+        <div class="md:w-1/2 flex justify-center items-center">
+            <img src="assets/img/indication_entreprise.png" alt="Bouton menant à la recherche d'entreprises">
+        </div>
+    </div>
+    <div class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center mb-8">
+        <div class="md:w-1/2 md:mr-8">
+            <p class="text-lg  text-gray-700 text-left">Une fois que vous avez trouvé une offre sur laquelle vous souhaitez postuler, cliquez sur le bouton<span style="font-weight: bold; color: #000000;"> "POSTULER"</span> en bas de l'offre.</p>
+        </div>
+        <div class="md:w-1/2 flex justify-center items-center">
+            <img src="assets/img/bouton_postuler.png" alt="Bouton pour postuler">
+        </div>
+    </div>
+    <div class="bg-gray-100 p-8 rounded-md flex flex-col md:flex-row items-center mb-8">
+        <div class="md:w-1/2 md:mr-8">
+            <p class="text-lg  text-gray-700 text-left">Vous serez alors redirigé sur un formulaire vous demandant de fournir un CV et une lettre de motivation, ainsi qu'un éventuel commentaire. Une fois celà fait, cliquez sur le bouton <span style="font-weight: bold; color: #000000;">"Postuler"</span>.</p>
+        </div>
+        <div class="md:w-1/2 flex justify-center items-center">
+            <img src="assets/img/formulaire_postuler.png" alt="Formulaire de postulation">
+        </div>
+    </div>
+    <div class="bg-gray-100 p-8 rounded-md flex flex-col items-center mb-8">
+        <div class="md:w-1/2 md:mr-8 text-center">
+            <p class="text-gray-800 font-bold">Vous avez désormais réussi à postuler pour une offre, mais rien ne vous empêche de postuler pour une autre.</p>
+        </div>
+    </div>
+
 </main>
