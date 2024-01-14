@@ -86,4 +86,6 @@ enum Action: string
 
     case AFFICHER_ENTREPRISE = "?a=afficherEntreprise";
     case TUTORIEL = "?a=tutoriel";
+
+    case TUTORIEL_ETUDIANT = "?c=etudiant&a=tutorielEtudiant";
 }

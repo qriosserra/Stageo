@@ -2096,11 +2096,18 @@ use Stageo\Model\Object\Secretaire;
                                     </div>
                                 </div>
                             </li>
-                            <li class="relative">
-                                <button class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500" id=<?php if (UserConnection::isInstance(new Etudiant())) : ?>""><a href="<?= Action::A_PROPOS->value ?>">A propos</a>
-                                    <?php else : ?>"dropdownButtonMission"><a href="<?= Action::TUTORIEL->value ?>">Besoin d'aide</a><?php endif ?>
+                                <?php if (UserConnection::isInstance(new Etudiant())) : ?>
+                                <button class="block py-2 pl-3 pr-4 h-[4rem]  text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent focus:outline-none md:hover:text-blue-700 md:dark:hover:text-blue-500" id="">
+                                    <a href="<?= Action::A_PROPOS->value ?>">A propos</a>
                                 </button>
-
+                                <?php endif?>
+                                <button>
+                                    <?php if (UserConnection::isInstance(new Etudiant())) : ?>
+                                    <a href="<?= Action::TUTORIEL_ETUDIANT->value?>">Besoin d'aide</a>
+                                    <?php else : ?>
+                                        <a href="<?= Action::TUTORIEL->value ?>">Besoin d'aide</a>
+                                    <?php endif?>
+                                </button>
                                 <div class="absolute hidden text-gray-700 pt-1 border border-slate-300 " id="dropdownContentMission">
                                     <div class="rounded  ease-in-out ml-3 mt-3 flex flex-row justify-end ">
                                         <div class="w-1/2">
@@ -2208,7 +2215,6 @@ use Stageo\Model\Object\Secretaire;
                             <li><a href="<?= Action::A_PROPOS->value?>">À propos</a></li>
                             <li><a href="<?= Action::CONTACT->value?>">Contact</a></li>
                             <li><a href="<?= Action::CONTACT->value?>"> Nous contacter</a></li>
-                            <li><a href="<?= Action::TUTORIEL->value?>">Tutoriel</a></li>
                         </ul>
                     </div>
                     <div class="space-y-4">

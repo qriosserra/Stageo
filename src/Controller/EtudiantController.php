@@ -1299,4 +1299,13 @@ class EtudiantController
             action: Action::HOME
         );
     }
+
+    public function tutorielEtudiant() : Response{
+        return new Response(
+            template: "etudiant/tutoriel.php",
+            params: [
+                "title" => "Tutoriel Etudiant",
+            ]
+        );
+    }
 }
