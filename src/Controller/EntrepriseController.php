@@ -43,6 +43,11 @@ use function Sodium\add;
 
 class EntrepriseController
 {
+    /**
+     * Affiche le formulaire de la première étape d'inscription pour une entreprise.
+     *
+     * @return Response
+     */
     public function signUpStep1Form(): Response
     {
         if (UserConnection::isSignedIn()) {
@@ -67,6 +72,8 @@ class EntrepriseController
      * @throws TokenTimeoutException
      * @throws ControllerException
      * @throws InvalidTokenException
+     * Traite la troisième étape du processus d'inscription pour une entreprise.
+     * @return Response
      */
     public function signUpStep1():  Response
     {
@@ -126,6 +133,11 @@ class EntrepriseController
         );
     }
 
+    /**
+     * Affiche le formulaire de la deuxième étape d'inscription pour une entreprise.
+     *
+     * @return Response
+     */
     public function signUpStep2Form(): Response
     {
         if (UserConnection::isSignedIn()) {
@@ -149,6 +161,11 @@ class EntrepriseController
         );
     }
 
+    /**
+     * Traite la deuxième étape du processus d'inscription pour une entreprise.
+     *
+     * @return Response
+     */
     public function signUpStep2(): Response
     {
         $siret = $_REQUEST["siret"];
@@ -215,6 +232,11 @@ class EntrepriseController
         );
     }
 
+    /**
+     * Affiche le formulaire de la troisième étape d'inscription pour une entreprise.
+     *
+     * @return Response
+     */
     public function signUpStep3Form(): Response
     {
         if (UserConnection::isSignedIn()) {
@@ -236,6 +258,11 @@ class EntrepriseController
         );
     }
 
+    /**
+     * Traite la troisième étape du processus d'inscription pour une entreprise.
+     *
+     * @return Response
+     */
     public function signUpStep3(): Response
     {
         $numero_voie = $_REQUEST["numero_voie"];
@@ -278,6 +305,11 @@ class EntrepriseController
         );
     }
 
+    /**
+     * Affiche le formulaire de la quatrième étape d'inscription pour une entreprise.
+     *
+     * @return Response
+     */
     public function signUpStep4Form(): Response
     {
         if (UserConnection::isSignedIn()) {
@@ -299,10 +331,13 @@ class EntrepriseController
     }
 
     /**
-     * @throws TokenTimeoutException
-     * @throws ControllerException
+     * @return Response
+     *@throws ControllerException
      * @throws InvalidTokenException
      * @throws Exception
+     * Traite le formulaire de la quatrième étape d'inscription pour une entreprise.
+     *
+     * @throws TokenTimeoutException
      */
     public function signUpStep4(): Response
     {
@@ -359,6 +394,12 @@ class EntrepriseController
         );
     }
 
+    /**
+     * Vérifie l'email de l'entreprise après qu'elle a suivi le lien de vérification.
+     *
+     * @param string $data Données cryptées nécessaires pour la vérification.
+     * @return Response
+     */
     public function verifier(string $data): Response
     {
         $decodedData = Crypto::decrypt($data);
@@ -386,6 +427,9 @@ class EntrepriseController
         );
     }
 
+    /**
+     * Affiche le formulaire de connexion pour une entreprise.
+     */
     public function signInForm(string $email = null): Response
     {
         UserConnection::signOut();
@@ -401,10 +445,29 @@ class EntrepriseController
         );
     }
 
+    /**
+     * Gère le processus de connexion d'une entreprise.
+     *
+     * Cette fonction récupère les paramètres de la requête, tels que l'email et le mot de passe,
+     * puis effectue plusieurs vérifications pour s'assurer de la validité des données fournies.
+     * Elle utilise la classe Token pour vérifier la validité du jeton de sécurité associé au formulaire.
+     * Si toutes les vérifications passent, elle tente de récupérer l'entreprise correspondant à l'email fourni
+     * depuis la base de données et vérifie si le mot de passe correspond.
+     * En cas de succès, elle connecte l'entreprise, ajoute un message flash de succès
+     * et redirige vers la page d'affichage des offres de l'entreprise connectée.
+     *
+     * @return Response
+     * @throws InvalidTokenException si le jeton de sécurité est invalide.
+     * @throws TokenTimeoutException si le jeton de sécurité a expiré.
+     * @throws ControllerException si l'email ou le mot de passe fourni est incorrect,
+     *                             ou si une erreur survient lors de la connexion de l'entreprise.
+     */
     public function signIn(): Response {
+        // Récupérer les paramètres de la requête
         $email = $_REQUEST["email"];
         $password = $_REQUEST["password"];
 
+        //Vérification des informations
         if (!Token::verify(Action::ENTREPRISE_SIGN_IN_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
         }
@@ -443,6 +506,18 @@ class EntrepriseController
         );
     }
 
+    /**
+     * Affiche le formulaire de création d'une nouvelle offre.
+     *
+     * Cette fonction vérifie d'abord si l'utilisateur est une instance de l'entreprise.
+     * Si c'est le cas, elle renvoie une Response contenant le formulaire de création d'une nouvelle offre
+     * avec les données précédemment saisies si elles existent en session.
+     * Les catégories et les unités de gratification disponibles sont également récupérées pour le formulaire.
+     *
+     * @param string|null $email Adresse e-mail optionnelle à afficher dans le formulaire.
+     * @return Response
+     * @throws ControllerException si l'utilisateur n'a pas les droits d'accéder à la page d'accueil.
+     */
     public function offreAddForm(string $email = null): Response
     {
         if (UserConnection::isInstance(new Entreprise())) {
@@ -467,12 +542,23 @@ class EntrepriseController
         );
     }
 
+
     /**
+     * Ajoute une nouvelle offre à partir des paramètres de la requête.
+     *
+     * Cette fonction récupère les paramètres nécessaires à la création d'une offre depuis la requête.
+     * Elle effectue des vérifications sur ces paramètres, notamment sur la validité des données, la présence du niveau d'étude,
+     * la vérification des tokens, etc.
+     * Si toutes les vérifications sont réussies, elle insère l'offre dans la base de données et associe les catégories sélectionnées.
+     * Enfin, elle renvoie une Response redirigeant vers la page d'accueil avec un message de succès.
+     *
+     * @return Response
+     * @throws ControllerException si des erreurs surviennent lors de la création de l'offre.
      * @throws TokenTimeoutException
-     * @throws ControllerException
      * @throws InvalidTokenException
      */
     public function offreAdd(): Response{
+        // Récupérer les paramètres de la requête
         $description = $_REQUEST["description"];
         $secteur = $_REQUEST["secteur"];
         $thematique = $_REQUEST["thematique"];
@@ -484,9 +570,12 @@ class EntrepriseController
         $date_debut = $_REQUEST["start"];
         $date_fin = $_REQUEST["end"];
         $selectedTags = $_REQUEST["selectedTags"];
+
         if(!$date_fin){
             $date_fin =null;
         }
+
+        // Vérifier si le niveau d'étude est sélectionné
         if(!$_REQUEST["checkbox"]){
             throw new ControllerException(
                 message: "Niveau d'étude pas selectionner",
@@ -494,6 +583,7 @@ class EntrepriseController
             );
         }
 
+        // Construire la chaîne du niveau d'étude en fonction du nombre de cases cochées
         if (count($_REQUEST["checkbox"]) == 1) {
             $niveau = $_REQUEST["checkbox"][0];
         }
@@ -504,6 +594,7 @@ class EntrepriseController
             $niveau = null;
         }
 
+        // Vérifier si l'utilisateur est une instance de l'entreprise
         if(!UserConnection::isInstance(new Entreprise())){
             throw new ControllerException(
                 message: "Vous n'avez pas les droits",
@@ -513,6 +604,7 @@ class EntrepriseController
         /**
          * @var Entreprise $entreprise
          */
+        //Enregistrer l'offre dans le session pour l'autocomplétion en cas d'erreur
         $entreprise = UserConnection::getSignedInUser();
         $offre = Session::set("offre", new Offre(
             description: $description,
@@ -532,6 +624,7 @@ class EntrepriseController
 
         $selectedTags = Session::set("tags",$selectedTags);
 
+        //Vérification des différentes informations
         if (!Token::verify(Action::ENTREPRISE_CREATION_OFFRE_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
         }
@@ -597,7 +690,7 @@ class EntrepriseController
         if($type=='stage' or $type=='Stage'){
             if(!Validate::isDateStage($date_debut,$date_fin,$niveau)){
                 throw new ControllerException(
-                    message: "Les dates de stages ne sont pas conforment",
+                    message: "Les dates de stages ne sont pas conformes",
                     action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
                 );
             }
@@ -628,13 +721,22 @@ class EntrepriseController
     }
 
     /**
-     * @throws ControllerException
+     * Affiche le formulaire de mise à jour d'une offre.
+     *
+     * Cette fonction récupère l'utilisateur connecté, l'identifiant de l'offre à mettre à jour, et l'offre correspondante.
+     * Elle effectue des vérifications sur la validité de l'utilisateur et de l'offre avant de construire la liste des tags déjà choisis.
+     * Enfin, elle renvoie une Response contenant le template du formulaire de mise à jour avec les paramètres nécessaires.
+     *
+     * @return Response
+     * @throws ControllerException si l'accès à la page est refusé ou si des erreurs se produisent.
      */
     public static function afficherFormulaireMiseAJourOffre(): Response
     {
         $user = UserConnection::getSignedInUser();
         $id = $_REQUEST["id"];
         $offre = (new OffreRepository)->getById($id);
+
+        //Vérification
         if (!$user) {
             throw new ControllerException(
                 message: "Veillez vous connecter",
@@ -651,6 +753,7 @@ class EntrepriseController
                 action: Action::HOME
             );
         } else {
+            // Construire la liste des tags déjà choisis pour l'offre
             $selectedTags = (new DeCategorieRepository)->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,$id));
             $idCategorie = [];
 
@@ -658,6 +761,7 @@ class EntrepriseController
                 $idCategorie[] = $tag->getIdCategorie();
             }
 
+            // Construire la liste des noms des tags choisis
             $nomTag = [];
 
             foreach ($idCategorie as $tag){
@@ -681,8 +785,21 @@ class EntrepriseController
         }
     }
 
+    /**
+     * Met à jour une offre dans la base de données.
+     *
+     * Cette fonction récupère les paramètres de la requête pour mettre à jour les informations d'une offre.
+     * Elle effectue des vérifications sur les données et les permissions de l'utilisateur avant la mise à jour.
+     * Si les conditions sont remplies, elle crée un nouvel objet Offre avec les nouvelles données,
+     * gère les catégories associées à l'offre, puis met à jour l'offre dans la base de données.
+     * Enfin, elle redirige l'utilisateur vers la page d'accueil.
+     *
+     * @return Response
+     * @throws ControllerException si l'accès à la page est refusé ou si des erreurs de validation se produisent.
+     */
     public static function mettreAJourOffre() : Response
     {
+        // Récupérer les paramètres de la requête
         $idOffre = $_REQUEST["id"];
         $offre = (new OffreRepository)->getById($idOffre);
         $description = $_REQUEST["description"];
@@ -696,6 +813,8 @@ class EntrepriseController
         $date_debut = $_REQUEST["start"];
         $date_fin = $_REQUEST["end"];
         $selectedTags = $_REQUEST["selectedTags"];
+
+        // Vérifier si le niveau d'étude a été sélectionné
         if(!$_REQUEST["checkbox"]){
             throw new ControllerException(
                 message: "Niveau d'étude pas selectionner",
@@ -703,6 +822,8 @@ class EntrepriseController
                 params: ["id"=>$idOffre]
             );
         }
+
+        // Déterminer le niveau d'étude en fonction de la sélection
         if (count($_REQUEST["checkbox"]) == 1) {
             $niveau = $_REQUEST["checkbox"][0];
         }
@@ -712,6 +833,8 @@ class EntrepriseController
         else {
             $niveau = null;
         }
+
+        //Vérification des différentes informations
         $user = UserConnection::getSignedInUser();
         if (!Token::verify(Action::ENTREPRISE_MODIFICATION_OFFRE_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
@@ -817,8 +940,11 @@ class EntrepriseController
         if ($type == "Stage&Alternance" || $type == "Alternance"){
             $date_fin = null;
         }
+
+        // Créer un nouvel objet Offre avec les nouvelles données
         $o = new Offre($idOffre, $description, $thematique,$secteur , $taches, $commentaires, $gratification,$type , null,$id_unite_gratification, $user->getIdEntreprise(),$date_debut,$date_fin,$niveau,$offre->getValider());
 
+        // Récupérer les catégories associées à l'offre avant la mise à jour
         $tags = (new DeCategorieRepository)->select(new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre));
         $idCategorie_avant = [];
         $idCategorie_apres = [];
@@ -832,6 +958,7 @@ class EntrepriseController
             $idCategorie_apres[] = $categorie->getIdCategorie();
         }
 
+        // Gérer les catégories associées avant et après la mise à jour
         foreach ($idCategorie_apres as $c){
             if(!in_array($c, $idCategorie_avant)){
                 (new DeCategorieRepository())->insert(new DeCategorie($c,$idOffre));
@@ -848,6 +975,7 @@ class EntrepriseController
             }
         }
 
+        // Supprimer les catégories associées qui ne sont plus sélectionnées
         foreach($idCategorie_avant as $c){
             $condition = [new QueryCondition("id_offre",ComparisonOperator::EQUAL,$idOffre, LogicalOperator::AND),
                 new QueryCondition("id_categorie",ComparisonOperator::EQUAL,$c)
@@ -855,16 +983,32 @@ class EntrepriseController
             (new DeCategorieRepository())->delete($condition);
         }
 
+        // Mettre à jour l'offre dans la base de données et redirection
         (new OffreRepository())->update($o);
         return new Response(
             action: Action::HOME,
         );
     }
 
+    /**
+     * Supprime une offre.
+     *
+     * Cette fonction permet à un utilisateur autorisé de supprimer une offre spécifique.
+     * Elle vérifie si l'utilisateur est connecté, s'il est une instance d'un administrateur ou d'une entreprise,
+     * et s'il appartient à la même entreprise que l'offre (dans le cas d'une entreprise).
+     * Si ces conditions sont remplies, elle supprime l'offre correspondante, puis redirige l'utilisateur vers la page d'accueil.
+     *
+     * @return Response
+     * @throws ControllerException si l'accès à la page est refusé.
+     */
     public static function deleteOffre() : Response{
+        // Récupérer les paramètres de la requête
         $id = $_REQUEST["id"];
         $offre = (new OffreRepository())->getById($id);
         $user = UserConnection::getSignedInUser();
+
+        /* Vérifier si l'utilisateur est connecté, est une instance de Entreprise ou de Admin
+        et s'il appartient à la même entreprise que l'offre si c'est une Entreprise*/
         if($user and (UserConnection::isInstance(new Admin())) or (UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise())){
             $condition = new QueryCondition("id_offre",ComparisonOperator::EQUAL,$id);
             (new OffreRepository())->delete($condition);
@@ -873,6 +1017,7 @@ class EntrepriseController
             );
         }
         else{
+            // Si les conditions ne sont pas remplies, générer une exception de contrôleur avec un message d'erreur
             throw new ControllerException(
                 message: "Vous n'avez pas les droits de supprimer cette offre",
                 action: Action::HOME
@@ -880,41 +1025,73 @@ class EntrepriseController
         }
     }
 
+    /**
+     * Accepte la candidature d'un étudiant pour une offre.
+     *
+     * Cette fonction permet à une entreprise de valider la candidature d'un étudiant pour une offre spécifique.
+     * Elle vérifie si l'utilisateur est connecté, s'il est une instance d'une entreprise, et s'il appartient à la même entreprise
+     * que l'offre en question. Si ces conditions sont remplies, elle met à jour l'offre avec le login de l'étudiant accepté,
+     * supprime l'enregistrement correspondant dans la table Postuler, envoie un email d'acceptation à l'étudiant,
+     * affiche un message de succès, puis redirige l'utilisateur vers la page d'accueil.
+     *
+     * @return Response
+     * @throws ControllerException si l'accès à la page est refusé.
+     */
     public static function accepterEtudiantOffre() : Response
     {
         /**
          * @var Etudiant $etudiant
          * @var Offre $offre
          */
+        // Récupérer les paramètres de la requête
         $id = $_REQUEST["id"];
         $login = $_REQUEST["login"];
+
         $offre = (new OffreRepository())->getById($id);
         $user = UserConnection::getSignedInUser();
+        /* Vérifier si l'utilisateur est connecté, est une instance de Entreprise et s'il appartient à la même entreprise que l'offre*/
         if($user and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
             $offre->setLogin($login);
             (new OffreRepository())->update($offre);
+
+            // Préparer des conditions pour supprimer l'enregistrement correspondant dans la table Postuler
             $condition = [
                 new QueryCondition("login", ComparisonOperator::EQUAL,$login,LogicalOperator::AND),
                 new QueryCondition("id_offre", ComparisonOperator::EQUAL,$id)
             ];
             (new PostulerRepository())->delete($condition);
             $etudiant = (new EtudiantRepository())->getByLogin($login);
+
+            // Envoyer un email à l'étudiant pour informer de l'acceptation de sa candidature
             Mailer::send(new Email(
                 $etudiant->getEmail(),
                 "Votre candidature a été accepté",
                 "Votre candidature a été accepté pour l'offre " . $offre->getThematique()
             ));
             FlashMessage::add("Etudiant accepter avec succès", FlashType::SUCCESS);
+
+            // Rediriger l'utilisateur vers la page d'accueil
             return new Response(
                 action: Action::HOME,
             );
         }
+        // Si les conditions ne sont pas remplies, générer une exception de contrôleur avec un message d'erreur
         throw new ControllerException(
             message: "Vous n'avez pas accès à cette page.",
             action: Action::HOME
         );
     }
 
+    /**
+     * Affiche la liste des offres de l'entreprise connectée.
+     *
+     * Cette fonction est destinée aux entreprises pour visualiser la liste de toutes les offres qu'elles ont publiées.
+     * Elle récupère l'identifiant de l'entreprise connectée, sélectionne toutes les offres correspondantes à cet identifiant,
+     * et prépare les données nécessaires pour l'affichage.
+     *
+     * @return Response
+     * @throws ControllerException si l'accès à la page est refusé.
+     */
     public static function mesOffres(): Response
     {
         if (UserConnection::isInstance(new Entreprise())) {
@@ -927,12 +1104,14 @@ class EntrepriseController
             foreach ($liste_offre as $offre){
                 $idOffres [] = $offre->getIdOffre();
             }
+            $Categories = (new CategorieRepository())->select();
             return new Response(
                 template: "entreprise/offre/liste-offre.php",
                 params: [
                     "title" => "Liste des offres",
                     "listeoffres" => $listeoffres,
                     "idOffres" => $idOffres,
+                    "Categories" => $Categories,
                     "nbRechercheTrouver" => count($idOffres),
                     "selB" => null,
                     "search" => null
@@ -945,7 +1124,16 @@ class EntrepriseController
         );
     }
 
-    /*Permet de renvoyer la liste des étudiants ayant postuler aux offre de l'entreprise*/
+    /**
+     * Affiche la liste des candidats ayant postulé à toutes les offres de l'entreprise.
+     *
+     * Cette fonction est destinée aux entreprises pour visualiser tous les candidats ayant postulé à leurs offres.
+     * Elle récupère toutes les offres de l'entreprise connectée, puis pour chaque offre, elle sélectionne les candidats
+     * ayant postulé à cette offre.
+     *
+     * @return Response
+     * @throws ControllerException si l'accès à la page est refusé.
+     */
     public static function afficherPostuleEtudiantAll():Response{
         if (UserConnection::isInstance(new Entreprise())) {
             $result = (new EntrepriseRepository())->getOffreEntreprise(UserConnection::getSignedInUser()->getIdEntreprise());
@@ -972,11 +1160,24 @@ class EntrepriseController
         );
     }
 
+    /**
+     * Affiche la liste des étudiants ayant postulé à une offre spécifique, regroupée par offre.
+     *
+     * Cette fonction nécessite que l'utilisateur soit connecté en tant qu'entreprise et que les conditions
+     * spécifiques soient remplies pour accéder à la liste des étudiants postulants à une offre.
+     *
+     * @return Response
+     * @throws ControllerException si l'accès à la page est refusé.
+     */
     public static function voirAPostuler():Response{
         if(UserConnection::isSignedIn()){
+            // Récupérer l'ID de l'offre depuis la requête
             $id = $_REQUEST["id"];
+
             $offre = (new OffreRepository())->getById($id);
             $user = UserConnection::getSignedInUser();
+
+            // Vérifier si les conditions pour accéder à la liste sont remplies
             if($user and $offre and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
                 $condition = new QueryCondition("id_offre", ComparisonOperator::EQUAL, $id);
                 $liste_offrePostuler = (new PostulerRepository())->select($condition);
@@ -998,6 +1199,11 @@ class EntrepriseController
         );
     }
 
+    /**
+     * Supprime le compte de l'entreprise connectée.
+     *
+     * @return Response
+     */
     public static function delete(){
         $user = UserConnection::getSignedInUser();
         $id =  $_REQUEST["idEntreprise"];
@@ -1011,6 +1217,21 @@ class EntrepriseController
         throw new ControllerException(
             message: "Vous n'avez pas accès à cette action.",
             action: Action::HOME
+        );
+    }
+
+    /**
+     * Affiche la page du tutoriel destiné aux entreprises.
+     *
+     * @return Response
+     */
+    public static function tutorielEntreprise(): Response
+    {
+        return new Response(
+            template: "entreprise/tutoriel.php",
+            params: [
+                "title" => "Tutoriel entreprise",
+            ]
         );
     }
 

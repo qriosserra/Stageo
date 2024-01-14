@@ -1,6 +1,10 @@
 <?php
 
 namespace Stageo\Lib\enums;
+/*
+ * représentant les actions et les routes de l'application PHP.
+ * Facilite la gestion claire et organisée des différentes actions disponibles.
+ */
 
 enum Action: string
 {
@@ -91,4 +95,6 @@ enum Action: string
     case TUTORIEL = "?a=tutoriel";
 
     case TUTORIEL_ETUDIANT = "?c=etudiant&a=tutorielEtudiant";
+
+    case TUTORIEL_ENTREPRISE = "?c=entreprise&a=tutorielEntreprise";
 }

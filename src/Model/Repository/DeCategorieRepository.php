@@ -31,57 +31,37 @@ class DeCategorieRepository extends CoreRepository
     {
         return $this->select([new QueryCondition("id_categorie", ComparisonOperator::EQUAL, $id)])[0] ?? null;
     }
+
+    /**
+     * Obtient les identifiants d'offres correspondant aux catégories fournies.
+     *
+     * Cette fonction prend en paramètre une liste d'objets Categorie, extrait leurs informations nécessaires,
+     * puis construit une requête SQL pour récupérer les identifiants d'offres associées à ces catégories.
+     * Elle effectue ensuite la requête et retourne un tableau d'identifiants d'offres correspondant.
+     * Si la liste de catégories est vide ou non valide, elle retourne tous les identifiants d'offres disponibles.
+     *
+     * @param array $cate Liste d'objets Categorie.
+     * @return array Tableau d'identifiants d'offres correspondant aux catégories.
+     */
     public function getByIdCategorieliste(  $cate ): array
     {
         foreach ($cate as $item) {
             if (!Null && $item instanceof Categorie) {
-                $listeprepare [] = ["tag" => ":" . $item->getLibelle(), "id" => $item->getIdCategorie(), "libelle" => $item->getLibelle()];
+                $listeprepare[] = [
+                    "tag" => ":" . htmlspecialchars(preg_replace('/[^a-zA-Z0-9]/', '', $item->getLibelle())),
+                    "id" => $item->getIdCategorie(),
+                    "libelle" => htmlspecialchars(preg_replace('/[^a-zA-Z0-9]/', '', $item->getLibelle()))
+                ];
             }
         }
-        /*$sql = "SELECT id_offre
-            FROM {$this->getTable()}
-            WHERE id_categorie = ".$listeprepare[0]["tag"];
 
-        for ($i = 1; $i < count($listeprepare); $i++){
-            $sql .= "
-            Intersect 
-            SELECT id_offre
-            FROM {$this->getTable()}
-            WHERE id_categorie = ".$listeprepare[$i]["tag"];
-        }*/
         if (isset($listeprepare)&&$listeprepare != NULL) {
             $categories = array_column($listeprepare, 'tag');
 
-// Construire la requête SQL avec des sous-requêtes
-        /* $sql = "SELECT id_offre
-         FROM {$this->getTable()}
-         WHERE id_categorie = " . $categories[0];
 
-         for ($i = 1; $i < count($categories); $i++) {
-             $sql .= "
-         INTERSECT
-         SELECT id_offre
-         FROM {$this->getTable()}
-         WHERE id_categorie = " . $categories[$i];
-         }
-
-         $pdo = DatabaseConnection::getPdo()->prepare($sql);
-         $counteur = 0;*/
-        /* $categories = array_column($listeprepare, 'tag');
-         $sql = "SELECT id_offre
-         FROM {$this->getTable()}  t1";
-
-         for ($i = 2; $i <= count($categories); $i++) {
-             $sql .= "
-         JOIN {$this->getTable()}  t$i ON t1.id_offre = t$i.id_offre
-         AND t$i.id_categorie = " . $categories[$i - 1]."  AND t1.id_categorie != t$i.id_categorie ";
-         }*/
-
-        //$pdo = DatabaseConnection::getPdo()->prepare($sql);
-
-        foreach ($listeprepare as list("libelle" => $libelle, "id" => $id)) {
-            $res[$libelle] = $id;
-        }
+            foreach ($listeprepare as list("libelle" => $libelle, "id" => $id)) {
+                $res[$libelle] = $id;
+            }
             $sql = "SELECT t0.id_offre
                 FROM {$this->getTable()} t0";
 
@@ -92,10 +72,10 @@ class DeCategorieRepository extends CoreRepository
             $sql .= " 
             WHERE   t0.id_categorie = " . $listeprepare[0]["tag"];
             for ($i = 1; $i < count($listeprepare); $i++) {
-                $sql .= "  AND  t".($i).".id_categorie = " . $listeprepare[$i]["tag"];
+                $sql .= '  AND  t'.($i).'.id_categorie = ' . $listeprepare[$i]["tag"];
             }
-             $pdo = DatabaseConnection::getPdo()->prepare($sql);
-             $pdo->execute($res);
+            $pdo = DatabaseConnection::getPdo()->prepare($sql);
+            $pdo->execute($res);
 
             for ($objectArray = $pdo->fetch();
                  $objectArray != false;

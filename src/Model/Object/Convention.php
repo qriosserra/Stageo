@@ -41,9 +41,60 @@ class Convention extends CoreObject
                                 private string|NullDataType|null $tuteur_fonction = null,
                                 private int|NullDataType|null    $id_distribution_commune = null,
                                 private string|NullDataType|null $id_entreprise = null,
-                                private string|NullDataType|null $login_enseignant = null)
+                                private string|NullDataType|null $login_enseignant = null,
+                                private bool|NullDataType|null $verification_admin = null,
+                                private bool|NullDataType|null $verification_secretaire = null,
+                                private bool|NullDataType|null $verification_entreprise = null)
+    {}
+
+    /**
+     * @return bool|NullDataType|null
+     */
+    public function getVerificationAdmin(): bool|NullDataType|null
     {
+        return $this->verification_admin;
     }
+
+    /**
+     * @param bool|NullDataType|null $verification_admin
+     */
+    public function setVerificationAdmin(bool|NullDataType|null $verification_admin): void
+    {
+        $this->verification_admin = $verification_admin;
+    }
+
+    /**
+     * @return bool|NullDataType|null
+     */
+    public function getVerificationSecretaire(): bool|NullDataType|null
+    {
+        return $this->verification_secretaire;
+    }
+
+    /**
+     * @param bool|NullDataType|null $verification_secretaire
+     */
+    public function setVerificationSecretaire(bool|NullDataType|null $verification_secretaire): void
+    {
+        $this->verification_secretaire = $verification_secretaire;
+    }
+
+    /**
+     * @return bool|NullDataType|null
+     */
+    public function getVerificationEntreprise(): bool|NullDataType|null
+    {
+        return $this->verification_entreprise;
+    }
+
+    /**
+     * @param bool|NullDataType|null $verification_entreprise
+     */
+    public function setVerificationEntreprise(bool|NullDataType|null $verification_entreprise): void
+    {
+        $this->verification_entreprise = $verification_entreprise;
+    }
+
 
     public function getIdConvention(): ?int
     {

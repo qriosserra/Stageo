@@ -73,7 +73,10 @@ BEGIN
         login_enseignant,
         id_entreprise,
         id_distribution_commune,
-        login
+        login,
+        verification_admin,
+        verification_secretaire,
+        verification_entreprise
     )
     VALUES (
         OLD.type_convention,
@@ -106,7 +109,10 @@ BEGIN
         OLD.login_enseignant,
         OLD.id_entreprise,
         OLD.id_distribution_commune,
-        OLD.login
+        OLD.login,
+        OLD.verification_admin,
+        OLD.verification_secretaire,
+        OLD.verification_entreprise
     );
 END;
 //
