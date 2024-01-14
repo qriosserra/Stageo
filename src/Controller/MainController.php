@@ -59,6 +59,26 @@ class MainController
         );
     }
 
+    /**
+     * Méthode de contrôleur représentant la gestion de la liste des offres dans l'application.
+     * Si l'utilisateur est connecté, la méthode traite les paramètres de recherche, effectue des requêtes SQL
+     * pour récupérer les offres correspondantes, et renvoie une réponse avec les données à afficher.
+     *
+     * @throws ControllerException Si l'utilisateur n'est pas connecté, une exception est levée redirigeant vers la page d'accueil.
+     *
+     * @return Response Réponse à renvoyer au client, généralement une page web affichant la liste des offres.
+     *
+     * @var string $search Représente le terme de recherche saisi par l'utilisateur.
+     * @var string $commune Représente la commune spécifiée dans la recherche.
+     * @var array $Togle Tableau indiquant les types d'offres à inclure dans la recherche (Alternances, Stages).
+     * @var array $categoriesSelect Tableau des catégories sélectionnées dans la recherche.
+     * @var array $offres Tableau contenant les offres résultant de la recherche.
+     * @var array $idOffres Tableau contenant les identifiants des offres résultant de la recherche.
+     * @var array $listeoffres Tableau contenant les détails des offres avec leurs catégories associées.
+     * @var array $Categories Tableau contenant toutes les catégories disponibles.
+     * @var int $nbRechercheTrouver Nombre d'offres trouvées suite à la recherche.
+     * @var string $communeTaper Représente la commune spécifiée dans la recherche (à afficher dans l'interface).
+     */
     public function listeOffre(): Response
     {
         if (UserConnection::isSignedIn()) {
@@ -160,8 +180,31 @@ class MainController
         );
     }
 
+    /**
+     * Méthode de contrôleur pour afficher la liste des entreprises dans l'application.
+     * Si l'utilisateur est connecté, la méthode traite les paramètres de recherche, effectue des requêtes SQL
+     * pour récupérer les entreprises correspondantes, et renvoie une réponse avec les données à afficher.
+     *
+     * @throws ControllerException Si l'utilisateur n'est pas connecté, une exception est levée redirigeant vers la page d'accueil.
+     *
+     * @return Response  une page web affichant la liste des entreprises.
+     *
+     * @var string $search Représente le terme de recherche saisi par l'utilisateur.
+     * @var string $commune Représente la commune spécifiée dans la recherche.
+     * @var string $option Représente l'option de recherche choisie par l'utilisateur (raison_sociale, communes).
+     * @var array $entreprises Tableau d'objets Entreprise résultant de la recherche.
+     * @var array $idEntreprises Tableau contenant les identifiants des entreprises résultant de la recherche.
+     * @var string|null $selA Sélection pour l'option "raison_sociale" dans la liste déroulante.
+     * @var string|null $selB Sélection pour l'option "communes" dans la liste déroulante.
+     * @var array $listeEntreprises Tableau contenant les détails des entreprises.
+     * @var array $Categories Tableau contenant toutes les catégories disponibles.
+     * @var int $nbRechercheTrouver Nombre d'entreprises trouvées suite à la recherche.
+     * @var string $communeTaper Représente la commune spécifiée dans la recherche (à afficher dans l'interface).
+     */
     public function listeEntreprises(): Response
     {
+
+
         if (UserConnection::isSignedIn()) {
             $search = $_REQUEST["search"] ?? "";
             $commune = $_REQUEST["commune"] ?? "";
@@ -218,8 +261,26 @@ class MainController
         );
     }
 
+    /**
+     * Méthode de contrôleur pour afficher les détails d'une offre spécifiée par son identifiant.
+     * Si l'utilisateur est connecté, la méthode récupère les informations de l'offre, de l'entreprise associée,
+     * des catégories auxquelles l'offre est liée, et renvoie une réponse avec ces données pour affichage.
+     *
+     * @param string $id Identifiant de l'offre à afficher.
+     *
+     * @throws ControllerException Si l'utilisateur n'est pas connecté, une exception est levée redirigeant vers la page d'accueil.
+     *
+     * @return Response  une page web affichant les détails de l'offre.
+     *
+     * @var Offre $offre Représente l'objet Offre récupéré de la base de données.
+     * @var Entreprise $entreprise Représente l'objet Entreprise associé à l'offre.
+     * @var array $categorie Tableau d'objets DeCategorie représentant les liens entre l'offre et ses catégories.
+     * @var array $nomCategory Tableau d'objets Categorie contenant les noms des catégories associées à l'offre.
+     * @var string $nomentreprise Nom de l'entreprise associée à l'offre (ou un message d'erreur en cas d'échec de recherche).
+     */
     public function afficherOffre(string $id): Response
     {
+
         if (UserConnection::isSignedIn()) {
             /**
              * @var Offre $offre
@@ -255,8 +316,25 @@ class MainController
         );
     }
 
+    /**
+     * Méthode de contrôleur pour afficher les détails d'une entreprise spécifiée par son identifiant,
+     * ainsi que la liste des offres associées à cette entreprise.
+     * Si l'utilisateur est connecté, la méthode récupère les informations de l'entreprise et de ses offres,
+     * puis renvoie une réponse avec ces données pour affichage.
+     *
+     * @param string $id Identifiant de l'entreprise à afficher.
+     *
+     * @throws ControllerException Si l'utilisateur n'est pas connecté, une exception est levée redirigeant vers la page d'accueil.
+     *
+     * @return Response une page web affichant ses offres et les détails de l'entreprise.
+     *
+     * @var Entreprise $entreprise Représente l'objet Entreprise récupéré de la base de données.
+     * @var array $listeoffres Tableau d'objets Offre représentant les offres associées à l'entreprise.
+     * @var int $nbRechercheTrouver Nombre d'offres trouvées associées à l'entreprise.
+     */
     public function afficherEntreprise(string $id): Response
     {
+
         if (UserConnection::isSignedIn()) {
             /**
              * @var Entreprise $entreprise
@@ -335,8 +413,19 @@ class MainController
         );
     }
 
+    /**
+     * Méthode de contrôleur pour importer des données à partir d'un fichier CSV dans la table temporaire de la base de données,
+     * puis d'appeller la procedure pour triée et ranger les valeurs.
+     *
+     * @return Response Réponse à renvoyer au client, généralement une redirection vers la page d'accueil.
+     *
+     * @var array $cheminCSV Informations sur le fichier CSV provenant des données de formulaire.
+     * @var string $csvContent Contenu du fichier CSV récupéré à partir du chemin temporaire du fichier.
+     */
+
     public function importCsv(): Response
     {
+
         $cheminCSV = $_FILES['CHEMINCSV'];
         if ($cheminCSV["size"] != 0) {
             $csvContent = file_get_contents($cheminCSV['tmp_name']);
@@ -353,6 +442,16 @@ class MainController
         );
     }
 
+    /**
+     * Méthode de contrôleur pour exporter les données des conventions vers un fichier CSV.
+     * Les informations nécessaires sont extraites de la base de données, puis écrites dans un fichier CSV.
+     * Un message flash de succès est ajouté et l'utilisateur est redirigé vers la page d'accueil.
+     *
+     * @return Response  une redirection vers la page d'accueil.
+     *
+     * @var array $data Tableau associatif contenant les données à exporter.
+     * @var resource $file Ressource représentant le fichier CSV à créer.
+     */
     public function exportCsv(): Response
     {
         /**
