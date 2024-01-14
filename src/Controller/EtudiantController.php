@@ -448,7 +448,7 @@ class EtudiantController
                 "nav" => false,
                 "footer" => false,
                 "title" => "Déposer une convention",
-                "convention" => Session::get("convention") ?? new Convention(),
+                "convention" => $convention ?? new Convention(),
                 "gratification" => (new ConfigurationRepository)->getGratificationMinimale(),
                 "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
                 "token" => Token::generateToken(Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM),
@@ -564,8 +564,135 @@ class EtudiantController
             action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
         );
     }
-
     public function conventionAddStep3Form(): Response
+    {
+        if (!UserConnection::isSignedIn()) {
+            throw new ControllerException(
+                message: "Vous devez être connecté pour acceder à cette page",
+                action: Action::ETUDIANT_SIGN_IN_FORM
+            );
+        }
+        if (!UserConnection::isInstance(new Etudiant)) {
+            throw new ControllerException(
+                message: "Vous ne pouvez pas acceder à cette page",
+                action: Action::HOME
+            );
+        }
+        if (Session::contains("convention")) {
+            $convention = Session::get("convention");
+        }
+        else {
+            $etudiant = UserConnection::getSignedInUser();
+            $convention = (new ConventionRepository)->getByLogin($etudiant->getLogin());
+            if (is_null($convention)){
+                $convention = new Convention();
+                if (Session::contains("convention")) {
+                    Session::delete("convention");
+                }
+            }
+            $suivi = (new SuiviRepository)->getByIdConvention($convention->getIdConvention());
+            if ($suivi != null && !$suivi->getModifiable()) {
+                throw new ControllerException(
+                    "Vous ne pouvez plus modifier la convention",
+                    Action::HOME
+                );
+            }
+        }
+        return new Response(
+            template: "etudiant/convention-add-step-3.php",
+            params: [
+                "nav" => false,
+                "footer" => false,
+                "title" => "Déposer une convention",
+                "convention" => $convention ?? new Convention(),
+                "token" => Token::generateToken(Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM)
+            ]
+        );
+    }
+
+    public function conventionAddStep3(): Response
+    {
+        if (!UserConnection::isSignedIn()) {
+            throw new ControllerException(
+                message: "Vous devez être connecté pour accéder à cette page",
+                action: Action::ETUDIANT_SIGN_IN_FORM
+            );
+        }
+        if (!UserConnection::isInstance(new Etudiant)) {
+            throw new ControllerException(
+                message: "Vous ne pouvez pas accéder à cette page",
+                action: Action::HOME
+            );
+        }
+        if (!Token::verify(Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM, $_REQUEST["token"]))
+            throw new InvalidTokenException();
+        if (Token::isTimeout(Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM)) {
+            throw new TokenTimeoutException(
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3
+            );
+        }
+
+        /**
+         * @var Convention $convention
+         */
+        $convention = Session::get("convention");
+        if (is_null($convention)){
+            $user = UserConnection::getSignedInUser();
+            /**
+             * @var Etudiant $user
+             */
+            $convention = (new ConventionRepository())->getByLogin($user->getLogin());
+            if (is_null($convention)){
+                throw new ControllerException(
+                    message: "Vous avez prit trop de temps, veuillez recommencer !",
+                    action: Action::HOME
+                );
+            }
+        }
+        $convention->setTuteurPrenom($_REQUEST["prenom"]);
+        $convention->setTuteurNom($_REQUEST["nom"]);
+        $convention->setTuteurEmail($_REQUEST["email"]);
+        $convention->setTuteurTelephone($_REQUEST["telephone"]);
+        $convention->setTuteurFonction($_REQUEST["fonction"]);
+        Session::set("convention", $convention);
+
+        if (!is_null($convention->getTuteurPrenom()) and !Validate::isName($convention->getTuteurPrenom())) {
+            throw new ControllerException(
+                message: "Le prénom du tuteur doit faire moins de 257 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if (!is_null($convention->getTuteurNom()) and !Validate::isName($convention->getTuteurNom())) {
+            throw new ControllerException(
+                message: "Le nom du tuteur doit faire moins de 257 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if (!is_null($convention->getTuteurEmail()) and !Validate::isEmail($convention->getTuteurEmail())) {
+            throw new ControllerException(
+                message: "L'email n'est pas valide",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if (!is_null($convention->getTuteurTelephone()) and !Validate::isPhoneNumber($convention->getTuteurTelephone())) {
+            throw new ControllerException(
+                message: "Le téléphone n'est pas valide",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if (!is_null($convention->getTuteurFonction()) and !Validate::isName($convention->getTuteurFonction())) {
+            throw new ControllerException(
+                message: "La fonction du tuteur doit faire moins de 257 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+
+        return new Response(
+            action: Action::ETUDIANT_CONVENTION_ADD_STEP_4_FORM
+        );
+    }
+
+    public function conventionAddStep4Form(): Response
     {
         if (!UserConnection::isSignedIn()) {
             throw new ControllerException(
@@ -602,20 +729,20 @@ class EtudiantController
         }
 
         return new Response(
-            template: "etudiant/convention-add-step-3.php",
+            template: "etudiant/convention-add-step-4.php",
             params: [
                 "nav" => false,
                 "footer" => false,
                 "title" => "Déposer une convention",
-                "convention" => Session::get("convention") ?? new Convention(),
+                "convention" => $convention ?? new Convention(),
                 "distributions_commune" => array_reduce((new DistributionCommuneRepository)->select(), fn($carry, $distribution) => $carry + [$distribution->getIdDistributionCommune() => "{$distribution->getCommune()} ({$distribution->getCodePostal()})"], []),
-                "token" => Token::generateToken(Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM),
+                "token" => Token::generateToken(Action::ETUDIANT_CONVENTION_ADD_STEP_4_FORM),
                 "nomsEntreprise" => array_reduce((new EntrepriseRepository)->select(), fn($carry, $entreprise) => $carry + [$entreprise->getIdEntreprise() => $entreprise->getRaisonSociale()], []),
             ]
         );
     }
 
-    public function conventionAddStep3(): Response
+    public function conventionAddStep4(): Response
     {
         if (!UserConnection::isSignedIn()) {
             throw new ControllerException(
@@ -629,9 +756,9 @@ class EtudiantController
                 action: Action::HOME
             );
         }
-        if (!Token::verify(Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM, $_REQUEST["token"]))
+        if (!Token::verify(Action::ETUDIANT_CONVENTION_ADD_STEP_4_FORM, $_REQUEST["token"]))
             throw new InvalidTokenException();
-        if (Token::isTimeout(Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM)) {
+        if (Token::isTimeout(Action::ETUDIANT_CONVENTION_ADD_STEP_4_FORM)) {
             throw new TokenTimeoutException(
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_3
             );
@@ -732,7 +859,7 @@ class EtudiantController
 
         if ($convention->getThematique()==""){
             throw new ControllerException(
-                message: "veuillé inscrire la thématique du stage/alternance !",
+                message: "Veuillez inscrire la thématique de la convention",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
@@ -744,7 +871,7 @@ class EtudiantController
         }
         if ($convention->getSujet()==""){
             throw new ControllerException(
-                message: "veuillé inscrire le sujet du stage/alternance !",
+                message: "Veuillez inscrire le sujet de la convention",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
@@ -756,7 +883,7 @@ class EtudiantController
         }
         if ($convention->getOrigineStage()==""){
             throw new ControllerException(
-                message: "veuillé inscrire l'origine du stage/alternance !",
+                message: "Veuillez inscrire l'origine de la convention",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
@@ -768,7 +895,7 @@ class EtudiantController
         }
         if ($convention->getTaches()==""){
             throw new ControllerException(
-                message: "veuillé inscrire les tâches de stage/alternance !",
+                message: "Veuillez inscrire les tâches de la convention",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
@@ -786,7 +913,7 @@ class EtudiantController
         }
         if ($convention->getDetails()==""){
             throw new ControllerException(
-                message: "veuillé inscrire les détails de stage/alternance !",
+                message: "Veuillez inscrire les détails de la convention",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
@@ -798,7 +925,7 @@ class EtudiantController
         }
         if (is_null($convention->getDateDebut())|| is_null($convention->getDateFin())){
             throw new ControllerException(
-                message: "veuillé inscrire les date de stage/alternance !",
+                message: "Veuillez inscrire les dates de la convention",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
@@ -846,7 +973,7 @@ class EtudiantController
         }
         if ($convention->getAvantagesNature()=="") {
             throw new ControllerException(
-                message: "veuillé inscrire les avantages nature de stage/alternance et \"Aucun\" si vous n'en avait pas !",
+                message: "Veuillez inscrire les avantages nature de la convention, \"aucun\" s'il n'y en a pas",
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
@@ -856,28 +983,88 @@ class EtudiantController
                 action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
             );
         }
+        if ($convention->getTuteurPrenom()=="") {
+            throw new ControllerException(
+                message: "Veuillez inscrire le prénom du tuteur",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if (!Validate::isName($convention->getTuteurPrenom())) {
+            throw new ControllerException(
+                message: "Le prénom du tuteur doit faire moins de 257 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if ($convention->getTuteurNom()=="") {
+            throw new ControllerException(
+                message: "Veuillez inscrire le nom du tuteur",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if (!Validate::isName($convention->getTuteurNom())) {
+            throw new ControllerException(
+                message: "Le nom du tuteur doit faire moins de 257 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if ($convention->getTuteurEmail()=="") {
+            throw new ControllerException(
+                message: "Veuillez inscrire l'email du tuteur",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if (!Validate::isEmail($convention->getTuteurEmail())) {
+            throw new ControllerException(
+                message: "L'email du tuteur n'est pas valide",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if ($convention->getTuteurTelephone()=="") {
+            throw new ControllerException(
+                message: "Veuillez inscrire le téléphone du tuteur",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if (!Validate::isPhoneNumber($convention->getTuteurTelephone())) {
+            throw new ControllerException(
+                message: "Le téléphone du tuteur n'est pas valide",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if ($convention->getTuteurFonction()=="") {
+            throw new ControllerException(
+                message: "Veuillez inscrire la fonction du tuteur",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
+        if (!Validate::isName($convention->getTuteurFonction())) {
+            throw new ControllerException(
+                message: "La fonction du tuteur doit faire moins de 257 caractères",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+            );
+        }
         if (is_null((new EntrepriseRepository)->getById($convention->getIdEntreprise()))) {
             throw new ControllerException(
                 message: "L'entreprise n'existe pas",
-                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_4_FORM
             );
         }
         if (is_null((new DistributionCommuneRepository)->getById($convention->getIdDistributionCommune()))) {
             throw new ControllerException(
                 message: "La commune n'existe pas",
-                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_4_FORM
             );
         }
         if ($convention->getNumeroVoie()=="") {
             throw new ControllerException(
-                message: "veuillé inscrire le numéro de voie du lieu de stage/alternance!",
-                action: Action::ETUDIANT_CONVENTION_ADD_STEP_2_FORM
+                message: "Veuillez inscrire l'adresse où se déroulera la convention",
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_4_FORM
             );
         }
         if (!Validate::isName($convention->getNumeroVoie())) {
             throw new ControllerException(
                 message: "Le numéro de voie doit faire moins de 257 caractères",
-                action: Action::ETUDIANT_CONVENTION_ADD_STEP_3_FORM
+                action: Action::ETUDIANT_CONVENTION_ADD_STEP_4_FORM
             );
         }
 

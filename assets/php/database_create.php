@@ -153,18 +153,6 @@ CREATE TABLE stg_entreprise(
    FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune)
 );
 
-CREATE TABLE stg_tuteur(
-   id_tuteur INT AUTO_INCREMENT,
-   nom VARCHAR(256),
-   prenom VARCHAR(256),
-   email VARCHAR(320),
-   telephone VARCHAR(20),
-   fonction VARCHAR(256),
-   id_entreprise INT NOT NULL,
-   PRIMARY KEY(id_tuteur),
-   FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise)
-);
-
 CREATE TABLE stg_offre(
    id_offre INT AUTO_INCREMENT,
    description TEXT,
@@ -211,16 +199,19 @@ CREATE TABLE stg_convention(
    avantages_nature VARCHAR(256),
    code_elp VARCHAR(256),
    numero_voie VARCHAR(256),
+   tuteur_nom VARCHAR(256),
+   tuteur_prenom VARCHAR(256),
+   tuteur_email VARCHAR(256),
+   tuteur_telephone VARCHAR(256),
+   tuteur_fonction VARCHAR(256),
    id_unite_gratification INT,
    login_enseignant VARCHAR(256),
-   id_tuteur INT,
    id_entreprise INT,
    id_distribution_commune INT,
    login VARCHAR(256),
    PRIMARY KEY(id_convention),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
    FOREIGN KEY(login_enseignant) REFERENCES stg_enseignant(login),
-   FOREIGN KEY(id_tuteur) REFERENCES stg_tuteur(id_tuteur),
    FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise),
    FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune),
    FOREIGN KEY(login) REFERENCES stg_etudiant(login)
@@ -278,6 +269,7 @@ CREATE TABLE stg_postuler(
    FOREIGN KEY(id_offre) REFERENCES stg_offre(id_offre)
 );
 
+
 CREATE TABLE stg_convention_archive(
    id_convention INT AUTO_INCREMENT,
    type_convention VARCHAR(256),
@@ -301,19 +293,22 @@ CREATE TABLE stg_convention_archive(
    avantages_nature VARCHAR(256),
    code_elp VARCHAR(256),
    numero_voie VARCHAR(256),
+   tuteur_nom VARCHAR(256),
+   tuteur_prenom VARCHAR(256),
+   tuteur_email VARCHAR(256),
+   tuteur_telephone VARCHAR(256),
+   tuteur_fonction VARCHAR(256),
    id_unite_gratification INT,
-   login_enseignant VARCHAR(256),
-   id_tuteur INT,
+   login VARCHAR(256),
    id_entreprise INT,
    id_distribution_commune INT,
-   login VARCHAR(256),
+   login_1 VARCHAR(256),
    PRIMARY KEY(id_convention),
    FOREIGN KEY(id_unite_gratification) REFERENCES stg_unite_gratification(id_unite_gratification),
-   FOREIGN KEY(login_enseignant) REFERENCES stg_enseignant(login),
-   FOREIGN KEY(id_tuteur) REFERENCES stg_tuteur(id_tuteur),
+   FOREIGN KEY(login) REFERENCES stg_enseignant(login),
    FOREIGN KEY(id_entreprise) REFERENCES stg_entreprise(id_entreprise),
    FOREIGN KEY(id_distribution_commune) REFERENCES stg_distribution_commune(id_distribution_commune),
-   FOREIGN KEY(login) REFERENCES stg_etudiant(login)
+   FOREIGN KEY(login_1) REFERENCES stg_etudiant(login)
 );
 
 CREATE TABLE stg_offre_archive(

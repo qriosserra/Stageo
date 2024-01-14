@@ -1,13 +1,17 @@
 <?php
 
+use Stageo\Lib\enums\Pattern;
 use Stageo\Lib\enums\Action;
 use Stageo\Model\Object\Convention;
+use Stageo\Model\Object\Entreprise;
 
 include __DIR__ . "/../macros/input.php";
 include __DIR__ . "/../macros/button.php";
 /**
  * @var string $token
  * @var Convention $convention
+ * @var array $distributions_commune
+ * @var array $nomsEntreprise
  */
 ?>
 <main class="bg-gray-100 w-full">
@@ -23,14 +27,12 @@ include __DIR__ . "/../macros/button.php";
         <span class="text-center" style="font-size: clamp(1rem, 5vw, 2rem)">Créer une convention</span>
     </div>
     <div class="max-w-lg mx-auto p-8 space-y-4">
-        <h4 class="text-center">Informations sur le tuteur de stage</h4>
-        <form action="<?=Action::ETUDIANT_CONVENTION_ADD_STEP_3->value?>" method="post" class="bg-white p-6 grid gap-4 rounded shadow-md border-t-4 border-blue-500">
-            <?=field("prenom", "Prénom", "text", "Entrez le prénom de votre tuteur de stage", null, false, $convention->getTuteurPrenom())?>
-            <?=field("nom", "Nom", "text", "Entrez le nom de votre tuteur de stage", null, false, $convention->getTuteurNom())?>
-            <?=field("email", "Email", "text", "Entrez l'email de votre tuteur de stage", null, false, $convention->getTuteurEmail())?>
-            <?=field("telephone", "Téléphone", "text", "Entrez le téléphone de votre tuteur de stage", null, false, $convention->getTuteurTelephone())?>
-            <?=field("fonction", "Fonction", "text", "Entrez sa fonction dans l'entreprise", null, false, $convention->getTuteurFonction())?>
-            <?=submit("Suivant")?>
+        <h4 class="text-center">Entreprise et adresse</h4>
+        <form action="<?=Action::ETUDIANT_CONVENTION_ADD_STEP_4->value?>" method="post" class="bg-white grid grid-cols-2 gap-4 p-6 rounded shadow-md border-t-4 border-blue-500">
+            <?=dropdown("entreprise", "Entreprise*", $convention->getIdEntreprise(), null, 1, $nomsEntreprise )?>
+            <?=dropdown("id_distribution_commune", "Commune*", $convention->getIdDistributionCommune(), null, 1 , $distributions_commune)?>
+            <?=field("numero_voie", "Adresse de l'établissement d'accueil", "text", null, Pattern::NAME, false, $convention->getNumeroVoie(), "col-span-2")?>
+            <?=submit("Enregistrer comme brouillon", "col-span-2")?>
             <?=token($token)?>
         </form>
     </div>

@@ -34,9 +34,13 @@ class Convention extends CoreObject
                                 private string|NullDataType|null $avantages_nature = null,
                                 private string|NullDataType|null $code_elp = null,
                                 private string|NullDataType|null $numero_voie = null,
+                                private string|NullDataType|null $tuteur_nom = null,
+                                private string|NullDataType|null $tuteur_prenom = null,
+                                private string|NullDataType|null $tuteur_email = null,
+                                private string|NullDataType|null $tuteur_telephone = null,
+                                private string|NullDataType|null $tuteur_fonction = null,
                                 private int|NullDataType|null    $id_distribution_commune = null,
                                 private string|NullDataType|null $id_entreprise = null,
-                                private string|NullDataType|null $id_tuteur = null,
                                 private string|NullDataType|null $login_enseignant = null)
     {
     }
@@ -281,6 +285,56 @@ class Convention extends CoreObject
         $this->numero_voie = $numero_voie;
     }
 
+    public function getTuteurNom(): string|NullDataType|null
+    {
+        return $this->tuteur_nom;
+    }
+
+    public function setTuteurNom(string|NullDataType|null $tuteur_nom): void
+    {
+        $this->tuteur_nom = $tuteur_nom;
+    }
+
+    public function getTuteurPrenom(): string|NullDataType|null
+    {
+        return $this->tuteur_prenom;
+    }
+
+    public function setTuteurPrenom(string|NullDataType|null $tuteur_prenom): void
+    {
+        $this->tuteur_prenom = $tuteur_prenom;
+    }
+
+    public function getTuteurEmail(): string|NullDataType|null
+    {
+        return $this->tuteur_email;
+    }
+
+    public function setTuteurEmail(string|NullDataType|null $tuteur_email): void
+    {
+        $this->tuteur_email = $tuteur_email;
+    }
+
+    public function getTuteurTelephone(): string|NullDataType|null
+    {
+        return $this->tuteur_telephone;
+    }
+
+    public function setTuteurTelephone(string|NullDataType|null $tuteur_telephone): void
+    {
+        $this->tuteur_telephone = $tuteur_telephone;
+    }
+
+    public function getTuteurFonction(): string|NullDataType|null
+    {
+        return $this->tuteur_fonction;
+    }
+
+    public function setTuteurFonction(string|NullDataType|null $tuteur_fonction): void
+    {
+        $this->tuteur_fonction = $tuteur_fonction;
+    }
+
     public function getIdDistributionCommune(): int|NullDataType|null
     {
         return $this->id_distribution_commune;
@@ -299,16 +353,6 @@ class Convention extends CoreObject
     public function setIdEntreprise(string|NullDataType|null $id_entreprise): void
     {
         $this->id_entreprise = $id_entreprise;
-    }
-
-    public function getIdTuteur(): string|NullDataType|null
-    {
-        return $this->id_tuteur;
-    }
-
-    public function setIdTuteur(string|NullDataType|null $id_tuteur): void
-    {
-        $this->id_tuteur = $id_tuteur;
     }
 
     public function getLoginEnseignant(): string|NullDataType|null
