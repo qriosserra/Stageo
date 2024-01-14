@@ -2,7 +2,7 @@
 
 ?>
 
-<main class="container mx-auto p-8">
+<main class="container mx-auto p-8 mt-[6rem]">
     <div class="flex flex-col-reverse  md:flex-row">
         <div class="md:w-1/3  rounded-lg p-4">
             <h6 class="mb-4 text-lg font-bold">Sommaire des tutos</h6>
