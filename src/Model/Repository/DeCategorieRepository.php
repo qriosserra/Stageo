@@ -31,6 +31,18 @@ class DeCategorieRepository extends CoreRepository
     {
         return $this->select([new QueryCondition("id_categorie", ComparisonOperator::EQUAL, $id)])[0] ?? null;
     }
+
+    /**
+     * Obtient les identifiants d'offres correspondant aux catégories fournies.
+     *
+     * Cette fonction prend en paramètre une liste d'objets Categorie, extrait leurs informations nécessaires,
+     * puis construit une requête SQL pour récupérer les identifiants d'offres associées à ces catégories.
+     * Elle effectue ensuite la requête et retourne un tableau d'identifiants d'offres correspondant.
+     * Si la liste de catégories est vide ou non valide, elle retourne tous les identifiants d'offres disponibles.
+     *
+     * @param array $cate Liste d'objets Categorie.
+     * @return array Tableau d'identifiants d'offres correspondant aux catégories.
+     */
     public function getByIdCategorieliste(  $cate ): array
     {
         foreach ($cate as $item) {
