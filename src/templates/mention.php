@@ -12,7 +12,7 @@
         <p class="text-sm/relaxed"><strong>Numéro de téléphone de l'organisme :</strong> +04 99 58 50 40</p>
         <p class="text-sm/relaxed"><strong>Adresse e-mail de contact :</strong> stageo@gmail.com</p>
       
-        <p class="text-sm/relaxed"><strong>Description de l'activité de l'organisme :</strong> Stageo est un organisme de l'IUT de Montpellier-Sète. Pour les stages/alternance de ces étdiants.</p>
+        <p class="text-sm/relaxed"><strong>Description de l'activité de l'organisme :</strong> Stageo est un organisme de l'IUT de Montpellier-Sète. Pour les stages/alternance de ces étudiants.</p>
         <p class="text-sm/relaxed"><strong>Droits d'auteur :</strong> Tous les contenus (textes, images, vidéos, etc.) présents sur le site web sont la propriété de Stageo, sauf indication contraire.</p>
         <p class="text-sm/relaxed"><strong>Politique de confidentialité :</strong> Stageo collecte, utilise et protège les données personnelles des utilisateurs du site web.</p>
         <p class="text-sm/relaxed"><strong>Conditions générales d'utilisation :</strong> Les conditions générales d'utilisation de Stageo la page dédier.</p>
