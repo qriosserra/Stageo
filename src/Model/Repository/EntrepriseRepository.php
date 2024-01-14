@@ -53,7 +53,9 @@ class EntrepriseRepository extends CoreRepository
 
         return ['offre' => $offre];
     }
-
+    /*
+     * recupere toutes les entreprises non Valider
+     */
     function getEntreprisesNonValidees() {
         try {
             $query = "SELECT e.id_entreprise, e.email, e.raison_sociale, e.siret, e.numero_voie, e.code_naf, e.telephone, e.fax, e.site, e.valide,
@@ -95,6 +97,9 @@ class EntrepriseRepository extends CoreRepository
         }
     }
 
+    /*
+     * recupere toute les entreprises archiver
+     */
     function getEntreprisesAchive() {
         try {
             $query = "SELECT 
@@ -136,6 +141,21 @@ class EntrepriseRepository extends CoreRepository
         }
     }
 
+    /**
+     * Fonction qui récupère les détails des entreprises depuis la base de données. La requête SQL joint plusieurs tables pour obtenir
+     * des informations détaillées sur chaque entreprise, telles que l'identifiant, l'email, la raison sociale, le SIRET, l'adresse,
+     * le code NAF, le téléphone, le fax, le site web, la validation, la taille de l'entreprise, le type de structure, le statut juridique,
+     * la commune, le code postal, l'identifiant du pays et le nom du pays.
+     *
+     * @return array|false Un tableau associatif contenant les détails des entreprises, ou false en cas d'erreur lors de l'exécution de la requête.
+     *
+     * @throws PDOException En cas d'erreur lors de l'exécution de la requête SQL, une exception PDO est attrapée, affichant le message d'erreur.
+     *
+     * @var string $query Requête SQL pour récupérer les détails des entreprises en utilisant des jointures.
+     * @var PDO $pdo Instance de l'objet PDO pour la connexion à la base de données.
+     * @var PDOStatement $stmt Instance de l'objet PDOStatement pour préparer et exécuter la requête SQL.
+     * @var array $result Résultat de la requête, un tableau associatif contenant les détails des entreprises.
+     */
     public function getEntrepriseDetails() {
         try {
             $query = "SELECT e.id_entreprise, e.email, e.raison_sociale, e.siret, e.numero_voie, e.code_naf, e.telephone, e.fax, e.site, e.valide,
@@ -160,6 +180,25 @@ class EntrepriseRepository extends CoreRepository
             return false;
         }
     }
+
+    /**
+     * Fonction qui récupère les détails d'une entreprise spécifique à partir de son identifiant.
+     * La requête SQL joint plusieurs tables pour obtenir des informations détaillées sur l'entreprise ciblée, telles que
+     * l'identifiant, l'email, la raison sociale, le SIRET, l'adresse, le code NAF, le téléphone, le fax, le site web, la validation,
+     * la taille de l'entreprise, le type de structure, le statut juridique, la commune, le code postal, l'identifiant du pays et le nom du pays.
+     *
+     * @param int $id L'identifiant de l'entreprise dont on souhaite récupérer les détails.
+     *
+     * @return array|false Un tableau associatif contenant les détails de l'entreprise, ou false en cas d'erreur lors de l'exécution de la requête.
+     *
+     * @throws PDOException En cas d'erreur lors de l'exécution de la requête SQL, une exception PDO est attrapée, affichant le message d'erreur.
+     *
+     * @var string $query Requête SQL pour récupérer les détails d'une entreprise spécifique en utilisant des jointures et une clause WHERE sur l'identifiant.
+     * @var PDO $pdo Instance de l'objet PDO pour la connexion à la base de données.
+     * @var PDOStatement $stmt Instance de l'objet PDOStatement pour préparer et exécuter la requête SQL.
+     * @var array $tab Tableau associatif contenant l'identifiant de l'entreprise, utilisé pour remplacer le paramètre de requête nommé ":idTag".
+     * @var array $result Résultat de la requête, un tableau associatif contenant les détails de l'entreprise ciblée.
+     */
     public function getEntrepriseDetailsById($id) {
         try {
             $query = "SELECT e.id_entreprise, e.email, e.raison_sociale, e.siret, e.numero_voie, e.code_naf, e.telephone, e.fax, e.site, e.valide,
