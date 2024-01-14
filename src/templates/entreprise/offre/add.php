@@ -19,87 +19,87 @@ include __DIR__ . "/../../macros/offre.php";
  * @var array $liste_tag_choisi
  */
 ?>
+<style>
+.formle {
+    display: flex;
+    flex-direction: column  ;
+}
+
+
+</style>
 <main class="h-screen flex flex-col items-center justify-center">
-    <?=button("Accueil", "fi-rr-home", Action::HOME, "!absolute !pl-2 top-8 left-8")?>
+    <?= button("Accueil", "fi-rr-home", Action::HOME, "!absolute !pl-2 top-8 left-8") ?>
     <h5 class="font-bold py-6"><?= $offre->getIdOffre() !== null ? 'Modifier' : 'Ajouter' ?> une offre</h5>
 
-    <form class="w-[60vw] h-[80vh] grid grid-cols-2 gap-8"
-          action="<?= $offre->getIdOffre() !== null ? Action::ENTREPRISE_MODIFICATION_OFFRE->value . '&id=' . $offre->getIdOffre() : Action::ENTREPRISE_CREATION_OFFRE->value ?>"
-          method="post">
+    <form class="w-[60vw] h-[80vh] grid grid-cols-2 gap-8 formle" action="<?= $offre->getIdOffre() !== null ? Action::ENTREPRISE_MODIFICATION_OFFRE->value . '&id=' . $offre->getIdOffre() : Action::ENTREPRISE_CREATION_OFFRE->value ?>" method="post">
 
         <?php if ($offre->getIdOffre() !== null) : ?>
             <input type="hidden" name="idOffre" value="<?= $offre->getIdOffre() ?>">
         <?php endif; ?>
+        <?= field("secteur", "Secteur de l'offre", "text", "", Pattern::NAME, true, $offre->getSecteur() ?? '', null) ?>
+        <?= field("thematique", "Thématique de l'offre", "text", null, Pattern::NAME, true, $offre->getThematique(), null) ?>
 
-        <?=field("secteur", "Secteur de l'offre", "text", "", Pattern::NAME, true, $offre->getSecteur() ?? '', null)?>
-        <?=field("thematique", "Thématique de l'offre", "text", null, Pattern::NAME, true, $offre->getThematique(), null)?>
-        <?=textarea("description", "Description", "", 4, false, $offre->getDescription(), "col-span-2")?>
+        <?= textarea("description", "Description", "", 4, false, $offre->getDescription(), "col-span-2") ?>
 
         <div class="col-span-2 sm:col-span-1">
-            <?=textarea("taches", "Fonctions et tâches", "", 4, false, $offre->getTaches())?>
+            <?= textarea("taches", "Fonctions et tâches", "", 4, false, $offre->getTaches()) ?>
         </div>
 
         <div class="col-span-2 sm:col-span-1">
-            <?=textarea("commentaires", "Commentaires sur l'offre", "", 4, false, $offre->getCommentaires())?>
+            <?= textarea("commentaires", "Commentaires sur l'offre", "", 4, false, $offre->getCommentaires()) ?>
         </div>
 
-        <?php if (!isset($gratification)){
-            $gratification=null;
-        }?>
+        <?php if (!isset($gratification)) {
+            $gratification = null;
+        } ?>
 
-        <?=field("gratification", "Gratification par heure", "float", "", null, true,$offre->getGratification())?>
-        <?=dropdown("id_unite_gratification", "Unité de gratification", null, null, 2, $unite_gratifications)?>
+        <?= field("gratification", "Gratification par heure", "float", "", null, true, $offre->getGratification()) ?>
+        <?= dropdown("id_unite_gratification", "Unité de gratification", null, null, 2, $unite_gratifications) ?>
 
         <div date-rangepicker class="flex flex-col sm:flex-row items-center col-span-2">
             <div class="relative flex items-center">
-                <input name="start" type="text" value="<?=$offre->getDateDebut()?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date début">
+                <input name="start" type="text" value="<?= $offre->getDateDebut() ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date début">
             </div>
             <p class="mx-4 text-gray-500" id="dateFin">à</p>
             <div class="relative flex items-center" id="dateFinContainer">
-                <input name="end" type="text" value="<?=$offre->getDateFin()?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date fin">
+                <input name="end" type="text" value="<?= $offre->getDateFin() ?>" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Date fin">
             </div>
         </div>
 
         <div>
-            <input type="checkbox" id="but2" name="checkbox[]" value="BUT2" class="mr-1" <?php if ($offre->getNiveau()!=null && str_contains($offre->getNiveau(), 'BUT2')) echo 'checked'; ?>>
+            <input type="checkbox" id="but2" name="checkbox[]" value="BUT2" class="mr-1" <?php if ($offre->getNiveau() != null && str_contains($offre->getNiveau(), 'BUT2')) echo 'checked'; ?>>
             <label for="but2" class="mr-5">BUT2</label>
 
 
-            <input type="checkbox" id="but3" name="checkbox[]" value="BUT3" class="mr-1" <?php if ($offre->getNiveau()!=null && str_contains($offre->getNiveau(), 'BUT3')) echo 'checked'; ?>>
+            <input type="checkbox" id="but3" name="checkbox[]" value="BUT3" class="mr-1" <?php if ($offre->getNiveau() != null && str_contains($offre->getNiveau(), 'BUT3')) echo 'checked'; ?>>
             <label for="but3" class="mr-5">BUT3</label>
         </div>
 
         <div class="flex items-center col-span-2">
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
                 <div>
-                    <input id="Alternance" type="radio" value="Alternance" name="emploi"
-                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        <?php if ($offre->getType() === 'Alternance') echo 'checked'; ?>>
+                    <input id="Alternance" type="radio" value="Alternance" name="emploi" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" <?php if ($offre->getType() === 'Alternance') echo 'checked'; ?>>
                     <label for="Alternance" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Alternance</label>
                 </div>
 
                 <div>
-                    <input id="Stage" type="radio" value="Stage" name="emploi"
-                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        <?php if ($offre->getType() === 'Stage') echo 'checked'; ?>>
+                    <input id="Stage" type="radio" value="Stage" name="emploi" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" <?php if ($offre->getType() === 'Stage') echo 'checked'; ?>>
                     <label for="Stage" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Stage</label>
                 </div>
 
                 <div>
-                    <input id="Stage&Alternance" type="radio" value="Stage&Alternance" name="emploi"
-                           class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        <?php if ($offre->getType() === 'Stage&Alternance') echo 'checked'; ?>>
+                    <input id="Stage&Alternance" type="radio" value="Stage&Alternance" name="emploi" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" <?php if ($offre->getType() === 'Stage&Alternance') echo 'checked'; ?>>
                     <label for="Stage&Alternance" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Stage&Alternance</label>
                 </div>
             </div>
         </div>
 
-        <div class="max-w-md mx-auto grid grid-cols-2">
+        <div class="max-w-md mx-auto grid grid-cols-2 w-[25rem]">
 
             <!-- Dropdown + bouton "Add" pour les tags -->
-            <div class="relative flex col-span-1 items-center mb-4">
+            <div class="relative flex flex-col col-span-1 items-center mb-4">
                 <?= dropdown("tag", "Tag", null, null, 2, $liste_tag) ?>
-                <button type="button" id="addTagButton" class="mt-5 h-10 px-4 py-2 text-sm font-medium leading-5 text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-800">
+                <button type="button" id="addTagButton" class="mt-5 h-10 px-4 py-2 text-sm font-medium leading-5 text-center text-white transition duration-150 ease-in-out bg-indigo-600 border border-transparent rounded-md hover:bg-indigo-500 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-700 active:bg-indigo-800">
                     Add
                 </button>
             </div>
@@ -115,23 +115,24 @@ include __DIR__ . "/../../macros/offre.php";
         </div>
 
         <!-- Nouvelle div pour le bouton "Submit" -->
-        <div class="col-span-2 mb-10">
-            <?= submit($offre->getIdOffre() !== null ? "Modifier" : "Publier") ?>
+        <div class="col-span-2  flex justify-center " >
+            <?= submit($offre->getIdOffre() !== null ? "Modifier mb-10" : "Publier", "mb-10") ?>
+            
         </div>
 
-        <?=token($token)?>
+        <?= token($token) ?>
     </form>
     <script>
         const tagListChoisi = <?php echo json_encode($liste_tag_choisi); ?>;
-        document.addEventListener('DOMContentLoaded', function () {
-            const tagList = <?php echo json_encode($liste_tag); ?>;//Merci GPT
+        document.addEventListener('DOMContentLoaded', function() {
+            const tagList = <?php echo json_encode($liste_tag); ?>; //Merci GPT
 
             const addTagButton = document.getElementById('addTagButton');
-            addTagButton.addEventListener('click', function () {
+            addTagButton.addEventListener('click', function() {
                 addTag(null);
             });
 
-            tagListChoisi.forEach(tag=>{
+            tagListChoisi.forEach(tag => {
                 console.log(tag);
                 addTag(tag);
             });
@@ -139,7 +140,7 @@ include __DIR__ . "/../../macros/offre.php";
             function addTag(selectedTag) {
                 const tagDropdown = document.querySelector('[name="tag"]');
                 //Attention c'est dans le texte les valeurs correspondent aux index
-                if(selectedTag === null){
+                if (selectedTag === null) {
                     selectedTag = tagDropdown.options[tagDropdown.selectedIndex].text.trim();
                 }
 
@@ -192,10 +193,10 @@ include __DIR__ . "/../../macros/offre.php";
                 return endDateObj.toISOString().split('T')[0];
             }
 
-            startInput.addEventListener('change', function () {
+            startInput.addEventListener('change', function() {
                 const selectedEmploi = document.querySelector("[name='emploi']:checked");
                 const durationWeeks = (selectedEmploi && selectedEmploi.value === 'Alternance') ? null : 1;
-                if(durationWeeks) {
+                if (durationWeeks) {
                     const selectedNiveau = document.querySelectorAll("[name='checkbox[]']:checked");
 
                     const hasBUT2 = Array.from(selectedNiveau).some(checkbox => checkbox.value === 'BUT2');
@@ -206,8 +207,8 @@ include __DIR__ . "/../../macros/offre.php";
                     endInput.value = calculateEndDate(this.value, dw);
                 }
             });
-            niveauCheckboxes.forEach(function (niveau) {
-                niveau.addEventListener('change', function () {
+            niveauCheckboxes.forEach(function(niveau) {
+                niveau.addEventListener('change', function() {
                     const selectedEmploi = document.querySelector("[name='emploi']:checked");
 
                     if (selectedEmploi && (selectedEmploi.value === 'Alternance' || selectedEmploi.value === 'Stage&Alternance')) {
@@ -225,13 +226,13 @@ include __DIR__ . "/../../macros/offre.php";
                 });
             });
 
-            emploiRadios.forEach(function (radio) {
-                radio.addEventListener('change', function () {
+            emploiRadios.forEach(function(radio) {
+                radio.addEventListener('change', function() {
                     const selectedEmploi = document.querySelector("[name='emploi']:checked");
 
                     // Si Alternance est sélectionné, masquer la date de fin, sinon l'afficher
-                    dateFinContainer.style.display = (selectedEmploi && (selectedEmploi.value === 'Alternance' || selectedEmploi.value==='Stage&Alternance')) ? 'none' : 'block';
-                    dateFin.style.display = (selectedEmploi && (selectedEmploi.value === 'Alternance' || selectedEmploi.value==='Stage&Alternance')) ? 'none' : 'block';
+                    dateFinContainer.style.display = (selectedEmploi && (selectedEmploi.value === 'Alternance' || selectedEmploi.value === 'Stage&Alternance')) ? 'none' : 'block';
+                    dateFin.style.display = (selectedEmploi && (selectedEmploi.value === 'Alternance' || selectedEmploi.value === 'Stage&Alternance')) ? 'none' : 'block';
 
                     if (selectedEmploi && (selectedEmploi.value === 'Alternance' || selectedEmploi.value === 'Stage&Alternance')) {
                         endInput.value = null;
@@ -253,6 +254,9 @@ include __DIR__ . "/../../macros/offre.php";
             dateFinContainer.style.display = (emploiSelectionne && (emploiSelectionne.value === 'Alternance' || emploiSelectionne.value === 'Stage&Alternance')) ? 'none' : 'block';
             dateFin.style.display = (emploiSelectionne && (emploiSelectionne.value === 'Alternance' || emploiSelectionne.value === 'Stage&Alternance')) ? 'none' : 'block';
         });
+
+
+     
     </script>
 
 </main>
