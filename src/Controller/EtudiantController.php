@@ -153,7 +153,7 @@ class EtudiantController
                 action: Action::HOME
             );
         }
-        $entreprise = $offre->getIdEntreprise();
+        $entreprise = (new EntrepriseRepository())->getById($offre->getIdEntreprise());
 
         if (!Token::verify(Action::ETUDIANT_POSTULER_OFFRE_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
@@ -173,7 +173,6 @@ class EtudiantController
                 ]
             );
         }
-        $etudiant = $offre->getByLogin($login);
         if (!$cv["size"]==0 and $cv["error"] != UPLOAD_ERR_OK) {
             throw new ControllerException(
                 message: "Erreur lors de l'upload du fichier cv",

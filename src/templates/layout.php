@@ -373,10 +373,11 @@ use Stageo\Model\Object\Secretaire;
                                         </div>
                                     </div>
                                 </li>
+                            <?php endif ?>
+                            <?php if (UserConnection::isSignedIn()) : ?>
                                 <li>
                                     <button id="dropdownButtonListEntreprise" class="block py-2 pl-3 pr-4 h-[4rem] text-gray-900 rounded md:p-0  hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700  md:dark:hover:text-blue-500 focus:outline-none" id="dropdownOffres">
-                                        <?php if (UserConnection::isSignedIn()) : ?> <a href="<?=Action::LISTE_ENTREPRISES->value?>">Entreprises</a>
-                                        <?php else : ?><a href="<?= Action::ETUDIANT_SIGN_IN_FORM->value ?>">Entreprises</a><?php endif ?>
+                                        <a href="<?=Action::LISTE_ENTREPRISES->value?>">Entreprises</a>
                                     </button>
 
                                     <div class="absolute hidden text-gray-700 pt-1 border border-slate-300 " id="dropdownContentListEntreprise">
