@@ -454,7 +454,7 @@ class EntrepriseController
                     "nav" => false,
                     "footer" => false,
                     "offre" => Session::get("offre") ?? new Offre(),
-                    "liste_tag_choisi" => [],
+                    "liste_tag_choisi" => Session::get("tags") ?? [],
                     "liste_tag" => array_column(array_map(fn($e) => $e->toArray(), (new CategorieRepository)->select()), "libelle"),
                     "unite_gratifications" => array_column(array_map(fn($e) => $e->toArray(), (new UniteGratificationRepository)->select()), "libelle", "id_unite_gratification"),
                     "token" => Token::generateToken(Action::ENTREPRISE_CREATION_OFFRE_FORM)
@@ -530,6 +530,8 @@ class EntrepriseController
             valider: false,
         ));
 
+        $selectedTags = Session::set("tags",$selectedTags);
+
         if (!Token::verify(Action::ENTREPRISE_CREATION_OFFRE_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
         }
@@ -574,7 +576,7 @@ class EntrepriseController
                 action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
             );
         }
-        if (!Validate::isFloat($gratification)) {
+        if (!Validate::isGratification($gratification)) {
             throw new ControllerException(
                 message: "La gratification n'est pas valide",
                 action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
@@ -592,7 +594,7 @@ class EntrepriseController
                 action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
             );
         }
-        if($type == "stage"){
+        if($type=='stage' or $type=='Stage'){
             if(!Validate::isDateStage($date_debut,$date_fin,$niveau)){
                 throw new ControllerException(
                     message: "Les dates de stages ne sont pas conforment",
@@ -619,6 +621,7 @@ class EntrepriseController
         FlashMessage::add("L'offre a été ajoutée avec succès", FlashType::SUCCESS);
 
         Session::delete("offre");
+        Session::delete("tags");
         return new Response(
             action: Action::HOME,
         );
@@ -793,7 +796,7 @@ class EntrepriseController
                 params: ["id"=>$idOffre]
             );
         }
-        if($type!='alternance' and $type!='Alternance'){
+        if($type=='stage' or $type=='Stage'){
             if(!Validate::isDateStage($date_debut,$date_fin,$niveau)){
                 throw new ControllerException(
                     message: "Les dates de stages ne sont pas conforment",

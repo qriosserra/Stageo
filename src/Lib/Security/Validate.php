@@ -172,4 +172,12 @@ class Validate
 
         return true;
     }
+
+    public static function isGratification(float $gratification, bool $required=true):bool
+    {
+       if(!self::isFloat($gratification) || $gratification<4.35){
+           return false;
+       }
+       return true;
+    }
 }

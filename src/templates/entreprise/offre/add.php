@@ -116,7 +116,7 @@ include __DIR__ . "/../../macros/offre.php";
 
         <!-- Nouvelle div pour le bouton "Submit" -->
         <div class="col-span-2  flex justify-center " >
-            <?= submit($offre->getIdOffre() !== null ? "Modifier mb-10" : "Publier", "mb-10") ?>
+            <?= submit($offre->getIdOffre() !== null ? "Modifier" : "Publier", "mb-10") ?>
             
         </div>
 
@@ -137,9 +137,19 @@ include __DIR__ . "/../../macros/offre.php";
                 addTag(tag);
             });
 
+            function removeTag(tagToRemove) {
+                const tagContainer = document.getElementById('tagContainer');
+                const tags = tagContainer.querySelectorAll('.tag-element');
+
+                tags.forEach(tag => {
+                    if (tag.textContent.trim() === tagToRemove) {
+                        tag.remove();
+                    }
+                });
+            }
+
             function addTag(selectedTag) {
                 const tagDropdown = document.querySelector('[name="tag"]');
-                //Attention c'est dans le texte les valeurs correspondent aux index
                 if (selectedTag === null) {
                     selectedTag = tagDropdown.options[tagDropdown.selectedIndex].text.trim();
                 }
@@ -147,11 +157,8 @@ include __DIR__ . "/../../macros/offre.php";
                 if (selectedTag !== '' && tagList.includes(selectedTag)) {
                     const tagContainer = document.getElementById('tagContainer');
 
-                    //je regarde si j'ai déjà rajouté le tag
                     const existingTags = tagContainer.querySelectorAll('.tag-element');
-                    console.log(existingTags);
                     const tagExists = Array.from(existingTags).some(tag => tag.textContent.trim() === selectedTag);
-                    //const tagExists = Array.from(existingTags).some(tag => tag.querySelector('input').value.trim() === selectedTag);
 
                     if (!tagExists) {
                         const tagElement = document.createElement('input');
@@ -163,6 +170,12 @@ include __DIR__ . "/../../macros/offre.php";
                         tagLabel.textContent = selectedTag;
                         tagLabel.appendChild(tagElement);
                         tagLabel.className = 'bg-indigo-200 text-indigo-800 px-2 py-1 m-1 rounded-full tag-element';
+
+                        // Ajouter le gestionnaire d'événements click pour la suppression du tag
+                        tagLabel.addEventListener('click', function() {
+                            removeTag(selectedTag);
+                        });
+
                         tagContainer.appendChild(tagLabel);
                         tagDropdown.value = '';
                     } else {
