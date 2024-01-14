@@ -13,6 +13,8 @@ use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
 use Stageo\Lib\HTTP\Session;
+use Stageo\Lib\Mailer\Email;
+use Stageo\Lib\Mailer\Mailer;
 use Stageo\Lib\Response;
 use Stageo\Lib\Security\Password;
 use Stageo\Lib\Security\Token;
@@ -144,6 +146,14 @@ class EtudiantController
         $cv = $_FILES["cv"];
         $lm = $_FILES["lm"];
         $complement = $_REQUEST["complement"];
+        $offre = (new OffreRepository)->getById($id_offre);
+        if (is_null($offre)) {
+            throw new ControllerException(
+                message: "L'offre n'existe pas",
+                action: Action::HOME
+            );
+        }
+        $entreprise = $offre->getIdEntreprise();
 
         if (!Token::verify(Action::ETUDIANT_POSTULER_OFFRE_FORM, $_REQUEST["token"])) {
             throw new InvalidTokenException();
@@ -163,6 +173,7 @@ class EtudiantController
                 ]
             );
         }
+        $etudiant = $offre->getByLogin($login);
         if (!$cv["size"]==0 and $cv["error"] != UPLOAD_ERR_OK) {
             throw new ControllerException(
                 message: "Erreur lors de l'upload du fichier cv",
@@ -225,6 +236,11 @@ class EtudiantController
             id_offre: $id_offre,
             lettre_motivation: $lmName,
             complement: $complement
+        ));
+        Mailer::send(new Email(
+            $entreprise->getEmail(),
+            "Votre convention a été validé pédaogiquement",
+            "Votre convention a été validé pédaogiquement"
         ));
         FlashMessage::add(
             content: "Vous avez postuler avec succes",

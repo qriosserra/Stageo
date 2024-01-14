@@ -13,6 +13,8 @@ use Stageo\Lib\enums\Action;
 use Stageo\Lib\enums\FlashType;
 use Stageo\Lib\FlashMessage;
 use Stageo\Lib\HTTP\Session;
+use Stageo\Lib\Mailer\Email;
+use Stageo\Lib\Mailer\Mailer;
 use Stageo\Lib\Response;
 use Stageo\Lib\Security\Crypto;
 use Stageo\Lib\Security\EmailVerification;
@@ -30,6 +32,7 @@ use Stageo\Model\Repository\CategorieRepository;
 use Stageo\Model\Repository\DeCategorieRepository;
 use Stageo\Model\Repository\DistributionCommuneRepository;
 use Stageo\Model\Repository\EntrepriseRepository;
+use Stageo\Model\Repository\EtudiantRepository;
 use Stageo\Model\Repository\OffreRepository;
 use Stageo\Model\Repository\PostulerRepository;
 use Stageo\Model\Repository\StatutJuridiqueRepository;
@@ -874,20 +877,31 @@ class EntrepriseController
         }
     }
 
-    public static function accepterEtudiantOffre():Response{
+    public static function accepterEtudiantOffre() : Response
+    {
+        /**
+         * @var Etudiant $etudiant
+         * @var Offre $offre
+         */
         $id = $_REQUEST["id"];
-        $etudiant = $_REQUEST["login"];
+        $login = $_REQUEST["login"];
         $offre = (new OffreRepository())->getById($id);
         $user = UserConnection::getSignedInUser();
         if($user and UserConnection::isInstance(new Entreprise) and $user->getIdEntreprise() == $offre->getIdEntreprise()){
-            $offre->setLogin($etudiant);
+            $offre->setLogin($login);
             (new OffreRepository())->update($offre);
             $condition = [
-                new QueryCondition("login", ComparisonOperator::EQUAL,$etudiant,LogicalOperator::AND),
+                new QueryCondition("login", ComparisonOperator::EQUAL,$login,LogicalOperator::AND),
                 new QueryCondition("id_offre", ComparisonOperator::EQUAL,$id)
             ];
             (new PostulerRepository())->delete($condition);
-            FlashMessage::add("Etudiant accepter avec success", FlashType::SUCCESS);
+            $etudiant = (new EtudiantRepository())->getByLogin($login);
+            Mailer::send(new Email(
+                $etudiant->getEmail(),
+                "Votre candidature a été accepté",
+                "Votre candidature a été accepté pour l'offre " . $offre->getThematique()
+            ));
+            FlashMessage::add("Etudiant accepter avec succès", FlashType::SUCCESS);
             return new Response(
                 action: Action::HOME,
             );
