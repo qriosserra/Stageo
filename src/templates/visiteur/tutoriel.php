@@ -13,7 +13,7 @@
 
     <div class="flex flex-col-reverse  md:flex-row">
         <div class="md:w-1/3  rounded-lg p-4">
-            <h6 class="mb-4 text-lg font-bold">Sommaire des tutos</h2>
+            <h6 class="mb-4 text-lg font-bold">Sommaire des tutos</h6>
             <ul class="space-y-2">
                 <li><a href="#connexion-etudiant-enseignant" class="bg-gray-200 border-2 ring-offset-background focus-visible:ring-ring border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-full items-center justify-center rounded-md  px-4 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">1) Connexion Étudiant ou Enseignant</a></li>
                 <li><a href="#connexion-entreprise" class="bg-gray-200 border-2 ring-offset-background focus-visible:ring-ring border-input bg-background hover:bg-accent hover:text-accent-foreground inline-flex h-10 w-full items-center justify-center rounded-md  px-4 py-2 text-left text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">2) Connexion Entreprise</a></li>
@@ -22,7 +22,7 @@
         </div>
         <div class="md:w-2/3 p-4">
             <h2 class="mb-4 text-2xl font-bold">Sections</h2>
-            <p class="text-gray-600">Cliquez sur n'importe qu'elle section pour être rediriger vers cette dernière. </p>
+            <p class="text-gray-600">Cliquez sur n'importe quelle section pour être redirigé vers cette dernière. </p>
         </div>
     </div>
 
