@@ -101,4 +101,6 @@ enum Action: string
     case TUTORIEL_SECRETAIRE = "?c=secretaire&a=tutorielSecretaire";
 
     case TUTORIEL_ADMIN = "?c=admin&a=tutorielSecretaire";
+
+    case ADMIN_STATS= "?c=admin&a=statsAdmin";
 }

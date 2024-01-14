@@ -613,6 +613,15 @@ class AdminController
             ]
         );
     }
+
+    public function statsAdmin() : Response {
+        return new Response(
+            template: "admin/statsAdmin.php",
+            params: [
+                "title" => "Statistiques Admin",
+            ]
+        );
+    }
 }
 
 
