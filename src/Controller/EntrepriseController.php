@@ -597,7 +597,7 @@ class EntrepriseController
         if($type=='stage' or $type=='Stage'){
             if(!Validate::isDateStage($date_debut,$date_fin,$niveau)){
                 throw new ControllerException(
-                    message: "Les dates de stages ne sont pas conforment",
+                    message: "Les dates de stages ne sont pas conformes",
                     action: Action::ENTREPRISE_CREATION_OFFRE_FORM,
                 );
             }
@@ -1013,6 +1013,16 @@ class EntrepriseController
         throw new ControllerException(
             message: "Vous n'avez pas accès à cette action.",
             action: Action::HOME
+        );
+    }
+
+    public static function tutorielEntreprise(): Response
+    {
+        return new Response(
+            template: "entreprise/tutoriel.php",
+            params: [
+                "title" => "Tutoriel entreprise",
+            ]
         );
     }
 

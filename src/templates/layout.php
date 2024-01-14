@@ -2102,6 +2102,8 @@ use Stageo\Model\Object\Secretaire;
                                 <button>
                                     <?php if (UserConnection::isInstance(new Etudiant())) : ?>
                                     <a href="<?= Action::TUTORIEL_ETUDIANT->value?>">Besoin d'aide</a>
+                                    <?php elseif (UserConnection::isInstance(new Entreprise())) : ?>
+                                        <a href="<?= Action::TUTORIEL_ENTREPRISE->value ?>">Besoin d'aide</a>
                                     <?php else : ?>
                                         <a href="<?= Action::TUTORIEL->value ?>">Besoin d'aide</a>
                                     <?php endif?>
