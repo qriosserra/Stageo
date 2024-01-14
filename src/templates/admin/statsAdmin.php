@@ -54,7 +54,7 @@
     <div class="p-6"><p class="text-4xl font-bold">$2389.00</p></div>
   </div>
       <div class="bg-card text-card-foreground h-full w-full max-w-2xl rounded-lg border shadow-sm" data-v0-t="card">
-    <div class="flex flex-row space-y-1.5 p-6">
+    <div class="flex flex-row space-y- 1.5 p-6">
       <div class="grid gap-1.5">
         <h3 class="text-2xl font-semibold leading-none tracking-tight">Nombre d'étudiants avec une convention</h3>
         <p class="text-muted-foreground text-sm">Le nombre d'étudiants qui possède une convention valiée ou non.</p>

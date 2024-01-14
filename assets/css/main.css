@@ -966,6 +966,9 @@ video {
 .w-screen{
   width: 100vw;
 }
+.w-\[67rem\]{
+  width: 67rem;
+}
 .min-w-\[60\%\]{
   min-width: 60%;
 }
@@ -1684,6 +1687,9 @@ video {
 }
 .uppercase{
   text-transform: uppercase;
+}
+.italic{
+  font-style: italic;
 }
 .leading-5{
   line-height: 1.25rem;
