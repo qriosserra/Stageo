@@ -1,7 +1,9 @@
 <?php
 
 namespace Stageo\Lib\Database;
-
+/*
+ * Liste des operation utilisable dans une requete SQL
+ */
 enum ComparisonOperator: string
 {
     case EQUAL = "=";
